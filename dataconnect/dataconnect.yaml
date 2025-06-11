@@ -1,0 +1,12 @@
+specVersion: "v1beta"
+serviceId: "hx-dataconnect"
+location: "us-east4"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "harielxavier-db"
+      cloudSql:
+        instanceId: "my-hx-cloud"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]

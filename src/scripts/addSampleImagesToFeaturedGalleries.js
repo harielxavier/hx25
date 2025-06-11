@@ -1,0 +1,119 @@
+// Script to add sample images to the featured galleries
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, getDocs, query, where, doc, updateDoc, addDoc, Timestamp } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
+import app, { db, storage } from '../lib/firebase.js';
+
+// No need to initialize Firebase again as we're importing it
+// // IMPORTANT: Use the shared Firebase instance from src/lib/firebase.ts instead of initializing a new one
+// This prevents the "Firebase App named '[DEFAULT]' already exists" error
+import app from '../lib/firebase';
+// const app = initializeApp(firebaseConfig); // This line is commented out to prevent duplicate initialization;
+// const db = getFirestore(app);
+// const storage = getStorage(app);
+
+const addSampleImagesToFeaturedGalleries = async () => {
+  try {
+    // Get all featured galleries
+    const galleriesRef = collection(db, 'galleries');
+    const featuredQuery = query(galleriesRef, where('featured', '==', true));
+    const featuredGalleries = await getDocs(featuredQuery);
+    
+    if (featuredGalleries.empty) {
+      console.log('No featured galleries found. Please run createFeaturedGalleries.js first.');
+      return;
+    }
+    
+    // Sample images for each category
+    const sampleImages = {
+      'wedding': [
+        'https://source.unsplash.com/random/1200x800/?wedding,bride',
+        'https://source.unsplash.com/random/1200x800/?wedding,couple',
+        'https://source.unsplash.com/random/1200x800/?wedding,ceremony',
+        'https://source.unsplash.com/random/1200x800/?wedding,reception',
+        'https://source.unsplash.com/random/1200x800/?wedding,cake'
+      ],
+      'portrait': [
+        'https://source.unsplash.com/random/1200x800/?portrait,woman',
+        'https://source.unsplash.com/random/1200x800/?portrait,man',
+        'https://source.unsplash.com/random/1200x800/?portrait,family',
+        'https://source.unsplash.com/random/1200x800/?portrait,child',
+        'https://source.unsplash.com/random/1200x800/?portrait,senior'
+      ],
+      'landscape': [
+        'https://source.unsplash.com/random/1200x800/?landscape,mountain',
+        'https://source.unsplash.com/random/1200x800/?landscape,beach',
+        'https://source.unsplash.com/random/1200x800/?landscape,forest',
+        'https://source.unsplash.com/random/1200x800/?landscape,desert',
+        'https://source.unsplash.com/random/1200x800/?landscape,lake'
+      ]
+    };
+    
+    // Process each gallery
+    for (const galleryDoc of featuredGalleries.docs) {
+      const gallery = { id: galleryDoc.id, ...galleryDoc.data() };
+      console.log(`Adding images to gallery: ${gallery.title}`);
+      
+      // Determine which image set to use based on gallery tags or title
+      let imageCategory = 'wedding'; // default
+      
+      if (gallery.title.toLowerCase().includes('portrait') || gallery.tags.includes('portrait')) {
+        imageCategory = 'portrait';
+      } else if (gallery.title.toLowerCase().includes('landscape') || gallery.tags.includes('landscape')) {
+        imageCategory = 'landscape';
+      }
+      
+      const images = sampleImages[imageCategory];
+      const imagesCollectionRef = collection(db, 'galleries', gallery.id, 'images');
+      
+      // Check if gallery already has images
+      const existingImages = await getDocs(imagesCollectionRef);
+      if (!existingImages.empty) {
+        console.log(`Gallery ${gallery.title} already has ${existingImages.size} images. Skipping.`);
+        continue;
+      }
+      
+      // Add images to the gallery
+      for (let i = 0; i < images.length; i++) {
+        const imageUrl = images[i];
+        const thumbnailUrl = imageUrl.replace('1200x800', '400x300');
+        
+        await addDoc(imagesCollectionRef, {
+          url: imageUrl,
+          thumbnailUrl: thumbnailUrl,
+          filename: `sample-image-${i + 1}.jpg`,
+          title: `Sample Image ${i + 1}`,
+          description: `This is a sample image for the gallery. Replace with your own content.`,
+          featured: i < 3, // First 3 images are featured
+          order: i,
+          width: 1200,
+          height: 800,
+          size: 500000, // Fake size ~500KB
+          createdAt: Timestamp.now(),
+          tags: gallery.tags
+        });
+        
+        console.log(`Added image ${i + 1} to gallery ${gallery.title}`);
+      }
+      
+      // Update the gallery's cover and thumbnail images to use the first image
+      await updateDoc(doc(db, 'galleries', gallery.id), {
+        coverImage: images[0],
+        thumbnailImage: images[0].replace('1200x800', '400x300'),
+        imageCount: images.length
+      });
+      
+      console.log(`Updated gallery ${gallery.title} with new cover and thumbnail images`);
+    }
+    
+    console.log('Sample images added to all featured galleries successfully!');
+    console.log('You can now view and edit these galleries in the admin panel.');
+  } catch (error) {
+    console.error('Error adding sample images to featured galleries:', error);
+  }
+};
+
+// Execute the function
+addSampleImagesToFeaturedGalleries()
+  .then(() => console.log('Script completed'))
+  .catch(error => console.error('Script failed:', error));

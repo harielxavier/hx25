@@ -1,0 +1,86 @@
+# Windsurf deployment ignore file
+# This file specifies patterns to exclude from deployment
+
+# Large SDK directories
+google-cloud-sdk/
+google-cloud-cli-*.tar.gz
+
+# Node modules
+node_modules/
+
+# Build directories
+dist/
+build/
+.vite/
+
+# Temporary directories
+temp/
+temp_images/
+tmp/
+
+# Firebase cache
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Environment variables (except windsurf specific)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.windsurf
+
+# Service account keys and credentials
+*-firebase-adminsdk-*.json
+firebase-admin-key.json
+*keyserv*.json
+firebase-service-account.json
+harielxavierphotography-*.json
+
+# Large media files
+*.mp4
+*.tiff
+*.avi
+*.flv
+*.mov
+*.wmv
+
+# Image files (except critical ones)
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.svg
+*.ico
+!public/favicon.ico
+!public/logo.png
+!src/assets/*.svg
+!src/assets/*.png
+
+# MoStuff directory (contains large files)
+MoStuff/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.backup
+*.bak
+*.old
+*.original
+
+# Deploy build directory
+deploy-build/
+
+# Data directories
+dataconnect/
+
+# Misc large files
+*.zip
+*.tar
+*.gz
+*.rar

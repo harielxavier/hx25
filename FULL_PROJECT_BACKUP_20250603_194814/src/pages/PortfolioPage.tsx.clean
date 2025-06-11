@@ -1,0 +1,25 @@
+import React from 'react';
+import Footer from '../components/landing/Footer';
+import Navigation from '../components/landing/Navigation';
+import { useThemeContext } from '../context/ThemeContext';
+
+const PortfolioPage = () => {
+  const { mode } = useThemeContext();
+  
+  return (
+    <>
+      <div className={`min-h-screen ${mode === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+        <Navigation />
+        
+        {/* Empty Portfolio Page Content */}
+        <main className="container mx-auto px-4 py-12">
+          {/* Content will be added here */}
+        </main>
+        
+        <Footer />
+      </div>
+    </>
+  );
+};
+
+export default PortfolioPage;

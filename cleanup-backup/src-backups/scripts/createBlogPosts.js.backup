@@ -1,0 +1,225 @@
+// Script to create sample blog posts in Firebase Firestore
+const { initializeApp } = require('firebase/app');
+const { getFirestore, collection, addDoc, Timestamp, query, where, getDocs } = require('firebase/firestore');
+
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: process.env.VITE_FIREBASE_API_KEY || 'AIzaSyA5gYx-pTg9DZZ_QXgQLfQYmQmzM4NpkSY',
+  authDomain: 'photo-business-crm.firebaseapp.com',
+  projectId: 'photo-business-crm',
+  storageBucket: 'photo-business-crm.appspot.com',
+  messagingSenderId: '1234567890',
+  appId: '1:1234567890:web:1234567890abcdef'
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Sample blog posts data
+const samplePosts = [
+  {
+    title: 'Wedding Photography Tips for Beginners',
+    slug: 'wedding-photography-tips-beginners',
+    author: {
+      name: 'Hariel Xavier',
+      avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80'
+    },
+    category: 'Wedding',
+    tags: ['Wedding', 'Photography', 'Tips', 'Beginners'],
+    image: 'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
+    excerpt: 'Essential tips for photographers just starting out in wedding photography, from preparation to post-processing.',
+    content: `
+      <p>Wedding photography is both an art and a challenge. As a beginner, it's important to be prepared and know what to expect.</p>
+      
+      <h2>Before the Wedding</h2>
+      <p>Always meet with the couple beforehand to understand their expectations and vision. Create a shot list of must-have moments and scout the location if possible.</p>
+      
+      <h2>Essential Equipment</h2>
+      <p>Always bring backup equipment, including:</p>
+      <ul>
+        <li>At least two camera bodies</li>
+        <li>Multiple lenses (wide-angle, portrait, and zoom)</li>
+        <li>Extra batteries and memory cards</li>
+        <li>External flashes</li>
+      </ul>
+      
+      <h2>Capturing the Day</h2>
+      <p>Focus on candid moments that tell the story of the day. Don't just photograph what happens, but also the emotions and atmosphere.</p>
+      
+      <h2>Post-Processing</h2>
+      <p>Develop a consistent editing style that enhances the natural beauty of the day without looking overly processed.</p>
+    `,
+    status: 'published',
+    created_at: Timestamp.now(),
+    updated_at: Timestamp.now(),
+    published_at: Timestamp.now(),
+    featured: true,
+    seo_title: 'Wedding Photography Tips for Beginners | Hariel Xavier Photography',
+    seo_description: 'Learn essential wedding photography tips for beginners, from preparation to post-processing.',
+    views: 245,
+    likes: 78,
+    comments: 12,
+    shares: 34
+  },
+  {
+    title: 'How to Choose the Perfect Portrait Lens',
+    slug: 'choose-perfect-portrait-lens',
+    author: {
+      name: 'Hariel Xavier',
+      avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80'
+    },
+    category: 'Equipment',
+    tags: ['Portrait', 'Lens', 'Equipment', 'Photography'],
+    image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
+    excerpt: 'A comprehensive guide to selecting the right lens for portrait photography based on your style and needs.',
+    content: `
+      <p>Choosing the right lens for portrait photography can significantly impact your results. Here's what to consider.</p>
+      
+      <h2>Focal Length Matters</h2>
+      <p>For portraits, focal lengths between 85mm and 135mm are often considered ideal as they provide flattering compression and background separation.</p>
+      
+      <h2>Aperture Considerations</h2>
+      <p>A wide aperture (f/1.4 to f/2.8) allows for beautiful background blur (bokeh) that makes your subject stand out.</p>
+      
+      <h2>Popular Portrait Lenses</h2>
+      <ul>
+        <li>85mm f/1.4 or f/1.8 - The classic portrait lens</li>
+        <li>50mm f/1.4 or f/1.8 - Versatile and affordable</li>
+        <li>70-200mm f/2.8 - Excellent compression and versatility</li>
+        <li>135mm f/2 - Beautiful compression and background separation</li>
+      </ul>
+      
+      <h2>Budget Considerations</h2>
+      <p>Don't feel pressured to buy the most expensive lens. Many affordable options like the 50mm f/1.8 (often called the "nifty fifty") can produce stunning portraits.</p>
+    `,
+    status: 'published',
+    created_at: Timestamp.now(),
+    updated_at: Timestamp.now(),
+    published_at: Timestamp.now(),
+    featured: false,
+    seo_title: 'How to Choose the Perfect Portrait Lens | Hariel Xavier Photography',
+    seo_description: 'Learn how to select the ideal lens for portrait photography based on your style and needs.',
+    views: 189,
+    likes: 45,
+    comments: 8,
+    shares: 22
+  },
+  {
+    title: 'Mastering Natural Light in Outdoor Photography',
+    slug: 'mastering-natural-light-outdoor-photography',
+    author: {
+      name: 'Hariel Xavier',
+      avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80'
+    },
+    category: 'Techniques',
+    tags: ['Natural Light', 'Outdoor', 'Photography', 'Techniques'],
+    image: 'https://images.unsplash.com/photo-1500051638674-ff996a0ec29e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
+    excerpt: 'Learn how to work with natural light to create stunning outdoor portraits and landscapes.',
+    content: `
+      <p>Natural light is one of the most beautiful and challenging elements in photography. Here's how to master it.</p>
+      
+      <h2>Understanding the Golden Hour</h2>
+      <p>The hour after sunrise and before sunset provides soft, warm light that's flattering for almost any subject. Plan your shoots around these times when possible.</p>
+      
+      <h2>Working with Harsh Midday Sun</h2>
+      <p>When shooting in midday sun, look for open shade or use a diffuser to soften the light. Alternatively, use the harsh light creatively for high-contrast images.</p>
+      
+      <h2>Backlighting Techniques</h2>
+      <p>Placing your subject with the sun behind them can create beautiful rim lighting and dreamy effects. Use spot metering or exposure compensation to properly expose your subject.</p>
+      
+      <h2>Using Reflectors</h2>
+      <p>A simple reflector can bounce light back onto your subject, filling in shadows and creating more balanced lighting in challenging conditions.</p>
+      
+      <h2>Reading the Weather</h2>
+      <p>Cloudy days provide soft, diffused light that's perfect for portraits. Don't cancel your shoot just because it's not sunny!</p>
+    `,
+    status: 'published',
+    created_at: Timestamp.now(),
+    updated_at: Timestamp.now(),
+    published_at: Timestamp.now(),
+    featured: false,
+    seo_title: 'Mastering Natural Light in Outdoor Photography | Hariel Xavier Photography',
+    seo_description: 'Learn techniques for working with natural light to create stunning outdoor portraits and landscapes.',
+    views: 312,
+    likes: 92,
+    comments: 15,
+    shares: 47
+  },
+  {
+    title: 'Building Your Photography Portfolio: A Step-by-Step Guide',
+    slug: 'building-photography-portfolio-guide',
+    author: {
+      name: 'Hariel Xavier',
+      avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80'
+    },
+    category: 'Business',
+    tags: ['Portfolio', 'Business', 'Marketing', 'Photography'],
+    image: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
+    excerpt: 'A comprehensive guide to creating a photography portfolio that showcases your best work and attracts clients.',
+    content: `
+      <p>A strong portfolio is essential for any photographer looking to attract clients or gain recognition. Here's how to build one that stands out.</p>
+      
+      <h2>Quality Over Quantity</h2>
+      <p>Include only your absolute best work. It's better to have 20 outstanding images than 100 mediocre ones.</p>
+      
+      <h2>Tell Your Story</h2>
+      <p>Your portfolio should reflect your unique style and vision. Don't try to copy others or include images that don't represent the work you want to do.</p>
+      
+      <h2>Organize by Category</h2>
+      <p>Group your images into logical categories (weddings, portraits, landscapes, etc.) to make it easy for potential clients to find what they're looking for.</p>
+      
+      <h2>Update Regularly</h2>
+      <p>Your portfolio should evolve as your skills improve. Regularly review and replace older images with newer, better work.</p>
+      
+      <h2>Consider Your Platform</h2>
+      <p>Whether you choose a personal website, Instagram, or printed portfolio, ensure the presentation complements your images and is accessible to your target audience.</p>
+      
+      <h2>Include Client Work</h2>
+      <p>If possible, showcase real client projects to demonstrate your professional experience and the types of assignments you've handled successfully.</p>
+    `,
+    status: 'published',
+    created_at: Timestamp.now(),
+    updated_at: Timestamp.now(),
+    published_at: Timestamp.now(),
+    featured: true,
+    seo_title: 'Building Your Photography Portfolio: A Step-by-Step Guide | Hariel Xavier Photography',
+    seo_description: 'Learn how to create a photography portfolio that showcases your best work and attracts clients.',
+    views: 278,
+    likes: 63,
+    comments: 9,
+    shares: 31
+  }
+];
+
+// Function to create blog posts in Firestore
+async function createBlogPosts() {
+  try {
+    console.log('Checking for existing blog posts...');
+    const postsRef = collection(db, 'blog_posts');
+    const q = query(postsRef, where('status', '==', 'published'));
+    const querySnapshot = await getDocs(q);
+    
+    if (!querySnapshot.empty) {
+      console.log(`Found ${querySnapshot.size} existing posts, skipping sample creation.`);
+      return false;
+    }
+    
+    console.log('No posts found, creating sample posts...');
+    
+    // Add each sample post to Firestore
+    for (const post of samplePosts) {
+      await addDoc(collection(db, 'blog_posts'), post);
+      console.log(`Created post: ${post.title}`);
+    }
+    
+    console.log('Sample blog posts created successfully!');
+    return true;
+  } catch (error) {
+    console.error('Error creating sample blog posts:', error);
+    return false;
+  }
+}
+
+// Execute the function
+createBlogPosts();

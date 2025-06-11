@@ -1,0 +1,180 @@
+.wedding-timeline-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+.wedding-timeline-container h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.timeline-intro {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 50px;
+  font-size: 1.1rem;
+  color: #666;
+}
+
+.timeline {
+  position: relative;
+  padding: 30px 0;
+}
+
+/* Timeline center line */
+.timeline::before {
+  content: '';
+  position: absolute;
+  width: 4px;
+  background-color: #f0f0f0;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  margin-left: -2px;
+  border-radius: 2px;
+}
+
+.timeline-step {
+  position: relative;
+  margin-bottom: 60px;
+  width: 100%;
+}
+
+.timeline-step::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+/* Left and right positioning */
+.timeline-step.left .timeline-content {
+  float: right;
+  padding-left: 40px;
+}
+
+.timeline-step.right .timeline-content {
+  float: left;
+  padding-right: 40px;
+  text-align: right;
+}
+
+.timeline-content {
+  position: relative;
+  width: 45%;
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.timeline-content:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Timeline icons */
+.timeline-icon {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  left: 50%;
+  margin-left: -30px;
+  background-color: #fff;
+  border: 4px solid #f0f0f0;
+  border-radius: 50%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  font-size: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Step titles */
+.timeline-content h3 {
+  margin-top: 0;
+  color: #333;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.timeline-content p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+  color: #666;
+}
+
+/* Testimonials */
+.timeline-testimonial {
+  background-color: #f9f9f9;
+  border-left: 4px solid #ddd;
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 4px;
+}
+
+.timeline-step.right .timeline-testimonial {
+  border-left: none;
+  border-right: 4px solid #ddd;
+  text-align: left;
+}
+
+.timeline-testimonial blockquote {
+  margin: 0 0 10px 0;
+  font-style: italic;
+  color: #555;
+  line-height: 1.6;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+}
+
+.timeline-step.right .testimonial-author {
+  justify-content: flex-start;
+}
+
+.testimonial-author img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+.testimonial-author span {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+  .timeline::before {
+    left: 40px;
+  }
+  
+  .timeline-step.left .timeline-content,
+  .timeline-step.right .timeline-content {
+    width: calc(100% - 90px);
+    float: right;
+    padding-left: 30px;
+    padding-right: 10px;
+    text-align: left;
+  }
+  
+  .timeline-icon {
+    left: 40px;
+    margin-left: 0;
+  }
+  
+  .timeline-step.right .timeline-testimonial {
+    border-left: 4px solid #ddd;
+    border-right: none;
+  }
+}

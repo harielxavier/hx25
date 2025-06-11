@@ -1,0 +1,129 @@
+.before-after-container {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+  cursor: col-resize;
+  user-select: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.before-image-container,
+.after-image-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.before-image-container {
+  width: 100%;
+  z-index: 1;
+}
+
+.after-image-container {
+  width: 50%;
+  z-index: 2;
+}
+
+.before-image-container img,
+.after-image-container img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slider-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slider-handle-line {
+  position: absolute;
+  width: 4px;
+  height: 100%;
+  background-color: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.slider-handle-circle {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  z-index: 4;
+}
+
+.slider-arrow-left,
+.slider-arrow-right {
+  position: absolute;
+  color: #333;
+  font-size: 14px;
+}
+
+.slider-arrow-left {
+  left: 8px;
+}
+
+.slider-arrow-right {
+  right: 8px;
+}
+
+/* Labels */
+.before-after-container::before,
+.before-after-container::after {
+  content: attr(data-before);
+  position: absolute;
+  bottom: 15px;
+  padding: 5px 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 5;
+}
+
+.before-after-container::before {
+  content: "BEFORE";
+  left: 15px;
+}
+
+.before-after-container::after {
+  content: "AFTER";
+  right: 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .before-after-container {
+    height: 350px;
+  }
+}
+
+@media (max-width: 480px) {
+  .before-after-container {
+    height: 250px;
+  }
+  
+  .slider-handle-circle {
+    width: 30px;
+    height: 30px;
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "galleries": [
+    {
+      "id": "wedding-sample",
+      "title": "Wedding Photography",
+      "slug": "wedding-photography",
+      "description": "Beautiful wedding photography showcasing couples on their special day.",
+      "clientName": "Sample Client",
+      "clientEmail": "sample@example.com",
+      "eventDate": "2025-03-24T00:02:41.086Z",
+      "password": null,
+      "isPublic": true,
+      "isPasswordProtected": false,
+      "allowDownloads": true,
+      "allowSharing": true,
+      "category": "Wedding",
+      "location": "New York, NY",
+      "featured": true,
+      "tags": [
+        "wedding",
+        "couple",
+        "love"
+      ],
+      "order": 1,
+      "coverImage": "/images/placeholders/wedding.jpg",
+      "thumbnailImage": "/images/placeholders/wedding.jpg",
+      "imageCount": 3,
+      "images": [
+        {
+          "id": "wedding-1",
+          "url": "/images/placeholders/wedding.jpg",
+          "thumbnailUrl": "/images/placeholders/wedding.jpg",
+          "filename": "wedding-1.jpg",
+          "title": "Wedding Sample 1",
+          "description": "Beautiful wedding ceremony",
+          "featured": true,
+          "order": 1
+        },
+        {
+          "id": "wedding-2",
+          "url": "/images/placeholders/wedding.jpg",
+          "thumbnailUrl": "/images/placeholders/wedding.jpg",
+          "filename": "wedding-2.jpg",
+          "title": "Wedding Sample 2",
+          "description": "Couple portraits",
+          "featured": false,
+          "order": 2
+        },
+        {
+          "id": "wedding-3",
+          "url": "/images/placeholders/wedding.jpg",
+          "thumbnailUrl": "/images/placeholders/wedding.jpg",
+          "filename": "wedding-3.jpg",
+          "title": "Wedding Sample 3",
+          "description": "Reception celebration",
+          "featured": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": "portrait-sample",
+      "title": "Portrait Photography",
+      "slug": "portrait-photography",
+      "description": "Professional portrait photography capturing personality and emotion.",
+      "clientName": "Sample Client",
+      "clientEmail": "sample@example.com",
+      "eventDate": "2025-03-24T00:02:41.087Z",
+      "password": null,
+      "isPublic": true,
+      "isPasswordProtected": false,
+      "allowDownloads": true,
+      "allowSharing": true,
+      "category": "Portrait",
+      "location": "New York, NY",
+      "featured": true,
+      "tags": [
+        "portrait",
+        "professional",
+        "headshot"
+      ],
+      "order": 2,
+      "coverImage": "/images/placeholders/portrait.jpg",
+      "thumbnailImage": "/images/placeholders/portrait.jpg",
+      "imageCount": 3,
+      "images": [
+        {
+          "id": "portrait-1",
+          "url": "/images/placeholders/portrait.jpg",
+          "thumbnailUrl": "/images/placeholders/portrait.jpg",
+          "filename": "portrait-1.jpg",
+          "title": "Portrait Sample 1",
+          "description": "Professional headshot",
+          "featured": true,
+          "order": 1
+        },
+        {
+          "id": "portrait-2",
+          "url": "/images/placeholders/portrait.jpg",
+          "thumbnailUrl": "/images/placeholders/portrait.jpg",
+          "filename": "portrait-2.jpg",
+          "title": "Portrait Sample 2",
+          "description": "Environmental portrait",
+          "featured": false,
+          "order": 2
+        },
+        {
+          "id": "portrait-3",
+          "url": "/images/placeholders/portrait.jpg",
+          "thumbnailUrl": "/images/placeholders/portrait.jpg",
+          "filename": "portrait-3.jpg",
+          "title": "Portrait Sample 3",
+          "description": "Family portrait",
+          "featured": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": "landscape-sample",
+      "title": "Landscape Photography",
+      "slug": "landscape-photography",
+      "description": "Breathtaking landscape photography from around the world.",
+      "clientName": "Sample Client",
+      "clientEmail": "sample@example.com",
+      "eventDate": "2025-03-24T00:02:41.087Z",
+      "password": null,
+      "isPublic": true,
+      "isPasswordProtected": false,
+      "allowDownloads": true,
+      "allowSharing": true,
+      "category": "Landscape",
+      "location": "Various Locations",
+      "featured": true,
+      "tags": [
+        "landscape",
+        "nature",
+        "travel"
+      ],
+      "order": 3,
+      "coverImage": "/images/placeholders/landscape.jpg",
+      "thumbnailImage": "/images/placeholders/landscape.jpg",
+      "imageCount": 3,
+      "images": [
+        {
+          "id": "landscape-1",
+          "url": "/images/placeholders/landscape.jpg",
+          "thumbnailUrl": "/images/placeholders/landscape.jpg",
+          "filename": "landscape-1.jpg",
+          "title": "Landscape Sample 1",
+          "description": "Mountain vista",
+          "featured": true,
+          "order": 1
+        },
+        {
+          "id": "landscape-2",
+          "url": "/images/placeholders/landscape.jpg",
+          "thumbnailUrl": "/images/placeholders/landscape.jpg",
+          "filename": "landscape-2.jpg",
+          "title": "Landscape Sample 2",
+          "description": "Ocean sunset",
+          "featured": false,
+          "order": 2
+        },
+        {
+          "id": "landscape-3",
+          "url": "/images/placeholders/landscape.jpg",
+          "thumbnailUrl": "/images/placeholders/landscape.jpg",
+          "filename": "landscape-3.jpg",
+          "title": "Landscape Sample 3",
+          "description": "Forest path",
+          "featured": false,
+          "order": 3
+        }
+      ]
+    }
+  ]
+}

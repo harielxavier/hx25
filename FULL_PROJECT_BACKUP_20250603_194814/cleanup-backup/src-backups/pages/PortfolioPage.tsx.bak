@@ -1,0 +1,1024 @@
+import { useState, useEffect, useRef } from 'react';
+import Footer from '../components/landing/Footer';
+import Navigation from '../components/landing/Navigation';
+import { useThemeContext } from '../context/ThemeContext';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../firebase/config';
+import { transformImageUrl } from '../utils/imageOptimizationUtils';
+import Lightbox from 'photoswipe/lightbox';
+import 'photoswipe/style.css';
+import WeddingStoriesGallery from '../components/portfolio/WeddingStoriesGallery';
+
+// Portfolio image interface
+interface PortfolioImage {
+  id: string;
+  src: string;
+  alt: string;
+  section: string;
+  featured: boolean;
+  width: number;
+  height: number;
+  order?: number;
+  category?: string;
+  portfolioId?: string;
+}
+
+const PortfolioPage = () => {
+  const { mode } = useThemeContext();
+  const [activeCategory, setActiveCategory] = useState('WEDDINGS');
+  const [portfolioImages, setPortfolioImages] = useState<PortfolioImage[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
+  
+  // Initialize PhotoSwipe lightbox
+  useEffect(() => {
+    if (portfolioImages.length === 0) return;
+    
+    let lightbox = new Lightbox({
+      gallery: '.gallery-grid',
+      children: 'a',
+      pswpModule: () => import('photoswipe'),
+      loop: true,
+      padding: { top: 20, bottom: 20, left: 20, right: 20 },
+      bgOpacity: 0.9,
+      showHideAnimationType: 'fade',
+      zoom: true,
+      counter: true,
+      arrowPrev: true,
+      arrowNext: true,
+      close: true,
+      preloaderDelay: 2000
+    });
+    
+    lightbox.init();
+    
+    return () => {
+      lightbox.destroy();
+      // @ts-ignore - TypeScript doesn't like setting this to null
+      lightbox = null;
+    };
+  }, [portfolioImages]);
+  
+  // Fetch portfolio images from Firebase
+  useEffect(() => {
+    const fetchPortfolioImages = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        let portfoliosQuery;
+        
+        // Handle ALL category differently
+        if (activeCategory === 'ALL') {
+          portfoliosQuery = query(
+            collection(db, 'portfolios')
+          );
+        } else {
+          // Get portfolios based on active category
+          portfoliosQuery = query(
+            collection(db, 'portfolios'),
+            where('category', '==', activeCategory)
+          );
+        }
+        
+        const portfoliosSnapshot = await getDocs(portfoliosQuery);
+        let allImages: PortfolioImage[] = [];
+        
+        // For each portfolio, get its images
+        for (const portfolioDoc of portfoliosSnapshot.docs) {
+          const portfolioId = portfolioDoc.id;
+          const imagesCollection = collection(db, 'portfolios', portfolioId, 'images');
+          const imagesSnapshot = await getDocs(imagesCollection);
+          
+          const portfolioImages = imagesSnapshot.docs.map(doc => {
+            const data = doc.data() as PortfolioImage;
+            return {
+              ...data,
+              id: doc.id,
+              portfolioId
+            };
+          });
+          
+          allImages = [...allImages, ...portfolioImages];
+        }
+        
+        // If no images found, use sample data for testing based on category
+        if (allImages.length === 0) {
+          // For ALL category, combine all sample images
+          if (activeCategory === 'ALL') {
+            allImages = [
+              // Wedding samples
+              {
+                id: 'kz-1',
+                src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-1.jpg',
+                alt: 'Elegant wedding portrait',
+                section: 'gallery',
+                featured: true,
+                width: 1200,
+                height: 800,
+                order: 1,
+                category: 'WEDDINGS'
+              },
+              {
+                id: 'kz-3',
+                src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-3.jpg',
+                alt: 'Bride preparation',
+                section: 'gallery',
+                featured: true,
+                width: 1200,
+                height: 800,
+                order: 2,
+                category: 'WEDDINGS'
+              },
+              // Engagement samples
+              {
+                id: 'eng-1',
+                src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-2.jpg',
+                alt: 'Couple in the park',
+                section: 'gallery',
+                featured: true,
+                width: 1200,
+                height: 800,
+                order: 3,
+                category: 'ENGAGEMENTS'
+              },
+              // Portrait samples
+              {
+                id: 'port-1',
+                src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-6.jpg',
+                alt: 'Professional headshot',
+                section: 'gallery',
+                featured: true,
+                width: 1200,
+                height: 800,
+                order: 4,
+                category: 'PORTRAITS'
+              },
+              // Detail samples
+              {
+                id: 'detail-1',
+                src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-50.jpg',
+                alt: 'Wedding details',
+                section: 'gallery',
+                featured: true,
+                width: 1200,
+                height: 800,
+                order: 5,
+                category: 'DETAILS'
+              }
+            ];
+          } else {
+            switch(activeCategory) {
+            case 'WEDDINGS':
+              // Use sample data from both Karni & Zilvinas and Crysta & David
+              allImages = [
+                {
+                  id: 'kz-1',
+                  src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-1.jpg',
+                  alt: 'Elegant wedding portrait',
+                  section: 'gallery',
+                  featured: true,
+                  width: 1200,
+                  height: 800,
+                  order: 1
+                },
+                {
+                  id: 'kz-3',
+                  src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-3.jpg',
+                  alt: 'Bride preparation',
+                  section: 'gallery',
+                  featured: true,
+                  width: 1200,
+                  height: 800,
+                  order: 2
+                },
+                {
+                  id: 'kz-5',
+                  src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-5.jpg',
+                  alt: 'Wedding ceremony',
+                  section: 'gallery',
+                  featured: true,
+                  width: 1200,
+                  height: 800,
+                  order: 3
+                },
+                {
+                  id: 'cd-322',
+                  src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-322.jpg',
+                  alt: 'Castle wedding reception',
+                  section: 'gallery',
+                  featured: true,
+                  width: 1200,
+                  height: 800,
+                  order: 4
+                },
+                {
+                  id: 'cd-170',
+                  src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-170.jpg',
+                  alt: 'Romantic couple portrait',
+                  section: 'gallery',
+                  featured: true,
+                  width: 1200,
+                  height: 800,
+                  order: 5
+                },
+                {
+                  id: 'cd-25',
+                  src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-25.jpg',
+                  alt: 'Bride getting ready',
+                  section: 'gallery',
+                  featured: true,
+                  width: 1200,
+                  height: 800,
+                  order: 6
+                }
+              ];
+              break;
+              
+            case 'ENGAGEMENTS':
+              // Sample engagement photos
+              allImages = [
+                {
+                  id: 'eng-1',
+                  src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-2.jpg',
+                  alt: 'Couple in the park',
+                  section: 'gallery',
+                  featured: true,
+                  width: 1200,
+                  height: 800,
+                  order: 1
+                },
+                {
+                  id: 'eng-2',
+                  src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-4.jpg',
+                  alt: 'Sunset engagement',
+                  section: 'gallery',
+                  featured: true,
+                  width: 1200,
+                  height: 800,
+                  order: 2
+                },
+                {
+                  id: 'eng-3',
+                  src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-15.jpg',
+                  alt: 'Urban engagement',
+                  section: 'gallery',
+                  featured: true,
+                  width: 1200,
+                  height: 800,
+                  order: 3
+                }
+              ];
+              break;
+              
+            case 'PORTRAITS':
+              // Sample portrait photos
+              allImages = [
+                {
+                  id: 'port-1',
+                  src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-6.jpg',
+                  alt: 'Professional headshot',
+                  section: 'gallery',
+                  featured: true,
+                  width: 1200,
+                  height: 800,
+                  order: 1
+                },
+                {
+                  id: 'port-2',
+                  src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-50.jpg',
+                  alt: 'Artistic portrait',
+                  section: 'gallery',
+                  featured: true,
+                  width: 1200,
+                  height: 800,
+                  order: 2
+                }
+              ];
+              break;
+              
+            case 'DETAILS':
+              // Sample detail photos
+              allImages = [
+                {
+                  id: 'detail-1',
+                  src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-50.jpg',
+                  alt: 'Wedding details',
+                  section: 'gallery',
+                  featured: true,
+                  width: 1200,
+                  height: 800,
+                  order: 1,
+                  category: 'DETAILS'
+                },
+                {
+                  id: 'detail-2',
+                  src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-10.jpg',
+                  alt: 'Fine art details',
+                  section: 'gallery',
+                  featured: true,
+                  width: 1200,
+                  height: 800,
+                  order: 2,
+                  category: 'DETAILS'
+                }
+              ];
+              break;
+              
+            default:
+              // Default empty array
+              break;
+            }
+          }
+        }
+        
+        // Sort images by order if available, otherwise by ID
+        const sortedImages = allImages.sort((a, b) => {
+          if (a.order !== undefined && b.order !== undefined) {
+            return a.order - b.order;
+          }
+          return a.id.localeCompare(b.id);
+        });
+        
+        setPortfolioImages(sortedImages);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching portfolio images:', err);
+        setError('Failed to load portfolio images. Please try again later.');
+        setLoading(false);
+      }
+    };
+    
+    fetchPortfolioImages();
+  }, [activeCategory]);
+  
+  return (
+    <>
+      <div className={`min-h-screen ${mode === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+        <Navigation />
+        
+        {/* Hero Section - Elegant full viewport height with refined text overlay */}
+        <section className="relative h-screen overflow-hidden">
+          <div className="absolute inset-0 transform transition-transform duration-30000 hover:scale-105">
+            <img 
+              src="https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-1.jpg" 
+              alt="Wedding Portfolio Hero" 
+              className="w-full h-full object-cover"
+              loading="eager"
+              {...{ fetchpriority: "high" } as any}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/70"></div>
+          </div>
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+            <div className="relative inline-block mb-6">
+              <div className="absolute -inset-1 bg-gradient-to-r from-rose-300 to-rose-500 opacity-20 blur rounded-full"></div>
+              <h1 className="relative text-6xl md:text-8xl text-white font-extralight tracking-widest drop-shadow-lg mb-4">HARIEL XAVIER</h1>
+            </div>
+            <div className="w-24 h-px bg-gradient-to-r from-transparent via-rose-300 to-transparent my-4"></div>
+            <p className="text-xl md:text-2xl text-white font-light tracking-widest mb-2 opacity-90">NEW YORK CITY</p>
+            <p className="text-2xl md:text-3xl text-white font-extralight tracking-wider uppercase">Luxury Wedding Photography</p>
+            <div className="mt-12 animate-bounce">
+              <svg className="w-8 h-8 text-white opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+              </svg>
+            </div>
+          </div>
+        </section>
+        
+        {/* Portfolio Categories Navigation - Elegant sticky navigation with refined categories */}
+        <section className="sticky top-0 z-10 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md py-5 border-b border-gray-200 dark:border-gray-800 shadow-sm">
+          <div className="container mx-auto px-4 overflow-x-auto">
+            <div className="flex justify-center space-x-12 min-w-max">
+              {['ALL', 'WEDDINGS', 'ENGAGEMENTS', 'PORTRAITS', 'DETAILS'].map((category) => (
+                <button
+                  key={category}
+                  className={`relative py-2 text-lg font-light tracking-widest transition-all duration-300 ${activeCategory === category ? 'text-rose-500 scale-105' : 'text-gray-500 hover:text-gray-900 dark:hover:text-gray-300'}`}
+                  onClick={() => setActiveCategory(category)}
+                >
+                  <span className="relative z-10">{category}</span>
+                  {activeCategory === category ? (
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-rose-500 to-transparent"></div>
+                  ) : (
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-px bg-gradient-to-r from-transparent via-rose-500 to-transparent transition-all duration-300 group-hover:w-1/2"></div>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+        
+        {/* Featured Weddings Section - Horizontal scrolling gallery */}
+        <section className="py-16 bg-gray-50 dark:bg-gray-900">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-light mb-8 text-center">Featured Weddings</h2>
+            <div className="relative overflow-x-auto pb-4">
+              <div className="flex space-x-6 min-w-max px-4 pb-4">
+                {/* Featured Wedding 1 */}
+                <div className="flex-shrink-0 w-80 group">
+                  <div className="overflow-hidden rounded-lg shadow-md mb-3">
+                    <img 
+                      src="https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-1.jpg" 
+                      alt="Karni & Zilvinas Wedding" 
+                      className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  <h3 className="font-medium text-lg">Karni & Zilvinas</h3>
+                  <p className="text-gray-600 dark:text-gray-400">The Plaza Hotel</p>
+                  <p className="text-gray-500 dark:text-gray-500">New York City • 2024</p>
+                </div>
+                
+                {/* Featured Wedding 2 */}
+                <div className="flex-shrink-0 w-80 group">
+                  <div className="overflow-hidden rounded-lg shadow-md mb-3">
+                    <img 
+                      src="https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-322.jpg" 
+                      alt="Crysta & David Wedding" 
+                      className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  <h3 className="font-medium text-lg">Crysta & David</h3>
+                  <p className="text-gray-600 dark:text-gray-400">Castle Hill</p>
+                  <p className="text-gray-500 dark:text-gray-500">Newport • 2023</p>
+                </div>
+                
+                {/* Featured Wedding 3 */}
+                <div className="flex-shrink-0 w-80 group">
+                  <div className="overflow-hidden rounded-lg shadow-md mb-3">
+                    <img 
+                      src="https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-5.jpg" 
+                      alt="Emma & James Wedding" 
+                      className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  <h3 className="font-medium text-lg">Emma & James</h3>
+                  <p className="text-gray-600 dark:text-gray-400">Brooklyn Botanic Garden</p>
+                  <p className="text-gray-500 dark:text-gray-500">Brooklyn • 2023</p>
+                </div>
+                
+                {/* Featured Wedding 4 */}
+                <div className="flex-shrink-0 w-80 group">
+                  <div className="overflow-hidden rounded-lg shadow-md mb-3">
+                    <img 
+                      src="https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-170.jpg" 
+                      alt="Sophia & Michael Wedding" 
+                      className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  <h3 className="font-medium text-lg">Sophia & Michael</h3>
+                  <p className="text-gray-600 dark:text-gray-400">The Foundry</p>
+                  <p className="text-gray-500 dark:text-gray-500">Long Island City • 2023</p>
+                </div>
+                
+                {/* Featured Wedding 5 */}
+                <div className="flex-shrink-0 w-80 group">
+                  <div className="overflow-hidden rounded-lg shadow-md mb-3">
+                    <img 
+                      src="https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-25.jpg" 
+                      alt="Olivia & Ethan Wedding" 
+                      className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  <h3 className="font-medium text-lg">Olivia & Ethan</h3>
+                  <p className="text-gray-600 dark:text-gray-400">Tribeca Rooftop</p>
+                  <p className="text-gray-500 dark:text-gray-500">New York City • 2022</p>
+                </div>
+                
+                {/* Featured Wedding 6 */}
+                <div className="flex-shrink-0 w-80 group">
+                  <div className="overflow-hidden rounded-lg shadow-md mb-3">
+                    <img 
+                      src="https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-3.jpg" 
+                      alt="Ava & Noah Wedding" 
+                      className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  <h3 className="font-medium text-lg">Ava & Noah</h3>
+                  <p className="text-gray-600 dark:text-gray-400">Liberty House</p>
+                  <p className="text-gray-500 dark:text-gray-500">Jersey City • 2022</p>
+                </div>
+              </div>
+              <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-gray-50 to-transparent dark:from-gray-900 pointer-events-none"></div>
+              <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-gray-50 to-transparent dark:from-gray-900 pointer-events-none"></div>
+            </div>
+          </div>
+        </section>
+        
+        {/* Portfolio Categories Gallery */}
+        <main className="container mx-auto px-4 py-12" ref={galleryRef}>
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-rose-500"></div>
+            </div>
+          ) : error ? (
+            <div className="text-center py-20">
+              <p className="text-red-500">{error}</p>
+            </div>
+          ) : portfolioImages.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-lg">No images found for {activeCategory}.</p>
+            </div>
+          ) : activeCategory === 'WEDDINGS' ? (
+            <WeddingStoriesGallery />
+          ) : (
+            <div className="gallery-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 masonry">
+              {portfolioImages.map((image, index) => (
+                  <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-12">
+                    <div className="md:w-1/3">
+                      <h3 className="text-2xl font-light mb-3">Karni & Zilvinas</h3>
+                      <p className="text-gray-600 dark:text-gray-400 mb-1">The Plaza Hotel</p>
+                      <p className="text-gray-500 dark:text-gray-500 mb-4">New York City • June 2024</p>
+                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                        An elegant celebration that blended traditional elements with modern sophistication. From the emotional first look to the last dance, every moment was filled with joy and connection.
+                      </p>
+                      <button className="mt-6 border border-rose-500 text-rose-500 hover:bg-rose-500 hover:text-white px-6 py-2 rounded-full transition duration-300 text-sm tracking-wider">
+                        VIEW FULL GALLERY
+                      </button>
+                    </div>
+                    <div className="md:w-2/3 grid grid-cols-2 gap-4">
+                      <div className="overflow-hidden rounded-lg shadow-lg col-span-2">
+                        <a 
+                          href={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-1.jpg', 1800)}
+                          className="gallery-item block"
+                          data-pswp-width={1200}
+                          data-pswp-height={800}
+                        >
+                          <img 
+                            src={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-1.jpg', 1200)}
+                            alt="Karni & Zilvinas" 
+                            className="w-full h-auto transition-transform duration-1000 hover:scale-105"
+                          />
+                        </a>
+                      </div>
+                      <div className="overflow-hidden rounded-lg shadow-lg">
+                        <a 
+                          href={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-3.jpg', 1800)}
+                          className="gallery-item block"
+                          data-pswp-width={1200}
+                          data-pswp-height={800}
+                        >
+                          <img 
+                            src={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-3.jpg', 600)}
+                            alt="Bride preparation" 
+                            className="w-full h-auto transition-transform duration-1000 hover:scale-105"
+                          />
+                        </a>
+                      </div>
+                      <div className="overflow-hidden rounded-lg shadow-lg">
+                        <a 
+                          href={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-5.jpg', 1800)}
+                          className="gallery-item block"
+                          data-pswp-width={1200}
+                          data-pswp-height={800}
+                        >
+                          <img 
+                            src={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-5.jpg', 600)}
+                            alt="Wedding ceremony" 
+                            className="w-full h-auto transition-transform duration-1000 hover:scale-105"
+                          />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Wedding Story 2: Crysta & David */}
+                <div className="wedding-story">
+                  <div className="flex flex-col md:flex-row-reverse items-center md:items-start gap-8 mb-12">
+                    <div className="md:w-1/3">
+                      <h3 className="text-2xl font-light mb-3">Crysta & David</h3>
+                      <p className="text-gray-600 dark:text-gray-400 mb-1">Castle Hill</p>
+                      <p className="text-gray-500 dark:text-gray-500 mb-4">Newport • September 2023</p>
+                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                        A breathtaking seaside celebration with timeless elegance. The historic venue provided a stunning backdrop for a day filled with heartfelt moments and joyful celebrations.
+                      </p>
+                      <button className="mt-6 border border-rose-500 text-rose-500 hover:bg-rose-500 hover:text-white px-6 py-2 rounded-full transition duration-300 text-sm tracking-wider">
+                        VIEW FULL GALLERY
+                      </button>
+                    </div>
+                    <div className="md:w-2/3 grid grid-cols-2 gap-4">
+                      <div className="overflow-hidden rounded-lg shadow-lg col-span-2">
+                        <a 
+                          href={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-322.jpg', 1800)}
+                          className="gallery-item block"
+                          data-pswp-width={1200}
+                          data-pswp-height={800}
+                        >
+                          <img 
+                            src={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-322.jpg', 1200)}
+                            alt="Crysta & David" 
+                            className="w-full h-auto transition-transform duration-1000 hover:scale-105"
+                          />
+                        </a>
+                      </div>
+                      <div className="overflow-hidden rounded-lg shadow-lg">
+                        <a 
+                          href={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-170.jpg', 1800)}
+                          className="gallery-item block"
+                          data-pswp-width={1200}
+                          data-pswp-height={800}
+                        >
+                          <img 
+                            src={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-170.jpg', 600)}
+                            alt="Romantic couple portrait" 
+                            className="w-full h-auto transition-transform duration-1000 hover:scale-105"
+                          />
+                        </a>
+                      </div>
+                      <div className="overflow-hidden rounded-lg shadow-lg">
+                        <a 
+                          href={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-25.jpg', 1800)}
+                          className="gallery-item block"
+                          data-pswp-width={1200}
+                          data-pswp-height={800}
+                        >
+                          <img 
+                            src={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-25.jpg', 600)}
+                            alt="Bride getting ready" 
+                            className="w-full h-auto transition-transform duration-1000 hover:scale-105"
+                          />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Wedding Day Timeline */}
+                <div className="wedding-day-timeline py-12 bg-gray-50 dark:bg-gray-800 rounded-xl">
+                  <div className="container mx-auto px-4">
+                    <h3 className="text-2xl font-light text-center mb-12">The Wedding Day Journey</h3>
+                    <div className="relative">
+                      {/* Timeline Line */}
+                      <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-px bg-rose-200 dark:bg-rose-900"></div>
+                      
+                      {/* Timeline Items */}
+                      <div className="space-y-24 relative">
+                        {/* Getting Ready */}
+                        <div className="flex flex-col md:flex-row items-center">
+                          <div className="md:w-1/2 md:pr-12 md:text-right mb-6 md:mb-0">
+                            <h4 className="text-xl font-light mb-2">Getting Ready</h4>
+                            <p className="text-gray-600 dark:text-gray-400">The quiet moments of anticipation as the bride and groom prepare for their day.</p>
+                          </div>
+                          <div className="md:w-1/2 md:pl-12">
+                            <div className="overflow-hidden rounded-lg shadow-lg">
+                              <a 
+                                href={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-3.jpg', 1800)}
+                                className="gallery-item block"
+                                data-pswp-width={1200}
+                                data-pswp-height={800}
+                              >
+                                <img 
+                                  src={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-3.jpg', 800)}
+                                  alt="Bride preparation" 
+                                  className="w-full h-auto transition-transform duration-1000 hover:scale-105"
+                                />
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Ceremony */}
+                        <div className="flex flex-col md:flex-row-reverse items-center">
+                          <div className="md:w-1/2 md:pl-12 md:text-left mb-6 md:mb-0">
+                            <h4 className="text-xl font-light mb-2">The Ceremony</h4>
+                            <p className="text-gray-600 dark:text-gray-400">The emotional exchange of vows and rings as two become one.</p>
+                          </div>
+                          <div className="md:w-1/2 md:pr-12">
+                            <div className="overflow-hidden rounded-lg shadow-lg">
+                              <a 
+                                href={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-5.jpg', 1800)}
+                                className="gallery-item block"
+                                data-pswp-width={1200}
+                                data-pswp-height={800}
+                              >
+                                <img 
+                                  src={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-5.jpg', 800)}
+                                  alt="Wedding ceremony" 
+                                  className="w-full h-auto transition-transform duration-1000 hover:scale-105"
+                                />
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Portraits */}
+                        <div className="flex flex-col md:flex-row items-center">
+                          <div className="md:w-1/2 md:pr-12 md:text-right mb-6 md:mb-0">
+                            <h4 className="text-xl font-light mb-2">Couple Portraits</h4>
+                            <p className="text-gray-600 dark:text-gray-400">Intimate moments captured between the newlyweds in their first hours of marriage.</p>
+                          </div>
+                          <div className="md:w-1/2 md:pl-12">
+                            <div className="overflow-hidden rounded-lg shadow-lg">
+                              <a 
+                                href={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-170.jpg', 1800)}
+                                className="gallery-item block"
+                                data-pswp-width={1200}
+                                data-pswp-height={800}
+                              >
+                                <img 
+                                  src={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-170.jpg', 800)}
+                                  alt="Romantic couple portrait" 
+                                  className="w-full h-auto transition-transform duration-1000 hover:scale-105"
+                                />
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Reception */}
+                        <div className="flex flex-col md:flex-row-reverse items-center">
+                          <div className="md:w-1/2 md:pl-12 md:text-left mb-6 md:mb-0">
+                            <h4 className="text-xl font-light mb-2">The Reception</h4>
+                            <p className="text-gray-600 dark:text-gray-400">The celebration continues with dining, dancing, and cherished traditions.</p>
+                          </div>
+                          <div className="md:w-1/2 md:pr-12">
+                            <div className="overflow-hidden rounded-lg shadow-lg">
+                              <a 
+                                href={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-322.jpg', 1800)}
+                                className="gallery-item block"
+                                data-pswp-width={1200}
+                                data-pswp-height={800}
+                              >
+                                <img 
+                                  src={transformImageUrl('https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-322.jpg', 800)}
+                                  alt="Castle wedding reception" 
+                                  className="w-full h-auto transition-transform duration-1000 hover:scale-105"
+                                />
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+                <div 
+                  key={image.id} 
+                  className={`gallery-item relative overflow-hidden rounded-lg shadow-lg transform transition-all duration-500 hover:shadow-xl hover:-translate-y-1 ${index % 5 === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}
+                  data-pswp-width={image.width}
+                  data-pswp-height={image.height}
+                >
+                  <a 
+                    href={transformImageUrl(image.src, 1800)}
+                    className="aspect-square w-full overflow-hidden block"
+                    data-pswp-src={transformImageUrl(image.src, 1800)}
+                    data-pswp-width={image.width}
+                    data-pswp-height={image.height}
+                  >
+                    {/* Elegant low-res placeholder for progressive loading */}
+                    <div className="absolute inset-0 bg-gray-100 dark:bg-gray-800" style={{ backgroundImage: `url(${transformImageUrl(image.src, 20)})`, backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(10px)' }}></div>
+                    
+                    <img
+                      src={transformImageUrl(image.src, 800)}
+                      alt={image.alt}
+                      className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110 relative z-10"
+                      loading="lazy"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      srcSet={`
+                        ${transformImageUrl(image.src, 400)} 400w,
+                        ${transformImageUrl(image.src, 800)} 800w,
+                        ${transformImageUrl(image.src, 1200)} 1200w,
+                        ${transformImageUrl(image.src, 1800)} 1800w
+                      `}
+                    />
+                    
+                    <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/60 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500 flex items-end justify-center p-6">
+                      <div className="text-center">
+                        <span className="text-white text-lg font-light tracking-wider block mb-1">{image.alt}</span>
+                        {activeCategory === 'ALL' && image.category && (
+                          <span className="text-white text-xs font-light tracking-widest uppercase mt-2 inline-block bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20">{image.category}</span>
+                        )}
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              ))}
+            </div>
+          )}
+        </main>
+        
+        {/* Single Wedding Story Section */}
+        <section className="py-20 bg-white dark:bg-gray-800">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              {/* Hero Image */}
+              <div className="mb-8 overflow-hidden rounded-lg shadow-lg">
+                <img 
+                  src="https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-1.jpg" 
+                  alt="Karni & Zilvinas Wedding" 
+                  className="w-full h-auto"
+                />
+              </div>
+              
+              {/* Couple Info */}
+              <div className="text-center mb-10">
+                <h2 className="text-4xl font-light mb-2">Karni & Zilvinas</h2>
+                <p className="text-xl text-gray-600 dark:text-gray-400 mb-1">The Plaza Hotel, New York City</p>
+                <p className="text-gray-500 dark:text-gray-500">June 15, 2024</p>
+              </div>
+              
+              {/* Story Introduction */}
+              <div className="mb-12">
+                <p className="text-lg leading-relaxed mb-6">
+                  Karni and Zilvinas's wedding day was nothing short of magical. From the moment the bride began her preparations at The Plaza Hotel to the last dance of the evening, every moment was filled with joy, elegance, and unforgettable memories. The couple chose to blend traditional elements with modern touches, creating a celebration that was uniquely theirs.                
+                </p>
+                <p className="text-lg leading-relaxed">
+                  The ceremony took place in the hotel's iconic Grand Ballroom, adorned with cascading white orchids and soft candlelight. As Karni walked down the aisle to meet Zilvinas, there wasn't a dry eye in the room. What followed was an evening of exquisite dining, heartfelt toasts, and dancing that continued well into the night.                
+                </p>
+              </div>
+              
+              {/* Photo Series */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                <div className="overflow-hidden rounded-lg shadow-md">
+                  <img 
+                    src="https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-3.jpg" 
+                    alt="Bride preparation" 
+                    className="w-full h-auto"
+                  />
+                </div>
+                <div className="overflow-hidden rounded-lg shadow-md">
+                  <img 
+                    src="https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-5.jpg" 
+                    alt="Wedding ceremony" 
+                    className="w-full h-auto"
+                  />
+                </div>
+                <div className="overflow-hidden rounded-lg shadow-md md:col-span-2">
+                  <img 
+                    src="https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-322.jpg" 
+                    alt="Reception venue" 
+                    className="w-full h-auto"
+                  />
+                </div>
+                <div className="overflow-hidden rounded-lg shadow-md">
+                  <img 
+                    src="https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-170.jpg" 
+                    alt="First dance" 
+                    className="w-full h-auto"
+                  />
+                </div>
+                <div className="overflow-hidden rounded-lg shadow-md">
+                  <img 
+                    src="https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/crysta-david/images/cdw-25.jpg" 
+                    alt="Evening celebration" 
+                    className="w-full h-auto"
+                  />
+                </div>
+              </div>
+              
+              {/* Vendor Credits */}
+              <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                <h3 className="text-xl font-medium mb-4">Vendor Credits</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p className="font-medium">Venue</p>
+                    <p className="text-gray-600 dark:text-gray-400">The Plaza Hotel</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Planner</p>
+                    <p className="text-gray-600 dark:text-gray-400">Elegant Affairs NYC</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Florist</p>
+                    <p className="text-gray-600 dark:text-gray-400">Bloom & Petal</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Catering</p>
+                    <p className="text-gray-600 dark:text-gray-400">The Plaza Culinary Team</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Music</p>
+                    <p className="text-gray-600 dark:text-gray-400">Metropolitan Players</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Videography</p>
+                    <p className="text-gray-600 dark:text-gray-400">Cinematic Moments</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        {/* Contact/Booking Section */}
+        <section className="py-20 bg-gray-50 dark:bg-gray-900">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center mb-12">
+              <h2 className="text-3xl font-light mb-4">Ready to Book Your Wedding?</h2>
+              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                I'd love to hear about your wedding plans and discuss how we can create beautiful memories together. Let's connect and start the conversation.              
+              </p>
+            </div>
+            
+            <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+              <div className="md:flex">
+                <div className="md:w-1/2 p-8">
+                  <h3 className="text-xl font-medium mb-4">Contact Form</h3>
+                  <form className="space-y-4">
+                    <div>
+                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name</label>
+                      <input 
+                        type="text" 
+                        id="name" 
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-rose-500 focus:border-rose-500 dark:bg-gray-700 dark:text-white" 
+                        placeholder="Your name"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                      <input 
+                        type="email" 
+                        id="email" 
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-rose-500 focus:border-rose-500 dark:bg-gray-700 dark:text-white" 
+                        placeholder="Your email"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Wedding Date</label>
+                      <input 
+                        type="date" 
+                        id="date" 
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-rose-500 focus:border-rose-500 dark:bg-gray-700 dark:text-white" 
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="venue" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Venue (if known)</label>
+                      <input 
+                        type="text" 
+                        id="venue" 
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-rose-500 focus:border-rose-500 dark:bg-gray-700 dark:text-white" 
+                        placeholder="Wedding venue"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="budget" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Budget Range</label>
+                      <select 
+                        id="budget" 
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-rose-500 focus:border-rose-500 dark:bg-gray-700 dark:text-white"
+                      >
+                        <option value="">Select a range</option>
+                        <option value="3000-5000">$3,000 - $5,000</option>
+                        <option value="5000-8000">$5,000 - $8,000</option>
+                        <option value="8000-12000">$8,000 - $12,000</option>
+                        <option value="12000+">$12,000+</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message</label>
+                      <textarea 
+                        id="message" 
+                        rows={4} 
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-rose-500 focus:border-rose-500 dark:bg-gray-700 dark:text-white" 
+                        placeholder="Tell me about your wedding plans"
+                      ></textarea>
+                    </div>
+                    <button 
+                      type="submit" 
+                      className="w-full bg-rose-500 text-white py-2 px-4 rounded-md hover:bg-rose-600 transition duration-300"
+                    >
+                      Send Message
+                    </button>
+                  </form>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">I typically respond within 24-48 hours</p>
+                </div>
+                
+                <div className="md:w-1/2 bg-rose-50 dark:bg-gray-700 p-8">
+                  <h3 className="text-xl font-medium mb-4">What Clients Say</h3>
+                  
+                  <div className="space-y-6">
+                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                      <p className="italic text-gray-600 dark:text-gray-400 mb-3">
+                        "Hariel captured our wedding day perfectly. The photos are beyond what we could have imagined - they tell the complete story of our day with so much emotion and beauty."
+                      </p>
+                      <p className="font-medium">— Emma & James</p>
+                    </div>
+                    
+                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                      <p className="italic text-gray-600 dark:text-gray-400 mb-3">
+                        "Working with Hariel was the best decision we made for our wedding. Not only are the photos stunning, but he made us feel completely comfortable throughout the day."
+                      </p>
+                      <p className="font-medium">— Sophia & Michael</p>
+                    </div>
+                    
+                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                      <p className="italic text-gray-600 dark:text-gray-400 mb-3">
+                        "The attention to detail and ability to capture candid moments is what sets Hariel apart. Our wedding album is a true work of art."
+                      </p>
+                      <p className="font-medium">— Olivia & Ethan</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <Footer />
+      </div>
+    </>
+  );
+};
+
+export default PortfolioPage;

@@ -1,0 +1,219 @@
+// This script sets up three distinct wedding galleries for the homepage
+// It uses CommonJS modules to avoid ESM import issues
+
+const firebase = require('firebase/app');
+require('firebase/firestore');
+
+// Firebase configuration (same as in your firebase.ts)
+const firebaseConfig = {
+  apiKey: "AIzaSyCxZL40_7Enc-I9IwRt0DllOMqlMwneje8",
+  authDomain: "harielxavierphotograph.firebaseapp.com",
+  projectId: "harielxavierphotograph",
+  storageBucket: "harielxavierphotograph.appspot.com",
+  messagingSenderId: "829105046643",
+  appId: "1:829105046643:web:6d22b9c17ac453472fd606",
+  measurementId: "G-0TQFQH1YLC"
+};
+
+// Initialize Firebase
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+const db = firebase.firestore();
+
+// Wedding gallery image URLs - using real wedding photos
+const weddingGalleryImages = {
+  'wedding1': [
+    'https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800&q=80',
+    'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800&q=80',
+    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800&q=80'
+  ],
+  'wedding2': [
+    'https://images.unsplash.com/photo-1537633552985-df8429e8048b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800&q=80',
+    'https://images.unsplash.com/photo-1583939003579-730e3918a45a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800&q=80',
+    'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800&q=80'
+  ],
+  'wedding3': [
+    'https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800&q=80',
+    'https://images.unsplash.com/photo-1507217633297-c9815ce2ac75?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800&q=80',
+    'https://images.unsplash.com/photo-1550005809-91ad75fb315f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800&q=80'
+  ]
+};
+
+// Wedding gallery data
+const weddingGalleries = [
+  {
+    title: "Emily & Michael's Wedding",
+    slug: "emily-michael-wedding",
+    description: "A beautiful summer wedding at Rosewood Estate featuring elegant decorations and a stunning sunset ceremony.",
+    category: "wedding",
+    location: "Rosewood Estate, California",
+    tags: ["wedding", "featured", "summer", "outdoor"],
+    order: 1
+  },
+  {
+    title: "Sarah & James' Wedding",
+    slug: "sarah-james-wedding",
+    description: "An intimate beach wedding with close family and friends, featuring breathtaking ocean views and romantic moments.",
+    category: "wedding",
+    location: "Malibu Beach, California",
+    tags: ["wedding", "featured", "beach", "intimate"],
+    order: 2
+  },
+  {
+    title: "Jessica & David's Wedding",
+    slug: "jessica-david-wedding",
+    description: "A luxurious ballroom wedding with elaborate floral arrangements and a spectacular first dance under crystal chandeliers.",
+    category: "wedding",
+    location: "Grand Plaza Hotel, New York",
+    tags: ["wedding", "featured", "luxury", "indoor"],
+    order: 3
+  }
+];
+
+// Create or update featured galleries
+async function setupFeaturedWeddings() {
+  try {
+    console.log('Setting up featured wedding galleries...');
+    
+    // Check if featured galleries already exist
+    const featuredSnapshot = await db.collection('galleries')
+      .where('featured', '==', true)
+      .get();
+    
+    // If we have featured galleries, update them
+    if (!featuredSnapshot.empty) {
+      console.log(`Found ${featuredSnapshot.size} existing featured galleries.`);
+      
+      // Update existing galleries (up to 3)
+      const docs = featuredSnapshot.docs;
+      const updateCount = Math.min(docs.length, 3);
+      
+      for (let i = 0; i < updateCount; i++) {
+        const galleryDoc = docs[i];
+        const galleryId = galleryDoc.id;
+        const galleryType = `wedding${i+1}`;
+        const newData = weddingGalleries[i];
+        
+        // Update the gallery document
+        await db.collection('galleries').doc(galleryId).update({
+          title: newData.title,
+          slug: newData.slug,
+          description: newData.description,
+          category: newData.category,
+          location: newData.location,
+          tags: newData.tags,
+          order: newData.order,
+          coverImage: weddingGalleryImages[galleryType][0],
+          thumbnailImage: weddingGalleryImages[galleryType][0].replace('w=1200&h=800', 'w=600&h=400'),
+          isPublic: true,
+          featured: true,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        console.log(`Updated gallery ${i+1}: ${newData.title}`);
+        
+        // Update or create featured images for this gallery
+        await updateGalleryImages(galleryId, galleryType);
+      }
+      
+      // Create additional galleries if needed
+      if (updateCount < 3) {
+        for (let i = updateCount; i < 3; i++) {
+          await createNewGallery(i);
+        }
+      }
+    } else {
+      console.log('No featured galleries found. Creating new ones...');
+      
+      // Create three new featured galleries
+      for (let i = 0; i < 3; i++) {
+        await createNewGallery(i);
+      }
+    }
+    
+    console.log('Featured wedding galleries setup complete!');
+  } catch (error) {
+    console.error('Error setting up featured galleries:', error);
+  }
+}
+
+// Helper function to create a new gallery
+async function createNewGallery(index) {
+  const galleryType = `wedding${index+1}`;
+  const galleryData = weddingGalleries[index];
+  
+  // Add timestamp fields
+  const newGallery = {
+    ...galleryData,
+    coverImage: weddingGalleryImages[galleryType][0],
+    thumbnailImage: weddingGalleryImages[galleryType][0].replace('w=1200&h=800', 'w=600&h=400'),
+    clientName: "Example Client",
+    clientEmail: "client@example.com",
+    eventDate: firebase.firestore.Timestamp.fromDate(new Date()),
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    expiresAt: null,
+    password: null,
+    isPublic: true,
+    isPasswordProtected: false,
+    allowDownloads: true,
+    allowSharing: true,
+    featured: true,
+    imageCount: weddingGalleryImages[galleryType].length
+  };
+  
+  // Create the gallery
+  const docRef = await db.collection('galleries').add(newGallery);
+  console.log(`Created new gallery: ${galleryData.title} with ID: ${docRef.id}`);
+  
+  // Add images to the gallery
+  await updateGalleryImages(docRef.id, galleryType);
+}
+
+// Helper function to update gallery images
+async function updateGalleryImages(galleryId, galleryType) {
+  // Get existing images
+  const imagesSnapshot = await db.collection('galleries').doc(galleryId).collection('images').get();
+  const existingImages = imagesSnapshot.docs;
+  const imageUrls = weddingGalleryImages[galleryType];
+  
+  // Update existing images first
+  for (let j = 0; j < Math.min(existingImages.length, imageUrls.length); j++) {
+    const imageDoc = existingImages[j];
+    await db.collection('galleries').doc(galleryId).collection('images').doc(imageDoc.id).update({
+      url: imageUrls[j],
+      thumbnailUrl: imageUrls[j].replace('w=1200&h=800', 'w=400&h=300'),
+      featured: true,
+      order: j,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    console.log(`Updated image ${j+1} in gallery ${galleryId}`);
+  }
+  
+  // Add new images if needed
+  if (existingImages.length < imageUrls.length) {
+    for (let j = existingImages.length; j < imageUrls.length; j++) {
+      await db.collection('galleries').doc(galleryId).collection('images').add({
+        url: imageUrls[j],
+        thumbnailUrl: imageUrls[j].replace('w=1200&h=800', 'w=400&h=300'),
+        filename: `wedding-image-${j+1}.jpg`,
+        title: `Wedding Photo ${j+1}`,
+        description: `Beautiful wedding photograph ${j+1}`,
+        featured: true,
+        order: j,
+        width: 1200,
+        height: 800,
+        size: 500000, // Approximate size
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        tags: ["wedding", "featured"]
+      });
+      console.log(`Added new image ${j+1} to gallery ${galleryId}`);
+    }
+  }
+}
+
+// Run the script
+setupFeaturedWeddings()
+  .then(() => console.log('Script completed successfully'))
+  .catch(err => console.error('Script failed:', err));

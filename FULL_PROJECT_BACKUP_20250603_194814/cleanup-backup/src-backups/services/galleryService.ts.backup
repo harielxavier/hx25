@@ -1,0 +1,786 @@
+import { 
+  collection, 
+  doc, 
+  getDoc, 
+  getDocs, 
+  query, 
+  where, 
+  addDoc, 
+  updateDoc, 
+  deleteDoc,
+  orderBy,
+  Timestamp,
+  serverTimestamp,
+  limit
+} from 'firebase/firestore';
+import { 
+  ref, 
+  uploadBytes, 
+  getDownloadURL, 
+  deleteObject
+} from 'firebase/storage';
+import { db, storage } from '../lib/firebase';
+
+export interface GalleryImage {
+  id: string;
+  url: string;
+  thumbnailUrl: string;
+  filename: string;
+  title?: string;
+  description?: string;
+  featured: boolean;
+  order: number;
+  width: number;
+  height: number;
+  size: number;
+  createdAt: Timestamp;
+  tags: string[];
+}
+
+export interface Gallery {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  coverImage: string;
+  thumbnailImage: string;
+  clientName: string;
+  clientEmail: string;
+  eventDate: Timestamp;
+  createdAt: Timestamp;
+  expiresAt: Timestamp | null;
+  password: string | null;
+  isPublic: boolean;
+  isPasswordProtected: boolean;
+  allowDownloads: boolean;
+  allowSharing: boolean;
+  category: string;
+  location: string;
+  imageCount: number;
+  featured: boolean;
+  tags: string[];
+  order?: number;
+}
+
+// Get all galleries (for admin)
+export const getAllGalleries = async (): Promise<Gallery[]> => {
+  try {
+    const galleriesRef = collection(db, 'galleries');
+    const q = query(galleriesRef, orderBy('createdAt', 'desc'));
+    const querySnapshot = await getDocs(q);
+    
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as Gallery));
+  } catch (error) {
+    console.error('Error getting galleries:', error);
+    throw error;
+  }
+};
+
+// Get public galleries (for portfolio)
+export const getPublicGalleries = async (): Promise<Gallery[]> => {
+  try {
+    const galleriesRef = collection(db, 'galleries');
+    
+    // Try with the composite index first
+    try {
+      const q = query(
+        galleriesRef, 
+        where('isPublic', '==', true),
+        orderBy('createdAt', 'desc')
+      );
+      const querySnapshot = await getDocs(q);
+      
+      return querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      } as Gallery));
+    } catch (error: any) {
+      // If we get a failed-precondition error, it's likely due to missing indexes
+      if (error.code === 'failed-precondition') {
+        console.warn('Using fallback query for public galleries due to missing index');
+        
+        // Fallback to a simpler query without orderBy
+        const fallbackQuery = query(
+          galleriesRef, 
+          where('isPublic', '==', true)
+        );
+        const fallbackSnapshot = await getDocs(fallbackQuery);
+        
+        // Sort manually in memory
+        return fallbackSnapshot.docs
+          .map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          } as Gallery))
+          .sort((a, b) => {
+            // Sort by createdAt in descending order
+            const aTime = a.createdAt?.toMillis() || 0;
+            const bTime = b.createdAt?.toMillis() || 0;
+            return bTime - aTime;
+          });
+      }
+      
+      // If it's not a failed-precondition error, rethrow
+      throw error;
+    }
+  } catch (error) {
+    console.error('Error getting public galleries:', error);
+    throw error;
+  }
+};
+
+// Get featured galleries (for homepage)
+export const getFeaturedGalleries = async (): Promise<Gallery[]> => {
+  try {
+    const galleriesRef = collection(db, 'galleries');
+    
+    // Try with the composite index first
+    try {
+      const q = query(
+        galleriesRef, 
+        where('featured', '==', true),
+        where('isPublic', '==', true),
+        orderBy('createdAt', 'desc')
+      );
+      const querySnapshot = await getDocs(q);
+      
+      return querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      } as Gallery));
+    } catch (error: any) {
+      // If we get a failed-precondition error, it's likely due to missing indexes
+      if (error.code === 'failed-precondition') {
+        console.warn('Using fallback query for featured galleries due to missing index');
+        
+        // Get all galleries and filter in memory
+        const allGalleriesQuery = query(galleriesRef);
+        const allGalleriesSnapshot = await getDocs(allGalleriesQuery);
+        
+        return allGalleriesSnapshot.docs
+          .map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          } as Gallery))
+          .filter(gallery => gallery.featured && gallery.isPublic)
+          .sort((a, b) => {
+            // Sort by createdAt in descending order
+            const aTime = a.createdAt?.toMillis() || 0;
+            const bTime = b.createdAt?.toMillis() || 0;
+            return bTime - aTime;
+          });
+      }
+      
+      // If it's not a failed-precondition error, rethrow
+      throw error;
+    }
+  } catch (error) {
+    console.error('Error getting featured galleries:', error);
+    throw error;
+  }
+};
+
+// Get galleries by category
+export const getGalleriesByCategory = async (category: string): Promise<Gallery[]> => {
+  try {
+    const galleriesRef = collection(db, 'galleries');
+    
+    // Try with the composite index first
+    try {
+      const q = query(
+        galleriesRef, 
+        where('category', '==', category),
+        where('isPublic', '==', true),
+        orderBy('createdAt', 'desc')
+      );
+      const querySnapshot = await getDocs(q);
+      
+      return querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      } as Gallery));
+    } catch (error: any) {
+      // If we get a failed-precondition error, it's likely due to missing indexes
+      if (error.code === 'failed-precondition') {
+        console.warn(`Using fallback query for category ${category} due to missing index`);
+        
+        // Fallback to a simpler query with just the category filter
+        const fallbackQuery = query(
+          galleriesRef, 
+          where('category', '==', category)
+        );
+        const fallbackSnapshot = await getDocs(fallbackQuery);
+        
+        // Filter and sort manually in memory
+        return fallbackSnapshot.docs
+          .map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          } as Gallery))
+          .filter(gallery => gallery.isPublic)
+          .sort((a, b) => {
+            // Sort by createdAt in descending order
+            const aTime = a.createdAt?.toMillis() || 0;
+            const bTime = b.createdAt?.toMillis() || 0;
+            return bTime - aTime;
+          });
+      }
+      
+      // If it's not a failed-precondition error, rethrow
+      throw error;
+    }
+  } catch (error) {
+    console.error(`Error getting galleries for category ${category}:`, error);
+    throw error;
+  }
+};
+
+// Get a single gallery by ID
+export const getGalleryById = async (galleryId: string): Promise<Gallery | null> => {
+  try {
+    const galleryRef = doc(db, 'galleries', galleryId);
+    const gallerySnap = await getDoc(galleryRef);
+    
+    if (gallerySnap.exists()) {
+      return {
+        id: gallerySnap.id,
+        ...gallerySnap.data()
+      } as Gallery;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error(`Error getting gallery ${galleryId}:`, error);
+    throw error;
+  }
+};
+
+// Get a single gallery by slug
+export const getGalleryBySlug = async (slug: string): Promise<Gallery | null> => {
+  try {
+    const galleriesRef = collection(db, 'galleries');
+    const q = query(galleriesRef, where('slug', '==', slug));
+    const querySnapshot = await getDocs(q);
+    
+    if (!querySnapshot.empty) {
+      const galleryDoc = querySnapshot.docs[0];
+      return {
+        id: galleryDoc.id,
+        ...galleryDoc.data()
+      } as Gallery;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error(`Error getting gallery with slug ${slug}:`, error);
+    throw error;
+  }
+};
+
+// Create a new gallery
+export const createGallery = async (galleryData: Omit<Gallery, 'id' | 'createdAt' | 'imageCount'>): Promise<string> => {
+  try {
+    const galleriesRef = collection(db, 'galleries');
+    
+    // Check if slug already exists
+    const slugCheck = query(galleriesRef, where('slug', '==', galleryData.slug));
+    const slugSnapshot = await getDocs(slugCheck);
+    
+    if (!slugSnapshot.empty) {
+      throw new Error('A gallery with this slug already exists');
+    }
+    
+    const newGallery = {
+      ...galleryData,
+      createdAt: serverTimestamp(),
+      imageCount: 0
+    };
+    
+    const docRef = await addDoc(galleriesRef, newGallery);
+    return docRef.id;
+  } catch (error) {
+    console.error('Error creating gallery:', error);
+    throw error;
+  }
+};
+
+// Update a gallery
+export const updateGallery = async (galleryId: string, galleryData: Partial<Gallery>): Promise<void> => {
+  try {
+    const galleryRef = doc(db, 'galleries', galleryId);
+    
+    // If updating slug, check if it already exists
+    if (galleryData.slug) {
+      const galleriesRef = collection(db, 'galleries');
+      const slugCheck = query(galleriesRef, where('slug', '==', galleryData.slug));
+      const slugSnapshot = await getDocs(slugCheck);
+      
+      if (!slugSnapshot.empty && slugSnapshot.docs[0].id !== galleryId) {
+        throw new Error('A gallery with this slug already exists');
+      }
+    }
+    
+    await updateDoc(galleryRef, galleryData);
+  } catch (error) {
+    console.error(`Error updating gallery ${galleryId}:`, error);
+    throw error;
+  }
+};
+
+// Delete a gallery and all its images
+export const deleteGallery = async (galleryId: string): Promise<void> => {
+  try {
+    // First, delete all images in the gallery
+    const imagesRef = collection(db, 'galleries', galleryId, 'images');
+    const imagesSnapshot = await getDocs(imagesRef);
+    
+    const deletePromises = imagesSnapshot.docs.map(async (imageDoc) => {
+      const imageData = imageDoc.data() as GalleryImage;
+      
+      // Delete image file from storage
+      const imageRef = ref(storage, `galleries/${galleryId}/${imageData.filename}`);
+      const thumbnailRef = ref(storage, `galleries/${galleryId}/thumbnails/${imageData.filename}`);
+      
+      try {
+        await deleteObject(imageRef);
+        await deleteObject(thumbnailRef);
+      } catch (error) {
+        console.error(`Error deleting image files for ${imageDoc.id}:`, error);
+      }
+      
+      // Delete image document
+      return deleteDoc(doc(db, 'galleries', galleryId, 'images', imageDoc.id));
+    });
+    
+    await Promise.all(deletePromises);
+    
+    // Then delete the gallery document
+    await deleteDoc(doc(db, 'galleries', galleryId));
+  } catch (error) {
+    console.error(`Error deleting gallery ${galleryId}:`, error);
+    throw error;
+  }
+};
+
+// Get all images in a gallery
+export const getGalleryImages = async (galleryId: string): Promise<GalleryImage[]> => {
+  try {
+    const imagesRef = collection(db, 'galleries', galleryId, 'images');
+    const q = query(imagesRef, orderBy('order', 'asc'));
+    const querySnapshot = await getDocs(q);
+    
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as GalleryImage));
+  } catch (error) {
+    console.error(`Error getting images for gallery ${galleryId}:`, error);
+    throw error;
+  }
+};
+
+// Get featured images in a gallery
+export const getFeaturedGalleryImages = async (galleryId: string): Promise<GalleryImage[]> => {
+  try {
+    const imagesRef = collection(db, 'galleries', galleryId, 'images');
+    
+    // Try with the composite index first
+    try {
+      const q = query(
+        imagesRef, 
+        where('featured', '==', true),
+        orderBy('order', 'asc')
+      );
+      const querySnapshot = await getDocs(q);
+      
+      return querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      } as GalleryImage));
+    } catch (error: any) {
+      // If we get a failed-precondition error, it's likely due to missing indexes
+      if (error.code === 'failed-precondition') {
+        console.warn('Using fallback query for featured images due to missing index');
+        
+        // Get all images and filter in memory
+        const allImagesQuery = query(imagesRef);
+        const allImagesSnapshot = await getDocs(allImagesQuery);
+        
+        return allImagesSnapshot.docs
+          .map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          } as GalleryImage))
+          .filter(image => image.featured)
+          .sort((a, b) => a.order - b.order);
+      }
+      
+      // If it's not a failed-precondition error, rethrow
+      throw error;
+    }
+  } catch (error) {
+    console.error(`Error getting featured images for gallery ${galleryId}:`, error);
+    throw error;
+  }
+};
+
+// Upload an image to a gallery
+export const uploadGalleryImage = async (
+  galleryId: string, 
+  file: File, 
+  metadata: Partial<GalleryImage>
+): Promise<string> => {
+  try {
+    // Create a unique filename to avoid conflicts
+    const timestamp = Date.now();
+    const safeFileName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+    const uniqueFileName = `${timestamp}_${safeFileName}`;
+    
+    // Check if we're in development mode
+    const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost';
+    
+    let url = '';
+    let thumbnailUrl = '';
+    
+    // Check file size - if over 2MB, use Firebase Storage even in development
+    const USE_STORAGE_SIZE_THRESHOLD = 2 * 1024 * 1024; // 2MB
+    const useStorage = !isDevelopment || file.size > USE_STORAGE_SIZE_THRESHOLD;
+    
+    if (isDevelopment && !useStorage) {
+      // In development with small files, use data URL for testing
+      console.log('Using local development mode for image uploads');
+      
+      // Create a compressed data URL for small images
+      url = await compressAndCreateDataUrl(file, 1200);
+      
+      // Create a smaller thumbnail version
+      thumbnailUrl = await compressAndCreateDataUrl(file, 400);
+      
+      console.log('Created local data URL for image');
+    } else {
+      // Use Firebase Storage (production or large files)
+      // Upload original image
+      const storageRef = ref(storage, `galleries/${galleryId}/${uniqueFileName}`);
+      
+      // Upload with explicit content type to ensure proper handling
+      const uploadMetadata = {
+        contentType: file.type || 'image/jpeg',
+        customMetadata: {
+          originalName: file.name
+        }
+      };
+      
+      await uploadBytes(storageRef, file, uploadMetadata);
+      url = await getDownloadURL(storageRef);
+      
+      // Create thumbnail reference
+      const thumbnailFileName = `thumb_${uniqueFileName}`;
+      const thumbnailRef = ref(storage, `galleries/${galleryId}/${thumbnailFileName}`);
+      
+      try {
+        // Try to create and upload a thumbnail
+        const thumbnailBlob = await createThumbnail(file, 400);
+        await uploadBytes(thumbnailRef, thumbnailBlob, {
+          contentType: 'image/jpeg',
+          customMetadata: {
+            originalName: file.name,
+            isThumbnail: 'true'
+          }
+        });
+        thumbnailUrl = await getDownloadURL(thumbnailRef);
+      } catch (thumbnailError) {
+        console.warn('Failed to create thumbnail, using original image:', thumbnailError);
+        thumbnailUrl = url;
+      }
+    }
+    
+    // Get the count of existing images to determine order
+    const imagesRef = collection(db, 'galleries', galleryId, 'images');
+    const imagesSnapshot = await getDocs(imagesRef);
+    const imageCount = imagesSnapshot.size;
+    
+    // Create image document
+    const imageData: Omit<GalleryImage, 'id'> = {
+      url,
+      thumbnailUrl,
+      filename: uniqueFileName,
+      featured: metadata.featured || false,
+      order: metadata.order || imageCount,
+      width: metadata.width || 1200, // Default width if not provided
+      height: metadata.height || 800, // Default height if not provided
+      size: file.size,
+      createdAt: Timestamp.now(),
+      tags: metadata.tags || [],
+      ...(metadata.title && { title: metadata.title }),
+      ...(metadata.description && { description: metadata.description })
+    };
+    
+    const docRef = await addDoc(imagesRef, imageData);
+    
+    // Update gallery image count and set cover image if this is the first image
+    const galleryRef = doc(db, 'galleries', galleryId);
+    const galleryDoc = await getDoc(galleryRef);
+    
+    if (galleryDoc.exists()) {
+      const galleryData = galleryDoc.data();
+      const updateData: any = {
+        imageCount: imageCount + 1
+      };
+      
+      // If this is the first image or no cover image exists, use this as the cover
+      if (!galleryData.coverImage || imageCount === 0) {
+        updateData.coverImage = url;
+        updateData.thumbnailImage = thumbnailUrl;
+      }
+      
+      await updateDoc(galleryRef, updateData);
+    }
+    
+    return docRef.id;
+  } catch (error) {
+    console.error(`Error uploading image to gallery ${galleryId}:`, error);
+    // Rethrow with more specific error message
+    throw new Error(`Failed to upload image: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+};
+
+// Helper function to compress an image and create a data URL
+const compressAndCreateDataUrl = async (file: File, maxWidth: number): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        // Calculate new dimensions while maintaining aspect ratio
+        let width = img.width;
+        let height = img.height;
+        
+        if (width > maxWidth) {
+          const ratio = maxWidth / width;
+          width = maxWidth;
+          height = Math.round(height * ratio);
+        }
+        
+        // Create canvas for resizing
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Draw and compress the image
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject(new Error('Could not get canvas context'));
+          return;
+        }
+        
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Convert to data URL with quality adjustment for JPEGs
+        const quality = 0.7; // 70% quality
+        const dataUrl = canvas.toDataURL(
+          file.type || 'image/jpeg', 
+          quality
+        );
+        
+        resolve(dataUrl);
+      };
+      
+      img.onerror = () => {
+        reject(new Error('Failed to load image'));
+      };
+      
+      img.src = event.target?.result as string;
+    };
+    
+    reader.onerror = () => {
+      reject(new Error('Failed to read file'));
+    };
+    
+    reader.readAsDataURL(file);
+  });
+};
+
+// Helper function to create a thumbnail blob
+const createThumbnail = async (file: File, maxWidth: number): Promise<Blob> => {
+  const dataUrl = await compressAndCreateDataUrl(file, maxWidth);
+  
+  // Convert data URL to Blob
+  const response = await fetch(dataUrl);
+  return await response.blob();
+};
+
+// Update image metadata
+export const updateGalleryImage = async (
+  galleryId: string, 
+  imageId: string, 
+  imageData: Partial<GalleryImage>
+): Promise<void> => {
+  try {
+    const imageRef = doc(db, 'galleries', galleryId, 'images', imageId);
+    await updateDoc(imageRef, imageData);
+  } catch (error) {
+    console.error(`Error updating image ${imageId} in gallery ${galleryId}:`, error);
+    throw error;
+  }
+};
+
+// Delete an image from a gallery
+export const deleteGalleryImage = async (galleryId: string, imageId: string): Promise<void> => {
+  try {
+    // Get image data to delete from storage
+    const imageRef = doc(db, 'galleries', galleryId, 'images', imageId);
+    const imageSnap = await getDoc(imageRef);
+    
+    if (imageSnap.exists()) {
+      const imageData = imageSnap.data() as GalleryImage;
+      
+      // Delete image file from storage
+      const storageRef = ref(storage, `galleries/${galleryId}/${imageData.filename}`);
+      const thumbnailRef = ref(storage, `galleries/${galleryId}/thumbnails/${imageData.filename}`);
+      
+      try {
+        await deleteObject(storageRef);
+        await deleteObject(thumbnailRef);
+      } catch (error) {
+        console.error(`Error deleting image files for ${imageId}:`, error);
+      }
+      
+      // Delete image document
+      await deleteDoc(imageRef);
+      
+      // Update gallery image count
+      const galleryRef = doc(db, 'galleries', galleryId);
+      const gallerySnap = await getDoc(galleryRef);
+      
+      if (gallerySnap.exists()) {
+        const galleryData = gallerySnap.data() as Gallery;
+        await updateDoc(galleryRef, {
+          imageCount: Math.max(0, galleryData.imageCount - 1)
+        });
+      }
+    }
+  } catch (error) {
+    console.error(`Error deleting image ${imageId} from gallery ${galleryId}:`, error);
+    throw error;
+  }
+};
+
+// Verify gallery password
+export const verifyGalleryPassword = async (galleryId: string, password: string): Promise<boolean> => {
+  try {
+    const galleryRef = doc(db, 'galleries', galleryId);
+    const gallerySnap = await getDoc(galleryRef);
+    
+    if (gallerySnap.exists()) {
+      const galleryData = gallerySnap.data() as Gallery;
+      
+      if (!galleryData.isPasswordProtected) {
+        return true;
+      }
+      
+      return galleryData.password === password;
+    }
+    
+    return false;
+  } catch (error) {
+    console.error(`Error verifying password for gallery ${galleryId}:`, error);
+    throw error;
+  }
+};
+
+// Create sample galleries for testing
+export const createSampleGalleries = async (): Promise<void> => {
+  try {
+    const sampleGalleries = [
+      {
+        title: "Mountain Wedding",
+        slug: "mountain-wedding",
+        description: "A beautiful wedding in the mountains of Colorado",
+        coverImage: "https://source.unsplash.com/random/800x600/?wedding,mountain",
+        thumbnailImage: "https://source.unsplash.com/random/400x300/?wedding,mountain",
+        clientName: "John & Sarah Smith",
+        clientEmail: "john.sarah@example.com",
+        eventDate: Timestamp.fromDate(new Date(2024, 2, 15)),
+        expiresAt: Timestamp.fromDate(new Date(2025, 2, 15)),
+        password: null,
+        isPublic: true,
+        isPasswordProtected: false,
+        allowDownloads: true,
+        allowSharing: true,
+        category: "weddings",
+        location: "Aspen, Colorado",
+        featured: true,
+        tags: ["wedding", "mountains", "outdoor"],
+        createdAt: Timestamp.now(),
+        imageCount: 5
+      },
+      {
+        title: "Beach Engagement",
+        slug: "beach-engagement",
+        description: "Romantic engagement photoshoot at sunset on the beach",
+        coverImage: "https://source.unsplash.com/random/800x600/?engagement,beach",
+        thumbnailImage: "https://source.unsplash.com/random/400x300/?engagement,beach",
+        clientName: "Michael & Emma Johnson",
+        clientEmail: "michael.emma@example.com",
+        eventDate: Timestamp.fromDate(new Date(2024, 1, 10)),
+        expiresAt: Timestamp.fromDate(new Date(2025, 1, 10)),
+        password: null,
+        isPublic: true,
+        isPasswordProtected: false,
+        allowDownloads: true,
+        allowSharing: true,
+        category: "engagements",
+        location: "Miami Beach, Florida",
+        featured: true,
+        tags: ["engagement", "beach", "sunset"],
+        createdAt: Timestamp.now(),
+        imageCount: 3
+      },
+      {
+        title: "Urban Portrait Session",
+        slug: "urban-portrait",
+        description: "Modern portrait photography in an urban setting",
+        coverImage: "https://source.unsplash.com/random/800x600/?portrait,urban",
+        thumbnailImage: "https://source.unsplash.com/random/400x300/?portrait,urban",
+        clientName: "Alex Chen",
+        clientEmail: "alex.chen@example.com",
+        eventDate: Timestamp.fromDate(new Date(2024, 0, 20)),
+        expiresAt: Timestamp.fromDate(new Date(2025, 0, 20)),
+        password: null,
+        isPublic: true,
+        isPasswordProtected: false,
+        allowDownloads: true,
+        allowSharing: true,
+        category: "portraits",
+        location: "New York City",
+        featured: false,
+        tags: ["portrait", "urban", "city"],
+        createdAt: Timestamp.now(),
+        imageCount: 4
+      }
+    ];
+    
+    const galleriesRef = collection(db, 'galleries');
+    
+    // Check if galleries already exist
+    const existingGalleries = await getDocs(query(galleriesRef, limit(1)));
+    if (!existingGalleries.empty) {
+      console.log('Galleries already exist, skipping sample creation');
+      return;
+    }
+    
+    // Create each sample gallery
+    for (const gallery of sampleGalleries) {
+      await addDoc(galleriesRef, gallery);
+      console.log(`Created sample gallery: ${gallery.title}`);
+    }
+    
+    console.log('Sample galleries created successfully');
+  } catch (error) {
+    console.error('Error creating sample galleries:', error);
+    throw error;
+  }
+};

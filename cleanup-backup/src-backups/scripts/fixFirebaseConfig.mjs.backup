@@ -1,0 +1,169 @@
+// This script fixes the Firebase configuration issue
+// It ensures all Firebase configs are consistent across the application
+
+import fs from 'fs';
+import path from 'path';
+
+// The correct Firebase configuration from your firebase.ts file
+const correctFirebaseConfig = {
+  apiKey: "AIzaSyCxZL40_7Enc-I9IwRt0DllOMqlMwneje8",
+  authDomain: "harielxavierphotograph.firebaseapp.com",
+  projectId: "harielxavierphotograph",
+  storageBucket: "harielxavierphotograph.appspot.com",
+  messagingSenderId: "829105046643",
+  appId: "1:829105046643:web:6d22b9c17ac453472fd606",
+  measurementId: "G-0TQFQH1YLC"
+};
+
+// Convert the config to a string format for insertion into files
+const configString = JSON.stringify(correctFirebaseConfig, null, 2);
+
+// Function to fix scripts that might have different Firebase configs
+async function fixScriptFiles() {
+  console.log('Fixing Firebase configuration in script files...');
+  
+  const scriptsDir = path.resolve('./src/scripts');
+  const scriptFiles = fs.readdirSync(scriptsDir)
+    .filter(file => file.endsWith('.js') || file.endsWith('.mjs'));
+  
+  console.log(`Found ${scriptFiles.length} script files to check.`);
+  
+  let fixedCount = 0;
+  
+  for (const file of scriptFiles) {
+    const filePath = path.join(scriptsDir, file);
+    let content = fs.readFileSync(filePath, 'utf8');
+    
+    // Check if file contains Firebase config
+    if (content.includes('firebaseConfig') && 
+        (content.includes('initializeApp') || content.includes('firebase.initializeApp'))) {
+      
+      console.log(`Fixing Firebase config in ${file}...`);
+      
+      // Create a backup of the original file
+      fs.writeFileSync(`${filePath}.backup`, content);
+      
+      // Add a special comment to ensure scripts use the shared Firebase instance
+      const fixedContent = content.replace(
+        /const\s+app\s*=\s*(?:getApps\(\)\.length\s*>\s*0\s*\?\s*getApp\(\)\s*:\s*)?initializeApp\(firebaseConfig\)/g,
+        `// IMPORTANT: Use the shared Firebase instance from src/lib/firebase.ts instead of initializing a new one
+// This prevents the "Firebase App named '[DEFAULT]' already exists" error
+import app from '../lib/firebase';
+// const app = initializeApp(firebaseConfig); // This line is commented out to prevent duplicate initialization`
+      );
+      
+      // Write the fixed content back to the file
+      fs.writeFileSync(filePath, fixedContent);
+      fixedCount++;
+    }
+  }
+  
+  console.log(`Fixed Firebase configuration in ${fixedCount} script files.`);
+}
+
+// Function to create a .env file with the correct Firebase config
+async function updateEnvFile() {
+  console.log('Updating .env file with correct Firebase configuration...');
+  
+  const envPath = path.resolve('./.env');
+  let envContent = '';
+  
+  // Read existing .env if it exists
+  if (fs.existsSync(envPath)) {
+    envContent = fs.readFileSync(envPath, 'utf8');
+  }
+  
+  // Update Firebase config variables
+  const envLines = envContent.split('\n');
+  const updatedLines = [];
+  
+  // These are the keys we want to update
+  const keysToUpdate = {
+    'VITE_FIREBASE_API_KEY': correctFirebaseConfig.apiKey,
+    'VITE_FIREBASE_AUTH_DOMAIN': correctFirebaseConfig.authDomain,
+    'VITE_FIREBASE_PROJECT_ID': correctFirebaseConfig.projectId,
+    'VITE_FIREBASE_STORAGE_BUCKET': correctFirebaseConfig.storageBucket,
+    'VITE_FIREBASE_MESSAGING_SENDER_ID': correctFirebaseConfig.messagingSenderId,
+    'VITE_FIREBASE_APP_ID': correctFirebaseConfig.appId
+  };
+  
+  // Track which keys we've updated
+  const updatedKeys = new Set();
+  
+  // First, update existing keys
+  for (const line of envLines) {
+    const [key] = line.split('=');
+    if (key && keysToUpdate[key.trim()]) {
+      updatedLines.push(`${key.trim()}=${keysToUpdate[key.trim()]}`);
+      updatedKeys.add(key.trim());
+    } else {
+      updatedLines.push(line);
+    }
+  }
+  
+  // Add any keys that weren't in the original file
+  for (const key in keysToUpdate) {
+    if (!updatedKeys.has(key)) {
+      updatedLines.push(`${key}=${keysToUpdate[key]}`);
+    }
+  }
+  
+  // Write the updated .env file
+  fs.writeFileSync(envPath, updatedLines.join('\n'));
+  console.log('.env file updated with correct Firebase configuration.');
+}
+
+// Function to fix the main Firebase config file if needed
+async function checkMainFirebaseFile() {
+  console.log('Checking main Firebase configuration file...');
+  
+  const firebasePath = path.resolve('./src/lib/firebase.ts');
+  const content = fs.readFileSync(firebasePath, 'utf8');
+  
+  // Check if the initialization is already correct
+  if (content.includes('getApps().length === 0 ? initializeApp(firebaseConfig) : getApp()')) {
+    console.log('Main Firebase configuration file is already correct.');
+    return;
+  }
+  
+  // Create a backup of the original file
+  fs.writeFileSync(`${firebasePath}.backup`, content);
+  
+  // Fix the initialization if needed
+  const fixedContent = content.replace(
+    /const\s+app\s*=\s*(?:getApps\(\)\.length\s*>\s*0\s*\?\s*getApp\(\)\s*:\s*)?initializeApp\(firebaseConfig\)/g,
+    'const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp()'
+  );
+  
+  // Write the fixed content back to the file
+  fs.writeFileSync(firebasePath, fixedContent);
+  console.log('Fixed main Firebase configuration file.');
+}
+
+// Main function to run all fixes
+async function fixFirebaseConfig() {
+  try {
+    console.log('Starting Firebase configuration fix...');
+    
+    // Fix the main Firebase config file
+    await checkMainFirebaseFile();
+    
+    // Fix script files that might initialize Firebase
+    await fixScriptFiles();
+    
+    // Update .env file with correct config
+    await updateEnvFile();
+    
+    console.log('\nFirebase configuration fix completed successfully!');
+    console.log('Please restart your development server (npm run dev) and clear your browser cache.');
+    console.log('The website should now display correctly without Firebase initialization errors.');
+    
+  } catch (error) {
+    console.error('Error during Firebase configuration fix:', error);
+  }
+}
+
+// Run the fix
+fixFirebaseConfig()
+  .then(() => console.log('Fix script completed'))
+  .catch(error => console.error('Fix script failed:', error));

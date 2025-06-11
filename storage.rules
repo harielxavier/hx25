@@ -1,0 +1,28 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Allow public read access to gallery images
+    match /galleries/{galleryId}/{imageId} {
+      allow read: if request.auth != null || 
+                   resource.metadata.isPublic == "true";
+      allow write: if request.auth != null;
+    }
+    
+    // Allow public read access to slider images
+    match /sliders/{sliderId}/{imageId} {
+      allow read: if true;  // Public read access
+      allow write: if request.auth != null;
+    }
+    
+    // Allow access to job documents
+    match /jobs/{jobId}/{docType}/{fileName} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    
+    // Allow admin access to all files
+    match /{allPaths=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}

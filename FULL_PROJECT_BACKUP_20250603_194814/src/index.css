@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-black antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-black text-white hover:bg-gray-900 transition-colors;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-black border border-black hover:bg-gray-100 transition-colors;
+  }
+  
+  /* Gallery image softening effect */
+  .gallery-with-soft-images img {
+    filter: brightness(0.98) contrast(0.98);
+    transition: transform 0.5s ease;
+  }
+  
+  .gallery-with-soft-images img:hover {
+    transform: scale(1.05);
+  }
+}

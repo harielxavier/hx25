@@ -1,0 +1,586 @@
+import { 
+  collection, 
+  doc, 
+  getDocs, 
+  getDoc, 
+  addDoc, 
+  updateDoc, 
+  deleteDoc, 
+  query, 
+  where, 
+  orderBy, 
+  limit, 
+  serverTimestamp,
+  increment,
+  Timestamp,
+  DocumentData,
+  QuerySnapshot,
+  DocumentSnapshot
+} from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
+import { db, storage } from '../firebase/config';
+import { getStockImage } from '../utils/images';
+import type { StockImageCategory } from '../utils/images';
+import { transformImageUrl } from '../utils/imageOptimizationUtils';
+
+// Consistent interfaces with camelCase naming throughout
+export interface Author {
+  name: string;
+  avatar: string;
+  bio?: string;
+}
+
+export interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  featuredImage: string;
+  category: string;
+  tags: string[];
+  status: 'draft' | 'published' | 'scheduled';
+  views: number;
+  author: Author;
+  publishedAt?: Timestamp;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+  seoTitle?: string;
+  seoDescription?: string;
+  featured?: boolean;
+  videoEmbed?: string;
+  commentsEnabled?: boolean;
+  readTime?: number;
+}
+
+// Helper function to sanitize image URLs
+export const sanitizeImageUrl = (url: string | undefined, category: StockImageCategory = 'wedding'): string => {
+  // If URL is undefined, null, or empty string, return a stock image
+  if (!url || url === '') {
+    return getStockImage(category);
+  }
+  
+  // If it's a relative path starting with /, it's a valid local image
+  if (url.startsWith('/')) {
+    // Check if it's pointing to one of our stock images
+    if (url.includes('/images/stock/')) {
+      return url;
+    }
+    
+    // For other local paths, we'll assume they're valid
+    return url;
+  }
+  
+  try {
+    // Check if URL is valid - just validate without storing the object
+    new URL(url);
+    
+    // Additional validation for common issues
+    if (url.includes('undefined') || url === 'null') {
+      throw new Error('Invalid URL containing undefined or null');
+    }
+    
+    // For external URLs, return them without logging
+    return transformImageUrl(url);
+  } catch (error) {
+    // Silently handle errors and return fallback image
+    // Return a stock image based on the category
+    return getStockImage(category);
+  }
+};
+
+// Helper function to convert Firestore data to BlogPost
+const convertToPost = (id: string, data: DocumentData): BlogPost => {
+  return {
+    id,
+    title: data.title || '',
+    slug: data.slug || '',
+    excerpt: data.excerpt || '',
+    content: data.content || '',
+    featuredImage: sanitizeImageUrl(data.featuredImage || data.image, (data.category || 'wedding') as StockImageCategory),
+    category: data.category || '',
+    tags: data.tags || [],
+    author: {
+      name: data.author?.name || 'Admin',
+      avatar: sanitizeImageUrl(data.author?.avatar, 'wedding'),
+      bio: data.author?.bio || ''
+    },
+    status: data.status || 'draft',
+    views: data.views || 0,
+    publishedAt: data.publishedAt,
+    createdAt: data.createdAt || Timestamp.now(),
+    updatedAt: data.updatedAt || Timestamp.now(),
+    seoTitle: data.seoTitle || data.seo?.title,
+    seoDescription: data.seoDescription || data.seo?.description,
+    featured: data.featured || false,
+    videoEmbed: data.videoEmbed || '',
+    commentsEnabled: data.commentsEnabled !== false,
+    readTime: data.readTime
+  };
+};
+
+// Safely execute Firestore query with proper error handling
+const safeFirestoreQuery = async <T>(
+  queryFn: () => Promise<QuerySnapshot | DocumentSnapshot>,
+  transformFn: (result: QuerySnapshot | DocumentSnapshot) => T,
+  fallbackValue: T,
+  errorMessage: string
+): Promise<T> => {
+  try {
+    const result = await queryFn();
+    return transformFn(result);
+  } catch (error) {
+    console.error(`${errorMessage}:`, error);
+    
+    // Log more detailed error information to help with debugging
+    if (error instanceof Error) {
+      console.error(`Error details: ${error.message}`);
+      console.error(`Error stack: ${error.stack}`);
+    }
+    
+    return fallbackValue;
+  }
+};
+
+// Get all blog posts
+export const getAllPosts = async (includeUnpublished = false): Promise<BlogPost[]> => {
+  try {
+    console.log('Fetching all blog posts...');
+    // First, try to get posts from Firestore
+    const postsRef = collection(db, 'posts');
+    
+    // Use a simpler query that doesn't require a composite index
+    // Just get all posts and filter client-side
+    const simpleQuery = query(postsRef);
+    
+    const querySnapshot = await getDocs(simpleQuery);
+    
+    if (querySnapshot.empty) {
+      console.log('No blog posts found in Firestore');
+      return [];
+    }
+    
+    // Filter and sort client-side
+    let posts = querySnapshot.docs.map(doc => convertToPost(doc.id, doc.data()));
+    
+    // Filter by status if needed
+    if (!includeUnpublished) {
+      posts = posts.filter(post => post.status === 'published');
+    }
+    
+    // Sort by publishedAt or createdAt
+    posts.sort((a, b) => {
+      const dateA = includeUnpublished 
+        ? (a.createdAt?.seconds || 0) 
+        : (a.publishedAt?.seconds || a.createdAt?.seconds || 0);
+      const dateB = includeUnpublished 
+        ? (b.createdAt?.seconds || 0) 
+        : (b.publishedAt?.seconds || b.createdAt?.seconds || 0);
+      return dateB - dateA; // Descending order
+    });
+    
+    console.log(`Found ${posts.length} blog posts`);
+    return posts;
+  } catch (error) {
+    console.error('Error fetching blog posts:', error);
+    
+    // Log more detailed error information
+    if (error instanceof Error) {
+      console.error(`Error details: ${error.message}`);
+      console.error(`Error stack: ${error.stack}`);
+    }
+    
+    return [];
+  }
+};
+
+// Get a single blog post by ID
+export const getPostById = async (id: string): Promise<BlogPost | null> => {
+  const transformDocSnapshot = (docSnapshot: DocumentSnapshot): BlogPost | null => {
+    if (!docSnapshot.exists()) {
+      console.log(`No blog post found with ID: ${id}`);
+      return null;
+    }
+    
+    return convertToPost(docSnapshot.id, docSnapshot.data() as DocumentData);
+  };
+  
+  return safeFirestoreQuery(
+    () => getDoc(doc(db, 'posts', id)),
+    transformDocSnapshot as any,
+    null,
+    `Error fetching blog post with ID: ${id}`
+  );
+};
+
+// Get a single blog post by slug
+export const getPostBySlug = async (slug: string): Promise<BlogPost | null> => {
+  const blogPostsRef = collection(db, 'posts');
+  const q = query(
+    blogPostsRef,
+    where('slug', '==', slug),
+    where('status', '==', 'published')
+  );
+  
+  const transformQuerySnapshot = (querySnapshot: QuerySnapshot): BlogPost | null => {
+    if (querySnapshot.empty) {
+      console.log(`No blog post found with slug: ${slug}`);
+      return null;
+    }
+    
+    return convertToPost(querySnapshot.docs[0].id, querySnapshot.docs[0].data());
+  };
+  
+  return safeFirestoreQuery(
+    () => getDocs(q),
+    transformQuerySnapshot as any,
+    null,
+    `Error fetching blog post with slug: ${slug}`
+  );
+};
+
+// Create a new blog post
+export const createPost = async (postData: Omit<BlogPost, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> => {
+  try {
+    // Prepare data for Firestore
+    const now = serverTimestamp();
+    const firestoreData = {
+      ...postData,
+      createdAt: now,
+      updatedAt: now,
+      views: 0
+    };
+    
+    // Add document to Firestore
+    const docRef = await addDoc(collection(db, 'posts'), firestoreData);
+    console.log('Blog post created with ID:', docRef.id);
+    
+    return docRef.id;
+  } catch (error) {
+    console.error('Error creating blog post:', error);
+    throw error;
+  }
+};
+
+// Update an existing blog post
+export const updatePost = async (id: string, postData: Partial<BlogPost>): Promise<boolean> => {
+  try {
+    // Prepare data for Firestore
+    const firestoreData = {
+      ...postData,
+      updatedAt: serverTimestamp()
+    };
+    
+    // Remove id field if present
+    if ('id' in firestoreData) {
+      delete firestoreData.id;
+    }
+    
+    // Update document in Firestore
+    await updateDoc(doc(db, 'posts', id), firestoreData);
+    console.log('Blog post updated:', id);
+    
+    return true;
+  } catch (error) {
+    console.error('Error updating blog post:', error);
+    return false;
+  }
+};
+
+// Check if a post is already published
+export const getPostPublishStatus = async (id: string): Promise<boolean> => {
+  try {
+    const docSnap = await getDoc(doc(db, 'posts', id));
+    if (!docSnap.exists()) {
+      return false;
+    }
+    
+    return docSnap.data().status === 'published';
+  } catch (error) {
+    console.error('Error checking post publish status:', error);
+    return false;
+  }
+};
+
+// Delete a blog post
+export const deletePost = async (id: string): Promise<boolean> => {
+  try {
+    // Get the post data first to check for images to delete
+    const docSnap = await getDoc(doc(db, 'posts', id));
+    
+    if (!docSnap.exists()) {
+      console.log('Post not found for deletion:', id);
+      return false;
+    }
+    
+    const postData = docSnap.data();
+    
+    // Delete the document from Firestore
+    await deleteDoc(doc(db, 'posts', id));
+    console.log('Blog post deleted:', id);
+    
+    // If there's a featured image stored in Firebase Storage, delete it too
+    if (postData.featuredImage && postData.featuredImage.includes('firebase')) {
+      try {
+        // Extract the path from the URL
+        const url = new URL(postData.featuredImage);
+        const path = url.pathname.split('/o/')[1];
+        
+        if (path) {
+          const decodedPath = decodeURIComponent(path.split('?')[0]);
+          const imageRef = ref(storage, decodedPath);
+          await deleteObject(imageRef);
+          console.log('Featured image deleted:', decodedPath);
+        }
+      } catch (imageError) {
+        console.error('Error deleting featured image:', imageError);
+        // Continue even if image deletion fails
+      }
+    }
+    
+    return true;
+  } catch (error) {
+    console.error('Error deleting blog post:', error);
+    return false;
+  }
+};
+
+// Upload a featured image for a blog post
+export const uploadFeaturedImage = async (file: File): Promise<string> => {
+  try {
+    const timestamp = new Date().getTime();
+    const storageRef = ref(storage, `blog/${timestamp}_${file.name}`);
+    
+    // Upload the file
+    await uploadBytes(storageRef, file);
+    
+    // Get download URL
+    const downloadURL = await getDownloadURL(storageRef);
+    console.log('Image uploaded successfully:', downloadURL);
+    
+    return downloadURL;
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    throw error;
+  }
+};
+
+// Increment post views
+export const incrementPostViews = async (id: string): Promise<boolean> => {
+  try {
+    await updateDoc(doc(db, 'posts', id), {
+      views: increment(1),
+      updatedAt: serverTimestamp()
+    });
+    
+    return true;
+  } catch (error) {
+    console.error('Error incrementing post views:', error);
+    return false;
+  }
+};
+
+// Get featured posts for the home page
+export const getFeaturedPosts = async (limitCount = 3): Promise<BlogPost[]> => {
+  try {
+    console.log('Fetching featured posts...');
+    // Get all posts and filter client-side
+    const postsRef = collection(db, 'posts');
+    const simpleQuery = query(postsRef);
+    
+    const querySnapshot = await getDocs(simpleQuery);
+    
+    if (querySnapshot.empty) {
+      console.log('No posts found in Firestore');
+      return [];
+    }
+    
+    // Filter for published and featured posts client-side
+    let posts = querySnapshot.docs
+      .map(doc => convertToPost(doc.id, doc.data()))
+      .filter(post => post.status === 'published' && post.featured === true);
+    
+    // Sort by publishedAt
+    posts.sort((a, b) => {
+      const dateA = a.publishedAt?.seconds || a.createdAt?.seconds || 0;
+      const dateB = b.publishedAt?.seconds || b.createdAt?.seconds || 0;
+      return dateB - dateA; // Descending order
+    });
+    
+    // Limit the number of posts
+    posts = posts.slice(0, limitCount);
+    
+    console.log(`Found ${posts.length} featured posts`);
+    return posts;
+  } catch (error) {
+    console.error('Error fetching featured posts:', error);
+    
+    // Log more detailed error information
+    if (error instanceof Error) {
+      console.error(`Error details: ${error.message}`);
+      console.error(`Error stack: ${error.stack}`);
+    }
+    
+    return [];
+  }
+};
+
+// Get posts by category
+export const getPostsByCategory = async (category: string): Promise<BlogPost[]> => {
+  try {
+    console.log(`Fetching posts by category: ${category}...`);
+    // Get all posts and filter client-side
+    const postsRef = collection(db, 'posts');
+    const simpleQuery = query(postsRef);
+    
+    const querySnapshot = await getDocs(simpleQuery);
+    
+    if (querySnapshot.empty) {
+      console.log('No posts found in Firestore');
+      return [];
+    }
+    
+    // Filter for published posts with matching category client-side
+    let posts = querySnapshot.docs
+      .map(doc => convertToPost(doc.id, doc.data()))
+      .filter(post => post.status === 'published' && post.category.toLowerCase() === category.toLowerCase());
+    
+    // Sort by publishedAt
+    posts.sort((a, b) => {
+      const dateA = a.publishedAt?.seconds || a.createdAt?.seconds || 0;
+      const dateB = b.publishedAt?.seconds || b.createdAt?.seconds || 0;
+      return dateB - dateA; // Descending order
+    });
+    
+    console.log(`Found ${posts.length} posts in category: ${category}`);
+    return posts;
+  } catch (error) {
+    console.error(`Error fetching posts by category ${category}:`, error);
+    
+    // Log more detailed error information
+    if (error instanceof Error) {
+      console.error(`Error details: ${error.message}`);
+      console.error(`Error stack: ${error.stack}`);
+    }
+    
+    return [];
+  }
+};
+
+// Get posts by tag
+export const getPostsByTag = async (tag: string): Promise<BlogPost[]> => {
+  try {
+    console.log(`Fetching posts by tag: ${tag}...`);
+    // Get all posts and filter client-side
+    const postsRef = collection(db, 'posts');
+    const simpleQuery = query(postsRef);
+    
+    const querySnapshot = await getDocs(simpleQuery);
+    
+    if (querySnapshot.empty) {
+      console.log('No posts found in Firestore');
+      return [];
+    }
+    
+    // Filter for published posts with matching tag client-side
+    let posts = querySnapshot.docs
+      .map(doc => convertToPost(doc.id, doc.data()))
+      .filter(post => 
+        post.status === 'published' && 
+        post.tags && 
+        post.tags.some(t => t.toLowerCase() === tag.toLowerCase())
+      );
+    
+    // Sort by publishedAt
+    posts.sort((a, b) => {
+      const dateA = a.publishedAt?.seconds || a.createdAt?.seconds || 0;
+      const dateB = b.publishedAt?.seconds || b.createdAt?.seconds || 0;
+      return dateB - dateA; // Descending order
+    });
+    
+    console.log(`Found ${posts.length} posts with tag: ${tag}`);
+    return posts;
+  } catch (error) {
+    console.error(`Error fetching posts by tag ${tag}:`, error);
+    
+    // Log more detailed error information
+    if (error instanceof Error) {
+      console.error(`Error details: ${error.message}`);
+      console.error(`Error stack: ${error.stack}`);
+    }
+    
+    return [];
+  }
+};
+
+// Search posts
+export const searchPosts = async (searchQuery: string): Promise<BlogPost[]> => {
+  try {
+    console.log(`Searching posts for: ${searchQuery}...`);
+    // Get all posts and filter client-side
+    const postsRef = collection(db, 'posts');
+    const simpleQuery = query(postsRef);
+    
+    const querySnapshot = await getDocs(simpleQuery);
+    
+    if (querySnapshot.empty) {
+      console.log('No posts found in Firestore');
+      return [];
+    }
+    
+    // Filter for published posts first
+    let posts = querySnapshot.docs
+      .map(doc => convertToPost(doc.id, doc.data()))
+      .filter(post => post.status === 'published');
+    
+    // Then filter by search query
+    posts = filterPostsBySearch(posts, searchQuery);
+    
+    // Sort by publishedAt
+    posts.sort((a, b) => {
+      const dateA = a.publishedAt?.seconds || a.createdAt?.seconds || 0;
+      const dateB = b.publishedAt?.seconds || b.createdAt?.seconds || 0;
+      return dateB - dateA; // Descending order
+    });
+    
+    console.log(`Found ${posts.length} posts matching search: ${searchQuery}`);
+    return posts;
+  } catch (error) {
+    console.error(`Error searching posts for ${searchQuery}:`, error);
+    
+    // Log more detailed error information
+    if (error instanceof Error) {
+      console.error(`Error details: ${error.message}`);
+      console.error(`Error stack: ${error.stack}`);
+    }
+    
+    return [];
+  }
+};
+
+// Helper function to filter posts by search query
+const filterPostsBySearch = (posts: BlogPost[], searchQuery: string): BlogPost[] => {
+  const searchLower = searchQuery.toLowerCase();
+  return posts.filter(post => (
+    post.title.toLowerCase().includes(searchLower) ||
+    post.excerpt.toLowerCase().includes(searchLower) ||
+    post.content.toLowerCase().includes(searchLower) ||
+    post.category.toLowerCase().includes(searchLower) ||
+    post.tags.some(tag => tag.toLowerCase().includes(searchLower))
+  ));
+};
+
+export default {
+  getAllPosts,
+  getPostById,
+  getPostBySlug,
+  createPost,
+  updatePost,
+  deletePost,
+  uploadFeaturedImage,
+  incrementPostViews,
+  getFeaturedPosts,
+  getPostsByCategory,
+  getPostsByTag,
+  searchPosts
+};

@@ -1,0 +1,115 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules
+.DS_Store
+dist
+dist-ssr
+coverage
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build files
+/build
+
+# Temporary files
+/temp
+/tmp
+*.tmp
+
+# Large media files
+*.mp4
+*.tiff
+*.avi
+*.flv
+*.mov
+*.wmv
+
+# Cloudinary credentials should not be exposed
+cloudinary.config.js
+
+# Service account keys
+*-firebase-adminsdk-*.json
+firebase-admin-key.json
+*keyserv*.json
+
+# MoStuff directory (contains large files)
+/MoStuff
+MoStuff/
+
+# Exclude large directories
+public/MoStuff/
+dist/
+temp/
+temp_images/
+.vite/
+
+# Exclude all image files except critical ones
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.svg
+*.ico
+!public/favicon.ico
+!public/logo.png
+!src/assets/*.svg
+!src/assets/*.png
+
+# Additional exclusions for Windsurf deployment
+google-cloud-sdk/
+node_modules/
+.git/
+.github/
+.firebase/
+functions/node_modules/
+*.zip
+*.tar.gz
+*.tgz
+
+# Exclude test files
+**/__tests__/
+**/*.test.*
+**/*.spec.*
+
+# Exclude documentation
+docs/
+*.md
+!README.md
+
+# Exclude development configs
+.eslintrc*
+.prettierrc*
+.stylelintrc*
+tsconfig.tsbuildinfo
+

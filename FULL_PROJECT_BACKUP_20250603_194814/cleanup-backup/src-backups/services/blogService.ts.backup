@@ -1,0 +1,542 @@
+import { 
+  collection, 
+  doc, 
+  getDocs, 
+  getDoc, 
+  addDoc, 
+  updateDoc, 
+  deleteDoc, 
+  query, 
+  where, 
+  orderBy, 
+  limit, 
+  serverTimestamp,
+  increment,
+  Timestamp,
+  DocumentData
+} from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
+import { db, storage } from '../firebase/config';
+import { getStockImage } from '../utils/images';
+import type { StockImageCategory } from '../utils/images';
+import { transformImageUrl } from '../utils/imageOptimizationUtils';
+
+// Consistent interfaces with camelCase naming throughout
+export interface Author {
+  name: string;
+  avatar: string;
+  bio?: string;
+}
+
+export interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  featuredImage: string;
+  category: string;
+  tags: string[];
+  status: 'draft' | 'published' | 'scheduled';
+  views: number;
+  author: Author;
+  publishedAt?: Timestamp;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+  seoTitle?: string;
+  seoDescription?: string;
+  featured?: boolean;
+  videoEmbed?: string;
+  commentsEnabled?: boolean;
+  readTime?: number;
+}
+
+// Helper function to sanitize image URLs
+export const sanitizeImageUrl = (url: string | undefined, category: StockImageCategory = 'wedding'): string => {
+  // If URL is undefined, null, or empty string, return a stock image
+  if (!url || url === '') {
+    // Don't log for missing URLs - this is expected behavior
+    return getStockImage(category);
+  }
+  
+  // If it's a relative path starting with /, it's a valid local image
+  if (url.startsWith('/')) {
+    // Check if it's pointing to one of our stock images
+    if (url.includes('/images/stock/')) {
+      return url;
+    }
+    
+    // For other local paths, we'll assume they're valid
+    return url;
+  }
+  
+  try {
+    // Check if URL is valid - just validate without storing the object
+    new URL(url);
+    
+    // Additional validation for common issues
+    if (url.includes('undefined') || url === 'null') {
+      throw new Error('Invalid URL containing undefined or null');
+    }
+    
+    // For external URLs, return them without logging
+    return transformImageUrl(url);
+  } catch (error) {
+    // Silently handle errors and return fallback image
+    // Return a stock image based on the category
+    return getStockImage(category);
+  }
+};
+
+// Helper function to convert Firestore data to BlogPost
+const convertToPost = (id: string, data: DocumentData): BlogPost => {
+  return {
+    id,
+    title: data.title || '',
+    slug: data.slug || '',
+    excerpt: data.excerpt || '',
+    content: data.content || '',
+    featuredImage: sanitizeImageUrl(data.featuredImage || data.image, (data.category || 'wedding') as StockImageCategory),
+    category: data.category || '',
+    tags: data.tags || [],
+    author: {
+      name: data.author?.name || 'Admin',
+      avatar: sanitizeImageUrl(data.author?.avatar, 'wedding'),
+      bio: data.author?.bio || ''
+    },
+    status: data.status || 'draft',
+    views: data.views || 0,
+    publishedAt: data.publishedAt,
+    createdAt: data.createdAt || Timestamp.now(),
+    updatedAt: data.updatedAt || Timestamp.now(),
+    seoTitle: data.seoTitle || data.seo?.title,
+    seoDescription: data.seoDescription || data.seo?.description,
+    featured: data.featured || false,
+    videoEmbed: data.videoEmbed || '',
+    commentsEnabled: data.commentsEnabled !== false,
+    readTime: data.readTime
+  };
+};
+
+// Get all blog posts
+export const getAllPosts = async (includeUnpublished = false): Promise<BlogPost[]> => {
+  try {
+    const postsRef = collection(db, 'posts');
+    
+    // Use a simple query without complex conditions that might require indexes
+    const simpleQuery = query(postsRef);
+    
+    try {
+      // Check if user is authenticated - if not, use mock data for public views
+      const isAuthenticated = localStorage.getItem('token') !== null;
+      
+      if (!isAuthenticated) {
+        console.log('User not authenticated, using public blog posts only');
+        // For unauthenticated users, return mock data or empty array
+        // This prevents permission-denied errors
+        return mockBlogPosts.filter(post => post.status === 'published');
+      }
+      
+      const querySnapshot = await getDocs(simpleQuery);
+      
+      if (querySnapshot.empty) {
+        console.log('No posts found in collection');
+        return [];
+      }
+      
+      // Convert and filter the posts manually
+      const allPosts = querySnapshot.docs.map(doc => convertToPost(doc.id, doc.data()));
+      
+      // Filter posts based on status
+      return includeUnpublished 
+        ? allPosts 
+        : allPosts.filter(post => post.status === 'published');
+    } catch (error: any) {
+      console.error('Error executing query:', error);
+      
+      // If there's a permission error, fall back to mock data for public views
+      if (error.code === 'permission-denied') {
+        console.log('Permission denied, using mock blog posts');
+        return mockBlogPosts.filter(post => post.status === 'published');
+      }
+      
+      return [];
+    }
+  } catch (error: any) {
+    console.error('Error fetching posts:', error);
+    return [];
+  }
+};
+
+// Get a single blog post by ID
+export const getPostById = async (id: string): Promise<BlogPost | null> => {
+  try {
+    const blogDocRef = doc(db, 'posts', id);
+    const docSnap = await getDoc(blogDocRef);
+    
+    if (docSnap.exists()) {
+      return convertToPost(docSnap.id, docSnap.data());
+    } else {
+      return null;
+    }
+  } catch (error: any) {
+    console.error('Error getting post by ID:', error);
+    throw error;
+  }
+};
+
+// Get a single blog post by slug
+export const getPostBySlug = async (slug: string): Promise<BlogPost | null> => {
+  try {
+    const blogPostsRef = collection(db, 'posts');
+    const q = query(
+      blogPostsRef,
+      where('slug', '==', slug),
+      limit(1)
+    );
+    
+    const querySnapshot = await getDocs(q);
+    
+    if (!querySnapshot.empty) {
+      const docSnap = querySnapshot.docs[0];
+      return convertToPost(docSnap.id, docSnap.data());
+    } else {
+      return null;
+    }
+  } catch (error: any) {
+    console.error('Error getting post by slug:', error);
+    throw error;
+  }
+};
+
+// Create a new blog post
+export const createPost = async (postData: Omit<BlogPost, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> => {
+  try {
+    // Generate slug if not provided
+    if (!postData.slug && postData.title) {
+      postData.slug = postData.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+    }
+    
+    // Set timestamps
+    const now = serverTimestamp();
+    const newPost = {
+      ...postData,
+      views: 0,
+      createdAt: now,
+      updatedAt: now,
+      publishedAt: postData.status === 'published' ? now : null
+    };
+    
+    const docRef = await addDoc(collection(db, 'posts'), newPost);
+    return docRef.id;
+  } catch (error: any) {
+    console.error('Error creating post:', error);
+    throw error;
+  }
+};
+
+// Update an existing blog post
+export const updatePost = async (id: string, postData: Partial<BlogPost>): Promise<boolean> => {
+  try {
+    const docRef = doc(db, 'posts', id);
+    
+    // If status is changing to published, set publishedAt
+    const updateData: any = {
+      ...postData,
+      updatedAt: serverTimestamp()
+    };
+    
+    if (postData.status === 'published' && !(await getPostPublishStatus(id))) {
+      updateData.publishedAt = serverTimestamp();
+    }
+    
+    await updateDoc(docRef, updateData);
+    return true;
+  } catch (error: any) {
+    console.error('Error updating post:', error);
+    throw error;
+  }
+};
+
+// Check if a post is already published
+export const getPostPublishStatus = async (id: string): Promise<boolean> => {
+  try {
+    const post = await getPostById(id);
+    return post?.status === 'published';
+  } catch (error: any) {
+    console.error('Error checking post publish status:', error);
+    throw error;
+  }
+};
+
+// Delete a blog post
+export const deletePost = async (id: string): Promise<boolean> => {
+  try {
+    // Get post to check if it has a featured image
+    const post = await getPostById(id);
+    
+    // Delete the post document
+    await deleteDoc(doc(db, 'posts', id));
+    
+    // Delete the featured image if it exists and is stored in Firebase Storage
+    if (post?.featuredImage && post.featuredImage.includes('firebasestorage')) {
+      try {
+        const imageRef = ref(storage, post.featuredImage);
+        await deleteObject(imageRef);
+      } catch (imageError: any) {
+        console.error('Error deleting post image:', imageError);
+        // Continue with deletion even if image removal fails
+      }
+    }
+    
+    return true;
+  } catch (error: any) {
+    console.error('Error deleting post:', error);
+    throw error;
+  }
+};
+
+// Upload a featured image for a blog post
+export const uploadFeaturedImage = async (file: File): Promise<string> => {
+  try {
+    const timestamp = Date.now();
+    const storageRef = ref(storage, `blog/${timestamp}_${file.name}`);
+    
+    const uploadTaskSnapshot = await uploadBytes(storageRef, file);
+    const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
+    
+    return downloadURL;
+  } catch (error: any) {
+    console.error('Error uploading featured image:', error);
+    throw error;
+  }
+};
+
+// Increment post views
+export const incrementPostViews = async (id: string): Promise<boolean> => {
+  try {
+    const docRef = doc(db, 'posts', id);
+    await updateDoc(docRef, {
+      views: increment(1)
+    });
+    return true;
+  } catch (error: any) {
+    console.error('Error incrementing post views:', error);
+    return false; // Don't throw error for view increments
+  }
+};
+
+// Get featured posts for the home page
+export const getFeaturedPosts = async (limit = 3): Promise<BlogPost[]> => {
+  try {
+    // Check if user is authenticated
+    const isAuthenticated = localStorage.getItem('token') !== null;
+    
+    if (!isAuthenticated) {
+      console.log('User not authenticated, using mock featured posts');
+      // For unauthenticated users, return mock featured posts
+      return mockBlogPosts
+        .filter(post => post.status === 'published' && post.featured === true)
+        .slice(0, limit);
+    }
+    
+    const postsRef = collection(db, 'posts');
+    
+    // Use a simple query without complex conditions
+    const simpleQuery = query(postsRef);
+    
+    try {
+      const querySnapshot = await getDocs(simpleQuery);
+      
+      // Convert all posts and then filter and sort manually
+      const allPosts = querySnapshot.docs.map(doc => convertToPost(doc.id, doc.data()));
+      
+      // Filter for published and featured posts
+      const featuredPosts = allPosts
+        .filter(post => post.status === 'published' && post.featured === true)
+        // Sort by publishedAt in descending order
+        .sort((a, b) => {
+          // Handle Timestamp objects properly
+          const dateA = a.publishedAt instanceof Timestamp 
+            ? a.publishedAt.toDate().getTime() 
+            : a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+          
+          const dateB = b.publishedAt instanceof Timestamp 
+            ? b.publishedAt.toDate().getTime() 
+            : b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+            
+          return dateB - dateA;
+        })
+        // Limit to the requested number
+        .slice(0, limit);
+      
+      return featuredPosts;
+    } catch (error: any) {
+      console.error('Error executing featured posts query:', error);
+      
+      // If there's a permission error, fall back to mock data
+      if (error.code === 'permission-denied') {
+        console.log('Permission denied, using mock featured posts');
+        return mockBlogPosts
+          .filter(post => post.status === 'published' && post.featured === true)
+          .slice(0, limit);
+      }
+      
+      return [];
+    }
+  } catch (error: any) {
+    console.error('Error fetching featured posts:', error);
+    return [];
+  }
+};
+
+// Get posts by category
+export const getPostsByCategory = async (category: string): Promise<BlogPost[]> => {
+  try {
+    const postsRef = collection(db, 'posts');
+    const q = query(
+      postsRef,
+      where('status', '==', 'published'),
+      where('category', '==', category),
+      orderBy('publishedAt', 'desc')
+    );
+    
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => convertToPost(doc.id, doc.data()));
+  } catch (error: any) {
+    console.error('Error fetching posts by category:', error);
+    throw error;
+  }
+};
+
+// Get posts by tag
+export const getPostsByTag = async (tag: string): Promise<BlogPost[]> => {
+  try {
+    const postsRef = collection(db, 'posts');
+    const q = query(
+      postsRef,
+      where('status', '==', 'published'),
+      where('tags', 'array-contains', tag),
+      orderBy('publishedAt', 'desc')
+    );
+    
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => convertToPost(doc.id, doc.data()));
+  } catch (error: any) {
+    console.error('Error fetching posts by tag:', error);
+    throw error;
+  }
+};
+
+// Search posts
+export const searchPosts = async (searchQuery: string): Promise<BlogPost[]> => {
+  try {
+    // Basic search implementation - in a real app, consider using Algolia or a similar service
+    const postsRef = collection(db, 'posts');
+    const q = query(
+      postsRef,
+      where('status', '==', 'published'),
+      orderBy('publishedAt', 'desc')
+    );
+    
+    const querySnapshot = await getDocs(q);
+    const posts = querySnapshot.docs.map(doc => convertToPost(doc.id, doc.data()));
+    
+    // Filter posts client-side for basic search functionality
+    return posts.filter(post => {
+      const searchLower = searchQuery.toLowerCase();
+      return (
+        post.title.toLowerCase().includes(searchLower) ||
+        post.excerpt.toLowerCase().includes(searchLower) ||
+        post.content.toLowerCase().includes(searchLower) ||
+        post.category.toLowerCase().includes(searchLower) ||
+        post.tags.some(tag => tag.toLowerCase().includes(searchLower))
+      );
+    });
+  } catch (error: any) {
+    console.error('Error searching posts:', error);
+    throw error;
+  }
+};
+
+// Mock blog posts for fallback when Firestore access is denied
+const mockBlogPosts: BlogPost[] = [
+  {
+    id: 'mock-post-1',
+    title: 'The Art of Wedding Photography',
+    slug: 'art-of-wedding-photography',
+    content: '<p>Wedding photography is about capturing the essence of love and celebration...</p>',
+    excerpt: 'Discover the secrets to capturing timeless wedding moments',
+    featuredImage: getStockImage('wedding'),
+    status: 'published',
+    views: 1250,
+    author: {
+      name: 'Hariel Xavier',
+      avatar: '/images/author/hariel.jpg',
+      bio: 'Professional photographer with over 10 years of experience'
+    },
+    publishedAt: Timestamp.fromDate(new Date('2023-03-15')),
+    createdAt: Timestamp.fromDate(new Date('2023-03-10')),
+    updatedAt: Timestamp.fromDate(new Date('2023-03-15')),
+    category: 'Wedding',
+    tags: ['wedding', 'photography', 'tips'],
+    featured: true,
+    commentsEnabled: true,
+    seoTitle: 'The Art of Wedding Photography - Tips and Techniques',
+    seoDescription: 'Learn professional wedding photography techniques and tips to capture timeless moments',
+    readTime: 5
+  },
+  {
+    id: 'mock-post-2',
+    title: 'Best Locations for Engagement Photos',
+    slug: 'best-locations-engagement-photos',
+    content: '<p>Choosing the right location for engagement photos can make all the difference...</p>',
+    excerpt: 'Explore stunning locations for memorable engagement sessions',
+    featuredImage: getStockImage('engagement'),
+    status: 'published',
+    views: 980,
+    author: {
+      name: 'Hariel Xavier',
+      avatar: '/images/author/hariel.jpg',
+      bio: 'Professional photographer with over 10 years of experience'
+    },
+    publishedAt: Timestamp.fromDate(new Date('2023-04-22')),
+    createdAt: Timestamp.fromDate(new Date('2023-04-20')),
+    updatedAt: Timestamp.fromDate(new Date('2023-04-22')),
+    category: 'Engagement',
+    tags: ['engagement', 'locations', 'photography'],
+    featured: true,
+    commentsEnabled: true,
+    seoTitle: 'Best Locations for Engagement Photos - Photography Guide',
+    seoDescription: 'Discover the perfect locations for your engagement photoshoot',
+    readTime: 4
+  },
+  {
+    id: 'mock-post-3',
+    title: 'Essential Gear for Portrait Photography',
+    slug: 'essential-gear-portrait-photography',
+    content: '<p>Having the right gear can elevate your portrait photography to new heights...</p>',
+    excerpt: 'The must-have equipment for stunning portrait sessions',
+    featuredImage: getStockImage('equipment'),
+    status: 'published',
+    views: 1120,
+    author: {
+      name: 'Hariel Xavier',
+      avatar: '/images/author/hariel.jpg',
+      bio: 'Professional photographer with over 10 years of experience'
+    },
+    publishedAt: Timestamp.fromDate(new Date('2023-05-10')),
+    createdAt: Timestamp.fromDate(new Date('2023-05-05')),
+    updatedAt: Timestamp.fromDate(new Date('2023-05-10')),
+    category: 'Gear',
+    tags: ['gear', 'portraits', 'equipment'],
+    featured: true,
+    commentsEnabled: true,
+    seoTitle: 'Essential Gear for Portrait Photography - Complete Guide',
+    seoDescription: 'Learn about the essential equipment needed for professional portrait photography',
+    readTime: 6
+  }
+];

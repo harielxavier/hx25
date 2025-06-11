@@ -1,0 +1,141 @@
+// Script to check gallery images and their URLs
+import { initializeApp, getApps, getApp } from 'firebase/app';
+import { 
+  getFirestore, 
+  collection, 
+  getDocs, 
+  query, 
+  where, 
+  orderBy
+} from 'firebase/firestore';
+
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCxZL40_7Enc-I9IwRt0DllOMqlMwneje8",
+  authDomain: "harielxavierphotograph.firebaseapp.com",
+  projectId: "harielxavierphotograph",
+  storageBucket: "harielxavierphotograph.appspot.com",
+  messagingSenderId: "829105046643",
+  appId: "1:829105046643:web:6d22b9c17ac453472fd606",
+  measurementId: "G-0TQFQH1YLC"
+};
+
+// Initialize Firebase - prevent duplicate app instances
+const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+async function checkGalleryImages() {
+  try {
+    console.log('Checking gallery images...');
+    
+    // Get featured galleries
+    const galleriesRef = collection(db, 'galleries');
+    const featuredQuery = query(
+      galleriesRef, 
+      where('featured', '==', true),
+      where('isPublic', '==', true)
+    );
+    
+    const featuredGalleries = await getDocs(featuredQuery);
+    
+    console.log(`Found ${featuredGalleries.size} featured galleries`);
+    
+    // Check each gallery's images
+    for (const galleryDoc of featuredGalleries.docs) {
+      const galleryId = galleryDoc.id;
+      const galleryData = galleryDoc.data();
+      
+      console.log(`\nGallery: ${galleryData.title} (${galleryId})`);
+      console.log(`Cover Image: ${galleryData.coverImage}`);
+      console.log(`Thumbnail Image: ${galleryData.thumbnailImage}`);
+      
+      // Get featured images
+      const imagesRef = collection(db, 'galleries', galleryId, 'images');
+      const featuredImagesQuery = query(
+        imagesRef, 
+        where('featured', '==', true),
+        orderBy('order', 'asc')
+      );
+      
+      try {
+        const featuredImages = await getDocs(featuredImagesQuery);
+        console.log(`Found ${featuredImages.size} featured images`);
+        
+        // Log details of each featured image
+        featuredImages.docs.forEach((imageDoc, index) => {
+          const imageData = imageDoc.data();
+          console.log(`\nImage ${index + 1}:`);
+          console.log(`ID: ${imageDoc.id}`);
+          console.log(`URL: ${imageData.url}`);
+          console.log(`Thumbnail URL: ${imageData.thumbnailUrl}`);
+          console.log(`Filename: ${imageData.filename}`);
+          console.log(`Featured: ${imageData.featured}`);
+          console.log(`Order: ${imageData.order}`);
+        });
+        
+        if (featuredImages.size === 0) {
+          console.log('No featured images found for this gallery.');
+          
+          // Check if there are any images at all
+          const allImagesQuery = query(imagesRef, orderBy('order', 'asc'), where('order', '>', 0));
+          const allImages = await getDocs(allImagesQuery);
+          
+          if (allImages.size > 0) {
+            console.log(`Gallery has ${allImages.size} non-featured images.`);
+            
+            // Log details of the first image
+            const firstImage = allImages.docs[0];
+            const firstImageData = firstImage.data();
+            console.log(`\nFirst non-featured image:`);
+            console.log(`ID: ${firstImage.id}`);
+            console.log(`URL: ${firstImageData.url}`);
+            console.log(`Thumbnail URL: ${firstImageData.thumbnailUrl}`);
+            console.log(`Filename: ${firstImageData.filename}`);
+            console.log(`Featured: ${firstImageData.featured}`);
+            console.log(`Order: ${firstImageData.order}`);
+          } else {
+            console.log('Gallery has no images at all.');
+          }
+        }
+      } catch (error) {
+        console.error(`Error getting images for gallery ${galleryId}:`, error);
+        
+        // Fallback to get all images
+        console.log('Trying fallback query...');
+        const allImagesQuery = query(imagesRef);
+        const allImages = await getDocs(allImagesQuery);
+        
+        console.log(`Found ${allImages.size} total images`);
+        
+        // Filter featured images
+        const featuredImages = allImages.docs
+          .filter(doc => doc.data().featured)
+          .sort((a, b) => a.data().order - b.data().order);
+        
+        console.log(`Found ${featuredImages.length} featured images after filtering`);
+        
+        // Log details of each featured image
+        featuredImages.forEach((imageDoc, index) => {
+          const imageData = imageDoc.data();
+          console.log(`\nImage ${index + 1}:`);
+          console.log(`ID: ${imageDoc.id}`);
+          console.log(`URL: ${imageData.url}`);
+          console.log(`Thumbnail URL: ${imageData.thumbnailUrl}`);
+          console.log(`Filename: ${imageData.filename}`);
+          console.log(`Featured: ${imageData.featured}`);
+          console.log(`Order: ${imageData.order}`);
+        });
+      }
+    }
+    
+    console.log('\nImage check completed.');
+    
+  } catch (error) {
+    console.error('Error checking gallery images:', error);
+  }
+}
+
+// Run the function
+checkGalleryImages()
+  .then(() => console.log('Check completed'))
+  .catch(error => console.error('Check failed:', error));

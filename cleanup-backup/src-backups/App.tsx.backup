@@ -1,0 +1,122 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext';
+import LandingPage from './pages/LandingPage';
+import AboutPage from './pages/AboutPage';
+import PricingPage from './pages/PricingPage';
+import GalleryPage from './pages/GalleryPage';
+import GalleryDetailPage from './pages/GalleryDetailPage';
+import GalleryDebugPage from './pages/GalleryDebugPage';
+import GalleriesPage from './pages/GalleriesPage';
+import ClientGalleryPage from './pages/ClientGalleryPage';
+import BlogPage from './pages/BlogPage';
+import BlogPostPage from './pages/BlogPostPage';
+import TestLeadsPage from './pages/TestLeadsPage';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminClients from './pages/admin/AdminClients';
+import AdminCalendar from './pages/admin/AdminCalendar';
+import PaymentsPage from './pages/admin/PaymentsPage';
+import ServicesPage from './pages/admin/ServicesPage';
+import BlogEditor from './pages/admin/BlogEditor';
+import MessagesPage from './pages/admin/MessagesPage';
+import ContractsPage from './pages/admin/ContractsPage';
+import AdminBlogPage from './pages/admin/BlogPage';
+import BlogManager from './pages/admin/BlogManager';
+import SEOPage from './pages/admin/SEOPage';
+import AdminLogin from './pages/admin/AdminLogin';
+import BookNowPage from './pages/BookNowPage';
+import NotFoundPage from './pages/NotFoundPage';
+import RealTimeAnalytics from './pages/admin/RealTimeAnalytics';
+import TrafficSources from './pages/admin/TrafficSources';
+import ActiveUsers from './pages/admin/ActiveUsers';
+import PopularPages from './pages/admin/PopularPages';
+import EntryExitPages from './pages/admin/EntryExitPages';
+import TimeOnPage from './pages/admin/TimeOnPage';
+import ScrollDepth from './pages/admin/ScrollDepth';
+import UserFlow from './pages/admin/UserFlow';
+import ConversionFunnels from './pages/admin/ConversionFunnels';
+import ConversionGoals from './pages/admin/ConversionGoals';
+import AdminGallery from './pages/admin/AdminGallery';
+import AdminGalleryDetail from './pages/admin/AdminGalleryDetail';
+import FeaturedGalleries from './pages/admin/FeaturedGalleries';
+import PortfolioSettings from './pages/admin/PortfolioSettings';
+import WeddingPhotography from './pages/WeddingPhotography';
+import DataImportPage from './pages/admin/DataImportPage';
+
+// Completely rewritten PrivateRoute component to avoid infinite loops
+// Using a class component approach to avoid React hooks issues
+function PrivateRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+  
+  // Simple conditional rendering without Navigate component
+  if (!user) {
+    window.location.href = '/login';
+    return null;
+  }
+  
+  return <>{children}</>;
+}
+
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/portfolio" element={<GalleryPage />} />
+        <Route path="/gallery/:slug" element={<GalleryDetailPage />} />
+        <Route path="/gallery-debug/:slug" element={<GalleryDebugPage />} />
+        <Route path="/galleries" element={<GalleriesPage />} />
+        <Route path="/client-gallery/:slug" element={<ClientGalleryPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/blog/:slug" element={<BlogPostPage />} />
+        <Route path="/wedding" element={<WeddingPhotography />} />
+        <Route path="/admin/test-leads" element={
+          <PrivateRoute>
+            <TestLeadsPage />
+          </PrivateRoute>
+        } />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<PrivateRoute><AdminDashboard /></PrivateRoute>} />
+        <Route path="/admin/clients" element={<PrivateRoute><AdminClients /></PrivateRoute>} />
+        <Route path="/admin/calendar" element={<PrivateRoute><AdminCalendar /></PrivateRoute>} />
+        <Route path="/admin/payments" element={<PrivateRoute><PaymentsPage /></PrivateRoute>} />
+        <Route path="/admin/services" element={<PrivateRoute><ServicesPage /></PrivateRoute>} />
+        <Route path="/admin/blog-editor" element={<PrivateRoute><BlogEditor /></PrivateRoute>} />
+        <Route path="/admin/blog-editor/:id" element={<PrivateRoute><BlogEditor /></PrivateRoute>} />
+        <Route path="/admin/messages" element={<PrivateRoute><MessagesPage /></PrivateRoute>} />
+        <Route path="/admin/gallery" element={<PrivateRoute><AdminGallery /></PrivateRoute>} />
+        <Route path="/admin/gallery/:galleryId" element={<PrivateRoute><AdminGalleryDetail /></PrivateRoute>} />
+        <Route path="/admin/featured-galleries" element={<PrivateRoute><FeaturedGalleries /></PrivateRoute>} />
+        <Route path="/admin/portfolio-settings" element={<PrivateRoute><PortfolioSettings /></PrivateRoute>} />
+        <Route path="/admin/contracts" element={<PrivateRoute><ContractsPage /></PrivateRoute>} />
+        <Route path="/admin/blog" element={<PrivateRoute><AdminBlogPage /></PrivateRoute>} />
+        <Route path="/admin/blog-manager" element={<PrivateRoute><BlogManager /></PrivateRoute>} />
+        <Route path="/admin/seo" element={<PrivateRoute><SEOPage /></PrivateRoute>} />
+        <Route path="/admin/real-time-analytics" element={<PrivateRoute><RealTimeAnalytics /></PrivateRoute>} />
+        <Route path="/admin/traffic-sources" element={<PrivateRoute><TrafficSources /></PrivateRoute>} />
+        <Route path="/admin/active-users" element={<PrivateRoute><ActiveUsers /></PrivateRoute>} />
+        <Route path="/admin/popular-pages" element={<PrivateRoute><PopularPages /></PrivateRoute>} />
+        <Route path="/admin/entry-exit-pages" element={<PrivateRoute><EntryExitPages /></PrivateRoute>} />
+        <Route path="/admin/time-on-page" element={<PrivateRoute><TimeOnPage /></PrivateRoute>} />
+        <Route path="/admin/scroll-depth" element={<PrivateRoute><ScrollDepth /></PrivateRoute>} />
+        <Route path="/admin/user-flow" element={<PrivateRoute><UserFlow /></PrivateRoute>} />
+        <Route path="/admin/conversion-funnels" element={<PrivateRoute><ConversionFunnels /></PrivateRoute>} />
+        <Route path="/admin/conversion-goals" element={<PrivateRoute><ConversionGoals /></PrivateRoute>} />
+        <Route path="/admin/data-import" element={<PrivateRoute><DataImportPage /></PrivateRoute>} />
+        <Route path="/book-now" element={<BookNowPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </Router>
+  );
+}

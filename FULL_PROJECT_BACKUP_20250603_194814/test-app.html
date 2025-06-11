@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Hariel Xavier Photography Website Test</h1>
+    <p>If you can see this page, the server is working correctly.</p>
+    <p>This is a test page to diagnose the white screen issue.</p>
+  </div>
+  
+  <div class="card">
+    <h2>Project Information</h2>
+    <ul>
+      <li>React version: 18.3.1</li>
+      <li>Vite version: 6.2.3</li>
+      <li>Firebase integration: Yes</li>
+      <li>Cloudinary integration: Yes</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Test Firebase Connection</h2>
+    <button id="testFirebase">Test Firebase</button>
+    <div id="firebaseResult"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js';
+    import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA72zzmJF4MA_HrAb-3dOaO82Rbbh2pSVQ",
+      authDomain: "harielxavierphotography-79f68.firebaseapp.com",
+      projectId: "harielxavierphotography-79f68",
+      storageBucket: "harielxavierphotography-79f68.firebasestorage.app",
+      messagingSenderId: "1037839898187",
+      appId: "1:1037839898187:web:16e7d37058b5fbb8409fce",
+      measurementId: "G-F4Z0Y39GBZ"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    document.getElementById('testFirebase').addEventListener('click', async () => {
+      const resultDiv = document.getElementById('firebaseResult');
+      resultDiv.innerHTML = 'Testing Firebase connection...';
+      
+      try {
+        const querySnapshot = await getDocs(collection(db, "test-collection"));
+        resultDiv.innerHTML = `Firebase connection successful! Found ${querySnapshot.size} documents.`;
+      } catch (error) {
+        resultDiv.innerHTML = `Error connecting to Firebase: ${error.message}`;
+        console.error("Firebase error:", error);
+      }
+    });
+  </script>
+</body>
+</html>

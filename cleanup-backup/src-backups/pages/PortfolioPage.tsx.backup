@@ -1,0 +1,2569 @@
+import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import Footer from '../components/landing/Footer';
+import { useThemeContext } from '../context/ThemeContext';
+import { transformImageUrl } from '../utils/imageOptimizationUtils';
+
+// Portfolio stories data - would come from Firebase in production
+const portfolioStories = [
+  {
+    id: 'karni-zilvinas',
+    title: 'Karni & Zilvinas',
+    subtitle: 'Luxury Venetian Wedding',
+    category: 'WEDDINGS',
+    location: 'The Venetian, NJ',
+    coverImage: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/cover.jpg',
+    fallbackImage: '/images/portfolio/wedding-1-cover.jpg',
+    featured: true,
+    description: 'A spectacular celebration at <a href="https://www.venetiannj.com/" target="_blank" rel="noopener noreferrer" class="text-rose-300 hover:text-rose-400 transition-colors font-medium">The Venetian</a> in New Jersey, featuring opulent ballrooms, grand staircases, and exquisite architectural details that created the perfect backdrop for this elegant affair.',
+    testimonial: "Hariel captured our special day with such artistry and attention to detail. Every time we look at our photos, we're transported back to those magical moments. The Masterpiece Package was absolutely worth it!",
+    clientName: "Karni & Zilvinas",
+    packageInfo: "Masterpiece Collection",
+    packageDetails: "Full-day coverage, second photographer, engagement session, luxury album, and complete digital gallery",
+    limitedAvailability: true,
+    tags: ["Elegant", "Luxury", "Traditional", "Ballroom", "Venetian"],
+    sections: [
+      {
+        id: 'gallery',
+        title: 'Wedding Gallery',
+        description: 'A collection of beautiful moments from this elegant Venetian wedding. Photos are arranged in chronological order from preparation to reception.',
+      }
+    ]
+  },
+  {
+    id: 'wedding-2',
+    title: 'Elena & James',
+    subtitle: 'Modern City Celebration',
+    category: 'WEDDINGS',
+    location: 'Brooklyn, NY',
+    date: 'September 2024',
+    coverImage: '/images/portfolio/wedding-2.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: false,
+    description: 'A modern celebration with the New York skyline as their witness.',
+    testimonial: '"Working with Hariel was the best decision we made for our wedding. The photos are beyond what we could have imagined."',
+    clientName: 'Elena & James',
+    tags: ["Modern", "City", "Romantic"],
+    sections: [
+      {
+        id: 'ceremony',
+        title: 'Rooftop Ceremony',
+        description: 'An intimate exchange of vows with the city skyline as backdrop.',
+        images: []
+      },
+      {
+        id: 'portraits',
+        title: 'Urban Portraits',
+        description: 'Capturing the couple against the urban landscape.',
+        images: []
+      },
+      {
+        id: 'reception',
+        title: 'Loft Reception',
+        description: 'A stylish celebration in a converted warehouse space.',
+        images: []
+      }
+    ]
+  },
+  {
+    id: 'wedding-3',
+    title: 'Olivia & Nathan',
+    subtitle: 'Beachfront Romance',
+    category: 'WEDDINGS',
+    location: 'Malibu, CA',
+    date: 'July 2024',
+    coverImage: '/images/portfolio/wedding-3.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: false,
+    description: 'A breathtaking ceremony on the shores of the Pacific, with toes in the sand and hearts full of joy.',
+    testimonial: '"Hariel has a gift for capturing not just how things looked, but how they felt. Our photos are full of emotion."',
+    clientName: 'Olivia & Nathan',
+    tags: ["Beach", "Romantic", "Outdoor"],
+    sections: [
+      {
+        id: 'ceremony',
+        title: 'Beach Ceremony',
+        description: 'Exchanging vows with the sound of waves in the background.',
+        images: []
+      },
+      {
+        id: 'sunset',
+        title: 'Golden Hour Portraits',
+        description: 'Taking advantage of California\'s famous golden light.',
+        images: []
+      },
+      {
+        id: 'reception',
+        title: 'Oceanside Celebration',
+        description: 'Dancing under the stars with the ocean as a backdrop.',
+        images: []
+      }
+    ]
+  },
+  {
+    id: 'wedding-4',
+    title: 'Isabella & William',
+    subtitle: 'Historic Estate Wedding',
+    category: 'WEDDINGS',
+    location: 'Charleston, SC',
+    date: 'April 2024',
+    coverImage: '/images/portfolio/wedding-4.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: false,
+    description: 'A timeless celebration at a historic plantation with southern charm and elegant details.',
+    testimonial: '"Our wedding photos look like they belong in a magazine. Hariel captured every detail we worked so hard on."',
+    clientName: 'Isabella & William',
+    tags: ["Historic", "Elegant", "Southern"],
+    sections: [
+      {
+        id: 'preparation',
+        title: 'Estate Preparations',
+        description: 'Getting ready in rooms filled with history and character.',
+        images: []
+      },
+      {
+        id: 'ceremony',
+        title: 'Garden Ceremony',
+        description: 'Saying "I do" surrounded by centuries-old oak trees.',
+        images: []
+      },
+      {
+        id: 'reception',
+        title: 'Ballroom Reception',
+        description: 'An elegant evening in a historic ballroom.',
+        images: []
+      }
+    ]
+  },
+  
+  // ENGAGEMENTS
+  {
+    id: 'alex-jordan',
+    title: 'Alex & Jordan',
+    subtitle: 'Autumn Central Park Engagement',
+    category: 'ENGAGEMENTS',
+    location: 'New York, NY',
+    date: 'October 2024',
+    coverImage: '/images/portfolio/engagement-1.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: true,
+    description: 'Fall colors and city skylines create a perfect backdrop for love.',
+    testimonial: '"The way Hariel made us feel comfortable completely transformed our photos. We look like ourselves, just on our best day."',
+    clientName: 'Alex & Jordan',
+    tags: ["Autumn", "Central Park", "Romantic"],
+    sections: [
+      { 
+        id: 'cityscape', 
+        title: 'Urban Romance',
+        description: 'Iconic New York backdrops frame their love story.'
+      },
+      { 
+        id: 'nature', 
+        title: 'Natural Connection',
+        description: 'Quiet moments among the fall foliage of Central Park.'
+      },
+      { 
+        id: 'intimate', 
+        title: 'Intimate Moments',
+        description: 'The small gestures that reveal their unique connection.'
+      }
+    ]
+  },
+  {
+    id: 'engagement-1',
+    title: 'Alex & Jordan',
+    subtitle: 'Mountain Adventure Session',
+    category: 'ENGAGEMENTS',
+    location: 'Aspen, CO',
+    date: 'January 2024',
+    coverImage: '/images/portfolio/engagement-1.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: true,
+    description: 'A breathtaking engagement session in the snow-covered mountains of Colorado.',
+    testimonial: '"These photos perfectly capture our love for adventure and each other. We couldn\'t be happier."',
+    clientName: 'Alex & Jordan',
+    tags: ["Mountain", "Adventure", "Romantic"],
+    sections: [
+      {
+        id: 'hike',
+        title: 'The Hike',
+        description: 'Capturing the journey through snow-covered trails.',
+        images: []
+      },
+      {
+        id: 'summit',
+        title: 'Summit Views',
+        description: 'Celebrating love at the top of the world.',
+        images: []
+      },
+      {
+        id: 'cabin',
+        title: 'Cozy Moments',
+        description: 'Intimate portraits in a mountain cabin.',
+        images: []
+      }
+    ]
+  },
+  {
+    id: 'engagement-2',
+    title: 'Maya & Daniel',
+    subtitle: 'Urban Love Story',
+    category: 'ENGAGEMENTS',
+    location: 'San Francisco, CA',
+    date: 'March 2024',
+    coverImage: '/images/portfolio/engagement-2.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: false,
+    description: 'Exploring the city where they fell in love, from iconic landmarks to hidden alleyways.',
+    testimonial: '"Hariel made us feel so comfortable. The photos show our real personalities and connection."',
+    clientName: 'Maya & Daniel',
+    tags: ["Urban", "Love Story", "Romantic"],
+    sections: [
+      {
+        id: 'landmarks',
+        title: 'City Icons',
+        description: 'Portraits with San Francisco\'s famous landmarks.',
+        images: []
+      },
+      {
+        id: 'neighborhood',
+        title: 'Their Neighborhood',
+        description: 'Walking the streets where their love story began.',
+        images: []
+      },
+      {
+        id: 'sunset',
+        title: 'Golden Gate Sunset',
+        description: 'A magical end to the session with iconic views.',
+        images: []
+      }
+    ]
+  },
+  {
+    id: 'engagement-3',
+    title: 'Taylor & Casey',
+    subtitle: 'Vineyard Proposal',
+    category: 'ENGAGEMENTS',
+    location: 'Sonoma, CA',
+    date: 'May 2024',
+    coverImage: '/images/portfolio/engagement-3.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: false,
+    description: 'A surprise proposal among the vines, followed by a celebration of their new engagement.',
+    testimonial: '"Hariel helped plan the perfect surprise proposal and captured the moment beautifully. We\'ll cherish these forever."',
+    clientName: 'Taylor & Casey',
+    tags: ["Vineyard", "Proposal", "Romantic"],
+    sections: [
+      {
+        id: 'setup',
+        title: 'The Setup',
+        description: 'Planning and preparing for the perfect moment.',
+        images: []
+      },
+      {
+        id: 'proposal',
+        title: 'The Proposal',
+        description: 'The emotional moment when they said "yes".',
+        images: []
+      },
+      {
+        id: 'celebration',
+        title: 'Celebration',
+        description: 'First portraits as an engaged couple.',
+        images: []
+      }
+    ]
+  },
+  {
+    id: 'engagement-4',
+    title: 'Riley & Morgan',
+    subtitle: 'Coastal Cliffs Engagement',
+    category: 'ENGAGEMENTS',
+    location: 'Big Sur, CA',
+    date: 'February 2024',
+    coverImage: '/images/portfolio/engagement-4.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: false,
+    description: 'Dramatic coastal views provided the perfect backdrop for this adventurous couple.',
+    testimonial: '"The way Hariel captured the landscape while keeping us as the focus is incredible. These photos take our breath away."',
+    clientName: 'Riley & Morgan',
+    tags: ["Coastal", "Cliffs", "Adventure"],
+    sections: [
+      {
+        id: 'cliffs',
+        title: 'Cliff Edges',
+        description: 'Daring portraits on the edge of the world.',
+        images: []
+      },
+      {
+        id: 'beach',
+        title: 'Hidden Beach',
+        description: 'Intimate moments on a secluded shoreline.',
+        images: []
+      },
+      {
+        id: 'sunset',
+        title: 'Pacific Sunset',
+        description: 'The perfect end to a perfect day.',
+        images: []
+      }
+    ]
+  },
+  
+  // PORTRAITS
+  {
+    id: 'emma-professional',
+    title: 'Emma\'s Portfolio',
+    subtitle: 'Executive Portraits',
+    category: 'PORTRAITS',
+    location: 'San Francisco, CA',
+    date: 'March 2024',
+    coverImage: '/images/portfolio/portrait-1.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: false,
+    description: 'Professional portraits with personality for a tech executive.',
+    testimonial: '"These portraits have completely transformed my professional presence. They\'re polished but still authentically me."',
+    clientName: 'Emma L., CEO',
+    tags: ["Professional", "Executive", "Portrait"],
+    sections: [
+      { 
+        id: 'studio', 
+        title: 'Studio Portraits',
+        description: 'Clean, professional images with a modern aesthetic.'
+      },
+      { 
+        id: 'environmental', 
+        title: 'Environmental Portraits',
+        description: 'Contextual images in a tech workspace.'
+      },
+      { 
+        id: 'casual', 
+        title: 'Approachable Moments',
+        description: 'Candid-style portraits showing personality and warmth.'
+      }
+    ]
+  },
+  {
+    id: 'portrait-1',
+    title: 'Executive Portraits',
+    subtitle: 'Corporate Leadership Series',
+    category: 'PORTRAITS',
+    location: 'Los Angeles, CA',
+    date: 'April 2024',
+    coverImage: '/images/portfolio/portrait-1.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: true,
+    description: 'Professional portraits that convey confidence, approachability, and leadership.',
+    testimonial: '"These portraits have elevated our company\'s image. They strike the perfect balance between professional and personable."',
+    clientName: 'Technovate Inc.',
+    tags: ["Corporate", "Leadership", "Portrait"],
+    sections: [
+      {
+        id: 'headshots',
+        title: 'Executive Headshots',
+        description: 'Clean, professional portraits for the leadership team.',
+        images: []
+      },
+      {
+        id: 'environmental',
+        title: 'Environmental Portraits',
+        description: 'Leaders in their natural work environment.',
+        images: []
+      },
+      {
+        id: 'team',
+        title: 'Team Dynamics',
+        description: 'Capturing collaboration and company culture.',
+        images: []
+      }
+    ]
+  },
+  
+  // MATERNITY
+  {
+    id: 'self-celebration',
+    title: 'Emma\'s Journey',
+    subtitle: 'Celebrating New Life',
+    category: 'MATERNITY',
+    location: 'Malibu Beach, CA',
+    date: 'February 2024',
+    coverImage: '/images/portfolio/maternity-1.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: true,
+    description: 'A serene maternity session capturing the beauty and anticipation of motherhood.',
+    testimonial: '"These photos make me feel beautiful during such a special time in my life. I\'ll treasure them forever."',
+    clientName: 'Emma T.',
+    tags: ["Maternity", "Beach", "Serene"],
+    sections: [
+      { 
+        id: 'beach', 
+        title: 'Sunset at the Beach',
+        description: 'Golden hour maternity portraits by the ocean.'
+      },
+      { 
+        id: 'natural', 
+        title: 'Natural Beauty',
+        description: 'Unposed moments capturing authentic confidence.'
+      },
+      { 
+        id: 'editorial', 
+        title: 'Editorial Style',
+        description: 'Fashion-inspired portraits with a maternity aesthetic.'
+      }
+    ]
+  },
+  {
+    id: 'maternity-1',
+    title: 'Emma\'s Journey',
+    subtitle: 'Celebrating New Life',
+    category: 'MATERNITY',
+    location: 'Malibu Beach, CA',
+    date: 'March 2024',
+    coverImage: '/images/portfolio/maternity-1.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: true,
+    description: 'A serene maternity session capturing the beauty and anticipation of motherhood.',
+    testimonial: '"These photos make me feel beautiful during such a special time in my life. I\'ll treasure them forever."',
+    clientName: 'Emma T.',
+    tags: ["Maternity", "Beach", "Serene"],
+    sections: [
+      {
+        id: 'beach',
+        title: 'Sunset at the Beach',
+        description: 'Golden hour maternity portraits by the ocean.',
+        images: [
+          { 
+            id: 'mat-1', 
+            src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/maternity-1/images/maternity-1-1.jpg',
+            alt: 'Mother-to-be at sunset',
+            featured: true
+          },
+          // More images...
+        ]
+      },
+      // More sections...
+    ]
+  },
+  {
+    id: 'maternity-2',
+    title: 'Sophia\'s Glow',
+    subtitle: 'Studio Maternity Session',
+    category: 'MATERNITY',
+    location: 'Studio, Los Angeles',
+    date: 'January 2024',
+    coverImage: '/images/portfolio/maternity-2.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: false,
+    description: 'Elegant studio portraits highlighting the beauty of motherhood with artistic lighting.',
+    testimonial: '"I was nervous about a maternity shoot, but Hariel made me feel so comfortable and beautiful."',
+    clientName: 'Sophia M.',
+    tags: ["Maternity", "Studio", "Elegant"],
+    sections: [
+      {
+        id: 'silhouette',
+        title: 'Silhouette Series',
+        description: 'Artistic silhouettes celebrating the maternal form.',
+        images: []
+      },
+      {
+        id: 'portrait',
+        title: 'Classic Portraits',
+        description: 'Timeless maternity portraits with soft lighting.',
+        images: []
+      },
+      {
+        id: 'couple',
+        title: 'Couple Portraits',
+        description: 'Celebrating the journey to parenthood together.',
+        images: []
+      }
+    ]
+  },
+  {
+    id: 'maternity-3',
+    title: 'Lily\'s Garden',
+    subtitle: 'Spring Bloom Maternity',
+    category: 'MATERNITY',
+    location: 'Botanical Gardens, Pasadena',
+    date: 'April 2024',
+    coverImage: '/images/portfolio/maternity-3.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: false,
+    description: 'A celebration of new life amidst the blooming flowers of spring.',
+    testimonial: '"The parallel between the blooming garden and my pregnancy created such meaningful photos. Hariel is an artist."',
+    clientName: 'Lily & David',
+    tags: ["Maternity", "Garden", "Spring"],
+    sections: [
+      {
+        id: 'flowers',
+        title: 'Among the Flowers',
+        description: 'Portraits surrounded by colorful spring blooms.',
+        images: []
+      },
+      {
+        id: 'greenhouse',
+        title: 'Greenhouse Light',
+        description: 'Beautiful filtered light through the historic greenhouse.',
+        images: []
+      },
+      {
+        id: 'family',
+        title: 'Family Moments',
+        description: 'Including their toddler in the celebration of a new sibling.',
+        images: []
+      }
+    ]
+  },
+  {
+    id: 'maternity-4',
+    title: 'Autumn Expectations',
+    subtitle: 'Fall Maternity Session',
+    category: 'MATERNITY',
+    location: 'Oak Canyon Park, CA',
+    date: 'October 2023',
+    coverImage: '/images/portfolio/maternity-4.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: false,
+    description: 'Embracing the warm colors of fall to celebrate the warmth of new life.',
+    testimonial: '"The autumn setting was perfect for our maternity photos. Hariel captured the season and our joy beautifully."',
+    clientName: 'Amber & Chris',
+    tags: ["Maternity", "Autumn", "Fall"],
+    sections: [
+      {
+        id: 'foliage',
+        title: 'Fall Foliage',
+        description: 'Portraits among the changing leaves and golden light.',
+        images: []
+      },
+      {
+        id: 'lake',
+        title: 'Lakeside Reflections',
+        description: 'Peaceful moments by the water.',
+        images: []
+      },
+      {
+        id: 'sunset',
+        title: 'Sunset Silhouettes',
+        description: 'Dramatic silhouettes against the setting sun.',
+        images: []
+      }
+    ]
+  },
+  
+  // COMMERCIAL
+  {
+    id: 'commercial-1',
+    title: 'BMW Luxury Series',
+    subtitle: 'Automotive Excellence',
+    category: 'COMMERCIAL',
+    location: 'Los Angeles, CA',
+    date: 'May 2024',
+    coverImage: '/images/portfolio/commercial-1.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: true,
+    description: 'High-end automotive photography showcasing the elegance and performance of BMW\'s luxury line.',
+    testimonial: '"Hariel\'s photography elevated our vehicles beyond mere products to objects of desire. The campaign exceeded expectations."',
+    clientName: 'BMW North America',
+    tags: ["Automotive", "Luxury", "Commercial"],
+    sections: [
+      {
+        id: 'studio',
+        title: 'Studio Perfection',
+        description: 'Controlled lighting to highlight every curve and detail.',
+        images: []
+      },
+      {
+        id: 'location',
+        title: 'Urban Environment',
+        description: 'The vehicles in their natural habitat - the city.',
+        images: []
+      },
+      {
+        id: 'details',
+        title: 'Craftsmanship Details',
+        description: 'Close-up photography of the exquisite details.',
+        images: []
+      }
+    ]
+  },
+  {
+    id: 'azure-collection',
+    title: 'Azure Collection',
+    subtitle: 'Jewelry Campaign',
+    category: 'COMMERCIAL',
+    location: 'Studio, Los Angeles',
+    date: 'April 2024',
+    coverImage: '/images/portfolio/commercial-1.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: false,
+    description: 'Product and lifestyle photography for a luxury jewelry brand.',
+    testimonial: '"The images Hariel created for our campaign exceeded our expectations and directly contributed to a 40% increase in sales."',
+    clientName: 'Azure Jewelry',
+    tags: ["Jewelry", "Luxury", "Commercial"],
+    sections: [
+      { 
+        id: 'product', 
+        title: 'Product Detail',
+        description: 'Macro photography highlighting craftsmanship and materials.'
+      },
+      { 
+        id: 'lifestyle', 
+        title: 'Lifestyle Context',
+        description: 'The jewelry in real-world settings and occasions.'
+      },
+      { 
+        id: 'brand', 
+        title: 'Brand Story',
+        description: 'Images that communicate the brand\'s values and aesthetic.'
+      }
+    ]
+  },
+  {
+    id: 'harvest-restaurant',
+    title: 'Harvest Restaurant',
+    subtitle: 'Culinary Photography',
+    category: 'COMMERCIAL',
+    location: 'Chicago, IL',
+    date: 'May 2024',
+    coverImage: '/images/portfolio/commercial-2.jpg',
+    fallbackImage: '/images/placeholder-image.jpg',
+    featured: true,
+    description: 'Food, interior, and ambiance photography for a farm-to-table restaurant.',
+    testimonial: '"Hariel didn\'t just photograph our food, but captured the entire experience of dining at Harvest. Our bookings have been full since the new website launched."',
+    clientName: 'Chef Daniel, Harvest Restaurant',
+    tags: ["Food", "Restaurant", "Commercial"],
+    sections: [
+      { 
+        id: 'food', 
+        title: 'Culinary Artistry',
+        description: 'Dishes that showcase both beauty and flavor.'
+      },
+      { 
+        id: 'interior', 
+        title: 'Restaurant Ambiance',
+        description: 'The unique atmosphere and design of the space.'
+      },
+      { 
+        id: 'people', 
+        title: 'The Human Element',
+        description: 'Chefs, servers, and guests that bring the restaurant to life.'
+      }
+    ]
+  }
+];
+
+// Sample images for stories - would come from Firebase in production
+const storyImages: Record<string, any[]> = {
+  'karni-zilvinas': [
+    // PREPARATION PHOTOS
+    {
+      id: 'kz-1',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-1.jpg',
+      alt: 'Karni & Zilvinas wedding preparation 1',
+      section: 'gallery',
+      featured: true,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-2',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-2.jpg',
+      alt: 'Karni & Zilvinas wedding preparation 2',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-3',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-3.jpg',
+      alt: 'Karni & Zilvinas wedding preparation 3',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-4',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-4.jpg',
+      alt: 'Karni & Zilvinas wedding preparation 4',
+      section: 'gallery',
+      featured: true,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-5',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-5.jpg',
+      alt: 'Karni & Zilvinas wedding preparation 5',
+      section: 'gallery',
+      featured: true,
+      width: 1200,
+      height: 800
+    },
+    
+    // CEREMONY PHOTOS
+    {
+      id: 'kz-10',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-10.jpg',
+      alt: 'Karni & Zilvinas wedding ceremony 1',
+      section: 'gallery',
+      featured: true,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-11',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-11.jpg',
+      alt: 'Karni & Zilvinas wedding ceremony 2',
+      section: 'gallery',
+      featured: true,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-12',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-12.jpg',
+      alt: 'Karni & Zilvinas wedding ceremony 3',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-13',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-13.jpg',
+      alt: 'Karni & Zilvinas wedding ceremony 4',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-15',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-15.jpg',
+      alt: 'Karni & Zilvinas wedding ceremony 5',
+      section: 'gallery',
+      featured: true,
+      width: 1200,
+      height: 800
+    },
+    
+    // OUTDOOR/PORTRAIT PHOTOS
+    {
+      id: 'kz-6',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-6.jpg',
+      alt: 'Karni & Zilvinas wedding portraits 1',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-7',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-7.jpg',
+      alt: 'Karni & Zilvinas wedding portraits 2',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-8',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-8.jpg',
+      alt: 'Karni & Zilvinas wedding portraits 3',
+      section: 'gallery',
+      featured: true,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-9',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-9.jpg',
+      alt: 'Karni & Zilvinas wedding portraits 4',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-16',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-16.jpg',
+      alt: 'Karni & Zilvinas wedding portraits 5',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-17',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-17.jpg',
+      alt: 'Karni & Zilvinas wedding portraits 6',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    
+    // RECEPTION PHOTOS
+    {
+      id: 'kz-20',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-20.jpg',
+      alt: 'Karni & Zilvinas wedding reception 1',
+      section: 'gallery',
+      featured: true,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-21',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-21.jpg',
+      alt: 'Karni & Zilvinas wedding reception 2',
+      section: 'gallery',
+      featured: true,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-22',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-22.jpg',
+      alt: 'Karni & Zilvinas wedding reception 3',
+      section: 'gallery',
+      featured: true,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-23',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-23.jpg',
+      alt: 'Karni & Zilvinas wedding reception 4',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-24',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-24.jpg',
+      alt: 'Karni & Zilvinas wedding reception 5',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-25',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-25.jpg',
+      alt: 'Karni & Zilvinas wedding reception 6',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-26',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-26.jpg',
+      alt: 'Karni & Zilvinas wedding reception 7',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-27',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-27.jpg',
+      alt: 'Karni & Zilvinas wedding reception 8',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-28',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-28.jpg',
+      alt: 'Karni & Zilvinas wedding reception 9',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-29',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-29.jpg',
+      alt: 'Karni & Zilvinas wedding reception 10',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-30',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-30.jpg',
+      alt: 'Karni & Zilvinas wedding reception 11',
+      section: 'gallery',
+      featured: true,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-31',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-31.jpg',
+      alt: 'Karni & Zilvinas wedding reception 12',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-32',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-32.jpg',
+      alt: 'Karni & Zilvinas wedding reception 13',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-33',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-33.jpg',
+      alt: 'Karni & Zilvinas wedding reception 14',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-34',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-34.jpg',
+      alt: 'Karni & Zilvinas wedding reception 15',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-35',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-35.jpg',
+      alt: 'Karni & Zilvinas wedding reception 16',
+      section: 'gallery',
+      featured: true,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-36',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-36.jpg',
+      alt: 'Karni & Zilvinas wedding reception 17',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-37',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-37.jpg',
+      alt: 'Karni & Zilvinas wedding reception 18',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-38',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-38.jpg',
+      alt: 'Karni & Zilvinas wedding reception 19',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-39',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-39.jpg',
+      alt: 'Karni & Zilvinas wedding reception 20',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-40',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-40.jpg',
+      alt: 'Karni & Zilvinas wedding reception 21',
+      section: 'gallery',
+      featured: true,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-41',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-41.jpg',
+      alt: 'Karni & Zilvinas wedding reception 22',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-42',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-42.jpg',
+      alt: 'Karni & Zilvinas wedding reception 23',
+      section: 'gallery',
+      featured: true,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-43',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-43.jpg',
+      alt: 'Karni & Zilvinas wedding reception 24',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-44',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-44.jpg',
+      alt: 'Karni & Zilvinas wedding reception 25',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-45',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-45.jpg',
+      alt: 'Karni & Zilvinas wedding reception 26',
+      section: 'gallery',
+      featured: true,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-46',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-46.jpg',
+      alt: 'Karni & Zilvinas wedding reception 27',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-47',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-47.jpg',
+      alt: 'Karni & Zilvinas wedding reception 28',
+      section: 'gallery',
+      featured: true,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-48',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-48.jpg',
+      alt: 'Karni & Zilvinas wedding reception 29',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-49',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-49.jpg',
+      alt: 'Karni & Zilvinas wedding reception 30',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-50',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-50.jpg',
+      alt: 'Karni & Zilvinas wedding reception 31',
+      section: 'gallery',
+      featured: true,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-51',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-51.jpg',
+      alt: 'Karni & Zilvinas wedding reception 32',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    },
+    {
+      id: 'kz-52',
+      src: 'https://storage.googleapis.com/harielxavierphotography-18d17.firebasestorage.app/portfolios/karni-zilvinas/images/karni-zilvinas-52.jpg',
+      alt: 'Karni & Zilvinas wedding reception 33',
+      section: 'gallery',
+      featured: false,
+      width: 1200,
+      height: 800
+    }
+  ],
+  'alex-jordan': [
+    {
+      id: 'aj-cityscape-1',
+      src: '/images/portfolio/engagement-1.jpg',
+      alt: 'Couple with NYC skyline',
+      section: 'cityscape',
+      featured: true,
+      width: 1200,
+      height: 800,
+      photographerNote: 'Timed this perfectly with the golden hour light hitting the buildings',
+      testimonial: '"This doesn\'t even look like us, but somehow it\'s the most authentic photo we\'ve ever had taken."'
+    },
+    {
+      id: 'aj-cityscape-2',
+      src: '/images/portfolio/engagement-2.jpg',
+      alt: 'Walking hand in hand through Brooklyn',
+      section: 'cityscape',
+      featured: false,
+      width: 800,
+      height: 1200,
+      photographerNote: null,
+      testimonial: null
+    },
+    {
+      id: 'aj-nature-1',
+      src: '/images/portfolio/engagement-3.jpg',
+      alt: 'Couple among fall foliage',
+      section: 'nature',
+      featured: true,
+      width: 1200,
+      height: 800,
+      photographerNote: 'The contrast of the urban couple against nature created magic',
+      testimonial: null
+    },
+    {
+      id: 'aj-intimate-1',
+      src: '/images/portfolio/engagement-4.jpg',
+      alt: 'Foreheads touching, eyes closed',
+      section: 'intimate',
+      featured: true,
+      width: 800,
+      height: 1200,
+      photographerNote: 'I asked them to close their eyes and think about their first date',
+      testimonial: '"This moment was so real. We completely forgot about the camera."'
+    }
+  ],
+  'emma-professional': [
+    {
+      id: 'ep-studio-1',
+      src: '/images/portfolio/portrait-1.jpg',
+      alt: 'Professional headshot with neutral background',
+      section: 'studio',
+      featured: true,
+      width: 800,
+      height: 1000,
+      photographerNote: 'Used soft lighting to maintain professionalism while keeping warmth',
+      testimonial: '"This has become my go-to professional photo. It\'s polished but still authentically me."'
+    },
+    {
+      id: 'ep-environmental-1',
+      src: '/images/portfolio/portrait-2.jpg',
+      alt: 'Executive at desk with city view',
+      section: 'environmental',
+      featured: true,
+      width: 1200,
+      height: 800,
+      photographerNote: 'The office view provided perfect context for her role',
+      testimonial: null
+    },
+    {
+      id: 'ep-casual-1',
+      src: '/images/portfolio/portrait-3.jpg',
+      alt: 'Casual laughing portrait',
+      section: 'casual',
+      featured: false,
+      width: 800,
+      height: 1000,
+      photographerNote: 'Captured between "official" shots - often the most authentic moments',
+      testimonial: '"This is the photo my team says actually looks like me in meetings!"'
+    }
+  ],
+  'self-celebration': [
+    {
+      id: 'sc-beach-1',
+      src: '/images/portfolio/maternity-1.jpg',
+      alt: 'Maternity portrait at sunset',
+      section: 'beach',
+      featured: true,
+      width: 800,
+      height: 1200,
+      photographerNote: 'Waited for the perfect sunset light for this shot',
+      testimonial: '"This photo makes me feel beautiful during such a special time in my life. I\'ll treasure it forever."'
+    },
+    {
+      id: 'sc-natural-1',
+      src: '/images/portfolio/maternity-2.jpg',
+      alt: 'Natural portrait with soft bedding',
+      section: 'natural',
+      featured: false,
+      width: 1200,
+      height: 800,
+      photographerNote: 'Kept direction minimal to capture genuine comfort',
+      testimonial: null
+    },
+    {
+      id: 'sc-editorial-1',
+      src: '/images/portfolio/maternity-3.jpg',
+      alt: 'Fashion-inspired portrait with dramatic lighting',
+      section: 'editorial',
+      featured: true,
+      width: 800,
+      height: 1200,
+      photographerNote: 'Created this editorial feel with specific lighting techniques',
+      testimonial: '"I felt like I was in a magazine shoot. The experience was empowering."'
+    }
+  ],
+  'azure-collection': [
+    {
+      id: 'ac-product-1',
+      src: '/images/portfolio/commercial-1.jpg',
+      alt: 'Sapphire necklace detail shot',
+      section: 'product',
+      featured: true,
+      width: 1200,
+      height: 800,
+      photographerNote: 'Used macro techniques to highlight the stone\'s unique inclusions',
+      testimonial: null
+    },
+    {
+      id: 'ac-lifestyle-1',
+      src: '/images/portfolio/commercial-2.jpg',
+      alt: 'Model wearing jewelry at gala event',
+      section: 'lifestyle',
+      featured: true,
+      width: 800,
+      height: 1200,
+      photographerNote: 'Staged event setting to showcase the jewelry in its intended context',
+      testimonial: '"These lifestyle images helped our customers envision themselves wearing our pieces."'
+    },
+    {
+      id: 'ac-brand-1',
+      src: '/images/portfolio/commercial-3.jpg',
+      alt: 'Jewelry creation process in workshop',
+      section: 'brand',
+      featured: false,
+      width: 1200,
+      height: 800,
+      photographerNote: 'Documented the artisan process to tell the brand\'s craftsmanship story',
+      testimonial: null
+    }
+  ]
+};
+
+// Sample portrait gallery images
+const portraitGalleryImages = [
+  {
+    id: 'portrait-1',
+    src: '/images/portfolio/portrait-1.jpg',
+    alt: 'Professional headshot with neutral background',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-2',
+    src: '/images/portfolio/portrait-2.jpg',
+    alt: 'Environmental portrait in office setting',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-3',
+    src: '/images/portfolio/portrait-3.jpg',
+    alt: 'Creative portrait with dramatic lighting',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-4',
+    src: '/images/portfolio/portrait-4.jpg',
+    alt: 'Family portrait in natural setting',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-5',
+    src: '/images/portfolio/portrait-5.jpg',
+    alt: 'Senior portrait in urban setting',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-6',
+    src: '/images/portfolio/portrait-6.jpg',
+    alt: 'Artistic black and white portrait',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-7',
+    src: '/images/portfolio/portrait-7.jpg',
+    alt: 'Graduation portrait on campus',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-8',
+    src: '/images/portfolio/portrait-8.jpg',
+    alt: 'Corporate team portrait',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-9',
+    src: '/images/portfolio/portrait-9.jpg',
+    alt: 'Lifestyle portrait of young professional',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-10',
+    src: '/images/portfolio/portrait-10.jpg',
+    alt: 'Studio portrait with colorful background',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-11',
+    src: '/images/portfolio/portrait-11.jpg',
+    alt: 'Outdoor portrait in golden hour light',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-12',
+    src: '/images/portfolio/portrait-12.jpg',
+    alt: 'Business casual portrait for LinkedIn',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-13',
+    src: '/images/portfolio/portrait-13.jpg',
+    alt: 'Artistic portrait with props',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-14',
+    src: '/images/portfolio/portrait-14.jpg',
+    alt: 'Candid portrait during conversation',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-15',
+    src: '/images/portfolio/portrait-15.jpg',
+    alt: 'High-key portrait with white background',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-16',
+    src: '/images/portfolio/portrait-16.jpg',
+    alt: 'Low-key portrait with dark background',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-17',
+    src: '/images/portfolio/portrait-17.jpg',
+    alt: 'Family generation portrait',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-18',
+    src: '/images/portfolio/portrait-18.jpg',
+    alt: 'Couple portrait for anniversary',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-19',
+    src: '/images/portfolio/portrait-19.jpg',
+    alt: 'Executive portrait for annual report',
+    category: 'PORTRAITS'
+  },
+  {
+    id: 'portrait-20',
+    src: '/images/portfolio/portrait-20.jpg',
+    alt: 'Creative portrait with motion blur',
+    category: 'PORTRAITS'
+  }
+];
+
+// Sample maternity gallery images
+const maternityGalleryImages = [
+  {
+    id: 'maternity-1',
+    src: '/images/portfolio/maternity-1.jpg',
+    alt: 'Silhouette maternity portrait at sunset',
+    category: 'MATERNITY'
+  },
+  {
+    id: 'maternity-2',
+    src: '/images/portfolio/maternity-2.jpg',
+    alt: 'Studio maternity portrait with fabric',
+    category: 'MATERNITY'
+  },
+  {
+    id: 'maternity-3',
+    src: '/images/portfolio/maternity-3.jpg',
+    alt: 'Outdoor maternity portrait in flower field',
+    category: 'MATERNITY'
+  },
+  {
+    id: 'maternity-4',
+    src: '/images/portfolio/maternity-4.jpg',
+    alt: 'Beach maternity portrait at golden hour',
+    category: 'MATERNITY'
+  },
+  {
+    id: 'maternity-5',
+    src: '/images/portfolio/maternity-5.jpg',
+    alt: 'Maternity portrait with partner',
+    category: 'MATERNITY'
+  },
+  {
+    id: 'maternity-6',
+    src: '/images/portfolio/maternity-6.jpg',
+    alt: 'Urban maternity portrait in city setting',
+    category: 'MATERNITY'
+  },
+  {
+    id: 'maternity-7',
+    src: '/images/portfolio/maternity-7.jpg',
+    alt: 'Artistic maternity portrait with milk bath',
+    category: 'MATERNITY'
+  },
+  {
+    id: 'maternity-8',
+    src: '/images/portfolio/maternity-8.jpg',
+    alt: 'Maternity portrait with siblings',
+    category: 'MATERNITY'
+  },
+  {
+    id: 'maternity-9',
+    src: '/images/portfolio/maternity-9.jpg',
+    alt: 'Black and white maternity portrait',
+    category: 'MATERNITY'
+  },
+  {
+    id: 'maternity-10',
+    src: '/images/portfolio/maternity-10.jpg',
+    alt: 'Maternity portrait in home setting',
+    category: 'MATERNITY'
+  },
+  {
+    id: 'maternity-11',
+    src: '/images/portfolio/maternity-11.jpg',
+    alt: 'Winter maternity portrait in snow',
+    category: 'MATERNITY'
+  },
+  {
+    id: 'maternity-12',
+    src: '/images/portfolio/maternity-12.jpg',
+    alt: 'Fall maternity portrait with autumn leaves',
+    category: 'MATERNITY'
+  },
+  {
+    id: 'maternity-13',
+    src: '/images/portfolio/maternity-13.jpg',
+    alt: 'Spring maternity portrait with blossoms',
+    category: 'MATERNITY'
+  },
+  {
+    id: 'maternity-14',
+    src: '/images/portfolio/maternity-14.jpg',
+    alt: 'Summer maternity portrait in lavender field',
+    category: 'MATERNITY'
+  },
+  {
+    id: 'maternity-15',
+    src: '/images/portfolio/maternity-15.jpg',
+    alt: 'Maternity portrait with dramatic lighting',
+    category: 'MATERNITY'
+  }
+];
+
+// Sample commercial gallery images
+const commercialGalleryImages = [
+  {
+    id: 'commercial-1',
+    src: '/images/portfolio/commercial-1.jpg',
+    alt: 'Product photography for luxury brand',
+    category: 'COMMERCIAL'
+  },
+  {
+    id: 'commercial-2',
+    src: '/images/portfolio/commercial-2.jpg',
+    alt: 'Food photography for restaurant',
+    category: 'COMMERCIAL'
+  },
+  {
+    id: 'commercial-3',
+    src: '/images/portfolio/commercial-3.jpg',
+    alt: 'Real estate photography interior',
+    category: 'COMMERCIAL'
+  },
+  {
+    id: 'commercial-4',
+    src: '/images/portfolio/commercial-4.jpg',
+    alt: 'Automotive photography for dealership',
+    category: 'COMMERCIAL'
+  },
+  {
+    id: 'commercial-5',
+    src: '/images/portfolio/commercial-5.jpg',
+    alt: 'Hotel room photography',
+    category: 'COMMERCIAL'
+  },
+  {
+    id: 'commercial-6',
+    src: '/images/portfolio/commercial-6.jpg',
+    alt: 'Corporate event photography',
+    category: 'COMMERCIAL'
+  },
+  {
+    id: 'commercial-7',
+    src: '/images/portfolio/commercial-7.jpg',
+    alt: 'Jewelry product photography',
+    category: 'COMMERCIAL'
+  },
+  {
+    id: 'commercial-8',
+    src: '/images/portfolio/commercial-8.jpg',
+    alt: 'Fashion photography for clothing brand',
+    category: 'COMMERCIAL'
+  },
+  {
+    id: 'commercial-9',
+    src: '/images/portfolio/commercial-9.jpg',
+    alt: 'Architecture photography exterior',
+    category: 'COMMERCIAL'
+  },
+  {
+    id: 'commercial-10',
+    src: '/images/portfolio/commercial-10.jpg',
+    alt: 'Product lifestyle photography',
+    category: 'COMMERCIAL'
+  },
+  {
+    id: 'commercial-11',
+    src: '/images/portfolio/commercial-11.jpg',
+    alt: 'Beverage photography for menu',
+    category: 'COMMERCIAL'
+  },
+  {
+    id: 'commercial-12',
+    src: '/images/portfolio/commercial-12.jpg',
+    alt: 'Tech product photography',
+    category: 'COMMERCIAL'
+  }
+];
+
+// Portfolio categories
+const categories = [
+  'WEDDINGS',
+  'ENGAGEMENTS',
+  'PORTRAITS',
+  'MATERNITY',
+  'COMMERCIAL'
+];
+
+// Portfolio page component
+const PortfolioPage = () => {
+  const { mode } = useThemeContext();
+  const [activeCategory, setActiveCategory] = useState('WEDDINGS');
+  const [activeStory, setActiveStory] = useState<string | null>(null);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Refs for scrolling
+  const storyGridRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const storyViewRef = useRef<HTMLDivElement>(null);
+  
+  // Simulate loading state
+  useEffect(() => {
+    setIsLoading(true);
+    setError(null);
+    
+    // Simulate loading delay
+    const timer = setTimeout(() => {
+      try {
+        // In a real implementation, this would fetch from Firebase
+        setIsLoading(false);
+      } catch (err) {
+        console.error('Error fetching stories:', err);
+        setError('Failed to load stories. Please try again later.');
+        setIsLoading(false);
+      }
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Handle story selection
+  const handleStorySelect = (storyId: string) => {
+    setActiveStory(storyId);
+    setActiveSection(null);
+    // setViewingStory(true);
+    
+    // Scroll to story view
+    setTimeout(() => {
+      if (storyViewRef.current) {
+        storyViewRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
+  
+  // Handle section selection
+  const handleSectionSelect = (sectionId: string) => {
+    setActiveSection(sectionId);
+    
+    // Scroll to section
+    const sectionElement = document.getElementById(`section-${sectionId}`);
+    if (sectionElement) {
+      sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+  
+  // Get active story data
+  const getActiveStory = () => {
+    return portfolioStories.find(story => story.id === activeStory);
+  };
+  
+  // Get images for active story and section
+  const getActiveImages = () => {
+    if (!activeStory) return [];
+    
+    const images = storyImages[activeStory as keyof typeof storyImages] || [];
+    
+    if (activeSection) {
+      return images.filter(img => img.section === activeSection);
+    }
+    
+    return images;
+  };
+
+  const handleBackToStories = () => {
+    // setViewingStory(false);
+    setActiveStory(null);
+    setActiveSection(null);
+    
+    // Scroll to story grid
+    if (storyGridRef.current) {
+      storyGridRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+  
+  const handleImageClick = (imageId: string) => {
+    setSelectedImage(imageId);
+  };
+
+  const ImageGallery = ({ images, category }: { images: any[], category: string }) => {
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const filteredImages = images.filter(image => image.category === category);
+    
+    const handleImageClick = (imageId: string) => {
+      setSelectedImage(imageId);
+    };
+    
+    const currentImage = filteredImages.find(img => img.id === selectedImage);
+    
+    return (
+      <div className="mb-20">
+        <h2 className="text-3xl font-playfair font-medium text-center mb-8">{category}</h2>
+        
+        {/* Image Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {filteredImages.map((image) => (
+            <div 
+              key={image.id}
+              className="relative aspect-square overflow-hidden rounded-lg shadow-md transition-all duration-300 hover:shadow-xl cursor-pointer"
+              onClick={() => handleImageClick(image.id)}
+            >
+              <img 
+                src={transformImageUrl(image.src, 600)} 
+                alt={image.alt}
+                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = '/images/placeholder-image.jpg';
+                }}
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-30 transition-all"></div>
+            </div>
+          ))}
+        </div>
+        
+        {/* Lightbox */}
+        <AnimatePresence>
+          {selectedImage && (
+            <motion.div
+              className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedImage(null)}
+            >
+              <motion.div
+                className="relative max-w-5xl max-h-[90vh] w-full"
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                transition={{ type: 'spring', damping: 25 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {currentImage && (
+                  <>
+                    <div className="relative">
+                      <img 
+                        src={transformImageUrl(currentImage.src, 1200)} 
+                        alt={currentImage.alt}
+                        className="w-full h-full object-contain mx-auto"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = '/images/placeholder-image.jpg';
+                        }}
+                      />
+                      
+                      {/* Image Caption */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white p-4">
+                        <p className="text-lg">{currentImage.alt}</p>
+                      </div>
+                      
+                      {/* Close Button */}
+                      <button 
+                        className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 flex items-center justify-center text-white"
+                        onClick={() => setSelectedImage(null)}
+                      >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <line x1="18" y1="6" x2="6" y2="18"></line>
+                          <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                      </button>
+                    </div>
+                    
+                    {/* Navigation Buttons */}
+                    <div className="absolute top-1/2 left-4 transform -translate-y-1/2">
+                      <button 
+                        className="w-12 h-12 rounded-full bg-black/50 flex items-center justify-center text-white"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const currentIndex = filteredImages.findIndex(img => img.id === selectedImage);
+                          const prevIndex = (currentIndex - 1 + filteredImages.length) % filteredImages.length;
+                          setSelectedImage(filteredImages[prevIndex].id);
+                        }}
+                      >
+                        <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                      </button>
+                    </div>
+                    <div className="absolute top-1/2 right-4 transform -translate-y-1/2">
+                      <button 
+                        className="w-12 h-12 rounded-full bg-black/50 flex items-center justify-center text-white"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const currentIndex = filteredImages.findIndex(img => img.id === selectedImage);
+                          const nextIndex = (currentIndex + 1) % filteredImages.length;
+                          setSelectedImage(filteredImages[nextIndex].id);
+                        }}
+                      >
+                        <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                      </button>
+                    </div>
+                  </>
+                )}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  };
+
+  const getFilteredStories = () => {
+    if (!activeCategory || activeCategory === 'ALL') {
+      return portfolioStories;
+    }
+    
+    return portfolioStories.filter((story: any) => {
+      // Check if story has the active filter category
+      return story.category === activeCategory;
+    });
+  };
+
+  return (
+    <>
+      <div className={`min-h-screen ${mode === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+        {/* Cinematic Hero Section */}
+        <section 
+          ref={heroRef}
+          className="relative h-screen w-full overflow-hidden"
+        >
+          {/* Video Background (would be a real video in production) */}
+          <div className="absolute inset-0 bg-black">
+            <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70 z-10"></div>
+            <img 
+              src="/images/portfolio/mag55.jpg" 
+              alt="Featured portrait photography"
+              className="w-full h-full object-cover opacity-80"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = '/images/placeholder-image.jpg';
+              }}
+            />
+          </div>
+          
+          {/* Hero Content */}
+          <div className="relative z-20 h-full flex flex-col items-center justify-center text-white px-4">
+            <motion.h1 
+              className="font-playfair text-4xl md:text-6xl font-light mb-4 text-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+            >
+              Capturing life's defining moments
+            </motion.h1>
+            <motion.p
+              className="font-inter text-xl md:text-2xl font-light mb-8 text-center max-w-2xl"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2, duration: 0.8 }}
+            >
+              From intimate weddings to powerful portraits
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.8, duration: 0.8 }}
+            >
+              <button 
+                onClick={() => {
+                  if (storyGridRef.current) {
+                    storyGridRef.current.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="px-6 py-3 bg-[#e5c1c1]/20 backdrop-blur-md rounded-full text-white hover:bg-[#e5c1c1]/30 transition-all font-inter"
+              >
+                Explore Portfolio
+              </button>
+            </motion.div>
+          </div>
+          
+          {/* Scroll Indicator */}
+          <motion.div 
+            className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 1.5 }}
+          >
+            <svg className="w-8 h-8 mx-auto text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+          </motion.div>
+        </section>
+        
+        {/* Portfolio Categories */}
+        <section className={`py-12 ${mode === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
+          <div className="container mx-auto px-4 md:px-8">
+            <h2 className="font-playfair text-3xl md:text-4xl font-light mb-6 text-center">Explore My Portfolio</h2>
+            <p className="font-inter text-center text-gray-500 dark:text-gray-400 mb-10 max-w-2xl mx-auto">
+              Each image tells a story. Discover my work across different specialties and imagine how your story will be captured.
+            </p>
+            
+            {/* Category Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+              {categories.map(category => {
+                // Find a featured story for this category to use as the image
+                const featuredStory = portfolioStories.find(
+                  story => story.category === category && story.featured
+                );
+                
+                return (
+                  <motion.div
+                    key={category}
+                    className={`relative overflow-hidden rounded-lg cursor-pointer group ${
+                      activeCategory === category ? 'ring-2 ring-[#e5c1c1]' : ''
+                    }`}
+                    onClick={() => setActiveCategory(category)}
+                    whileHover={{ y: -5 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {/* Category Image */}
+                    <div className="aspect-[3/4] relative">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10"></div>
+                      <img 
+                        src={transformImageUrl(featuredStory?.coverImage || '/images/placeholder-image.jpg', 800)} 
+                        alt={category}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = '/images/placeholder-image.jpg';
+                        }}
+                      />
+                      
+                      {/* Category Title */}
+                      <div className="absolute bottom-0 left-0 right-0 p-4 z-20">
+                        <h3 className="font-playfair text-white text-xl font-medium">{category}</h3>
+                        <p className="font-inter text-white/80 text-sm mt-1">
+                          {category === 'WEDDINGS' && 'Timeless moments of celebration'}
+                          {category === 'ENGAGEMENTS' && 'The beginning of your journey'}
+                          {category === 'PORTRAITS' && 'Capturing authentic personality'}
+                          {category === 'MATERNITY' && 'Celebrating the journey to motherhood'}
+                          {category === 'COMMERCIAL' && 'Elevating your brand'}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+            
+            {/* Category Pills for Mobile/Quick Navigation */}
+            <div className="flex flex-wrap justify-center gap-2 mt-6">
+              {categories.map(category => (
+                <button
+                  key={`pill-${category}`}
+                  onClick={() => setActiveCategory(category)}
+                  className={`px-4 py-2 rounded-full text-sm transition-all font-inter ${
+                    activeCategory === category
+                      ? `bg-[#e5c1c1] text-[#333333]`
+                      : `border border-gray-300 dark:border-gray-700 ${
+                          mode === 'dark' ? 'hover:bg-gray-800 text-gray-200' : 'hover:bg-gray-100 text-gray-700'
+                        }`
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+        
+        {/* Portfolio Stories Grid */}
+        <section 
+          ref={storyGridRef}
+          className={`py-16 ${mode === 'dark' ? 'bg-gray-900' : 'bg-white'} ${activeStory ? 'hidden' : 'block'}`}
+        >
+          <div className="container mx-auto px-4 md:px-8">
+            <h2 className="font-playfair text-3xl md:text-4xl font-light mb-4 text-center">{activeCategory} Stories</h2>
+            <p className="font-inter text-center text-gray-500 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
+              {activeCategory === 'WEDDINGS' && 'From intimate ceremonies to grand celebrations, each wedding tells a unique story.'}
+              {activeCategory === 'ENGAGEMENTS' && 'The moment you decide to spend your lives together, captured with authenticity.'}
+              {activeCategory === 'PORTRAITS' && 'Professional portraits that reveal personality and create lasting impressions.'}
+              {activeCategory === 'MATERNITY' && 'Celebrating the beauty and anticipation of motherhood with timeless imagery.'}
+              {activeCategory === 'COMMERCIAL' && 'Elevating brands through compelling visual storytelling.'}
+            </p>
+            
+            {isLoading ? (
+              <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#e5c1c1] dark:border-[#e5c1c1]"></div>
+              </div>
+            ) : error ? (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6 max-w-2xl mx-auto">
+                <p>{error}</p>
+                <button 
+                  onClick={() => {
+                    setError(null);
+                    setIsLoading(true);
+                    setTimeout(() => setIsLoading(false), 1000);
+                  }}
+                  className="text-sm underline mt-2"
+                >
+                  Try again
+                </button>
+              </div>
+            ) : (
+              <>
+                {getFilteredStories().length === 0 ? (
+                  <div className="text-center py-16">
+                    <svg className="w-16 h-16 mx-auto text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <h3 className="font-playfair text-xl mb-2">No stories found</h3>
+                    <p className="font-inter text-gray-500 dark:text-gray-400 mb-6">
+                      Try selecting a different category
+                    </p>
+                    <button 
+                      onClick={() => setActiveCategory('WEDDINGS')}
+                      className="px-6 py-3 border border-[#e5c1c1] text-[#333333] dark:text-[#e5c1c1] rounded-lg hover:bg-[#e5c1c1]/10 transition-colors font-inter"
+                    >
+                      View weddings
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-16">
+                    {/* Featured Story */}
+                    {(() => {
+                      const featuredStory = getFilteredStories().find(
+                        story => story.featured
+                      );
+                      
+                      if (!featuredStory) return null;
+                      
+                      return (
+                        <div className="mb-16">
+                          <h3 className="font-playfair text-2xl font-light mb-6 border-b border-[#e5c1c1]/30 pb-2">Featured Story</h3>
+                          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                            <div className="lg:col-span-8">
+                              <motion.div
+                                className={`relative h-[600px] rounded-xl overflow-hidden shadow-lg cursor-pointer group ${
+                                  featuredStory.id === 'karni-zilvinas' 
+                                    ? 'bg-gradient-to-br from-gray-50/95 via-gray-50 to-[#e5c1c1]/10 dark:from-gray-800/95 dark:via-gray-800 dark:to-[#e5c1c1]/5 shadow-lg border border-[#e5c1c1]/20'
+                                    : 'bg-gray-50 dark:bg-gray-800'
+                                }`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleStorySelect(featuredStory.id);
+                                }}
+                                whileHover={{ 
+                                  scale: 1.01,
+                                  transition: { duration: 0.3 }
+                                }}
+                              >
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10"></div>
+                                <img 
+                                  src={transformImageUrl(featuredStory.coverImage, 1600)} 
+                                  alt={`${featuredStory.title} - ${featuredStory.subtitle}`}
+                                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.src = featuredStory.fallbackImage;
+                                  }}
+                                />
+                                
+                                {/* Category Title */}
+                                <div className="absolute bottom-0 left-0 right-0 p-4 z-20">
+                                  <h3 className="font-playfair text-white text-3xl font-medium">{featuredStory.title}</h3>
+                                  <p className="font-inter text-white/80 text-lg mb-3">{featuredStory.subtitle}</p>
+                                  <div className="flex items-center text-white/70 text-sm font-inter mb-4">
+                                    <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                                      <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                                      <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    <span>{featuredStory.location}</span>
+                                    <span className="mx-2">•</span>
+                                    <span>{featuredStory.date}</span>
+                                  </div>
+                                  <button 
+                                    className={`px-6 py-3 ${
+                                      featuredStory.id === 'karni-zilvinas'
+                                        ? 'bg-[#e5c1c1] hover:bg-[#e5c1c1]/90 text-[#333333] font-medium shadow-md hover:shadow-lg transition-all'
+                                        : 'bg-[#e5c1c1] hover:bg-[#e5c1c1]/90 text-[#333333]'
+                                    } rounded-lg`}
+                                  >
+                                    View Full Story
+                                  </button>
+                                </div>
+                              </motion.div>
+                            </div>
+                            <div className="lg:col-span-4 flex flex-col justify-between">
+                              <div className={`bg-gray-50 dark:bg-gray-800 p-6 rounded-xl h-full ${
+                                featuredStory.id === 'karni-zilvinas' 
+                                  ? 'shadow-lg border border-[#e5c1c1]/20'
+                                  : ''
+                              }`}>
+                                <h4 className={`font-playfair ${
+                                  featuredStory.id === 'karni-zilvinas' 
+                                    ? 'text-2xl'
+                                    : 'text-xl'
+                                } font-medium mb-4`}>
+                                  {featuredStory.title}
+                                </h4>
+                                
+                                {/* Story Description */}
+                                <p 
+                                  className={`font-inter text-gray-600 dark:text-gray-300 mb-6 ${
+                                    featuredStory.id === 'karni-zilvinas' 
+                                      ? 'line-clamp-5'
+                                      : 'line-clamp-4'
+                                  }`}
+                                  dangerouslySetInnerHTML={{ __html: featuredStory.description }}
+                                ></p>
+                                
+                                {/* Package Info - Only for Karni & Zilvinas */}
+                                {featuredStory.id === 'karni-zilvinas' && featuredStory.packageInfo && (
+                                  <div className="mb-6 bg-[#e5c1c1]/10 p-3 rounded-lg border border-[#e5c1c1]/30">
+                                    <div className="flex items-center mb-2">
+                                      <svg className="w-5 h-5 text-[#e5c1c1] mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M20 6L9 17l-5-5"></path>
+                                      </svg>
+                                      <span className="font-medium text-lg text-[#333333] dark:text-[#e5c1c1]">
+                                        {featuredStory.packageInfo}
+                                      </span>
+                                      {featuredStory.limitedAvailability && (
+                                        <span className="ml-2 px-2 py-1 bg-[#e5c1c1] text-[#333333] text-xs rounded-full animate-pulse">
+                                          Limited Availability
+                                        </span>
+                                      )}
+                                    </div>
+                                    <p className="text-gray-600 dark:text-gray-300">
+                                      Full-day coverage, second photographer, engagement session, luxury album, and complete digital gallery
+                                    </p>
+                                  </div>
+                                )}
+                                
+                                {/* Story Tags */}
+                                <div className="flex flex-wrap gap-2 mb-6">
+                                  {featuredStory.tags.map((tag, index) => (
+                                    <span 
+                                      key={index} 
+                                      className={`px-3 py-1 ${
+                                        featuredStory.id === 'karni-zilvinas'
+                                          ? 'bg-[#e5c1c1]/20 text-[#333333] dark:text-[#e5c1c1] font-medium'
+                                          : 'bg-[#e5c1c1]/10 text-[#333333] dark:text-[#e5c1c1]'
+                                      } rounded-full text-xs font-inter`}
+                                    >
+                                      {tag}
+                                    </span>
+                                  ))}
+                                </div>
+                                
+                                {/* Story Footer */}
+                                <div className="mt-auto">
+                                  <div className="flex justify-between items-center">
+                                    <span className="text-sm font-inter text-gray-500">
+                                      {featuredStory.sections.length} {featuredStory.sections.length === 1 ? 'chapter' : 'chapters'}
+                                    </span>
+                                    <button 
+                                      className={`px-4 py-2 rounded-full text-sm font-inter ${
+                                        featuredStory.id === 'karni-zilvinas'
+                                          ? 'bg-[#e5c1c1] hover:bg-[#e5c1c1]/90 text-[#333333] font-medium shadow-md hover:shadow-lg transition-all'
+                                          : 'bg-[#e5c1c1] hover:bg-[#e5c1c1]/90 text-[#333333]'
+                                      }`}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleStorySelect(featuredStory.id);
+                                      }}
+                                    >
+                                      View Story
+                                    </button>
+                                  </div>
+                                  
+                                  {/* FOMO Message - Only for Karni & Zilvinas */}
+                                  {featuredStory.id === 'karni-zilvinas' && (
+                                    <p className="text-xs text-[#e5c1c1] dark:text-[#e5c1c1] mt-3 text-center italic">
+                                      *Only 3 Masterpiece Collections available per month
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
+                    
+                    {/* Regular Stories Grid */}
+                    <div>
+                      <h3 className="font-playfair text-2xl font-light mb-6 border-b border-[#e5c1c1]/30 pb-2">More Stories</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {getFilteredStories()
+                          .filter(story => !story.featured)
+                          .slice(0, 3)
+                          .map((story, index) => (
+                            <motion.div
+                              key={story.id}
+                              className={`${
+                                story.id === 'karni-zilvinas' 
+                                  ? 'bg-gradient-to-br from-gray-50/95 via-gray-50 to-[#e5c1c1]/10 dark:from-gray-800/95 dark:via-gray-800 dark:to-[#e5c1c1]/5 shadow-lg border border-[#e5c1c1]/20'
+                                  : 'bg-gray-50 dark:bg-gray-800'
+                              } p-6 rounded-xl h-full`}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.5, delay: index * 0.1 }}
+                            >
+                              {/* Story Title */}
+                              <h4 className={`font-playfair ${
+                                story.id === 'karni-zilvinas' 
+                                  ? 'text-2xl'
+                                  : 'text-xl'
+                              } font-medium mb-4`}>
+                                {story.title}
+                              </h4>
+                              
+                              {/* Story Description */}
+                              <p 
+                                className={`font-inter text-gray-600 dark:text-gray-300 mb-6 ${
+                                  story.id === 'karni-zilvinas' 
+                                    ? 'line-clamp-5'
+                                    : 'line-clamp-4'
+                                }`}
+                                dangerouslySetInnerHTML={{ __html: story.description }}
+                              ></p>
+                              
+                              {/* Story Tags */}
+                              <div className="flex flex-wrap gap-2 mb-6">
+                                {story.tags.map((tag, index) => (
+                                  <span 
+                                    key={index} 
+                                    className={`px-3 py-1 ${
+                                      story.id === 'karni-zilvinas'
+                                        ? 'bg-[#e5c1c1]/20 text-[#333333] dark:text-[#e5c1c1] font-medium'
+                                        : 'bg-[#e5c1c1]/10 text-[#333333] dark:text-[#e5c1c1]'
+                                    } rounded-full text-xs font-inter`}
+                                  >
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+                              
+                              {/* Story Footer */}
+                              <div className="mt-auto">
+                                <div className="flex justify-between items-center">
+                                  <span className="text-sm font-inter text-gray-500">
+                                    {story.sections.length} {story.sections.length === 1 ? 'chapter' : 'chapters'}
+                                  </span>
+                                  <button 
+                                    className={`px-4 py-2 rounded-full text-sm font-inter ${
+                                      story.id === 'karni-zilvinas'
+                                        ? 'bg-[#e5c1c1] hover:bg-[#e5c1c1]/90 text-[#333333] font-medium shadow-md hover:shadow-lg transition-all'
+                                        : 'bg-[#e5c1c1] hover:bg-[#e5c1c1]/90 text-[#333333]'
+                                    }`}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleStorySelect(story.id);
+                                    }}
+                                  >
+                                    View Story
+                                  </button>
+                                </div>
+                                
+                                {/* FOMO Message - Only for Karni & Zilvinas */}
+                                {story.id === 'karni-zilvinas' && story.packageInfo && (
+                                  <div className="mt-3">
+                                    <p className="text-xs text-[#e5c1c1] dark:text-[#e5c1c1] text-center italic">
+                                      *Only 3 Masterpiece Collections available per month - Book now to secure yours
+                                    </p>
+                                  </div>
+                                )}
+                              </div>
+                            </motion.div>
+                          ))}
+                      </div>
+                      
+                      {/* Show More Button (if more than 3 non-featured stories) */}
+                      {getFilteredStories().filter(story => !story.featured).length > 3 && (
+                        <div className="text-center mt-10">
+                          <button 
+                            className="px-6 py-3 border border-[#e5c1c1] text-[#333333] dark:text-[#e5c1c1] rounded-lg hover:bg-[#e5c1c1]/10 transition-colors font-inter"
+                          >
+                            View More Stories
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </section>
+        
+        {/* Portraits Section - Image Gallery */}
+        {(activeCategory === 'ALL' || activeCategory === 'PORTRAITS') && (
+          <ImageGallery images={portraitGalleryImages} category="PORTRAITS" />
+        )}
+
+        {/* Maternity Section - Image Gallery */}
+        {(activeCategory === 'ALL' || activeCategory === 'MATERNITY') && (
+          <ImageGallery images={maternityGalleryImages} category="MATERNITY" />
+        )}
+
+        {/* Commercial Section - Image Gallery */}
+        {(activeCategory === 'ALL' || activeCategory === 'COMMERCIAL') && (
+          <ImageGallery images={commercialGalleryImages} category="COMMERCIAL" />
+        )}
+        
+        {/* Portfolio Story Chronological View */}
+        <AnimatePresence>
+          {activeStory && (
+            <motion.section
+              ref={storyViewRef}
+              className={`py-8 ${mode === 'dark' ? 'bg-gray-900' : 'bg-white'}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <div className="container mx-auto px-4">
+                {/* Back Button */}
+                <div className="mb-6">
+                  <button 
+                    onClick={handleBackToStories}
+                    className="flex items-center text-blue-500 hover:text-blue-600 transition-colors"
+                  >
+                    <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    <span>Back to Portfolio</span>
+                  </button>
+                </div>
+                
+                {/* Story Header */}
+                {getActiveStory() && (
+                  <div className="mb-12">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-6">
+                      <div>
+                        <h1 className="font-playfair text-3xl md:text-5xl font-light mb-2">{getActiveStory()?.title}</h1>
+                        <p className="font-inter text-gray-500 dark:text-gray-400">{getActiveStory()?.subtitle}</p>
+                      </div>
+                      <div className="mt-4 md:mt-0 flex items-center text-sm text-gray-500 dark:text-gray-400 font-inter">
+                        <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                          <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span>{getActiveStory()?.location}</span>
+                        <span className="mx-2">•</span>
+                        <span>{getActiveStory()?.date}</span>
+                      </div>
+                    </div>
+                    
+                    {/* Client Testimonial Featured */}
+                    {getActiveStory()?.testimonial && activeStory !== 'karni-zilvinas' && (
+                      <div className={`p-6 rounded-lg ${mode === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                        <div className="flex flex-col md:flex-row items-start md:items-center">
+                          <div className="text-3xl font-serif text-blue-500 dark:text-blue-400 mr-4 mb-4 md:mb-0">"</div>
+                          <div>
+                            <p className="text-lg md:text-xl italic mb-4">{getActiveStory()?.testimonial}</p>
+                            <p className="text-right font-medium">— {getActiveStory()?.clientName}</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Package Info Badge - Only for Karni & Zilvinas */}
+                    {activeStory === 'karni-zilvinas' && (
+                      <div className="mb-8 bg-[#e5c1c1]/10 p-4 rounded-lg border border-[#e5c1c1]/30 flex items-start">
+                        <div className="flex-shrink-0 bg-[#e5c1c1] rounded-full p-2 mr-4">
+                          <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                          </svg>
+                        </div>
+                        <div>
+                          <div className="flex items-center mb-1">
+                            <h3 className="font-medium text-lg text-[#333333] dark:text-[#e5c1c1]">
+                              Masterpiece Collection
+                            </h3>
+                            <span className="ml-3 px-2 py-1 bg-[#e5c1c1] text-[#333333] text-xs rounded-full animate-pulse">
+                              Limited Availability
+                            </span>
+                          </div>
+                          <p className="text-gray-600 dark:text-gray-300">
+                            Full-day coverage, second photographer, engagement session, luxury album, and complete digital gallery
+                          </p>
+                          <p className="text-sm text-[#e5c1c1] mt-2 italic">
+                            *Only 3 Masterpiece Collections available per month - Book now to secure yours
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Section Navigation */}
+                    <div className="mb-12 overflow-x-auto">
+                      <div className="flex space-x-4 pb-2">
+                        {getActiveStory()?.sections.map((section) => (
+                          <button
+                            key={section.id}
+                            onClick={() => handleSectionSelect(section.id)}
+                            className={`whitespace-nowrap px-5 py-2 rounded-full transition-all ${
+                              activeSection === section.id
+                                ? `bg-[#e5c1c1] text-[#333333]`
+                                : `border border-gray-300 dark:border-gray-700 ${
+                                    mode === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
+                                  }`
+                            }`}
+                          >
+                            {section.title}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* Story Sections */}
+                    <div className="space-y-20">
+                      {getActiveStory()?.sections.map((section) => (
+                        <div 
+                          key={section.id} 
+                          id={`section-${section.id}`}
+                          className="scroll-mt-24"
+                        >
+                          <div className="mb-8">
+                            <h2 className="font-playfair text-2xl md:text-3xl font-light mb-2">{section.title}</h2>
+                            <p className="font-inter text-gray-500 dark:text-gray-400" dangerouslySetInnerHTML={{ __html: section.description }}></p>
+                          </div>
+                          
+                          {/* Image Grid for Section */}
+                          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {getActiveImages()
+                              .filter(img => img.section === section.id)
+                              .map((image, index) => (
+                                <motion.div
+                                  key={image.id}
+                                  className="relative group cursor-pointer"
+                                  initial={{ opacity: 0, y: 20 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: index * 0.05, duration: 0.3 }}
+                                  onClick={() => handleImageClick(image.id)}
+                                >
+                                  {/* Image */}
+                                  <div className="relative overflow-hidden rounded-lg">
+                                    <div className="aspect-square bg-gray-200 dark:bg-gray-800">
+                                      <img 
+                                        src={transformImageUrl(image.src, 800)} 
+                                        alt={image.alt}
+                                        className="w-full h-full object-cover"
+                                        onError={(e) => {
+                                          const target = e.target as HTMLImageElement;
+                                          target.src = '/images/placeholder-image.jpg';
+                                        }}
+                                      />
+                                    </div>
+                                    
+                                    {/* Simple Number Overlay */}
+                                    <div className="absolute top-2 left-2 bg-black/70 text-white text-xs font-bold px-2 py-1 rounded">
+                                      {index + 1}
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              ))}
+                          </div>
+                          
+                          {/* End of Section CTA */}
+                          {section.id === 'reception' && activeStory !== 'karni-zilvinas' && (
+                            <div className="mt-12 text-center">
+                              <h3 className="font-playfair text-xl mb-3">Ready to create your own story?</h3>
+                              <p className="font-inter text-gray-500 dark:text-gray-400 mb-6 max-w-2xl mx-auto">
+                                Most couples book 9-12 months in advance to secure their date.
+                              </p>
+                              <button className="px-6 py-3 bg-[#e5c1c1] hover:bg-[#e5c1c1]/90 text-[#333333] rounded-lg transition-colors font-inter">
+                                Start Your Journey
+                              </button>
+                            </div>
+                          )}
+                          {section.id === 'gallery' && activeStory === 'karni-zilvinas' && (
+                            <div className="mt-16 p-8 rounded-lg bg-gradient-to-r from-rose-50 to-amber-50 dark:from-rose-900/30 dark:to-amber-900/30 shadow-lg">
+                              <h3 className="text-2xl font-bold text-rose-600 dark:text-rose-400 mb-4">Ready for Your Luxury Wedding Experience?</h3>
+                              <div className="flex flex-col md:flex-row items-center justify-between">
+                                <div className="md:w-2/3 mb-6 md:mb-0 md:pr-8">
+                                  <p className="text-lg mb-4">
+                                    Your wedding deserves the same attention to detail and artistic vision showcased in the Karni & Zilvinas collection. 
+                                    The Masterpiece Package includes full-day coverage, a second photographer, and a luxury album.
+                                  </p>
+                                  <p className="text-lg font-medium text-amber-800 dark:text-amber-400">
+                                    Limited dates available for 2025-2026 wedding season. Book your consultation today!
+                                  </p>
+                                </div>
+                                <div className="md:w-1/3 flex justify-center">
+                                  <a 
+                                    href="/contact" 
+                                    className="inline-block px-8 py-4 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-lg shadow-md transition-all transform hover:scale-105"
+                                  >
+                                    Book Your Consultation
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.section>
+              )}
+            </AnimatePresence>
+            
+            {/* Lightbox for Selected Image */}
+            <AnimatePresence>
+              {selectedImage && (
+                <motion.div
+                  className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center p-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setSelectedImage(null)}
+                >
+                  <motion.div
+                    className="relative max-w-6xl max-h-[90vh] w-full"
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.9, opacity: 0 }}
+                    transition={{ type: "spring", damping: 300, stiffness: 300 }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {getActiveImages().filter(img => img.id === selectedImage).map(image => (
+                      <div key={image.id} className="relative">
+                        <img 
+                          src={transformImageUrl(image.src, 1800)} 
+                          alt={image.alt}
+                          className="max-w-full max-h-full object-contain"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = '/images/placeholder-image.jpg';
+                          }}
+                        />
+                        
+                        {/* Image Caption */}
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white p-4">
+                          <p className="text-lg">{image.alt}</p>
+                        </div>
+                        
+                        {/* Close Button */}
+                        <button 
+                          className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 flex items-center justify-center text-white"
+                          onClick={() => setSelectedImage(null)}
+                        >
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                          </svg>
+                        </button>
+                        
+                        {/* Simple Image Number */}
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white p-2 text-center">
+                          Image {getActiveImages().filter(img => img.section === activeSection).findIndex(img => img.id === selectedImage) + 1} of {getActiveImages().filter(img => img.section === activeSection).length}
+                        </div>
+                      </div>
+                    ))}
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            
+            {/* Call to Action Section */}
+            <section className="py-20 bg-black text-white text-center">
+              <div className="container mx-auto px-4">
+                <h2 className="text-5xl mb-6 font-playfair">Only 8 wedding dates remaining for 2025</h2>
+                <p className="text-white/80 max-w-2xl mx-auto mb-12 font-inter">
+                  Limited dates available for 2025-2026 weddings. Inquire now to secure your date.
+                </p>
+                <div className="flex flex-col sm:flex-row justify-center gap-4">
+                  <button 
+                    className="bg-white text-black px-12 py-4 hover:bg-gray-100 transition-all duration-300 group font-inter"
+                    onClick={() => window.location.href = '/contact'}
+                  >
+                    Check Availability
+                    <svg className="inline-block ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14"></path>
+                      <path d="m12 5 7 7-7 7"></path>
+                    </svg>
+                  </button>
+                  <Link 
+                    to="/wedding"
+                    className="border border-white text-white px-12 py-4 hover:bg-white hover:text-black transition-all duration-300 group font-inter"
+                  >
+                    Wedding Experience
+                    <svg className="inline-block ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14"></path>
+                      <path d="m12 5 7 7-7 7"></path>
+                    </svg>
+                  </Link>
+                </div>
+              </div>
+            </section>
+            
+            <Footer />
+          </div>
+        </>
+      );
+    };
+
+    export default PortfolioPage;

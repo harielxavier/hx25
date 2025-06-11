@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Test Page</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .test-section { margin-bottom: 30px; border: 1px solid #ddd; padding: 20px; border-radius: 8px; }
+        .image-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+        .image-item { position: relative; }
+        img { width: 100%; height: 200px; object-fit: cover; margin-bottom: 5px; border-radius: 4px; }
+        .status { font-size: 12px; margin-top: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        h2 { border-bottom: 1px solid #eee; padding-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Image Path Test</h1>
+    <p>This page tests different image path formats to determine which ones are actually accessible.</p>
+
+    <div class="test-section">
+        <h2>Test 1: Direct paths with spaces</h2>
+        <div class="image-container">
+            <div class="image-item">
+                <img src="/Crysta & David/cdw-25.jpg" alt="Image 1" onerror="this.parentNode.innerHTML += '<div class=\'error\'>ERROR: Image failed to load</div>'" onload="this.parentNode.innerHTML += '<div class=\'success\'>SUCCESS: Image loaded</div>'">
+                <p>Path: /Crysta & David/cdw-25.jpg</p>
+            </div>
+            <div class="image-item">
+                <img src="/Crysta & David/cdw-170.jpg" alt="Image 2" onerror="this.parentNode.innerHTML += '<div class=\'error\'>ERROR: Image failed to load</div>'" onload="this.parentNode.innerHTML += '<div class=\'success\'>SUCCESS: Image loaded</div>'">
+                <p>Path: /Crysta & David/cdw-170.jpg</p>
+            </div>
+            <div class="image-item">
+                <img src="/Crysta & David/cdw-255.jpg" alt="Image 3" onerror="this.parentNode.innerHTML += '<div class=\'error\'>ERROR: Image failed to load</div>'" onload="this.parentNode.innerHTML += '<div class=\'success\'>SUCCESS: Image loaded</div>'">
+                <p>Path: /Crysta & David/cdw-255.jpg</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: URL encoded paths with spaces</h2>
+        <div class="image-container">
+            <div class="image-item">
+                <img src="/Crysta%20%26%20David/cdw-25.jpg" alt="Image 1" onerror="this.parentNode.innerHTML += '<div class=\'error\'>ERROR: Image failed to load</div>'" onload="this.parentNode.innerHTML += '<div class=\'success\'>SUCCESS: Image loaded</div>'">
+                <p>Path: /Crysta%20%26%20David/cdw-25.jpg</p>
+            </div>
+            <div class="image-item">
+                <img src="/Crysta%20%26%20David/cdw-170.jpg" alt="Image 2" onerror="this.parentNode.innerHTML += '<div class=\'error\'>ERROR: Image failed to load</div>'" onload="this.parentNode.innerHTML += '<div class=\'success\'>SUCCESS: Image loaded</div>'">
+                <p>Path: /Crysta%20%26%20David/cdw-170.jpg</p>
+            </div>
+            <div class="image-item">
+                <img src="/Crysta%20%26%20David/cdw-255.jpg" alt="Image 3" onerror="this.parentNode.innerHTML += '<div class=\'error\'>ERROR: Image failed to load</div>'" onload="this.parentNode.innerHTML += '<div class=\'success\'>SUCCESS: Image loaded</div>'">
+                <p>Path: /Crysta%20%26%20David/cdw-255.jpg</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Paths with hyphens</h2>
+        <div class="image-container">
+            <div class="image-item">
+                <img src="/crysta-david/cdw-25.jpg" alt="Image 1" onerror="this.parentNode.innerHTML += '<div class=\'error\'>ERROR: Image failed to load</div>'" onload="this.parentNode.innerHTML += '<div class=\'success\'>SUCCESS: Image loaded</div>'">
+                <p>Path: /crysta-david/cdw-25.jpg</p>
+            </div>
+            <div class="image-item">
+                <img src="/crysta-david/cdw-170.jpg" alt="Image 2" onerror="this.parentNode.innerHTML += '<div class=\'error\'>ERROR: Image failed to load</div>'" onload="this.parentNode.innerHTML += '<div class=\'success\'>SUCCESS: Image loaded</div>'">
+                <p>Path: /crysta-david/cdw-170.jpg</p>
+            </div>
+            <div class="image-item">
+                <img src="/crysta-david/cdw-255.jpg" alt="Image 3" onerror="this.parentNode.innerHTML += '<div class=\'error\'>ERROR: Image failed to load</div>'" onload="this.parentNode.innerHTML += '<div class=\'success\'>SUCCESS: Image loaded</div>'">
+                <p>Path: /crysta-david/cdw-255.jpg</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: All images in crysta-david directory</h2>
+        <div class="image-container" id="allImagesContainer">
+            <script>
+                // JavaScript to dynamically create elements for all available images
+                const imageFiles = [
+                    'cdw-25.jpg', 'cdw-55.jpg', 'cdw-64.jpg', 'cdw-127.jpg', 'cdw-160.jpg',
+                    'cdw-169.jpg', 'cdw-170.jpg', 'cdw-174.jpg', 'cdw-185.jpg', 'cdw-186.jpg',
+                    'cdw-188.jpg', 'cdw-198.jpg', 'cdw-203.jpg', 'cdw-210.jpg', 'cdw-219.jpg',
+                    'cdw-225.jpg', 'cdw-240.jpg', 'cdw-248.jpg', 'cdw-255.jpg', 'cdw-261.jpg',
+                    'cdw-265.jpg', 'cdw-270.jpg', 'cdw-278.jpg', 'cdw-290.jpg', 'cdw-314.jpg',
+                    'cdw-322.jpg', 'cdw-330.jpg', 'cdw-333.jpg', 'cdw-377.jpg', 'cdw-381.jpg',
+                    'cdw-384.jpg', 'cdw-387.jpg', 'cdw-390.jpg', 'cdw-391.jpg', 'cdw-401.jpg',
+                    'cdw-405.jpg', 'cdw-414.jpg', 'cdw-415.jpg', 'cdw-425.jpg', 'cdw-428.jpg'
+                ];
+
+                const container = document.getElementById('allImagesContainer');
+                
+                // Try with hyphens first since that path seems more likely
+                imageFiles.forEach(file => {
+                    const div = document.createElement('div');
+                    div.className = 'image-item';
+                    
+                    const img = document.createElement('img');
+                    img.src = `/crysta-david/${file}`;
+                    img.alt = file;
+                    
+                    const p = document.createElement('p');
+                    p.textContent = file;
+                    
+                    div.appendChild(img);
+                    div.appendChild(p);
+                    
+                    img.onerror = function() {
+                        const error = document.createElement('div');
+                        error.className = 'error';
+                        error.textContent = 'ERROR: Image failed to load';
+                        div.appendChild(error);
+                    };
+                    
+                    img.onload = function() {
+                        const success = document.createElement('div');
+                        success.className = 'success';
+                        success.textContent = 'SUCCESS: Image loaded';
+                        div.appendChild(success);
+                    };
+                    
+                    container.appendChild(div);
+                });
+            </script>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+// Script to check gallery thumbnails
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCxZL40_7Enc-I9IwRt0DllOMqlMwneje8",
+  authDomain: "harielxavierphotograph.firebaseapp.com",
+  projectId: "harielxavierphotograph",
+  storageBucket: "harielxavierphotograph.appspot.com",
+  messagingSenderId: "829105046643",
+  appId: "1:829105046643:web:6d22b9c17ac453472fd606",
+  measurementId: "G-0TQFQH1YLC"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+async function checkGalleryThumbnails() {
+  try {
+    console.log('Checking gallery thumbnails...');
+    
+    const galleriesRef = collection(db, 'galleries');
+    const querySnapshot = await getDocs(galleriesRef);
+    
+    querySnapshot.forEach(doc => {
+      const gallery = doc.data();
+      console.log(`Gallery: ${gallery.title} (ID: ${doc.id})`);
+      console.log(`- Featured: ${gallery.featured}`);
+      console.log(`- Thumbnail: ${gallery.thumbnailImage || 'None'}`);
+      console.log(`- Cover: ${gallery.coverImage || 'None'}`);
+      console.log('---');
+    });
+    
+    console.log('Gallery check complete!');
+  } catch (error) {
+    console.error('Error checking galleries:', error);
+  }
+}
+
+// Run the function
+checkGalleryThumbnails()
+  .then(() => console.log('Script completed successfully'))
+  .catch(err => console.error('Script failed:', err));

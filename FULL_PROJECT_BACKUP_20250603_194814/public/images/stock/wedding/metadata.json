@@ -1,0 +1,524 @@
+{
+  "images": [
+    {
+      "id": "wedding-1",
+      "path": "/images/stock/wedding/wedding-1.jpg",
+      "alt": "Wedding photo 1",
+      "width": 800,
+      "height": 646,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-2",
+      "path": "/images/stock/wedding/wedding-2.jpg",
+      "alt": "Wedding photo 2",
+      "width": 800,
+      "height": 621,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-3",
+      "path": "/images/stock/wedding/wedding-3.jpg",
+      "alt": "Wedding photo 3",
+      "width": 800,
+      "height": 690,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-4",
+      "path": "/images/stock/wedding/wedding-4.jpg",
+      "alt": "Wedding photo 4",
+      "width": 800,
+      "height": 787,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-5",
+      "path": "/images/stock/wedding/wedding-5.jpg",
+      "alt": "Wedding photo 5",
+      "width": 800,
+      "height": 718,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-6",
+      "path": "/images/stock/wedding/wedding-6.jpg",
+      "alt": "Wedding photo 6",
+      "width": 800,
+      "height": 955,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-7",
+      "path": "/images/stock/wedding/wedding-7.jpg",
+      "alt": "Wedding photo 7",
+      "width": 800,
+      "height": 857,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-8",
+      "path": "/images/stock/wedding/wedding-8.jpg",
+      "alt": "Wedding photo 8",
+      "width": 800,
+      "height": 818,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-9",
+      "path": "/images/stock/wedding/wedding-9.jpg",
+      "alt": "Wedding photo 9",
+      "width": 800,
+      "height": 617,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-10",
+      "path": "/images/stock/wedding/wedding-10.jpg",
+      "alt": "Wedding photo 10",
+      "width": 800,
+      "height": 953,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-11",
+      "path": "/images/stock/wedding/wedding-11.jpg",
+      "alt": "Wedding photo 11",
+      "width": 800,
+      "height": 697,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-12",
+      "path": "/images/stock/wedding/wedding-12.jpg",
+      "alt": "Wedding photo 12",
+      "width": 800,
+      "height": 679,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-13",
+      "path": "/images/stock/wedding/wedding-13.jpg",
+      "alt": "Wedding photo 13",
+      "width": 800,
+      "height": 677,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-14",
+      "path": "/images/stock/wedding/wedding-14.jpg",
+      "alt": "Wedding photo 14",
+      "width": 800,
+      "height": 856,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-15",
+      "path": "/images/stock/wedding/wedding-15.jpg",
+      "alt": "Wedding photo 15",
+      "width": 800,
+      "height": 657,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-16",
+      "path": "/images/stock/wedding/wedding-16.jpg",
+      "alt": "Wedding photo 16",
+      "width": 800,
+      "height": 901,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-17",
+      "path": "/images/stock/wedding/wedding-17.jpg",
+      "alt": "Wedding photo 17",
+      "width": 800,
+      "height": 807,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-18",
+      "path": "/images/stock/wedding/wedding-18.jpg",
+      "alt": "Wedding photo 18",
+      "width": 800,
+      "height": 788,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-19",
+      "path": "/images/stock/wedding/wedding-19.jpg",
+      "alt": "Wedding photo 19",
+      "width": 800,
+      "height": 830,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-20",
+      "path": "/images/stock/wedding/wedding-20.jpg",
+      "alt": "Wedding photo 20",
+      "width": 800,
+      "height": 711,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-21",
+      "path": "/images/stock/wedding/wedding-21.jpg",
+      "alt": "Wedding photo 21",
+      "width": 800,
+      "height": 836,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-22",
+      "path": "/images/stock/wedding/wedding-22.jpg",
+      "alt": "Wedding photo 22",
+      "width": 800,
+      "height": 649,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-23",
+      "path": "/images/stock/wedding/wedding-23.jpg",
+      "alt": "Wedding photo 23",
+      "width": 800,
+      "height": 698,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-24",
+      "path": "/images/stock/wedding/wedding-24.jpg",
+      "alt": "Wedding photo 24",
+      "width": 800,
+      "height": 855,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-25",
+      "path": "/images/stock/wedding/wedding-25.jpg",
+      "alt": "Wedding photo 25",
+      "width": 800,
+      "height": 850,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-26",
+      "path": "/images/stock/wedding/wedding-26.jpg",
+      "alt": "Wedding photo 26",
+      "width": 800,
+      "height": 624,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-27",
+      "path": "/images/stock/wedding/wedding-27.jpg",
+      "alt": "Wedding photo 27",
+      "width": 800,
+      "height": 866,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-28",
+      "path": "/images/stock/wedding/wedding-28.jpg",
+      "alt": "Wedding photo 28",
+      "width": 800,
+      "height": 922,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-29",
+      "path": "/images/stock/wedding/wedding-29.jpg",
+      "alt": "Wedding photo 29",
+      "width": 800,
+      "height": 981,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-30",
+      "path": "/images/stock/wedding/wedding-30.jpg",
+      "alt": "Wedding photo 30",
+      "width": 800,
+      "height": 845,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-31",
+      "path": "/images/stock/wedding/wedding-31.jpg",
+      "alt": "Wedding photo 31",
+      "width": 800,
+      "height": 803,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-32",
+      "path": "/images/stock/wedding/wedding-32.jpg",
+      "alt": "Wedding photo 32",
+      "width": 800,
+      "height": 996,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-33",
+      "path": "/images/stock/wedding/wedding-33.jpg",
+      "alt": "Wedding photo 33",
+      "width": 800,
+      "height": 952,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-34",
+      "path": "/images/stock/wedding/wedding-34.jpg",
+      "alt": "Wedding photo 34",
+      "width": 800,
+      "height": 929,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-35",
+      "path": "/images/stock/wedding/wedding-35.jpg",
+      "alt": "Wedding photo 35",
+      "width": 800,
+      "height": 660,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-36",
+      "path": "/images/stock/wedding/wedding-36.jpg",
+      "alt": "Wedding photo 36",
+      "width": 800,
+      "height": 835,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-37",
+      "path": "/images/stock/wedding/wedding-37.jpg",
+      "alt": "Wedding photo 37",
+      "width": 800,
+      "height": 614,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-38",
+      "path": "/images/stock/wedding/wedding-38.jpg",
+      "alt": "Wedding photo 38",
+      "width": 800,
+      "height": 958,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-39",
+      "path": "/images/stock/wedding/wedding-39.jpg",
+      "alt": "Wedding photo 39",
+      "width": 800,
+      "height": 802,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    },
+    {
+      "id": "wedding-40",
+      "path": "/images/stock/wedding/wedding-40.jpg",
+      "alt": "Wedding photo 40",
+      "width": 800,
+      "height": 879,
+      "category": "wedding",
+      "tags": [
+        "wedding",
+        "stock",
+        "photography"
+      ]
+    }
+  ]
+}

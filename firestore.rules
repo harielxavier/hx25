@@ -1,0 +1,100 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // LEADS: Public can add, only admins can read/update
+    match /leads/{leadId} {
+      allow create: if request.auth == null &&
+                       request.resource.data.keys().hasAll(['name', 'email', 'message', 'source', 'createdAt']) &&
+                       request.resource.data.name is string &&
+                       request.resource.data.email is string &&
+                       request.resource.data.message is string &&
+                       request.resource.data.source is string &&
+                       request.resource.data.createdAt == request.time;
+                       // Add more specific field validations as needed (e.g., string length, email format)
+      allow read, update, delete: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Timeline sub-collection under leads
+    match /leads/{leadId}/timeline/{entryId} {
+      allow create: if request.auth != null && request.auth.token.admin == true;
+      allow read, update, delete: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // CLIENTS: Accessible by the specific client and admins
+    match /clients/{clientId} {
+      allow read: if request.auth != null && (request.auth.uid == clientId || request.auth.token.admin == true);
+      allow update: if request.auth != null && 
+                       (request.auth.uid == clientId || request.auth.token.admin == true) &&
+                       !(request.resource.data.diff(resource.data).affectedKeys().hasAny(['authId', 'createdAt', 'email'])); // Prevent client from changing critical fields
+                       // Admins can update any field (covered by the general admin write rule below or a more specific one)
+      // Allow create and delete only for admins
+      allow create, delete: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Timeline sub-collection under clients
+    match /clients/{clientId}/timeline/{entryId} {
+      allow read: if request.auth != null && (request.auth.uid == clientId || request.auth.token.admin == true);
+      allow create, update, delete: if request.auth != null && request.auth.token.admin == true; // Only admins manage client timeline entries
+    }
+    
+    // Gallery metadata sub-collection under clients
+    match /clients/{clientId}/gallery/{photoId} {
+      allow read: if request.auth != null && (request.auth.uid == clientId || request.auth.token.admin == true);
+      allow create, update, delete: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Bookings: Clients can read their own bookings, admins can manage all
+    match /bookings/{bookingId} {
+      allow read: if request.auth != null && 
+                     (request.auth.token.admin == true || (resource.data.clientId is string && request.auth.uid == resource.data.clientId));
+      allow create, update, delete: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Invoices: Clients can read their own, admins can manage all
+    match /invoices/{invoiceId} {
+      allow read: if request.auth != null && 
+                     (request.auth.token.admin == true || (resource.data.clientId is string && request.auth.uid == resource.data.clientId));
+      allow create, update, delete: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Admins collection (or any other admin-only configuration data)
+    match /admins/{adminId} {
+      allow read, write: if request.auth != null && request.auth.token.admin == true;
+    }
+    
+    // Example for a general 'settings' collection, readable by all, writable by admin
+    match /settings/{settingId} {
+      allow read: if true; // Publicly readable settings
+      allow write: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Payments: Clients can read their own, admins can manage all
+    match /payments/{paymentId} {
+      allow read: if request.auth != null && 
+                     (request.auth.token.admin == true || (resource.data.clientId is string && request.auth.uid == resource.data.clientId));
+      allow create, update, delete: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Email Templates: Admin only
+    match /email_templates/{templateId} {
+      allow read, write: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Email Sequences: Admin only  
+    match /email_sequences/{sequenceId} {
+      allow read, write: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Analytics Data: Admin only
+    match /analytics_data/{recordId} {
+      allow read, write: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Default deny all other paths not explicitly matched
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,113 @@
+/* Fix for blog manager action buttons */
+.blog-manager-actions {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  gap: 12px !important;
+  justify-content: center !important;
+}
+
+/* Make the table horizontally scrollable */
+.overflow-x-auto {
+  overflow-x: auto !important;
+  max-width: 100% !important;
+  padding-bottom: 1rem !important;
+}
+
+/* Ensure table cells are properly sized */
+.blog-manager-table th,
+.blog-manager-table td {
+  min-width: 100px !important;
+  padding: 0.75rem 1rem !important;
+  white-space: nowrap !important;
+}
+
+/* Make sure the actions column is wide enough and always visible */
+.blog-manager-table th:last-child,
+.blog-manager-table td:last-child {
+  min-width: 150px !important;
+  position: sticky !important;
+  right: 0 !important;
+  background-color: white !important;
+  z-index: 10 !important;
+  box-shadow: -5px 0 5px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Ensure buttons are visible and styled properly */
+.blog-manager-table button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 36px !important;
+  height: 36px !important;
+  background-color: #f3f4f6 !important;
+  border-radius: 50% !important;
+  padding: 8px !important;
+  margin: 0 4px !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+/* Style for view button */
+.blog-manager-table button.view-button {
+  color: #3b82f6 !important;
+  background-color: #eff6ff !important;
+}
+
+/* Style for edit button */
+.blog-manager-table button.edit-button {
+  color: #6366f1 !important;
+  background-color: #eef2ff !important;
+}
+
+/* Style for delete button */
+.blog-manager-table button.delete-button {
+  color: #ef4444 !important;
+  background-color: #fee2e2 !important;
+}
+
+/* Force the action icons to be visible */
+.blog-manager-table svg {
+  width: 20px !important;
+  height: 20px !important;
+  display: block !important;
+  pointer-events: none !important;
+}
+
+/* Add action buttons if they don't exist */
+.blog-manager-table td:last-child:empty::after {
+  content: "Actions";
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Make sure the table header is always visible */
+.blog-manager-table thead {
+  position: sticky !important;
+  top: 0 !important;
+  background-color: #f9fafb !important;
+  z-index: 20 !important;
+}
+
+/* Add custom action buttons for each row */
+.blog-manager-table tr:hover .blog-manager-actions {
+  background-color: #f9fafb !important;
+}
+
+/* Make sure the table is visible on all screen sizes */
+@media (max-width: 1024px) {
+  .blog-manager-table {
+    font-size: 0.875rem !important;
+  }
+  
+  .blog-manager-table th,
+  .blog-manager-table td {
+    padding: 0.5rem 0.75rem !important;
+  }
+  
+  .blog-manager-table button {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 6px !important;
+  }
+}

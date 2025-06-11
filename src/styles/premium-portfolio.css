@@ -1,0 +1,164 @@
+/* Premium Portfolio Styles */
+
+/* Custom Typography */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.premium-portfolio {
+  /* Premium Font Stack */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Montserrat', sans-serif;
+  
+  /* Refined Color Palette */
+  --color-primary: #1a1a1a;
+  --color-secondary: #9a8478;
+  --color-accent: #d4c9c4;
+  --color-light: #f8f5f3;
+  
+  /* Generous Spacing */
+  --spacing-premium: 2rem;
+}
+
+/* Typography Classes */
+.premium-portfolio .font-display {
+  font-family: var(--font-display);
+}
+
+.premium-portfolio .font-body {
+  font-family: var(--font-body);
+}
+
+/* Premium Spacing */
+.premium-portfolio .premium-spacing {
+  margin: var(--spacing-premium) 0;
+}
+
+/* Subtle Animations */
+.premium-portfolio .animate-reveal {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.premium-portfolio .animate-reveal:not(.animate-reveal) {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Custom Cursor for Gallery */
+.premium-portfolio .portfolio-grid {
+  cursor: url('/images/cursors/gallery-cursor.png'), auto;
+}
+
+/* Premium UI Elements */
+.premium-portfolio button {
+  transition: all 0.3s ease;
+}
+
+.premium-portfolio input,
+.premium-portfolio textarea,
+.premium-portfolio select {
+  transition: all 0.3s ease;
+}
+
+/* Custom PhotoSwipe UI */
+.premium-portfolio .pswp__button--close.custom-close,
+.premium-portfolio .pswp__button--arrow--left.custom-arrow-left,
+.premium-portfolio .pswp__button--arrow--right.custom-arrow-right {
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.premium-portfolio .pswp__button--close.custom-close:hover,
+.premium-portfolio .pswp__button--arrow--left.custom-arrow-left:hover,
+.premium-portfolio .pswp__button--arrow--right.custom-arrow-right:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Refined Image Hover Effects */
+.premium-portfolio .grid-item img {
+  transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.premium-portfolio .grid-item:hover img {
+  transform: scale(1.05);
+}
+
+.premium-portfolio figcaption {
+  transition: opacity 0.5s ease;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .premium-portfolio {
+    --spacing-premium: 1.5rem;
+  }
+  
+  .premium-portfolio .font-display {
+    font-size: 90%;
+  }
+}
+
+/* Dark Mode Enhancements */
+.dark .premium-portfolio {
+  --color-primary: #f8f5f3;
+  --color-secondary: #d4c9c4;
+  --color-accent: #9a8478;
+  --color-light: #1a1a1a;
+}
+
+/* Progressive Image Loading */
+.premium-portfolio .blur-placeholder {
+  filter: blur(20px);
+  transform: scale(1.1);
+  transition: opacity 0.3s ease;
+}
+
+.premium-portfolio img.loaded + .blur-placeholder {
+  opacity: 0;
+}
+
+/* Custom Scrollbar */
+.premium-portfolio::-webkit-scrollbar {
+  width: 8px;
+}
+
+.premium-portfolio::-webkit-scrollbar-track {
+  background: var(--color-light);
+}
+
+.premium-portfolio::-webkit-scrollbar-thumb {
+  background-color: var(--color-secondary);
+  border-radius: 4px;
+}
+
+/* Micro-interactions */
+.premium-portfolio button:active {
+  transform: scale(0.98);
+}
+
+.premium-portfolio .hover-lift {
+  transition: transform 0.3s ease;
+}
+
+.premium-portfolio .hover-lift:hover {
+  transform: translateY(-5px);
+}
+
+/* Luxury Indicators */
+.premium-portfolio .limited-availability {
+  border: 1px solid var(--color-accent);
+  padding: 0.5rem 1rem;
+  font-family: var(--font-display);
+  font-style: italic;
+}
+
+/* Custom PhotoSwipe Caption */
+.premium-portfolio .pswp__caption__center {
+  max-width: 80%;
+  margin: 0 auto;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  text-align: center;
+}

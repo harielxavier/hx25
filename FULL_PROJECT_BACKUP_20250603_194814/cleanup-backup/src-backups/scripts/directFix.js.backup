@@ -1,0 +1,103 @@
+// This is a direct fix for the landing page featured galleries
+// It uses CommonJS syntax for better compatibility
+
+const { initializeApp } = require('firebase/app');
+const { getFirestore, collection, getDocs, query, where, updateDoc, doc } = require('firebase/firestore');
+
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCxZL40_7Enc-I9IwRt0DllOMqlMwneje8",
+  authDomain: "harielxavierphotograph.firebaseapp.com",
+  projectId: "harielxavierphotograph",
+  storageBucket: "harielxavierphotograph.appspot.com",
+  messagingSenderId: "829105046643",
+  appId: "1:829105046643:web:6d22b9c17ac453472fd606",
+  measurementId: "G-0TQFQH1YLC"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Main function to fix the featured galleries
+async function fixFeaturedGalleries() {
+  try {
+    console.log('Checking galleries...');
+    
+    // Get all galleries
+    const galleriesRef = collection(db, 'galleries');
+    const allGalleriesSnapshot = await getDocs(galleriesRef);
+    
+    if (allGalleriesSnapshot.empty) {
+      console.log('No galleries found in the database.');
+      return;
+    }
+    
+    console.log(`Found ${allGalleriesSnapshot.size} galleries total.`);
+    
+    // Check for featured galleries
+    const featuredQuery = query(galleriesRef, where('featured', '==', true));
+    const featuredSnapshot = await getDocs(featuredQuery);
+    
+    if (!featuredSnapshot.empty) {
+      console.log(`Found ${featuredSnapshot.size} featured galleries.`);
+      
+      // Make sure they're all public
+      let updatedCount = 0;
+      
+      for (const docSnapshot of featuredSnapshot.docs) {
+        const galleryData = docSnapshot.data();
+        
+        if (!galleryData.isPublic) {
+          console.log(`Making gallery "${galleryData.title}" public...`);
+          
+          await updateDoc(doc(db, 'galleries', docSnapshot.id), {
+            isPublic: true
+          });
+          
+          updatedCount++;
+        }
+      }
+      
+      if (updatedCount > 0) {
+        console.log(`Updated ${updatedCount} galleries to be public.`);
+      } else {
+        console.log('All featured galleries are already public.');
+      }
+      
+      console.log('Your landing page should now display these galleries correctly.');
+      return;
+    }
+    
+    console.log('No featured galleries found. Setting up featured galleries...');
+    
+    // Get the first 3 galleries and make them featured and public
+    const galleries = allGalleriesSnapshot.docs.slice(0, 3);
+    
+    if (galleries.length === 0) {
+      console.log('No galleries available to feature.');
+      return;
+    }
+    
+    for (const docSnapshot of galleries) {
+      const galleryData = docSnapshot.data();
+      console.log(`Making gallery "${galleryData.title}" featured and public...`);
+      
+      await updateDoc(doc(db, 'galleries', docSnapshot.id), {
+        featured: true,
+        isPublic: true
+      });
+    }
+    
+    console.log(`Successfully set up ${galleries.length} featured galleries.`);
+    console.log('Your landing page should now display these galleries correctly.');
+    
+  } catch (error) {
+    console.error('Error fixing featured galleries:', error);
+  }
+}
+
+// Run the function
+fixFeaturedGalleries()
+  .then(() => console.log('Fix completed'))
+  .catch(error => console.error('Fix failed:', error));

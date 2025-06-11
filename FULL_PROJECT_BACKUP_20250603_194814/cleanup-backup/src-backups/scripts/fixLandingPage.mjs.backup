@@ -1,0 +1,193 @@
+// Simple script to fix the landing page by creating featured galleries
+// This script uses ES modules syntax
+
+import { getApps, getApp, initializeApp } from 'firebase/app';
+import { getFirestore, collection, addDoc, getDocs, query, where, serverTimestamp } from 'firebase/firestore';
+
+// Firebase configuration for harielxavierphotograph project
+const firebaseConfig = {
+  apiKey: "AIzaSyCxZL40_7Enc-I9IwRt0DllOMqlMwneje8",
+  authDomain: "harielxavierphotograph.firebaseapp.com",
+  projectId: "harielxavierphotograph",
+  storageBucket: "harielxavierphotograph.appspot.com",
+  messagingSenderId: "829105046643",
+  appId: "1:829105046643:web:6d22b9c17ac453472fd606",
+  measurementId: "G-0TQFQH1YLC"
+};
+
+// Initialize Firebase - prevent duplicate app instances
+const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Main function to check and create featured galleries if needed
+async function checkAndCreateFeaturedGalleries() {
+  try {
+    console.log('Checking for featured galleries...');
+    
+    // Check if featured galleries already exist
+    const galleriesRef = collection(db, 'galleries');
+    const featuredQuery = query(galleriesRef, where('featured', '==', true));
+    const existingFeatured = await getDocs(featuredQuery);
+    
+    if (!existingFeatured.empty) {
+      console.log(`Found ${existingFeatured.size} existing featured galleries.`);
+      console.log('Your landing page should now display these galleries.');
+      return;
+    }
+    
+    console.log('No featured galleries found. Creating sample featured galleries...');
+    
+    // Sample gallery data for featured galleries
+    const sampleGalleries = [
+      {
+        title: "Featured Wedding Photography",
+        slug: "featured-wedding-photography",
+        description: "Capturing the most beautiful moments of your special day with elegance and emotion.",
+        coverImage: "https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
+        thumbnailImage: "https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        clientName: "Sample Client",
+        clientEmail: "sample@example.com",
+        eventDate: new Date(),
+        expiresAt: null,
+        password: null,
+        isPublic: true,
+        isPasswordProtected: false,
+        allowDownloads: true,
+        allowSharing: true,
+        category: "Wedding",
+        location: "New York, NY",
+        featured: true,
+        tags: ["wedding", "portrait", "couple"],
+        createdAt: serverTimestamp(),
+        imageCount: 3
+      },
+      {
+        title: "Featured Portrait Collection",
+        slug: "featured-portrait-collection",
+        description: "Professional portrait photography that captures personality and emotion.",
+        coverImage: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-4.0.3&auto=format&fit=crop&w=1528&q=80",
+        thumbnailImage: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        clientName: "Sample Client",
+        clientEmail: "sample@example.com",
+        eventDate: new Date(),
+        expiresAt: null,
+        password: null,
+        isPublic: true,
+        isPasswordProtected: false,
+        allowDownloads: true,
+        allowSharing: true,
+        category: "Portrait",
+        location: "Los Angeles, CA",
+        featured: true,
+        tags: ["portrait", "professional", "studio"],
+        createdAt: serverTimestamp(),
+        imageCount: 3
+      },
+      {
+        title: "Featured Landscape Series",
+        slug: "featured-landscape-series",
+        description: "Breathtaking landscape photography from around the world.",
+        coverImage: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
+        thumbnailImage: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        clientName: "Sample Client",
+        clientEmail: "sample@example.com",
+        eventDate: new Date(),
+        expiresAt: null,
+        password: null,
+        isPublic: true,
+        isPasswordProtected: false,
+        allowDownloads: true,
+        allowSharing: true,
+        category: "Landscape",
+        location: "Various Locations",
+        featured: true,
+        tags: ["landscape", "nature", "travel"],
+        createdAt: serverTimestamp(),
+        imageCount: 3
+      }
+    ];
+    
+    // Create each featured gallery
+    for (const gallery of sampleGalleries) {
+      const docRef = await addDoc(galleriesRef, gallery);
+      console.log(`Created featured gallery: ${gallery.title} with ID: ${docRef.id}`);
+      
+      // Add sample images to each gallery
+      await addSampleImagesToGallery(docRef.id, gallery.slug);
+    }
+    
+    console.log('Featured galleries created successfully!');
+    console.log('Your landing page should now display these galleries.');
+    
+  } catch (error) {
+    console.error('Error checking/creating featured galleries:', error);
+  }
+}
+
+// Function to add sample images to a gallery
+async function addSampleImagesToGallery(galleryId, gallerySlug) {
+  try {
+    console.log(`Adding sample images to gallery: ${galleryId}`);
+    
+    // Sample images for each gallery type
+    const sampleImages = {
+      "featured-wedding-photography": [
+        "https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
+        "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
+        "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1469&q=80"
+      ],
+      "featured-portrait-collection": [
+        "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-4.0.3&auto=format&fit=crop&w=1528&q=80",
+        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1376&q=80",
+        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80"
+      ],
+      "featured-landscape-series": [
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
+        "https://images.unsplash.com/photo-1439853949127-fa647821eba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80"
+      ]
+    };
+    
+    const urls = sampleImages[gallerySlug] || [];
+    
+    if (urls.length === 0) {
+      console.log(`No sample images defined for gallery: ${gallerySlug}`);
+      return;
+    }
+    
+    const imagesCollectionRef = collection(db, `galleries/${galleryId}/images`);
+    
+    // Add each image to the gallery
+    for (let i = 0; i < urls.length; i++) {
+      const imageUrl = urls[i];
+      const thumbnailUrl = imageUrl.replace('w=1470', 'w=400').replace('w=1528', 'w=400').replace('w=1376', 'w=400').replace('w=1374', 'w=400').replace('w=1469', 'w=400');
+      
+      const imageData = {
+        url: imageUrl,
+        thumbnailUrl: thumbnailUrl,
+        filename: `sample-image-${i + 1}.jpg`,
+        title: `Sample Image ${i + 1}`,
+        description: `This is a sample image for the gallery. Replace with your own content.`,
+        featured: true,
+        order: i,
+        width: 1470,
+        height: 980,
+        size: 500000, // Fake size ~500KB
+        createdAt: serverTimestamp(),
+        tags: []
+      };
+      
+      await addDoc(imagesCollectionRef, imageData);
+      console.log(`Added image ${i + 1} to gallery ${galleryId}`);
+    }
+    
+    console.log(`Successfully added ${urls.length} sample images to gallery: ${galleryId}`);
+  } catch (error) {
+    console.error(`Error adding sample images to gallery: ${error}`);
+  }
+}
+
+// Run the function
+checkAndCreateFeaturedGalleries()
+  .then(() => console.log('Script completed'))
+  .catch(error => console.error('Script failed:', error));

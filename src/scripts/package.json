@@ -1,0 +1,9 @@
+{
+  "name": "blog-scripts",
+  "version": "1.0.0",
+  "description": "Scripts for the blog functionality",
+  "type": "module",
+  "scripts": {
+    "create-posts": "node createSampleBlogPosts.js"
+  }
+}
