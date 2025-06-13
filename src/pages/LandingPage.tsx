@@ -779,6 +779,92 @@ export function LandingPage() {
 
       <PhotographyStyleSlider />
 
+      {/* AI Assistant Section */}
+      <section className="py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white relative overflow-hidden">
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: 'url(/MoStuff/torso.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        />
+        
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-gray-900/80 to-black/60" />
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="mb-8">
+              <span className="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium mb-4">
+                ✨ AI-Powered Photography Assistant
+              </span>
+              <h2 className="text-4xl md:text-5xl font-serif mb-6">
+                Meet Your Personal
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-amber-400">
+                  Photography Consultant
+                </span>
+              </h2>
+              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                Get instant, personalized recommendations for your wedding photography needs.
+                Our AI assistant helps you discover the perfect package and style for your special day.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                <div className="w-12 h-12 bg-gradient-to-r from-rose-500 to-amber-500 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                  <span className="text-2xl">🎯</span>
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Smart Recommendations</h3>
+                <p className="text-gray-400 text-sm">
+                  Get personalized package suggestions based on your wedding details and preferences
+                </p>
+              </div>
+              
+              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                <div className="w-12 h-12 bg-gradient-to-r from-rose-500 to-amber-500 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                  <span className="text-2xl">💬</span>
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Instant Answers</h3>
+                <p className="text-gray-400 text-sm">
+                  Ask questions about pricing, availability, and services - get immediate responses
+                </p>
+              </div>
+              
+              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                <div className="w-12 h-12 bg-gradient-to-r from-rose-500 to-amber-500 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                  <span className="text-2xl">📅</span>
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Planning Support</h3>
+                <p className="text-gray-400 text-sm">
+                  Get timeline suggestions and photography planning tips for your wedding day
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/pricing"
+                className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-rose-500 to-amber-500 text-white font-semibold rounded-lg hover:from-rose-600 hover:to-amber-600 transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
+                Try AI Assistant
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Link>
+              <Link
+                to="/showcase"
+                className="inline-flex items-center justify-center px-8 py-4 border border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-all duration-300"
+              >
+                View Portfolio
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">

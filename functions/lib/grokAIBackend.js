@@ -1,283 +1,134 @@
 "use strict";
-/**
- * Grok AI Backend Service for Firebase Functions
- *
- * This is the backend version of the Grok AI service that runs in Firebase Functions
- * and handles AI-powered package recommendations and content generation.
- */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.grokAI = void 0;
-class GrokAIBackendService {
-    constructor() {
-        this.baseUrl = 'https://api.x.ai/v1';
-        // Use environment variable or fallback to hardcoded key
-        this.apiKey = process.env.GROK_API_KEY || 'xai-KeUNf3srwQp9bTQU90gZwysz7mO6dEnf5naCwiDKJB3kSVu2zBZE73vAHmhjZ3QDQQ5TqTWghJe5LpSl';
+exports.getGrokPackageSuggestion = void 0;
+const functions = __importStar(require("firebase-functions"));
+const admin = __importStar(require("firebase-admin"));
+const axios_1 = __importDefault(require("axios"));
+// Ensure Firebase Admin is initialized (if not already in index.ts)
+if (admin.apps.length === 0) {
+    admin.initializeApp();
+}
+// It's highly recommended to set your Grok API key as an environment variable
+// in your Firebase project settings:
+// firebase functions:config:set grok.apikey="YOUR_ACTUAL_API_KEY"
+// Then deploy your functions.
+// For local testing with emulators, you might use a .env file and process.env,
+// or set it in functions.config().
+const GROK_API_KEY = ((_a = functions.config().grok) === null || _a === void 0 ? void 0 : _a.apikey) || process.env.GROK_API_KEY;
+const GROK_API_URL = "https://api.x.ai/v1/chat/completions";
+exports.getGrokPackageSuggestion = functions.https.onRequest(async (req, res) => {
+    var _a;
+    // Set CORS headers for all responses
+    res.set("Access-Control-Allow-Origin", "*"); // Allow all origins
+    res.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    // Handle preflight OPTIONS requests
+    if (req.method === "OPTIONS") {
+        res.status(204).send("");
+        return;
     }
-    /**
-     * Get AI-powered package recommendation based on quiz responses
-     */
-    async getPackageRecommendation(quizData) {
-        const prompt = this.buildRecommendationPrompt(quizData);
-        try {
-            const response = await this.callGrokAPI(prompt, {
-                temperature: 0.7,
-                maxTokens: 1000
-            });
-            return this.parseRecommendationResponse(response);
-        }
-        catch (error) {
-            console.error('Error getting package recommendation:', error);
-            return this.getFallbackRecommendation(quizData);
-        }
+    if (!GROK_API_KEY) {
+        console.error("Grok API key is not configured on the server.");
+        res.status(500).json({ error: "Grok API key is not configured." });
+        return;
     }
-    /**
-     * Generate personalized content using Grok AI
-     */
-    async generateContent(request) {
-        const prompt = this.buildContentPrompt(request);
-        try {
-            const response = await this.callGrokAPI(prompt, {
-                temperature: 0.8,
-                maxTokens: 500
-            });
-            return this.parseContentResponse(response, request.type);
-        }
-        catch (error) {
-            console.error('Error generating content:', error);
-            return this.getFallbackContent(request.type);
-        }
+    // For onRequest, data is in req.body. For onCall, it was data directly.
+    // Assuming the client will send a POST request with JSON body
+    const { userInput, packages } = req.body.data || req.body; // req.body.data for callable-style POST
+    if (!userInput || !packages || !Array.isArray(packages) || packages.length === 0) {
+        console.error("Invalid arguments received:", { userInput, packages });
+        res.status(400).json({ error: "Invalid arguments. 'userInput' and 'packages' (array) are required." });
+        return;
     }
-    /**
-     * Core Grok API call method
-     */
-    async callGrokAPI(prompt, options) {
-        const response = await fetch(`${this.baseUrl}/chat/completions`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${this.apiKey}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                model: 'grok-beta',
-                messages: [
-                    {
-                        role: 'system',
-                        content: 'You are an expert wedding photography consultant for Hariel Xavier Photography, a luxury photographer in New Jersey. You understand the emotional and artistic aspects of wedding photography and can provide personalized recommendations.'
-                    },
-                    {
-                        role: 'user',
-                        content: prompt
-                    }
-                ],
-                temperature: options.temperature,
-                max_tokens: options.maxTokens
-            })
+    // Construct a detailed prompt for Grok
+    let prompt = `You are Sarah, an AI wedding photography consultant for Hariel Xavier Photography.
+A potential client has provided the following information about their needs: "${userInput}".
+
+Here are the available photography packages:
+`;
+    packages.forEach((pkg, index) => {
+        prompt += `
+Package ${index + 1}: ${pkg.name}
+Price: $${pkg.price}
+${pkg.usp ? `Unique Selling Point: ${pkg.usp}` : ""}
+Features:
+`;
+        pkg.features.forEach(feature => {
+            prompt += `- ${typeof feature === 'string' ? feature : feature.text}\n`;
         });
-        if (!response.ok) {
-            throw new Error(`Grok API error: ${response.status} ${response.statusText}`);
+        if (pkg.perfectFor && pkg.perfectFor.length > 0) {
+            prompt += `Perfect For: ${pkg.perfectFor.join(", ")}\n`;
         }
-        const data = await response.json();
-        return data.choices[0].message.content;
-    }
-    /**
-     * Build recommendation prompt for Grok
-     */
-    buildRecommendationPrompt(quizData) {
-        return `
-As an expert wedding photography consultant for Hariel Xavier Photography, analyze this couple's quiz responses and recommend the perfect package.
-
-AVAILABLE PACKAGES:
-1. The Essential ($2,395)
-   - 6 hours coverage, 400 edited images
-   - Online gallery, 3-month hosting
-   - 5 sneak peeks within 48 hours
-   - Best for: Intimate weddings, budget-conscious couples
-
-2. The Timeless ($2,995) [MOST POPULAR]
-   - 8 hours coverage, 600 edited images
-   - Engagement session included
-   - 1-year gallery hosting
-   - 10 sneak peeks within 24 hours
-   - Best for: Traditional weddings, couples wanting engagement photos
-
-3. The Heritage ($3,895)
-   - 9 hours with 2 photographers
-   - 800 edited images, lifetime hosting
-   - Engagement session, luxury print box
-   - 15 sneak peeks within 24 hours
-   - Best for: Larger weddings, couples wanting comprehensive coverage
-
-4. The Masterpiece ($5,395) [MOST POPULAR PREMIUM]
-   - 10 hours with 2 photographers
-   - 1000 edited images, luxury album included
-   - Parent albums, rehearsal dinner coverage
-   - Priority editing, next-day preview blog
-   - Best for: Luxury weddings, couples wanting the full experience
-
-CLIENT PROFILE:
-- Guest Count: ${quizData.guestCount}
-- Venue Type: ${quizData.venueType}
-- Budget Range: ${quizData.budgetRange}
-- Social Media Focus: ${quizData.socialFocus}
-- Wedding Style: ${quizData.weddingStyle}
-- Photography Priority: ${quizData.photographyPriority}
-- Special Needs: ${quizData.specialNeeds.join(', ')}
-- Timeline Flexibility: ${quizData.timelineFlexibility}
-
-Provide a JSON response with:
-{
-  "recommendedPackage": "package-name",
-  "confidence": 0-100,
-  "reasoning": "detailed explanation why this package fits",
-  "suggestedAddOns": [
-    {
-      "addOnId": "addon-id",
-      "name": "Add-on Name",
-      "price": 000,
-      "reasoning": "why this add-on makes sense",
-      "priority": "high/medium/low"
-    }
-  ],
-  "personalizedMessage": "warm, personal message explaining the recommendation"
-}
-
-Focus on emotional connection and value, not just features. Be persuasive but authentic.
+    });
+    prompt += `
+Based on the client's needs ("${userInput}") and the available packages, please recommend the single most suitable package and briefly explain why in a friendly, helpful, and concise tone.
+Address the client directly. Start your response with "Okay, based on what you've told me..."
+Focus on recommending one specific package by name from the list provided.
+If multiple packages seem suitable, pick the one that offers the best value or coverage for the stated needs.
+If no package seems like a good fit, you can gently suggest a custom consultation.
+Keep your entire response to 2-3 sentences.
 `;
-    }
-    /**
-     * Build content generation prompt
-     */
-    buildContentPrompt(request) {
-        const { type, context } = request;
-        const basePrompt = `
-You are creating ${type} content for Hariel Xavier Photography, a luxury wedding photographer in New Jersey.
-
-BRAND VOICE: Elegant, warm, professional, emotionally connected
-STYLE: Sophisticated but approachable, focuses on memories and emotions
-TARGET AUDIENCE: Affluent couples in NJ/NY area, values quality and experience
-
-CONTEXT:
-${Object.entries(context).map(([key, value]) => `- ${key}: ${value}`).join('\n')}
-`;
-        switch (type) {
-            case 'sneak-peek-caption':
-                return `${basePrompt}
-
-Create an Instagram caption for sneak peek photos. Include:
-- Emotional hook about the moment captured
-- Mention of the couple (if names provided)
-- Relevant hashtags for NJ wedding photography
-- Call to action for booking consultations
-
-Keep it under 150 words, engaging and shareable.`;
-            case 'email-follow-up':
-                return `${basePrompt}
-
-Create a personalized follow-up email. Include:
-- Warm greeting referencing their consultation/inquiry
-- Recap of their wedding vision
-- Gentle reminder about booking
-- Next steps
-- Professional but friendly tone
-
-Keep it under 200 words.`;
-            case 'social-post':
-                return `${basePrompt}
-
-Create a social media post showcasing recent work. Include:
-- Engaging caption about the wedding/couple
-- Behind-the-scenes insight
-- Relevant hashtags
-- Call to action
-
-Keep it engaging and authentic.`;
-            case 'upsell-email':
-                return `${basePrompt}
-
-Create an upsell email for existing clients. Include:
-- Personal greeting
-- Explanation of additional service value
-- Limited-time offer if applicable
-- Easy next steps
-
-Keep it helpful, not pushy.`;
-            default:
-                return basePrompt;
+    try {
+        const axiosResponse = await axios_1.default.post(GROK_API_URL, {
+            model: "grok-1.5-flash",
+            messages: [
+                { role: "user", content: prompt },
+            ],
+            temperature: 0.7, // Adjust for creativity vs. predictability
+        }, {
+            headers: {
+                "Authorization": `Bearer ${GROK_API_KEY}`,
+                "Content-Type": "application/json",
+            },
+        });
+        if (axiosResponse.data && axiosResponse.data.choices && axiosResponse.data.choices.length > 0) {
+            // For onRequest, send response via res.json()
+            // The client SDK for onCall expects a 'data' wrapper, so we mimic that for consistency if client code isn't changed.
+            res.status(200).json({ data: { suggestion: axiosResponse.data.choices[0].message.content } });
+        }
+        else {
+            console.error("Grok API returned an unexpected response structure:", axiosResponse.data);
+            res.status(500).json({ error: "Grok API returned an unexpected response structure." });
         }
     }
-    /**
-     * Parse recommendation response from Grok
-     */
-    parseRecommendationResponse(response) {
-        try {
-            // Clean up response and parse JSON
-            const cleanResponse = response.replace(/```json\n?|\n?```/g, '').trim();
-            return JSON.parse(cleanResponse);
+    catch (error) {
+        console.error("Error calling Grok API:", ((_a = error.response) === null || _a === void 0 ? void 0 : _a.data) || error.message);
+        let errorMessage = "Failed to get a suggestion from Sarah AI.";
+        if (error.response && error.response.data && error.response.data.error && error.response.data.error.message) {
+            errorMessage = `Sarah AI Error: ${error.response.data.error.message}`;
         }
-        catch (error) {
-            console.error('Error parsing recommendation response:', error);
-            return this.getFallbackRecommendation({});
+        else if (error.message) {
+            errorMessage = `Sarah AI Error: ${error.message}`;
         }
+        // For onRequest, send error response via res.status().json()
+        res.status(500).json({ error: errorMessage });
     }
-    /**
-     * Parse content response from Grok
-     */
-    parseContentResponse(response, type) {
-        try {
-            // If response is JSON, parse it; otherwise treat as plain text
-            if (response.trim().startsWith('{')) {
-                return JSON.parse(response);
-            }
-            return {
-                content: response.trim(),
-                tone: 'professional',
-                hashtags: type === 'sneak-peek-caption' ? ['#NJWeddingPhotographer', '#HarielXavierPhotography'] : undefined
-            };
-        }
-        catch (error) {
-            console.error('Error parsing content response:', error);
-            return this.getFallbackContent(type);
-        }
-    }
-    /**
-     * Fallback recommendation if AI fails
-     */
-    getFallbackRecommendation(quizData) {
-        // Simple rule-based fallback
-        let recommendedPackage = 'timeless';
-        if (quizData.guestCount > 150 || quizData.budgetRange === 'above-8k') {
-            recommendedPackage = 'masterpiece';
-        }
-        else if (quizData.guestCount > 100 || quizData.budgetRange === '5k-8k') {
-            recommendedPackage = 'heritage';
-        }
-        else if (quizData.budgetRange === 'under-3k') {
-            recommendedPackage = 'essential';
-        }
-        return {
-            recommendedPackage,
-            confidence: 75,
-            reasoning: 'Based on your wedding size and preferences, this package offers the best value for your needs.',
-            suggestedAddOns: [],
-            personalizedMessage: 'We recommend this package based on your wedding details. Let\'s discuss how we can make your day perfect!'
-        };
-    }
-    /**
-     * Fallback content if AI fails
-     */
-    getFallbackContent(type) {
-        const fallbackContent = {
-            'sneak-peek-caption': 'Another beautiful moment captured! ✨ #NJWeddingPhotographer #HarielXavierPhotography',
-            'email-follow-up': 'Thank you for your interest in Hariel Xavier Photography. We\'d love to discuss your wedding photography needs.',
-            'social-post': 'Capturing love stories across New Jersey. Book your consultation today!',
-            'upsell-email': 'We have some exciting add-ons that could enhance your wedding photography experience.'
-        };
-        return {
-            content: fallbackContent[type] || 'Thank you for choosing Hariel Xavier Photography!',
-            tone: 'professional'
-        };
-    }
-}
-exports.grokAI = new GrokAIBackendService();
-exports.default = GrokAIBackendService;
+});
 //# sourceMappingURL=grokAIBackend.js.map

@@ -3,11 +3,15 @@ import * as emailFunctions from "./email";
 import * as functions from "firebase-functions";
 import { sendLeadEmails } from "./admin-email";
 import { getGrokPackageSuggestion as getGrokPackageSuggestionFromBackend } from "./grokAIBackend"; // Added import
+import { getAnthropicPackageSuggestion } from "./anthropicAIBackend"; // Import Anthropic function
 // import * as analyticsApi from "./analyticsApi"; // Temporarily disabled due to build errors
 
 // Export the original functions
 export const sendEmailWithSMTP = emailFunctions.sendEmailWithSMTP;
 export const sendEmail = emailFunctions.sendEmail;
+
+// Export the AI functions
+export { getAnthropicPackageSuggestion }; // Export Anthropic function
 
 // Export the analytics function - temporarily disabled
 // export const getAnalyticsData = analyticsApi.getAnalyticsData;

@@ -23,11 +23,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateContentWithGrok = exports.getPackageRecommendationWithGrok = exports.analyticsEndpoint = exports.onLeadCreatedWithAdmin = exports.sendEmail = exports.sendEmailWithSMTP = void 0;
+exports.generateContentWithGrok = exports.getGrokPackageSuggestion = exports.analyticsEndpoint = exports.onLeadCreatedWithAdmin = exports.getAnthropicPackageSuggestion = exports.sendEmail = exports.sendEmailWithSMTP = void 0;
 // Import all function modules
 const emailFunctions = __importStar(require("./email"));
 const functions = __importStar(require("firebase-functions"));
 const admin_email_1 = require("./admin-email");
+const grokAIBackend_1 = require("./grokAIBackend"); // Added import
+const anthropicAIBackend_1 = require("./anthropicAIBackend"); // Import Anthropic function
+Object.defineProperty(exports, "getAnthropicPackageSuggestion", { enumerable: true, get: function () { return anthropicAIBackend_1.getAnthropicPackageSuggestion; } });
 // import * as analyticsApi from "./analyticsApi"; // Temporarily disabled due to build errors
 // Export the original functions
 exports.sendEmailWithSMTP = emailFunctions.sendEmailWithSMTP;
@@ -124,49 +127,54 @@ exports.analyticsEndpoint = functions.https.onRequest(async (req, res) => {
         });
     }
 });
-// Grok AI package recommendation endpoint (simplified version)
-exports.getPackageRecommendationWithGrok = functions.https.onCall(async (data, context) => {
-    try {
-        const { quizData } = data;
-        // Simple rule-based recommendation as fallback
-        let recommendedPackage = 'timeless';
-        if (quizData.guestCount > 150 || quizData.budgetRange === 'above-8k') {
-            recommendedPackage = 'masterpiece';
-        }
-        else if (quizData.guestCount > 100 || quizData.budgetRange === '5k-8k') {
-            recommendedPackage = 'heritage';
-        }
-        else if (quizData.budgetRange === 'under-3k') {
-            recommendedPackage = 'essential';
-        }
-        const recommendation = {
-            recommendedPackage,
-            confidence: 85,
-            reasoning: `Based on your ${quizData.guestCount} guests and ${quizData.budgetRange} budget, this package offers the best value for your ${quizData.weddingStyle} wedding.`,
-            suggestedAddOns: [
-                {
-                    addOnId: 'drone',
-                    name: 'Drone Coverage',
-                    price: 245,
-                    reasoning: 'Aerial shots would be perfect for your venue type.',
-                    priority: 'medium'
-                }
-            ],
-            personalizedMessage: `We're excited to capture your special day! The ${recommendedPackage} package is perfect for your vision.`
-        };
-        return {
-            success: true,
-            recommendation
-        };
+// Export our new Grok AI function
+exports.getGrokPackageSuggestion = grokAIBackend_1.getGrokPackageSuggestion;
+/*
+// Grok AI package recommendation endpoint (simplified version) - COMMENTED OUT to avoid conflict
+export const getPackageRecommendationWithGrok = functions.https.onCall(async (data, context) => {
+  try {
+    const { quizData } = data;
+    
+    // Simple rule-based recommendation as fallback
+    let recommendedPackage = 'timeless';
+    
+    if (quizData.guestCount > 150 || quizData.budgetRange === 'above-8k') {
+      recommendedPackage = 'masterpiece';
+    } else if (quizData.guestCount > 100 || quizData.budgetRange === '5k-8k') {
+      recommendedPackage = 'heritage';
+    } else if (quizData.budgetRange === 'under-3k') {
+      recommendedPackage = 'essential';
     }
-    catch (error) {
-        console.error('Error getting package recommendation:', error);
-        return {
-            success: false,
-            error: error instanceof Error ? error.message : 'Unknown error'
-        };
-    }
+
+    const recommendation = {
+      recommendedPackage,
+      confidence: 85,
+      reasoning: `Based on your ${quizData.guestCount} guests and ${quizData.budgetRange} budget, this package offers the best value for your ${quizData.weddingStyle} wedding.`,
+      suggestedAddOns: [
+        {
+          addOnId: 'drone',
+          name: 'Drone Coverage',
+          price: 245,
+          reasoning: 'Aerial shots would be perfect for your venue type.',
+          priority: 'medium'
+        }
+      ],
+      personalizedMessage: `We're excited to capture your special day! The ${recommendedPackage} package is perfect for your vision.`
+    };
+
+    return {
+      success: true,
+      recommendation
+    };
+  } catch (error) {
+    console.error('Error getting package recommendation:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    };
+  }
 });
+*/
 // Content generation endpoint (simplified version)
 exports.generateContentWithGrok = functions.https.onCall(async (data, context) => {
     try {

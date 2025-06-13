@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { Bot, Send, Loader2, Sparkles } from 'lucide-react';
-import { grokAIService, GrokServicePricingPackage } from '../../services/ai/GrokAIService';
+import { grokAI, GrokServicePricingPackage } from '../../services/ai/GrokAIService';
 
 interface SarahAIWidgetProps {
   allPackages: GrokServicePricingPackage[];
 }
 
 const questions = [
-  { id: 'style', prompt: "First, what's your ideal wedding style or vibe? (e.g., rustic, classic, modern, bohemian, adventurous elopement)" },
-  { id: 'guests', prompt: "Great! Roughly how many guests are you expecting?" },
-  { id: 'hours', prompt: "And about how many hours of photography coverage are you thinking you'll need?" },
-  { id: 'budget', prompt: "Finally, do you have an approximate budget in mind for photography? (This helps me narrow down the best options!)" },
+  { id: 'celebrationType', prompt: "Let's start with your vision - are you planning an intimate elopement (just the two of you or under 50 guests) or a traditional wedding celebration?" },
+  { id: 'guestCount', prompt: "Perfect! How many loved ones will be celebrating with you? This helps me understand the scale of coverage you'll need." },
+  { id: 'weddingStyle', prompt: "What's the aesthetic that speaks to your heart? (e.g., timeless elegance, rustic romance, modern luxury, bohemian chic, adventurous outdoor)" },
+  { id: 'venueType', prompt: "Tell me about your venue - is it indoor elegance, natural outdoor beauty, or a mix of both?" },
+  { id: 'priorities', prompt: "What matters most to you in your wedding photography? (e.g., capturing candid moments, artistic portraits, family traditions, social media content)" },
+  { id: 'timeline', prompt: "How many hours of coverage are you envisioning for your special day?" },
+  { id: 'budget', prompt: "To ensure I recommend the perfect collection for you, what investment range feels comfortable? (This helps me tailor my suggestions to your vision)" },
+  { id: 'specialElements', prompt: "Any special elements I should know about? (e.g., multiple locations, cultural traditions, specific must-have shots, pets)" }
 ];
 
 const SarahAIWidget: React.FC<SarahAIWidgetProps> = ({ allPackages }) => {
@@ -51,9 +55,9 @@ const SarahAIWidget: React.FC<SarahAIWidgetProps> = ({ allPackages }) => {
       // All questions answered, now get suggestion
       setChatComplete(true);
       setIsLoading(true);
-      const compiledInput = `Style: ${newAnswers.style || 'Not specified'}. Guests: ${newAnswers.guests || 'Not specified'}. Coverage: ${newAnswers.hours || 'Not specified'}. Budget: ${newAnswers.budget || 'Not specified'}.`;
+      const compiledInput = `Celebration Type: ${newAnswers.celebrationType || 'Not specified'}. Guest Count: ${newAnswers.guestCount || 'Not specified'}. Wedding Style: ${newAnswers.weddingStyle || 'Not specified'}. Venue Type: ${newAnswers.venueType || 'Not specified'}. Priorities: ${newAnswers.priorities || 'Not specified'}. Timeline: ${newAnswers.timeline || 'Not specified'}. Budget: ${newAnswers.budget || 'Not specified'}. Special Elements: ${newAnswers.specialElements || 'None'}.`;
       try {
-        const suggestion = await grokAIService.getAISuggestion(compiledInput, allPackages);
+        const suggestion = await grokAI.getAISuggestion(compiledInput, allPackages);
         setAiSuggestion(suggestion);
       } catch (err: any) {
         setError('Oh dear! Sarah seems to be having a moment. Please try again, or explore the collections manually.');
@@ -125,18 +129,57 @@ const SarahAIWidget: React.FC<SarahAIWidgetProps> = ({ allPackages }) => {
       )}
 
       {!isLoading && chatComplete && aiSuggestion && !error && (
-        <div className="mt-6 p-6 bg-green-50 border-l-4 border-green-500 rounded-md shadow-sm">
-          <div className="flex items-center gap-3 mb-3">
-            <Sparkles className="w-7 h-7 text-green-600" />
-            <h4 className="font-serif text-xl text-gray-800">Sarah's Recommendation For You:</h4>
+        <div className="mt-6 p-8 bg-gradient-to-br from-rose-50 to-amber-50 border border-rose-200 rounded-xl shadow-lg">
+          <div className="flex items-center gap-3 mb-4">
+            <Sparkles className="w-8 h-8 text-rose-600" />
+            <h4 className="font-serif text-2xl text-gray-800">Sarah's Recommendation</h4>
           </div>
-          <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">{aiSuggestion}</p>
-          <button
-            onClick={handleStartChat}
-            className="mt-4 text-sm text-champagneRose hover:underline"
-          >
-            Ask Sarah again?
-          </button>
+          <div className="text-gray-700 whitespace-pre-wrap leading-relaxed mb-6 text-base">{aiSuggestion}</div>
+          
+          {/* Action Buttons */}
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <a
+                href="https://calendly.com/harielxavierphotography/hariel-xavier-photography-meeting"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center px-4 py-3 bg-gradient-to-r from-rose-500 to-amber-500 text-white font-semibold rounded-lg hover:from-rose-600 hover:to-amber-600 transition-all duration-300 text-sm"
+              >
+                📅 Schedule Call
+              </a>
+              <button
+                onClick={() => {
+                  const packagesSection = document.getElementById('collections-title');
+                  if (packagesSection) {
+                    packagesSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="flex items-center justify-center px-4 py-3 bg-white border-2 border-rose-300 text-rose-700 font-semibold rounded-lg hover:bg-rose-50 transition-all duration-300 text-sm"
+              >
+                📋 View All Packages
+              </button>
+              <button
+                onClick={() => {
+                  const contactForm = document.getElementById('contact-form') || document.querySelector('iframe[id*="sn-form"]');
+                  if (contactForm) {
+                    contactForm.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="flex items-center justify-center px-4 py-3 bg-white border-2 border-rose-300 text-rose-700 font-semibold rounded-lg hover:bg-rose-50 transition-all duration-300 text-sm"
+              >
+                ✉️ Contact Form
+              </button>
+            </div>
+            
+            <div className="text-center">
+              <button
+                onClick={handleStartChat}
+                className="text-sm text-rose-600 hover:text-rose-800 hover:underline font-medium"
+              >
+                Ask Sarah a different question?
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

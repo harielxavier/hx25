@@ -492,14 +492,31 @@ const QuizResults: React.FC<{
   recommendation: PackageRecommendation;
   onReset: () => void;
 }> = ({ recommendation, onReset }) => {
-  const packageDetails = {
-    essential: { name: 'The Essential', price: '$2,395', color: 'blue' },
-    timeless: { name: 'The Timeless', price: '$2,995', color: 'green' },
-    heritage: { name: 'The Heritage', price: '$3,895', color: 'purple' },
-    masterpiece: { name: 'The Masterpiece', price: '$5,395', color: 'gold' }
+  const packageDetails: Record<string, { name: string; price: string; color: string }> = {
+    // Elopement packages
+    'elopement-intimate': { name: 'The Intimate', price: '$1,595', color: 'rose' },
+    'elopement-adventure': { name: 'The Adventure', price: '$2,195', color: 'amber' },
+    'elopement-escape': { name: 'The Escape', price: '$2,895', color: 'emerald' },
+    
+    // Single shooter packages
+    'wedding-sparta-sparkler': { name: 'The Sparta Sparkler', price: '$2,795', color: 'blue' },
+    'wedding-xavier-classic': { name: 'The Xavier Classic', price: '$3,295', color: 'indigo' },
+    
+    // Duo coverage packages
+    'duo-sussex-storyteller': { name: 'Sussex Storyteller Duo', price: '$3,995', color: 'purple' },
+    'duo-skylands-signature': { name: 'Skylands Signature Duo', price: '$5,495', color: 'pink' },
+    
+    // Luxury package
+    'duo-xavier-xperience': { name: 'The Xavier Xperience', price: '$7,995+', color: 'gold' },
+    
+    // Legacy package names for backward compatibility
+    essential: { name: 'The Essential', price: '$2,795', color: 'blue' },
+    timeless: { name: 'The Timeless', price: '$3,995', color: 'purple' },
+    heritage: { name: 'The Heritage', price: '$3,995', color: 'purple' },
+    masterpiece: { name: 'The Masterpiece', price: '$5,495', color: 'gold' }
   };
 
-  const recommended = packageDetails[recommendation.recommendedPackage];
+  const recommended = packageDetails[recommendation.recommendedPackage] || packageDetails['duo-sussex-storyteller'];
 
   return (
     <motion.div

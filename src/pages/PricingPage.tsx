@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { useInView } from 'react-intersection-observer';
 import { Check, Sparkles, Gem, Crown, Zap, Film, Gift, CalendarDays, MessageSquareHeart, Users, Video, Package2, Bot } from 'lucide-react'; // Added Bot icon
-import { grokAIService, GrokServicePricingPackage } from '../services/ai/GrokAIService';
+import { grokAI, GrokServicePricingPackage } from '../services/ai/GrokAIService';
 import SarahAIWidget from '../components/pricing/SarahAIWidget'; // Import the new widget
 import Navigation from '../components/landing/Navigation';
 import SEO from '../components/layout/SEO';
@@ -361,37 +361,56 @@ export default function PricingPage() {
         
         <div id="collections-title"></div> {/* Anchor for manual exploration */}
 
-        <PricingSectionWrapper 
-          title="Elopement Collections" 
+        <PricingSectionWrapper
+          title="Elopement Collections"
           subtitle="Intimate, adventurous, unforgettable. Weekday & Off-Peak Friendly. *12-month, interest-free auto-pay."
           bgClass="bg-black" titleClass="text-white" subtitleClass="text-gray-300"
         >
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {elopementPackages.map(pkg => <PricingCard key={pkg.id} pkg={pkg} />)}
+          <div className="flex justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl">
+              {elopementPackages.map(pkg => <PricingCard key={pkg.id} pkg={pkg} />)}
+            </div>
           </div>
         </PricingSectionWrapper>
 
-        <PricingSectionWrapper 
-          title="Wedding Collections: Single Photographer" 
+        <PricingSectionWrapper
+          title="Wedding Collections: Single Photographer"
           subtitle="Focused, artistic coverage by Hariel Xavier, perfect for capturing the essence of your day with elegance and intimacy. These options already undercut competing single-shooter packages that begin at $3,495."
         >
-          <div className="grid md:grid-cols-2 gap-8">
-            {singleShooterWeddingPackages.map(pkg => <PricingCard key={pkg.id} pkg={pkg} />)}
+          <div className="flex justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
+              {singleShooterWeddingPackages.map(pkg => <PricingCard key={pkg.id} pkg={pkg} />)}
+            </div>
           </div>
         </PricingSectionWrapper>
 
-        <PricingSectionWrapper 
-          title="Wedding Collections: Duo Coverage" 
-          subtitle="Two storytellers, one seamless narrative. Ensure every angle, every emotion, every fleeting moment is captured with our lead and second photographer teams. Compared with the nearest local peers—whose two-photographer 8-hour “Gold” runs $4,895—our Duo line saves you ≈ $900 while adding an extra hour and richer deliverables."
+        <PricingSectionWrapper
+          title="Wedding Collections: Duo Coverage"
+          subtitle="Two storytellers, one seamless narrative. Ensure every angle, every emotion, every fleeting moment is captured with our lead and second photographer teams. Compared with the nearest local peers—whose two-photographer 8-hour 'Gold' runs $4,895—our Duo line saves you ≈ $900 while adding an extra hour and richer deliverables."
           bgClass="bg-gray-100"
         >
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {duoCoverageWeddingPackages.map(pkg => (
-              <PricingCard 
-                key={pkg.id} 
-                pkg={pkg} 
-                className={pkg.tier === 'luxury' ? 'lg:col-span-3' : (duoCoverageWeddingPackages.length === 2 && pkg.id === 'duo-skylands-signature' ? 'lg:col-span-2' : '')} // Adjust for 2 or 3 items
-              />
+          <div className="space-y-8">
+            {/* Regular duo packages in centered grid */}
+            <div className="flex justify-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
+                {duoCoverageWeddingPackages.filter(pkg => pkg.tier !== 'luxury').map(pkg => (
+                  <PricingCard key={pkg.id} pkg={pkg} />
+                ))}
+              </div>
+            </div>
+            
+            {/* Luxury package centered and highlighted */}
+            {duoCoverageWeddingPackages.filter(pkg => pkg.tier === 'luxury').map(pkg => (
+              <div key={pkg.id} className="flex justify-center mt-12">
+                <div className="max-w-2xl w-full">
+                  <div className="text-center mb-6">
+                    <span className="inline-block px-4 py-2 bg-gradient-to-r from-amber-400 to-rose-400 text-white text-sm font-semibold rounded-full mb-4">
+                      ✨ LUXURY EXPERIENCE ✨
+                    </span>
+                  </div>
+                  <PricingCard pkg={pkg} className="transform hover:scale-105 transition-all duration-300" />
+                </div>
+              </div>
             ))}
           </div>
         </PricingSectionWrapper>
