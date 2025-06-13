@@ -71,7 +71,13 @@ const SarahAIWidget: React.FC<SarahAIWidgetProps> = ({ allPackages }) => {
   return (
     <div className="bg-white p-6 md:p-8 rounded-lg shadow-xl border border-gray-200 w-full max-w-2xl mx-auto transition-all duration-500">
       <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-6">
-        <Bot className="w-20 h-20 md:w-24 md:h-24 text-champagneRose shrink-0 bg-rose-50 p-4 rounded-full" />
+        <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-rose-200 shrink-0">
+          <img
+            src="/images/sarahai.jpg"
+            alt="Sarah AI Consultant"
+            className="w-full h-full object-cover"
+          />
+        </div>
         <div className="text-center sm:text-left">
           <h3 className="text-2xl md:text-3xl font-serif text-gray-800 mb-2">Meet Sarah, Your Personal Wedding Guide!</h3>
           <p className="text-gray-600 text-sm md:text-base leading-relaxed">

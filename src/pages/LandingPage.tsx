@@ -779,87 +779,181 @@ export function LandingPage() {
 
       <PhotographyStyleSlider />
 
-      {/* AI Assistant Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white relative overflow-hidden">
-        {/* Background Image */}
-        <div
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage: 'url(/MoStuff/torso.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }}
-        />
+      {/* Revolutionary AI Wedding Consultant Hero Section */}
+      <section className="py-24 bg-gradient-to-br from-slate-900 via-gray-900 to-black text-white relative overflow-hidden">
+        {/* Dynamic Background Elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-rose-500/20 to-amber-500/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-purple-500/15 to-pink-500/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+        </div>
         
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-gray-900/80 to-black/60" />
+        {/* Subtle Background Pattern */}
+        <div className="absolute inset-0 opacity-5" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+        }}></div>
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="mb-8">
-              <span className="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium mb-4">
-                ✨ AI-Powered Photography Assistant
-              </span>
-              <h2 className="text-4xl md:text-5xl font-serif mb-6">
-                Meet Your Personal
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-amber-400">
-                  Photography Consultant
-                </span>
-              </h2>
-              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-                Get instant, personalized recommendations for your wedding photography needs.
-                Our AI assistant helps you discover the perfect package and style for your special day.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8 mb-12">
-              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                <div className="w-12 h-12 bg-gradient-to-r from-rose-500 to-amber-500 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <span className="text-2xl">🎯</span>
-                </div>
-                <h3 className="text-lg font-semibold mb-2">Smart Recommendations</h3>
-                <p className="text-gray-400 text-sm">
-                  Get personalized package suggestions based on your wedding details and preferences
-                </p>
-              </div>
+          <div className="max-w-7xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
               
-              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                <div className="w-12 h-12 bg-gradient-to-r from-rose-500 to-amber-500 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <span className="text-2xl">💬</span>
+              {/* Left Column - Content */}
+              <div className="space-y-8">
+                {/* Innovation Badge */}
+                <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-rose-500/20 to-amber-500/20 backdrop-blur-sm rounded-full border border-white/10">
+                  <div className="w-2 h-2 bg-gradient-to-r from-rose-400 to-amber-400 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-medium tracking-wide">WORLD'S FIRST AI WEDDING CONSULTANT</span>
+                  <div className="w-2 h-2 bg-gradient-to-r from-rose-400 to-amber-400 rounded-full animate-pulse"></div>
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Instant Answers</h3>
-                <p className="text-gray-400 text-sm">
-                  Ask questions about pricing, availability, and services - get immediate responses
-                </p>
-              </div>
-              
-              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                <div className="w-12 h-12 bg-gradient-to-r from-rose-500 to-amber-500 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <span className="text-2xl">📅</span>
-                </div>
-                <h3 className="text-lg font-semibold mb-2">Planning Support</h3>
-                <p className="text-gray-400 text-sm">
-                  Get timeline suggestions and photography planning tips for your wedding day
-                </p>
-              </div>
-            </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/pricing"
-                className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-rose-500 to-amber-500 text-white font-semibold rounded-lg hover:from-rose-600 hover:to-amber-600 transition-all duration-300 transform hover:scale-105 shadow-lg"
-              >
-                Try AI Assistant
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Link>
-              <Link
-                to="/showcase"
-                className="inline-flex items-center justify-center px-8 py-4 border border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-all duration-300"
-              >
-                View Portfolio
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Link>
+                {/* Main Headline */}
+                <div className="space-y-4">
+                  <h2 className="text-5xl lg:text-6xl xl:text-7xl font-light leading-tight">
+                    Meet
+                    <span className="block font-serif text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-pink-400 to-amber-400 animate-gradient">
+                      Sarah
+                    </span>
+                  </h2>
+                  <p className="text-2xl lg:text-3xl text-gray-300 font-light">
+                    Your AI Wedding Photography Strategist
+                  </p>
+                </div>
+
+                {/* Value Proposition */}
+                <div className="space-y-6">
+                  <p className="text-xl text-gray-200 leading-relaxed max-w-2xl">
+                    While other photographers are still catching up, we've revolutionized wedding planning with proprietary AI technology. Sarah analyzes 14+ years of wedding data and 300+ celebrations to deliver precision recommendations that match your vision perfectly.
+                  </p>
+                  
+                  {/* Key Benefits */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-gradient-to-r from-rose-500 to-amber-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-xs">✓</span>
+                      </div>
+                      <div>
+                        <p className="font-medium text-white">Instant Package Matching</p>
+                        <p className="text-sm text-gray-400">AI-powered analysis of your celebration needs</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-gradient-to-r from-rose-500 to-amber-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-xs">✓</span>
+                      </div>
+                      <div>
+                        <p className="font-medium text-white">Elopement Expertise</p>
+                        <p className="text-sm text-gray-400">Specialized algorithms for intimate celebrations</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-gradient-to-r from-rose-500 to-amber-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-xs">✓</span>
+                      </div>
+                      <div>
+                        <p className="font-medium text-white">Budget Optimization</p>
+                        <p className="text-sm text-gray-400">Maximum value within your investment range</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-gradient-to-r from-rose-500 to-amber-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-xs">✓</span>
+                      </div>
+                      <div>
+                        <p className="font-medium text-white">24/7 Availability</p>
+                        <p className="text-sm text-gray-400">Instant consultations, no scheduling required</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Social Proof */}
+                <div className="flex items-center gap-8 pt-4">
+                  <div className="text-center">
+                    <p className="text-3xl font-bold text-white">300+</p>
+                    <p className="text-sm text-gray-400">Weddings Analyzed</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-3xl font-bold text-white">14+</p>
+                    <p className="text-sm text-gray-400">Years of Data</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-3xl font-bold text-white">98%</p>
+                    <p className="text-sm text-gray-400">Match Accuracy</p>
+                  </div>
+                </div>
+
+                {/* CTA Buttons */}
+                <div className="flex justify-center pt-6">
+                  <Link
+                    to="/pricing"
+                    className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-rose-500 to-amber-500 text-white font-semibold rounded-xl hover:from-rose-600 hover:to-amber-600 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-rose-500/25"
+                  >
+                    <span>Consult with Sarah</span>
+                    <ArrowRight className="ml-2 w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Right Column - Sarah's Image & Tech Showcase */}
+              <div className="relative">
+                {/* Main Sarah Image Container */}
+                <div className="relative max-w-md mx-auto">
+                  {/* Glowing Ring Effect */}
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 p-1 animate-spin-slow">
+                    <div className="w-full h-full rounded-full bg-gradient-to-br from-slate-900 to-gray-900"></div>
+                  </div>
+                  
+                  {/* Sarah's Image */}
+                  <div className="relative z-10 p-6">
+                    <div className="w-80 h-80 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl mx-auto">
+                      <img
+                        src="/images/sarahai.jpg"
+                        alt="Sarah - World's First AI Wedding Consultant"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Floating Tech Elements */}
+                  <div className="absolute -top-4 -right-4 bg-gradient-to-r from-rose-500 to-pink-500 rounded-xl p-3 shadow-xl animate-float">
+                    <span className="text-2xl">🧠</span>
+                  </div>
+                  
+                  <div className="absolute top-1/2 -left-6 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl p-3 shadow-xl animate-float-delayed">
+                    <span className="text-2xl">⚡</span>
+                  </div>
+                  
+                  <div className="absolute -bottom-4 left-1/4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl p-3 shadow-xl animate-float-reverse">
+                    <span className="text-2xl">🎯</span>
+                  </div>
+                  
+                  {/* Data Visualization Elements */}
+                  <div className="absolute top-8 left-8 bg-black/40 backdrop-blur-sm rounded-lg p-3 border border-white/10">
+                    <div className="flex items-center gap-2 text-xs text-white">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                      <span>AI Active</span>
+                    </div>
+                  </div>
+                  
+                  <div className="absolute bottom-8 right-8 bg-black/40 backdrop-blur-sm rounded-lg p-3 border border-white/10">
+                    <div className="text-xs text-white">
+                      <div className="flex justify-between gap-4 mb-1">
+                        <span>Match Rate:</span>
+                        <span className="text-green-400 font-bold">98%</span>
+                      </div>
+                      <div className="w-16 h-1 bg-gray-600 rounded-full overflow-hidden">
+                        <div className="w-full h-full bg-gradient-to-r from-green-400 to-emerald-400 animate-pulse"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Background Glow Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-rose-500/20 to-amber-500/20 rounded-full blur-3xl scale-150 -z-10"></div>
+              </div>
             </div>
           </div>
         </div>
