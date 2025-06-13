@@ -780,12 +780,12 @@ export function LandingPage() {
       <PhotographyStyleSlider />
 
       {/* Revolutionary AI Wedding Consultant Hero Section */}
-      <section className="py-24 bg-gradient-to-br from-slate-900 via-gray-900 to-black text-white relative overflow-hidden">
+      <section className="py-24 bg-gradient-to-br from-black via-gray-900 to-black text-white relative overflow-hidden">
         {/* Dynamic Background Elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-rose-500/20 to-amber-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-purple-500/15 to-pink-500/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+          <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-white/10 to-gray-300/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-gray-400/15 to-white/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-gray-500/10 to-white/10 rounded-full blur-3xl animate-pulse delay-500"></div>
         </div>
         
         {/* Subtle Background Pattern */}
@@ -800,70 +800,70 @@ export function LandingPage() {
               {/* Left Column - Content */}
               <div className="space-y-8">
                 {/* Innovation Badge */}
-                <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-rose-500/20 to-amber-500/20 backdrop-blur-sm rounded-full border border-white/10">
-                  <div className="w-2 h-2 bg-gradient-to-r from-rose-400 to-amber-400 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-medium tracking-wide">WORLD'S FIRST AI WEDDING CONSULTANT</span>
-                  <div className="w-2 h-2 bg-gradient-to-r from-rose-400 to-amber-400 rounded-full animate-pulse"></div>
+                <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-white/20 to-gray-300/20 backdrop-blur-sm rounded-full border border-white/20">
+                  <div className="w-2 h-2 bg-gradient-to-r from-white to-gray-300 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-medium tracking-wide">HARIEL XAVIER'S AI WEDDING CONSULTANT</span>
+                  <div className="w-2 h-2 bg-gradient-to-r from-white to-gray-300 rounded-full animate-pulse"></div>
                 </div>
 
                 {/* Main Headline */}
                 <div className="space-y-4">
                   <h2 className="text-5xl lg:text-6xl xl:text-7xl font-light leading-tight">
                     Meet
-                    <span className="block font-serif text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-pink-400 to-amber-400 animate-gradient">
+                    <span className="block font-serif text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-400">
                       Sarah
                     </span>
                   </h2>
                   <p className="text-2xl lg:text-3xl text-gray-300 font-light">
-                    Your AI Wedding Photography Strategist
+                    Your Noir Wedding Photography Strategist
                   </p>
                 </div>
 
                 {/* Value Proposition */}
                 <div className="space-y-6">
                   <p className="text-xl text-gray-200 leading-relaxed max-w-2xl">
-                    While other photographers are still catching up, we've revolutionized wedding planning with proprietary AI technology. Sarah analyzes 14+ years of wedding data and 300+ celebrations to deliver precision recommendations that match your vision perfectly.
+                    Powered by Hariel Xavier's 14+ years of noir wedding expertise and 300+ sophisticated celebrations. Sarah analyzes your vision, style preferences, and celebration details to recommend the perfect photography collection that matches your refined aesthetic and timeless taste.
                   </p>
                   
                   {/* Key Benefits */}
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-gradient-to-r from-rose-500 to-amber-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-xs">✓</span>
+                      <div className="w-6 h-6 bg-gradient-to-r from-white to-gray-300 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-xs text-black">✓</span>
                       </div>
                       <div>
-                        <p className="font-medium text-white">Instant Package Matching</p>
-                        <p className="text-sm text-gray-400">AI-powered analysis of your celebration needs</p>
+                        <p className="font-medium text-white">Sophisticated Style Matching</p>
+                        <p className="text-sm text-gray-400">AI analysis of your noir aesthetic preferences</p>
                       </div>
                     </div>
                     
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-gradient-to-r from-rose-500 to-amber-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-xs">✓</span>
+                      <div className="w-6 h-6 bg-gradient-to-r from-white to-gray-300 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-xs text-black">✓</span>
                       </div>
                       <div>
-                        <p className="font-medium text-white">Elopement Expertise</p>
-                        <p className="text-sm text-gray-400">Specialized algorithms for intimate celebrations</p>
+                        <p className="font-medium text-white">Intimate Celebration Expertise</p>
+                        <p className="text-sm text-gray-400">Specialized guidance for elegant elopements</p>
                       </div>
                     </div>
                     
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-gradient-to-r from-rose-500 to-amber-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-xs">✓</span>
+                      <div className="w-6 h-6 bg-gradient-to-r from-white to-gray-300 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-xs text-black">✓</span>
                       </div>
                       <div>
-                        <p className="font-medium text-white">Budget Optimization</p>
-                        <p className="text-sm text-gray-400">Maximum value within your investment range</p>
+                        <p className="font-medium text-white">Investment Optimization</p>
+                        <p className="text-sm text-gray-400">Maximum artistry within your budget</p>
                       </div>
                     </div>
                     
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-gradient-to-r from-rose-500 to-amber-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-xs">✓</span>
+                      <div className="w-6 h-6 bg-gradient-to-r from-white to-gray-300 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-xs text-black">✓</span>
                       </div>
                       <div>
-                        <p className="font-medium text-white">24/7 Availability</p>
-                        <p className="text-sm text-gray-400">Instant consultations, no scheduling required</p>
+                        <p className="font-medium text-white">Instant Consultations</p>
+                        <p className="text-sm text-gray-400">Available 24/7 for immediate guidance</p>
                       </div>
                     </div>
                   </div>
@@ -889,7 +889,7 @@ export function LandingPage() {
                 <div className="flex justify-center pt-6">
                   <Link
                     to="/pricing"
-                    className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-rose-500 to-amber-500 text-white font-semibold rounded-xl hover:from-rose-600 hover:to-amber-600 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-rose-500/25"
+                    className="group inline-flex items-center justify-center px-8 py-4 bg-white text-black font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-white/25 border border-gray-300"
                   >
                     <span>Consult with Sarah</span>
                     <ArrowRight className="ml-2 w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
@@ -902,8 +902,8 @@ export function LandingPage() {
                 {/* Main Sarah Image Container */}
                 <div className="relative max-w-md mx-auto">
                   {/* Glowing Ring Effect */}
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 p-1 animate-spin-slow">
-                    <div className="w-full h-full rounded-full bg-gradient-to-br from-slate-900 to-gray-900"></div>
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-white via-gray-300 to-gray-500 p-1 animate-spin-slow">
+                    <div className="w-full h-full rounded-full bg-gradient-to-br from-black to-gray-900"></div>
                   </div>
                   
                   {/* Sarah's Image */}
@@ -918,15 +918,15 @@ export function LandingPage() {
                   </div>
                   
                   {/* Floating Tech Elements */}
-                  <div className="absolute -top-4 -right-4 bg-gradient-to-r from-rose-500 to-pink-500 rounded-xl p-3 shadow-xl animate-float">
+                  <div className="absolute -top-4 -right-4 bg-gradient-to-r from-white to-gray-300 rounded-xl p-3 shadow-xl animate-float">
                     <span className="text-2xl">🧠</span>
                   </div>
                   
-                  <div className="absolute top-1/2 -left-6 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl p-3 shadow-xl animate-float-delayed">
+                  <div className="absolute top-1/2 -left-6 bg-gradient-to-r from-gray-300 to-white rounded-xl p-3 shadow-xl animate-float-delayed">
                     <span className="text-2xl">⚡</span>
                   </div>
                   
-                  <div className="absolute -bottom-4 left-1/4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl p-3 shadow-xl animate-float-reverse">
+                  <div className="absolute -bottom-4 left-1/4 bg-gradient-to-r from-gray-400 to-gray-200 rounded-xl p-3 shadow-xl animate-float-reverse">
                     <span className="text-2xl">🎯</span>
                   </div>
                   

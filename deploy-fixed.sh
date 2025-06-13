@@ -1,0 +1,87 @@
+#!/bin/bash
+
+# Hariel Xavier Photography - Fixed Deployment Script
+# Deploy to harielxavier.com with correct path
+
+echo "🚀 Starting deployment to harielxavier.com..."
+
+# Configuration
+SSH_HOST="harielxavier.com"
+SSH_USER="missiongeek"
+REMOTE_PATH="/home/missiongeek/public_html"
+BUILD_DIR="./dist"
+KEY_FILE="./ssh_key"
+
+# Check if build directory exists
+if [ ! -d "$BUILD_DIR" ]; then
+    echo "❌ Build directory not found. Running build first..."
+    npm run build
+    if [ $? -ne 0 ]; then
+        echo "❌ Build failed. Exiting."
+        exit 1
+    fi
+fi
+
+echo "📦 Build directory found: $BUILD_DIR"
+
+# Create SSH private key file
+echo "🔐 Setting up SSH key..."
+cat > "$KEY_FILE" << 'EOF'
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABAeRzUU/w
+rbyXCJVpu5dmlzAAAAEAAAAAEAAAEXAAAAB3NzaC1yc2EAAAADAQABAAABAQCnq6T1HcC5
+m2VFX9FyB25CLqcwek1toP1u0n+UJXDate7cjXsSv0r0NvJcSEBONgVTD2syZZzo9+RLKK
+R5hGTtR+fZn9mndw7KSeBzKl5/xzRsqmS/SK+RLj41BM6flQSqL2p384mzsdU+gQCIyZ42
+86QIwgtcqLO5s5x9wk0bYIC+Rk1yregPF0zM78X/OwjwsME4jY/rE5DG5rLEHtmfUc6Hsh
+9Z36eRsMkXmy7dQ+dwwxr9mZUCujiC44zYJedwOKfpq1RNaJ32XeDe87ZPefnOvE2uxRUe
+2ppeItQWAyFqTOY6XC8p1ucPuYPY0PGCj2w0rQkzKazWhMGHU0rnAAADwM2hww8m2C9rTv
+Ds0f23VZ1x+hmQVnpxTiAkawYNGgqHL8H+LcfWh0FI5PZI5RIDHQ1r/KowSv1nSxzyFpmD
+UQ0iRs7c/LpWM7Ox9EAOIs7rXdT0BieGgxC8QbrKJ/F3EZhDuEKFI4m5S4X45uLCTsnlnS
+Z9DeB/7qqv6OJYhAfF3XfXsyhh7NXf+2p7XxsstPizsGW/pU4EOJvobXF6EbKtnze51i0E
+w7mv4HtOw/CBhbvoUb4uDzeoWl06FguQNeYkgEgaa4wxiTmszuFpszLPN0v/z1ToYxDjGg
+8uJJ9i6rOHY65Can89ghwrdRFQrBfp0tx0R3OZMDpYMkY8Git7PGYMn6YDKsCLVD5k4/I0
+KQP44wth1ML0Dw/QV20FTpIOnvXM6ZFNMD/JEvk4zlOc5oc7c+rVZNXa4d2CuybtWnUDaS
+GjNibEE0tOLg8hwSEofzx6kmbELTXxF1a78ug/R5Vkv4hcVNM+fvm/56us0KN+cOSvUbLg
+4EvaGtRYoTg7i0gukoMznFuK/hNuXSaSpIa0php/hL46Te2LKXfALoQ4m/Id1SvaBh48y8
+iq1L13IDm5wLisSKvacB/PI9zkhHHoSU3WXreAwGeLN5rHOeYnik71gNYDxLEBMJsjT80C
+46M2PMOjNRNd72wdiXDz9D+8DSTv5lNz/M1Tg5JgYGJHhS0n/LoStMrqEZEcwDMrKDFDKz
++iH7O1L8GW8dH9XhNYFIYgOClWrfWcTtsdOPT5DEXdE9pFpWQu5zJV7Cxo5Z/veMjoTOTk
+00FtRLEpjEpjGETQgr0NizRE5bUMsdI0qbFX92+7kR7AOjodEZCfARAPjoAepPcKn4IR8V
+MOBcujEg9K/cX1YngSC8JEeWemtomffoteIcflTeLM1jgXnEoBVKIcP3By0nY5AH3Ls1gr
+W+xU8O7HAelz8DZVmGQ7Rm+yXCuoNtWXogrKM3sGKvVFKnEbcwMOcCxV32YTZxqEbW/zEa
+WJCKk7/M7VS/mCYbEY59ZoH0QjPcQHS9iN7CtkxQIcOefjzDqFU4pS7gGRdfipfcgyoVle
+7rgBsIdszfrmR1l6egIk/PdtNtB29pnZ9TijC6ReNUH9AYn0tTHB+AxOEJXrFbHGWheWIz
+uUzLEL5zhTsUSUurIBwOJiyXVMQagl9F7dmXcyDgsXrYb0dsl7ZERdO303PgSN8fz9pgOs
+Zehm++imhxFwv+NXh/bWshFDfo/VuOtXK9jdow1uV305yfKmF464iW3gcRGFEp1H8ekL+y
+vXXbsnXg==
+-----END OPENSSH PRIVATE KEY-----
+EOF
+
+# Set proper permissions for SSH key
+chmod 600 "$KEY_FILE"
+
+echo "🔐 Connecting to $SSH_HOST with SSH key..."
+echo "📤 Uploading files to correct path: $REMOTE_PATH"
+
+# Try rsync with SSH key and correct path
+rsync -avz --delete -e "ssh -i $KEY_FILE -o StrictHostKeyChecking=no" "$BUILD_DIR/" "$SSH_USER@$SSH_HOST:$REMOTE_PATH/"
+
+# Clean up SSH key file
+rm -f "$KEY_FILE"
+
+if [ $? -eq 0 ]; then
+    echo "✅ Deployment completed successfully!"
+    echo "🌐 Your website should now be live at: https://$SSH_HOST"
+    echo "🎯 Files uploaded to: $REMOTE_PATH"
+else
+    echo "❌ Deployment failed."
+    echo "💡 Manual upload instructions:"
+    echo "   1. Login to Bluehost cPanel at https://my.bluehost.com"
+    echo "   2. Open File Manager"
+    echo "   3. Navigate to /home/missiongeek/public_html/"
+    echo "   4. Upload all contents from the ./dist/ folder"
+    echo "   5. Ensure index.html is in the root of public_html"
+    exit 1
+fi
+
+echo "🎉 Deployment process finished!"

@@ -69,19 +69,19 @@ const SarahAIWidget: React.FC<SarahAIWidgetProps> = ({ allPackages }) => {
   };
 
   return (
-    <div className="bg-white p-6 md:p-8 rounded-lg shadow-xl border border-gray-200 w-full max-w-2xl mx-auto transition-all duration-500">
+    <div className="bg-gradient-to-br from-black via-gray-900 to-black p-6 md:p-8 rounded-lg shadow-2xl border border-gray-800 w-full max-w-2xl mx-auto transition-all duration-500">
       <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-6">
-        <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-rose-200 shrink-0">
+        <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-white/20 shrink-0 shadow-xl">
           <img
             src="/images/sarahai.jpg"
-            alt="Sarah AI Consultant"
+            alt="Sarah AI Consultant - Hariel Xavier Photography"
             className="w-full h-full object-cover"
           />
         </div>
         <div className="text-center sm:text-left">
-          <h3 className="text-2xl md:text-3xl font-serif text-gray-800 mb-2">Meet Sarah, Your Personal Wedding Guide!</h3>
-          <p className="text-gray-600 text-sm md:text-base leading-relaxed">
-            Overwhelmed by choices? I'm Sarah, your friendly AI concierge! Tell me about your dream day – your style, guest count, must-haves – and I'll help find the Hariel Xavier collection that's a perfect match for your vision and budget. It's quick, easy, and all about you!
+          <h3 className="text-2xl md:text-3xl font-serif text-white mb-2">Meet Sarah, Your AI Wedding Strategist</h3>
+          <p className="text-gray-300 text-sm md:text-base leading-relaxed">
+            Powered by 14+ years of Hariel Xavier's wedding expertise. I analyze your vision, style, and celebration details to recommend the perfect photography collection that matches your noir aesthetic and sophisticated taste.
           </p>
         </div>
       </div>
@@ -90,57 +90,58 @@ const SarahAIWidget: React.FC<SarahAIWidgetProps> = ({ allPackages }) => {
         <div className="text-center mt-6">
           <button
             onClick={handleStartChat}
-            className="bg-champagneRose text-black px-8 py-3.5 rounded-lg hover:bg-rose-400 transition-colors font-semibold text-base hover:shadow-lg transform hover:scale-105 flex items-center justify-center mx-auto"
+            className="bg-white text-black px-8 py-3.5 rounded-lg hover:bg-gray-100 transition-colors font-semibold text-base hover:shadow-lg transform hover:scale-105 flex items-center justify-center mx-auto border border-gray-300"
           >
             <Sparkles className="inline-block w-5 h-5 mr-2 -mt-0.5" />
-            Chat with Sarah for a Recommendation
+            Consult with Sarah AI
           </button>
         </div>
       )}
 
       {showChatFlow && !chatComplete && (
         <form onSubmit={handleNextQuestion} className="mt-6 space-y-4">
-          <div className="p-4 bg-rose-50 rounded-lg">
-            <p className="text-gray-700 text-md mb-2 font-medium">{questions[currentQuestionIndex].prompt}</p>
+          <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <p className="text-white text-md mb-2 font-medium">{questions[currentQuestionIndex].prompt}</p>
             <input
               type="text"
               value={currentAnswer}
               onChange={(e) => setCurrentAnswer(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-champagneRose focus:border-transparent transition-shadow text-sm"
+              className="w-full p-3 border border-gray-600 bg-gray-900 text-white rounded-md focus:ring-2 focus:ring-white focus:border-transparent transition-shadow text-sm placeholder-gray-400"
+              placeholder="Share your thoughts..."
               disabled={isLoading}
             />
           </div>
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors font-semibold text-base flex items-center justify-center gap-2 disabled:opacity-70"
+            className="w-full bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors font-semibold text-base flex items-center justify-center gap-2 disabled:opacity-70 border border-gray-300"
           >
-            {currentQuestionIndex < questions.length - 1 ? 'Next Question' : "Get Sarah's Advice"}
+            {currentQuestionIndex < questions.length - 1 ? 'Next Question' : "Get Sarah's Recommendation"}
             <Send className="w-4 h-4 ml-1" />
           </button>
         </form>
       )}
 
       {isLoading && chatComplete && (
-        <div className="mt-6 flex flex-col items-center justify-center p-6 bg-rose-50 rounded-lg">
-          <Loader2 className="animate-spin w-8 h-8 text-champagneRose mb-3" />
-          <p className="text-gray-700 font-medium">Sarah is crafting your personalized recommendation...</p>
+        <div className="mt-6 flex flex-col items-center justify-center p-6 bg-gray-800 rounded-lg border border-gray-700">
+          <Loader2 className="animate-spin w-8 h-8 text-white mb-3" />
+          <p className="text-gray-300 font-medium">Sarah is analyzing your vision and crafting your personalized recommendation...</p>
         </div>
       )}
 
       {error && (
-        <div className="mt-6 p-4 bg-red-50 border-l-4 border-red-400 rounded-md text-red-700 text-sm">
+        <div className="mt-6 p-4 bg-red-900 border-l-4 border-red-500 rounded-md text-red-200 text-sm">
           {error}
         </div>
       )}
 
       {!isLoading && chatComplete && aiSuggestion && !error && (
-        <div className="mt-6 p-8 bg-gradient-to-br from-rose-50 to-amber-50 border border-rose-200 rounded-xl shadow-lg">
+        <div className="mt-6 p-8 bg-gradient-to-br from-gray-900 to-black border border-gray-700 rounded-xl shadow-2xl">
           <div className="flex items-center gap-3 mb-4">
-            <Sparkles className="w-8 h-8 text-rose-600" />
-            <h4 className="font-serif text-2xl text-gray-800">Sarah's Recommendation</h4>
+            <Sparkles className="w-8 h-8 text-white" />
+            <h4 className="font-serif text-2xl text-white">Sarah's Expert Recommendation</h4>
           </div>
-          <div className="text-gray-700 whitespace-pre-wrap leading-relaxed mb-6 text-base">{aiSuggestion}</div>
+          <div className="text-gray-300 whitespace-pre-wrap leading-relaxed mb-6 text-base">{aiSuggestion}</div>
           
           {/* Action Buttons */}
           <div className="space-y-4">
@@ -149,7 +150,7 @@ const SarahAIWidget: React.FC<SarahAIWidgetProps> = ({ allPackages }) => {
                 href="https://calendly.com/harielxavierphotography/hariel-xavier-photography-meeting"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center px-4 py-3 bg-gradient-to-r from-rose-500 to-amber-500 text-white font-semibold rounded-lg hover:from-rose-600 hover:to-amber-600 transition-all duration-300 text-sm"
+                className="flex items-center justify-center px-4 py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-100 transition-all duration-300 text-sm border border-gray-300"
               >
                 📅 Schedule Call
               </a>
@@ -160,7 +161,7 @@ const SarahAIWidget: React.FC<SarahAIWidgetProps> = ({ allPackages }) => {
                     packagesSection.scrollIntoView({ behavior: 'smooth' });
                   }
                 }}
-                className="flex items-center justify-center px-4 py-3 bg-white border-2 border-rose-300 text-rose-700 font-semibold rounded-lg hover:bg-rose-50 transition-all duration-300 text-sm"
+                className="flex items-center justify-center px-4 py-3 bg-gray-800 border-2 border-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-all duration-300 text-sm"
               >
                 📋 View All Packages
               </button>
@@ -171,7 +172,7 @@ const SarahAIWidget: React.FC<SarahAIWidgetProps> = ({ allPackages }) => {
                     contactForm.scrollIntoView({ behavior: 'smooth' });
                   }
                 }}
-                className="flex items-center justify-center px-4 py-3 bg-white border-2 border-rose-300 text-rose-700 font-semibold rounded-lg hover:bg-rose-50 transition-all duration-300 text-sm"
+                className="flex items-center justify-center px-4 py-3 bg-gray-800 border-2 border-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-all duration-300 text-sm"
               >
                 ✉️ Contact Form
               </button>
@@ -180,7 +181,7 @@ const SarahAIWidget: React.FC<SarahAIWidgetProps> = ({ allPackages }) => {
             <div className="text-center">
               <button
                 onClick={handleStartChat}
-                className="text-sm text-rose-600 hover:text-rose-800 hover:underline font-medium"
+                className="text-sm text-gray-400 hover:text-white hover:underline font-medium"
               >
                 Ask Sarah a different question?
               </button>
