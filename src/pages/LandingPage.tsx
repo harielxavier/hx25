@@ -11,9 +11,9 @@ import PhotographyStyleSlider from '../components/portfolio/PhotographyStyleSlid
 // Removed FOMO element
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
-
 // Import lens flare styles
 import '../styles/lens-flare.css';
+import '../styles/animated-dots.css';
 
 const HeroPageUrl = '../../MoStuff/LandingPage/HeroPage.jpg';
 const PortraitUrl = '../../MoStuff/portrait.jpg';
@@ -145,8 +145,27 @@ export function LandingPage() {
 
       <Navigation />
       
-      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32" style={{ backgroundImage: `url(${HeroPageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh' }}>
-        <div className="absolute inset-0 bg-black bg-opacity-50" data-component-name="LandingPage" aria-hidden="true" />
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32" style={{ height: '100vh' }}>
+        {/* Video Background */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          poster={HeroPageUrl}
+        >
+          <source src="/images/bts.MOV" type="video/mp4" />
+          {/* Fallback for browsers that don't support video */}
+        </video>
+        
+        {/* Fallback background image */}
+        <div
+          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${HeroPageUrl})` }}
+        />
+        
+        <div className="absolute inset-0 bg-black bg-opacity-20" data-component-name="LandingPage" aria-hidden="true" />
         
         {/* Lens Flare Effect */}
         <div className="lens-flare-container">
@@ -777,21 +796,13 @@ export function LandingPage() {
         </div>
       </section>
 
-      <PhotographyStyleSlider />
-
-      {/* Revolutionary AI Wedding Consultant Hero Section */}
-      <section className="py-24 bg-gradient-to-br from-black via-gray-900 to-black text-white relative overflow-hidden">
-        {/* Dynamic Background Elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-white/10 to-gray-300/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-gray-400/15 to-white/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-gray-500/10 to-white/10 rounded-full blur-3xl animate-pulse delay-500"></div>
-        </div>
+{/* Revolutionary AI Wedding Consultant Hero Section */}
+      <section className="py-24 bg-black text-white relative overflow-hidden">
+        {/* Animated Dot Matrix Background */}
+        <div className="absolute inset-0 animated-dots"></div>
         
-        {/* Subtle Background Pattern */}
-        <div className="absolute inset-0 opacity-5" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-        }}></div>
+        {/* Overlay for content readability */}
+        <div className="absolute inset-0 animated-dots-overlay"></div>
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-7xl mx-auto">
@@ -815,14 +826,14 @@ export function LandingPage() {
                     </span>
                   </h2>
                   <p className="text-2xl lg:text-3xl text-gray-300 font-light">
-                    Your Noir Wedding Photography Strategist
+                    Your Wedding Photography Strategist
                   </p>
                 </div>
 
                 {/* Value Proposition */}
                 <div className="space-y-6">
                   <p className="text-xl text-gray-200 leading-relaxed max-w-2xl">
-                    Powered by Hariel Xavier's 14+ years of noir wedding expertise and 300+ sophisticated celebrations. Sarah analyzes your vision, style preferences, and celebration details to recommend the perfect photography collection that matches your refined aesthetic and timeless taste.
+                    Powered by Hariel Xavier's 14+ years of wedding expertise and 300+ sophisticated celebrations. Sarah analyzes your vision, style preferences, and celebration details to recommend the perfect photography collection that matches your refined aesthetic and timeless taste.
                   </p>
                   
                   {/* Key Benefits */}
@@ -833,7 +844,7 @@ export function LandingPage() {
                       </div>
                       <div>
                         <p className="font-medium text-white">Sophisticated Style Matching</p>
-                        <p className="text-sm text-gray-400">AI analysis of your noir aesthetic preferences</p>
+                        <p className="text-sm text-gray-400">AI analysis of your aesthetic preferences</p>
                       </div>
                     </div>
                     
@@ -917,19 +928,6 @@ export function LandingPage() {
                     </div>
                   </div>
                   
-                  {/* Floating Tech Elements */}
-                  <div className="absolute -top-4 -right-4 bg-gradient-to-r from-white to-gray-300 rounded-xl p-3 shadow-xl animate-float">
-                    <span className="text-2xl">🧠</span>
-                  </div>
-                  
-                  <div className="absolute top-1/2 -left-6 bg-gradient-to-r from-gray-300 to-white rounded-xl p-3 shadow-xl animate-float-delayed">
-                    <span className="text-2xl">⚡</span>
-                  </div>
-                  
-                  <div className="absolute -bottom-4 left-1/4 bg-gradient-to-r from-gray-400 to-gray-200 rounded-xl p-3 shadow-xl animate-float-reverse">
-                    <span className="text-2xl">🎯</span>
-                  </div>
-                  
                   {/* Data Visualization Elements */}
                   <div className="absolute top-8 left-8 bg-black/40 backdrop-blur-sm rounded-lg p-3 border border-white/10">
                     <div className="flex items-center gap-2 text-xs text-white">
@@ -958,6 +956,8 @@ export function LandingPage() {
           </div>
         </div>
       </section>
+      <PhotographyStyleSlider />
+
 
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">

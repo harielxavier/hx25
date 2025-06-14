@@ -155,8 +155,8 @@ const FeaturedGalleries: React.FC = () => {
   }, []);
 
   return (
-    <section 
-      ref={sectionRef} 
+    <section
+      ref={sectionRef}
       className="py-16 md:py-24 bg-white"
       id="featured-galleries"
       aria-label="Featured Wedding Galleries"
@@ -178,18 +178,18 @@ const FeaturedGalleries: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {galleries.map((gallery, index) => (
-              <div 
+              <div
                 key={gallery.id}
                 className={`group relative overflow-hidden transition-all duration-700 ${
                   inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
                 }`}
-                style={{ 
-                  transitionDelay: `${index * 200}ms` 
+                style={{
+                  transitionDelay: `${index * 200}ms`
                 }}
               >
                 <div className="relative h-full w-full overflow-hidden rounded-lg">
-                  <img 
-                    src={gallery.imageUrl} 
+                  <img
+                    src={gallery.imageUrl}
                     alt={`Gallery: ${gallery.title} at ${gallery.venue || ''}, ${gallery.location || ''}`}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     loading="lazy"
@@ -209,7 +209,7 @@ const FeaturedGalleries: React.FC = () => {
                     <MapPin className="w-4 h-4 mr-1" />
                     <span>{gallery.location}</span>
                   </div>
-                  <Link 
+                  <Link
                     to={gallery.linkUrl}
                     className="inline-flex items-center text-white border-b border-white pb-1 hover:text-rose-200 hover:border-rose-200 transition-colors"
                   >

@@ -31,11 +31,10 @@ export default function Navigation() {
             aria-label="Home"
             className="transition-colors"
           >
-            <ManagedImage
-              identifier="common.header.logo"
+            <img
+              src="/black.png"
               alt="Hariel Xavier Photography Logo"
               className="h-20 w-auto"
-              placeholderCategory="logo"
             />
           </Link>
 

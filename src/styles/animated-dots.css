@@ -1,0 +1,20 @@
+.animated-dots {
+  background-image: radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px);
+  background-size: 20px 20px;
+  animation: dotPulse 4s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { 
+    opacity: 0.3; 
+    background-size: 20px 20px;
+  }
+  50% { 
+    opacity: 0.7; 
+    background-size: 22px 22px;
+  }
+}
+
+.animated-dots-overlay {
+  background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.3) 100%);
+}

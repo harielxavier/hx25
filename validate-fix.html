@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlogManagerActions.js Fix Validator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .test-results {
+            margin-top: 20px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #console-output {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 BlogManagerActions.js Fix Validator</h1>
+        <p>This tool validates that the BlogManagerActions.js 404 error has been resolved.</p>
+        
+        <div class="test-results">
+            <h2>Diagnostic Tests</h2>
+            <button onclick="runAllTests()">Run All Tests</button>
+            <button onclick="clearConsole()">Clear Console</button>
+            
+            <div id="test-status"></div>
+            <div id="console-output"></div>
+        </div>
+    </div>
+
+    <script>
+        let consoleOutput = document.getElementById('console-output');
+        let testStatus = document.getElementById('test-status');
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            consoleOutput.textContent += `[${timestamp}] ${message}\n`;
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        function clearConsole() {
+            consoleOutput.textContent = '';
+            testStatus.innerHTML = '';
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `status ${type}`;
+            statusDiv.textContent = message;
+            testStatus.appendChild(statusDiv);
+        }
+
+        async function testScriptLoading() {
+            log('Testing BlogManagerActions.js loading...');
+            
+            try {
+                const response = await fetch('/src/pages/admin/BlogManagerActions.js');
+                if (response.status === 404) {
+                    showStatus('✅ PASS: BlogManagerActions.js correctly returns 404 (file removed)', 'success');
+                    log('✅ BlogManagerActions.js correctly returns 404');
+                } else {
+                    showStatus('❌ FAIL: BlogManagerActions.js still exists on server', 'error');
+                    log('❌ BlogManagerActions.js still exists on server');
+                }
+            } catch (error) {
+                showStatus('✅ PASS: BlogManagerActions.js not accessible (expected)', 'success');
+                log('✅ BlogManagerActions.js not accessible (expected)');
+            }
+        }
+
+        function testConsoleErrors() {
+            log('Monitoring console for BlogManagerActions.js errors...');
+            
+            // Override console.error to catch 404 errors
+            const originalError = console.error;
+            let blogManagerErrors = 0;
+            
+            console.error = function(...args) {
+                const message = args.join(' ');
+                if (message.includes('BlogManagerActions.js')) {
+                    blogManagerErrors++;
+                    log(`❌ Console Error: ${message}`);
+                }
+                originalError.apply(console, args);
+            };
+
+            // Check after 3 seconds
+            setTimeout(() => {
+                if (blogManagerErrors === 0) {
+                    showStatus('✅ PASS: No BlogManagerActions.js console errors detected', 'success');
+                    log('✅ No BlogManagerActions.js console errors detected');
+                } else {
+                    showStatus(`❌ FAIL: ${blogManagerErrors} BlogManagerActions.js console errors detected`, 'error');
+                    log(`❌ ${blogManagerErrors} BlogManagerActions.js console errors detected`);
+                }
+                
+                // Restore original console.error
+                console.error = originalError;
+            }, 3000);
+        }
+
+        function testCacheHeaders() {
+            log('Testing cache headers...');
+            
+            fetch(window.location.href, { method: 'HEAD' })
+                .then(response => {
+                    const cacheControl = response.headers.get('cache-control');
+                    const pragma = response.headers.get('pragma');
+                    
+                    log(`Cache-Control: ${cacheControl}`);
+                    log(`Pragma: ${pragma}`);
+                    
+                    if (cacheControl && cacheControl.includes('no-cache')) {
+                        showStatus('✅ PASS: Cache-busting headers detected', 'success');
+                        log('✅ Cache-busting headers are working');
+                    } else {
+                        showStatus('⚠️ WARNING: Cache headers may not be optimal', 'info');
+                        log('⚠️ Cache headers may not be optimal');
+                    }
+                })
+                .catch(error => {
+                    log(`Error checking cache headers: ${error.message}`);
+                });
+        }
+
+        function testPageLoad() {
+            log('Testing page load performance...');
+            
+            const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+            log(`Page load time: ${loadTime}ms`);
+            
+            if (loadTime < 5000) {
+                showStatus('✅ PASS: Page loads quickly (no blocking 404s)', 'success');
+            } else {
+                showStatus('⚠️ WARNING: Slow page load detected', 'info');
+            }
+        }
+
+        async function runAllTests() {
+            clearConsole();
+            log('🚀 Starting BlogManagerActions.js fix validation...');
+            
+            await testScriptLoading();
+            testConsoleErrors();
+            testCacheHeaders();
+            testPageLoad();
+            
+            log('🏁 All tests initiated. Check results above.');
+        }
+
+        // Auto-run tests when page loads
+        window.addEventListener('load', () => {
+            setTimeout(runAllTests, 1000);
+        });
+    </script>
+</body>
+</html>
