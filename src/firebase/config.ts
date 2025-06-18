@@ -5,15 +5,26 @@ import { getStorage } from 'firebase/storage';
 import { getFunctions } from 'firebase/functions';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 
+// Firebase configuration using Vite environment variables
+// Ensure these are set in your .env file (e.g., .env.local)
 export const firebaseConfig = {
-  apiKey: "AIzaSyAXW2TqnlSymyfdZULM4NN3gfSG_imcv0U",
-  authDomain: "harielxavierphotography-18d17.firebaseapp.com",
-  projectId: "harielxavierphotography-18d17",
-  storageBucket: "harielxavierphotography-18d17.firebasestorage.app",
-  messagingSenderId: "195040006099",
-  appId: "1:195040006099:web:4d670ea2b5d859ab606926",
-  measurementId: "G-SB0Q9ER7KW"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
+
+// Basic check to ensure config values are loaded
+if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+  console.error("Firebase configuration is missing. Ensure VITE_FIREBASE_API_KEY and VITE_FIREBASE_PROJECT_ID (and others) are set in your .env file.");
+  // Optionally, throw an error or display a message to the user in development
+  if (import.meta.env.DEV) {
+    alert("Firebase configuration is missing. Please check your .env file and console for details.");
+  }
+}
 
 // Initialize Firebase - check if app already exists
 let app: ReturnType<typeof initializeApp>;

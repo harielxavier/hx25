@@ -1,6 +1,7 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import axios from "axios";
+import { z } from "zod"; // Import Zod
 
 // Ensure Firebase Admin is initialized (if not already in index.ts)
 if (admin.apps.length === 0) {
@@ -8,12 +9,10 @@ if (admin.apps.length === 0) {
 }
 
 // Using Anthropic Claude API
-const ANTHROPIC_API_KEY = "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";
+const ANTHROPIC_API_KEY = functions.config().anthropic?.key;
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
 
-// Package interface removed - using comprehensive package knowledge directly in prompts
-
-interface QuizResponse {
+interface QuizResponse { // This interface is useful for type safety within handlePackageRecommendation
   guestCount: number;
   venueType: string;
   budgetRange: string;
@@ -36,42 +35,98 @@ interface PackageRecommendation {
   personalizedMessage: string;
 }
 
+// --- Zod Schemas for Input Validation ---
+const quizResponseSchemaForZod = z.object({
+  guestCount: z.number().int().positive({ message: "Guest count must be a positive number." }),
+  venueType: z.string().min(1, { message: "Venue type is required." }),
+  budgetRange: z.string().min(1, { message: "Budget range is required." }),
+  socialFocus: z.string().min(1, { message: "Social focus is required." }),
+  specialNeeds: z.array(z.string()),
+  weddingStyle: z.string().min(1, { message: "Wedding style is required." }),
+  photographyPriority: z.string().min(1, { message: "Photography priority is required." }),
+  timelineFlexibility: z.string().min(1, { message: "Timeline flexibility is required." }),
+});
+
+const packageRecommendationRequestSchema = z.object({
+  type: z.literal("packageRecommendation"),
+  quizData: quizResponseSchemaForZod,
+});
+
+// Schema for general suggestion where type might be different or not present, but userInput is key
+const generalSuggestionInternalSchema = z.object({
+  userInput: z.string().min(1, { message: "User input is required." }),
+  type: z.string().optional(), // type is not strictly 'generalSuggestion' but anything not 'packageRecommendation'
+}).passthrough();
+
+
+// Combined schema using discriminatedUnion for clarity on 'type'
+const anthropicRequestSchema = z.discriminatedUnion("type", [
+  packageRecommendationRequestSchema,
+  // For any other type, we expect userInput.
+  // This makes 'type' the discriminator. If type is not 'packageRecommendation', it falls to the next schema.
+  // We need a literal type for the second part of the union if we want to use discriminatedUnion effectively.
+  // Let's adjust: if type is not 'packageRecommendation', it's a general request.
+  // A simpler union might be better if 'type' isn't always present for general suggestions.
+]);
+
+// Alternative schema if 'type' is not always reliable for general suggestions:
+const anthropicRequestSchemaAlternative = z.union([
+  packageRecommendationRequestSchema,
+  generalSuggestionInternalSchema, // This will match if packageRecommendationRequestSchema doesn't
+]);
+
+
 export const getAnthropicPackageSuggestion = functions.https.onRequest(async (req, res) => {
-  // Set CORS headers for all responses
-  res.set("Access-Control-Allow-Origin", "*"); // Allow all origins
+  res.set("Access-Control-Allow-Origin", "*");
   res.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-  // Handle preflight OPTIONS requests
   if (req.method === "OPTIONS") {
     res.status(204).send("");
     return;
   }
 
   if (!ANTHROPIC_API_KEY) {
-    console.error("Anthropic API key is not configured on the server.");
+    console.error("Anthropic API key is not configured.");
     res.status(500).json({ error: "Anthropic API key is not configured." });
     return;
   }
 
-  // Handle different request types
-  const requestData = req.body.data || req.body;
+  const rawRequestData = req.body.data || req.body;
   
-  if (requestData.type === 'packageRecommendation') {
-    await handlePackageRecommendation(req, res, requestData.quizData);
+  // Try parsing as package recommendation first
+  let validatedRequestData: any;
+  let requestType: 'packageRecommendation' | 'generalSuggestion' | 'unknown' = 'unknown';
+
+  const packageRecResult = packageRecommendationRequestSchema.safeParse(rawRequestData);
+  if (packageRecResult.success) {
+    validatedRequestData = packageRecResult.data;
+    requestType = 'packageRecommendation';
   } else {
-    await handleGeneralSuggestion(req, res, requestData);
+    const generalSugResult = generalSuggestionInternalSchema.safeParse(rawRequestData);
+    if (generalSugResult.success) {
+      validatedRequestData = generalSugResult.data;
+      requestType = 'generalSuggestion';
+    } else {
+      console.error("Invalid request data for Anthropic AI:", packageRecResult.error.flatten(), generalSugResult.error.flatten());
+      res.status(400).json({ error: "Invalid request data.", details: generalSugResult.error.flatten().fieldErrors }); // Show general suggestion errors as it's the fallback
+      return;
+    }
+  }
+  
+  if (requestType === 'packageRecommendation') {
+    await handlePackageRecommendation(req, res, validatedRequestData.quizData);
+  } else if (requestType === 'generalSuggestion') {
+    await handleGeneralSuggestion(req, res, { userInput: validatedRequestData.userInput });
+  } else {
+    // This case should ideally not be reached if the logic above is correct
+    console.error("Unhandled request structure after validation:", validatedRequestData);
+    res.status(400).json({ error: "Invalid request structure." });
   }
 });
 
 async function handlePackageRecommendation(req: functions.Request, res: functions.Response, quizData: QuizResponse) {
-  if (!quizData) {
-    console.error("Quiz data is required for package recommendation");
-    res.status(400).json({ error: "Quiz data is required for package recommendation." });
-    return;
-  }
-
-  // Create a detailed prompt for package recommendation with comprehensive package knowledge
+  // quizData is validated by Zod before this function is called.
   const prompt = `You are Sarah, the AI wedding photography consultant for Hariel Xavier Photography - a luxury wedding photography studio in Sparta, NJ with 14+ years of experience capturing timeless love stories.
 
 HARIEL XAVIER PHOTOGRAPHY BRAND:
@@ -203,7 +258,7 @@ Be specific about why the package matches their needs, reference Hariel Xavier's
     const axiosResponse = await axios.post(
       ANTHROPIC_API_URL,
       {
-        model: "claude-3-5-sonnet-20241022",
+        model: "claude-3-5-sonnet-20241022", // Ensure this model ID is up-to-date
         max_tokens: 1500,
         messages: [
           { role: "user", content: prompt },
@@ -222,25 +277,22 @@ Be specific about why the package matches their needs, reference Hariel Xavier's
     if (axiosResponse.data && axiosResponse.data.content && axiosResponse.data.content.length > 0) {
       try {
         const responseText = axiosResponse.data.content[0].text;
-        // Try to parse JSON from the response
         const jsonMatch = responseText.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
           const recommendation = JSON.parse(jsonMatch[0]) as PackageRecommendation;
           res.status(200).json({ data: recommendation });
         } else {
-          // Fallback if JSON parsing fails
           const fallbackRecommendation: PackageRecommendation = {
             recommendedPackage: 'duo-sussex-storyteller',
             confidence: 85,
             reasoning: 'Based on your preferences, the Sussex Storyteller Duo offers excellent value with comprehensive coverage and engagement session included.',
             suggestedAddOns: [],
-            personalizedMessage: responseText
+            personalizedMessage: responseText 
           };
           res.status(200).json({ data: fallbackRecommendation });
         }
       } catch (parseError) {
         console.error("Error parsing AI response:", parseError);
-        // Provide fallback recommendation
         const fallbackRecommendation: PackageRecommendation = {
           recommendedPackage: 'duo-sussex-storyteller',
           confidence: 80,
@@ -257,7 +309,7 @@ Be specific about why the package matches their needs, reference Hariel Xavier's
   } catch (error: any) {
     console.error("Error calling Anthropic API:", error.response?.data || error.message);
     let errorMessage = "Failed to get a recommendation from Sarah AI.";
-    if (error.response && error.response.data && error.response.data.error && error.response.data.error.message) {
+    if (error.response?.data?.error?.message) {
       errorMessage = `Sarah AI Error: ${error.response.data.error.message}`;
     } else if (error.message) {
       errorMessage = `Sarah AI Error: ${error.message}`;
@@ -266,17 +318,10 @@ Be specific about why the package matches their needs, reference Hariel Xavier's
   }
 }
 
-async function handleGeneralSuggestion(req: functions.Request, res: functions.Response, requestData: any) {
-  const { userInput: clientAnswersString } = requestData;
+async function handleGeneralSuggestion(req: functions.Request, res: functions.Response, requestData: { userInput: string }) {
+  const clientAnswersString = requestData.userInput; // Already validated by Zod
 
-  if (!clientAnswersString) {
-    console.error("Invalid arguments received:", { clientAnswersString });
-    res.status(400).json({ error: "Invalid arguments. 'userInput' (string of answers) is required." });
-    return;
-  }
-
-  // Construct a detailed prompt for Claude with comprehensive package knowledge
-  let prompt = `You are Sarah, the AI wedding photography consultant for Hariel Xavier Photography - a luxury wedding photography studio based in Sparta, NJ, known for capturing timeless love stories with artistic elegance and modern sophistication.
+  const prompt = `You are Sarah, the AI wedding photography consultant for Hariel Xavier Photography - a luxury wedding photography studio based in Sparta, NJ, known for capturing timeless love stories with artistic elegance and modern sophistication.
 
 HARIEL XAVIER PHOTOGRAPHY BRAND IDENTITY:
 - Lead photographer: Mauricio Fernandez with 14+ years of professional wedding photography experience
@@ -436,7 +481,7 @@ CRITICAL: Always properly evaluate if this is an elopement scenario and recommen
     const axiosResponse = await axios.post(
       ANTHROPIC_API_URL,
       {
-        model: "claude-3-5-sonnet-20241022",
+        model: "claude-3-5-sonnet-20241022", // Ensure this model ID is up-to-date
         max_tokens: 1000,
         messages: [
           { role: "user", content: prompt },
@@ -461,7 +506,7 @@ CRITICAL: Always properly evaluate if this is an elopement scenario and recommen
   } catch (error: any) {
     console.error("Error calling Anthropic API:", error.response?.data || error.message);
     let errorMessage = "Failed to get a suggestion from Sarah AI.";
-    if (error.response && error.response.data && error.response.data.error && error.response.data.error.message) {
+    if (error.response?.data?.error?.message) {
       errorMessage = `Sarah AI Error: ${error.response.data.error.message}`;
     } else if (error.message) {
       errorMessage = `Sarah AI Error: ${error.message}`;

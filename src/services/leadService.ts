@@ -1,5 +1,25 @@
 import { collection, addDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { z } from 'zod';
 import { db } from '../firebase/config';
+
+// Zod schema for Lead Submission
+const leadSubmissionSchema = z.object({
+  firstName: z.string().min(1, { message: "First name is required" }),
+  lastName: z.string().min(1, { message: "Last name is required" }),
+  email: z.string().email({ message: "Invalid email address" }),
+  phone: z.string().optional(),
+  eventType: z.string().optional(),
+  eventDate: z.string().optional(), // Could be further validated with z.date() or a regex
+  eventLocation: z.string().optional(),
+  guestCount: z.string().optional(), // Could be z.number() if parsed
+  preferredStyle: z.array(z.string()).optional(),
+  mustHaveShots: z.string().optional(),
+  inspirationLinks: z.string().url({ message: "Invalid URL for inspiration links" }).optional().or(z.literal('')), // Allow empty string or valid URL
+  budget: z.string().optional(),
+  hearAboutUs: z.string().optional(),
+  additionalInfo: z.string().optional(),
+  source: z.string().optional(),
+});
 
 export interface Lead {
   firstName: string;
@@ -47,12 +67,15 @@ export interface LeadSubmission {
  */
 export const createLead = async (leadData: LeadSubmission): Promise<string> => {
   try {
+    // Validate leadData against the schema
+    const validatedData = leadSubmissionSchema.parse(leadData);
+
     const leadsRef = collection(db, 'leads');
     
     const lead: Omit<Lead, 'id'> = {
-      ...leadData,
+      ...validatedData, // Use validated data
       status: 'new',
-      source: leadData.source || 'website_form',
+      source: validatedData.source || 'website_form',
       createdAt: serverTimestamp() as Timestamp,
       updatedAt: serverTimestamp() as Timestamp
     };
@@ -61,8 +84,14 @@ export const createLead = async (leadData: LeadSubmission): Promise<string> => {
     console.log('Lead created with ID:', docRef.id);
     return docRef.id;
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      // Log Zod validation errors or rethrow as a custom error
+      console.error('Lead data validation error:', error.errors);
+      // You might want to throw a more specific error or handle it
+      // For example, throw new Error(`Validation failed: ${error.errors.map(e => e.message).join(', ')}`);
+    }
     console.error('Error creating lead:', error);
-    throw error;
+    throw error; // Rethrow the original error or a new one
   }
 };
 

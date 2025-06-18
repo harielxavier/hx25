@@ -1,5 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import * as Sentry from "@sentry/react";
 import { AuthProvider } from './contexts/AuthContext';
 import App from './App';
 import './index.css';
@@ -10,6 +11,46 @@ import logger from './utils/logger';
 
 // Import the Firebase configuration
 import './firebase/config';
+
+// Initialize Sentry
+const sentryDsn = import.meta.env.VITE_SENTRY_DSN_FRONTEND || "https://1fb81719800e469ccfc621e5f4b02e07@o4509517571620864.ingest.us.sentry.io/4509517580664832"; // Fallback to existing DSN if env var is not set
+
+if (import.meta.env.VITE_SENTRY_DSN_FRONTEND) {
+  console.log("Initializing Sentry with DSN from environment variable.");
+} else if (sentryDsn) {
+  console.warn("VITE_SENTRY_DSN_FRONTEND not set, using fallback Sentry DSN. Please set this in your .env file for production.");
+} else {
+  console.error("Sentry DSN is not configured. Sentry will not be initialized.");
+}
+
+if (sentryDsn && sentryDsn !== "YOUR_SENTRY_DSN_HERE") { // Ensure it's not the placeholder from .env.example
+  Sentry.init({
+    dsn: sentryDsn,
+    integrations: [
+      Sentry.browserTracingIntegration(),
+    Sentry.replayIntegration({
+      // Additional Replay configuration options can be set here
+      maskAllText: false, // Example: Set to true to mask all text
+      blockAllMedia: false, // Example: Set to true to block all media
+    }),
+    // Send console.log, console.error, and console.warn calls as logs to Sentry
+    Sentry.consoleLoggingIntegration({ levels: ["error", "warn", "log"] }), // Capturing log, warn, error
+  ],
+  // Performance Monitoring
+  tracesSampleRate: 1.0, // Capture 100% of transactions, adjust for production
+  // Session Replay
+  replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want this to be 100% while in development and adjust lower in production.
+  replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, sample the session when an error occurs.
+  sendDefaultPii: true, // As per user's example
+  _experiments: { // As per user's example
+    enableLogs: true,
+  },
+  environment: import.meta.env.MODE, // 'development' or 'production'
+  // release: "my-project-name@1.0.0", // Consider setting a release version
+  });
+  console.log("Sentry initialized for Frontend.");
+}
+
 
 // Initialize security features
 try {
