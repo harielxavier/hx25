@@ -146,7 +146,8 @@ export function LandingPage() {
       <Navigation />
       
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32" style={{ height: '100vh' }}>
-        {/* Video Background */}
+        {/* Video Background REMOVED - Using static image HeroPageUrl as primary background */}
+        {/* 
         <video
           autoPlay
           muted
@@ -156,13 +157,13 @@ export function LandingPage() {
           poster={HeroPageUrl}
         >
           <source src="/images/bts.MOV" type="video/mp4" />
-          {/* Fallback for browsers that don't support video */}
         </video>
+        */}
         
-        {/* Fallback background image */}
+        {/* Static background image */}
         <div
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${HeroPageUrl})` }}
+          style={{ backgroundImage: `url(${HeroPageUrl})` }} // HeroPageUrl is '/MoStuff/LandingPage/HeroPage.jpg'
         />
         
         <div className="absolute inset-0 bg-black bg-opacity-20" data-component-name="LandingPage" aria-hidden="true" />
