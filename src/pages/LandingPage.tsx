@@ -15,8 +15,8 @@ import { useWindowSize } from 'react-use';
 import '../styles/lens-flare.css';
 import '../styles/animated-dots.css';
 
-const HeroPageUrl = '../../MoStuff/LandingPage/HeroPage.jpg';
-const PortraitUrl = '../../MoStuff/portrait.jpg';
+const HeroPageUrl = '/MoStuff/LandingPage/HeroPage.jpg';
+const PortraitUrl = '/MoStuff/portrait.jpg';
 
 export function LandingPage() {
   const [scrollProgress, setScrollProgress] = useState(0);

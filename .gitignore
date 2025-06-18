@@ -113,3 +113,13 @@ docs/
 .stylelintrc*
 tsconfig.tsbuildinfo
 
+# Deployment and sensitive files
+bluehost_key
+deploy-to-bluehost.sh
+deploy-ftp.sh
+fix-website-ftp.sh
+*.key
+*.pem
+*.p12
+*.pfx
+
