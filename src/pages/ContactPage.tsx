@@ -35,7 +35,7 @@ const ContactPage: React.FC = () => {
               "@type": "LocalBusiness",
               "name": "Hariel Xavier Photography",
               "image": "https://harielxavierphotography.com/logo.svg",
-              "telephone": "+1-862-290-4349",
+              "telephone": "+1-862-391-4179",
               "email": "Hi@HarielXavier.com",
               "address": {
                 "@type": "PostalAddress",
@@ -136,8 +136,8 @@ const ContactPage: React.FC = () => {
                     </svg>
                   </div>
                   <h3 className="text-xl font-semibold text-gray-800 mb-2">Phone</h3>
-                  <a href="tel:+18622904349" className="text-green-600 hover:text-green-800 transition-colors font-medium">
-                    (862) 290-4349
+                  <a href="tel:+18623914179" className="text-green-600 hover:text-green-800 transition-colors font-medium">
+                    (862) 391-4179
                   </a>
                   <p className="text-sm text-gray-500 mt-2">Call or text anytime</p>
                 </div>

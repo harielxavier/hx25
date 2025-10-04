@@ -30,10 +30,10 @@ export default function Navigation() {
             <span className="font-light hidden sm:inline">Call or text us at our new number:</span>
             <span className="font-light sm:hidden">Our new number:</span>
             <a 
-              href="tel:+18622904349" 
+              href="tel:+18623914179" 
               className="font-semibold hover:text-gray-300 transition-colors underline decoration-dotted underline-offset-4"
             >
-              (862) 290-4349
+              (862) 391-4179
             </a>
           </div>
         </div>

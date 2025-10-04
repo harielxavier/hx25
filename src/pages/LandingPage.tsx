@@ -114,7 +114,7 @@ export function LandingPage() {
           'postalCode': '',
           'addressCountry': 'US'
         },
-        'telephone': '+1-862-290-4349',
+        'telephone': '+1-862-391-4179',
         'url': 'https://harielxavierphotography.com',
         'priceRange': '$$$',
         'sameAs': [
@@ -134,6 +134,78 @@ export function LandingPage() {
           'ratingValue': '5',
           'reviewCount': '100'
         }
+      }) }} />
+      
+      {/* Review Schema for Testimonials */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Review',
+        'itemReviewed': {
+          '@type': 'LocalBusiness',
+          'name': 'Hariel Xavier Photography',
+          'image': 'https://harielxavierphotography.com/MoStuff/LandingPage/HeroPage.jpg',
+          'telephone': '+1-862-391-4179',
+          'address': {
+            '@type': 'PostalAddress',
+            'addressLocality': 'Sparta',
+            'addressRegion': 'NJ',
+            'addressCountry': 'US'
+          }
+        },
+        'reviewRating': {
+          '@type': 'Rating',
+          'ratingValue': '5',
+          'bestRating': '5'
+        },
+        'author': {
+          '@type': 'Person',
+          'name': 'Roberto Tatis'
+        },
+        'reviewBody': 'We couldn\'t have picked a better wedding photographer than Mauricio from Hariel Xavier Photography. From the moment he showed up, his fun personality and energy made our day even more special. He kept us relaxed and made everything so easy. The photos turned out amazing!'
+      }) }} />
+      
+      {/* VideoObject Schema for Wedding Video */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'VideoObject',
+        'name': 'Morgan & Michael\'s Wedding - Farmstead Golf & Country Club',
+        'description': 'Cinematic wedding film capturing the love story of Morgan and Michael at Farmstead Golf & Country Club in Lafayette, NJ. Professional wedding videography by Hariel Xavier Photography.',
+        'thumbnailUrl': 'https://harielxavierphotography.com/MoStuff/images/morganvideocover.jpg',
+        'uploadDate': '2024-06-15',
+        'duration': 'PT5M30S',
+        'contentUrl': 'https://harielxavierphotography.com/MoStuff/images/Morgan & Michael\'s Wedding.mp4',
+        'embedUrl': 'https://harielxavierphotography.com',
+        'publisher': {
+          '@type': 'Organization',
+          'name': 'Hariel Xavier Photography',
+          'logo': {
+            '@type': 'ImageObject',
+            'url': 'https://harielxavierphotography.com/black.png'
+          }
+        },
+        'locationCreated': {
+          '@type': 'Place',
+          'name': 'Farmstead Golf & Country Club',
+          'address': {
+            '@type': 'PostalAddress',
+            'streetAddress': '88 Lawrence Rd',
+            'addressLocality': 'Lafayette',
+            'addressRegion': 'NJ',
+            'addressCountry': 'US'
+          }
+        }
+      }) }} />
+      
+      {/* BreadcrumbList Schema */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        'itemListElement': [{
+          '@type': 'ListItem',
+          'position': 1,
+          'name': 'Home',
+          'item': 'https://harielxavierphotography.com'
+        }]
       }) }} />
 
       <div className="fixed top-0 left-0 w-full h-1 bg-gray-200 z-[60]">
@@ -254,7 +326,7 @@ export function LandingPage() {
             <div>
               <img
                 src={PortraitUrl}
-                alt="Mauricio Fernandez, lead wedding photographer"
+                alt="Mauricio Fernandez, award-winning wedding photographer in Sparta, NJ specializing in luxury wedding photography"
                 className="w-full aspect-[3/4] object-cover"
                 data-component-name="LandingPage"
                 loading="lazy"
@@ -292,7 +364,7 @@ export function LandingPage() {
                 <div className="relative overflow-hidden h-full">
                   <img 
                     src="/MoStuff/club/pic8.jpg" 
-                    alt="Wedding ceremony at Picatinny Club" 
+                    alt="Elegant outdoor wedding ceremony at Picatinny Club, Sparta NJ - Preferred wedding photographer Hariel Xavier" 
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                     loading="lazy"
                   />
@@ -731,7 +803,7 @@ export function LandingPage() {
               <div className="aspect-[3/4] bg-white rounded-lg shadow-xl overflow-hidden relative">
                 <img 
                   src="/MoStuff/whattowear.png" 
-                  alt="What to Wear for Your Engagement Session - Style Guide Cover"
+                  alt="Free engagement photo style guide - What to wear for engagement photos in NJ by Hariel Xavier Photography"
                   className="w-full h-full object-cover"
                   data-component-name="LandingPage"
                   loading="lazy"

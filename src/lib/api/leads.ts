@@ -400,7 +400,7 @@ const sendLeadAutoresponseEmail = async (lead: Lead): Promise<boolean> => {
                     <a href="mailto:hi@harielxavier.com" style="color: #4a6a8a; text-decoration: none;">hi@harielxavier.com</a>
                   </p>
                   <p style="margin: 0; font-size: 14px; line-height: 20px;">
-                    <a href="tel:+18622904349" style="color: #4a6a8a; text-decoration: none;">(862) 290-4349</a>
+                    <a href="tel:+18623914179" style="color: #4a6a8a; text-decoration: none;">(862) 391-4179</a>
                   </p>
                 </td>
               </tr>
