@@ -130,62 +130,11 @@ const EnhancedContactForm: React.FC = () => {
 
     setIsLoading(true);
     try {
-      const emailService = await import('../../lib/api/email');
-      const emailData = {
-        to: 'info@harielxavier.com',
-        subject: `New ${formData.jobType} Inquiry from ${formData.firstName} ${formData.lastName}`,
-        html: `
-          <div style="font-family: 'Georgia', serif; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #000000 0%, #333333 100%); padding: 40px 20px;">
-            <div style="background: white; border-radius: 20px; padding: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
-              <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px;">
-                <img src="https://harielxavierphotography.com/logo.svg" alt="Hariel Xavier Photography" style="height: 60px; margin-bottom: 15px;" onerror="this.src='https://harielxavierphotography.com/MoStuff/faviconhx.png'; this.style.height='40px';" />
-                <h1 style="color: #2c3e50; font-size: 28px; margin: 0; font-weight: 300;">✨ New Love Story Inquiry ✨</h1>
-                <div style="width: 60px; height: 3px; background: linear-gradient(45deg, #000000, #333333); margin: 20px auto; border-radius: 2px;"></div>
-              </div>
-              
-              <div style="background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 25px;">
-                <h2 style="color: #2c3e50; font-size: 20px; margin: 0 0 15px 0; display: flex; align-items: center;">
-                  💕 Couple Information
-                </h2>
-                <p style="margin: 8px 0; color: #555;"><strong>Names:</strong> ${formData.firstName} ${formData.lastName}${formData.partnerName ? ` & ${formData.partnerName}` : ''}</p>
-                <p style="margin: 8px 0; color: #555;"><strong>Email:</strong> ${formData.email}</p>
-                <p style="margin: 8px 0; color: #555;"><strong>Phone:</strong> ${formData.phone}</p>
-              </div>
-
-              <div style="background: #fff5f5; border-radius: 15px; padding: 25px; margin-bottom: 25px;">
-                <h2 style="color: #2c3e50; font-size: 20px; margin: 0 0 15px 0; display: flex; align-items: center;">
-                  📸 Event Details
-                </h2>
-                <p style="margin: 8px 0; color: #555;"><strong>Service Type:</strong> ${formData.jobType}</p>
-                <p style="margin: 8px 0; color: #555;"><strong>Event Date:</strong> ${formData.eventDate}</p>
-                <p style="margin: 8px 0; color: #555;"><strong>Location:</strong> ${formData.eventLocation}</p>
-                ${formData.weddingStyle ? `<p style="margin: 8px 0; color: #555;"><strong>Wedding Style:</strong> ${formData.weddingStyle}</p>` : ''}
-              </div>
-
-              <div style="background: #f0f8ff; border-radius: 15px; padding: 25px; margin-bottom: 25px;">
-                <h2 style="color: #2c3e50; font-size: 20px; margin: 0 0 15px 0; display: flex; align-items: center;">
-                  💰 Investment & Discovery
-                </h2>
-                <p style="margin: 8px 0; color: #555;"><strong>Budget Range:</strong> ${formData.budget}</p>
-                <p style="margin: 8px 0; color: #555;"><strong>How they found us:</strong> ${formData.hearAboutUs}</p>
-              </div>
-
-              <div style="background: #f9f9f9; border-radius: 15px; padding: 25px;">
-                <h2 style="color: #2c3e50; font-size: 20px; margin: 0 0 15px 0; display: flex; align-items: center;">
-                  💌 Their Love Story Vision
-                </h2>
-                <p style="margin: 0; color: #555; line-height: 1.6; font-style: italic;">"${formData.message}"</p>
-              </div>
-
-              <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid #f0f0f0;">
-                <p style="color: #888; font-size: 14px; margin: 0;">Sent with love from HarielXavier.com ✨</p>
-              </div>
-            </div>
-          </div>
-        `,
-      };
+      // Use EmailJS service (no backend needed!)
+      const { sendContactEmail } = await import('../../services/emailjsService');
       
-      const success = await emailService.sendEmail(emailData);
+      const success = await sendContactEmail(formData);
+      
       if (success) {
         setSubmitted(true);
         setFormData({
@@ -203,11 +152,11 @@ const EnhancedContactForm: React.FC = () => {
           weddingStyle: ''
         });
       } else {
-        alert('There was an error sending your message. Please try again.');
+        alert('There was an error sending your message. Please try again or call us at (862) 290-4349.');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      alert('There was an error sending your message. Please try again.');
+      alert('There was an error sending your message. Please try again or call us at (862) 290-4349.');
     } finally {
       setIsLoading(false);
     }

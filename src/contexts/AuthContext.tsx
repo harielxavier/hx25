@@ -9,6 +9,7 @@ import {
   browserLocalPersistence
 } from 'firebase/auth';
 import { signInWithGoogle as authServiceSignInWithGoogle } from '../services/authService';
+import { supabase } from '../lib/supabase';
 
 interface AuthContextType {
   user: any;
@@ -16,6 +17,7 @@ interface AuthContextType {
   error: string | null;
   signIn: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
+  signInWithMagicLink: (email: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -195,12 +197,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const handleMagicLinkSignIn = async (email: string) => {
+    try {
+      setError(null);
+      setLoading(true);
+      console.log(`Sending magic link to: ${email}`);
+      
+      const { error } = await supabase.auth.signInWithOtp({
+        email: email.trim(),
+        options: {
+          emailRedirectTo: 'https://www.harielxavier.com/auth/callback'
+        }
+      });
+      
+      if (error) throw error;
+      
+      console.log('Magic link sent successfully!');
+      alert('Check your email for the magic link!');
+    } catch (error: any) {
+      console.error('Magic link error:', error);
+      setError(error.message || 'Error sending magic link');
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const value = {
     user,
     loading,
     error,
     signIn: handleSignIn,
     signInWithGoogle: handleGoogleSignIn,
+    signInWithMagicLink: handleMagicLinkSignIn,
     signOut: handleSignOut
   };
 

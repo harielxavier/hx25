@@ -1,12 +1,10 @@
 import { 
-  getStorage, 
   ref, 
   uploadBytesResumable, 
   getDownloadURL,
   deleteObject
 } from 'firebase/storage';
 import {
-  getFirestore,
   collection,
   addDoc,
   getDoc,
@@ -19,10 +17,7 @@ import {
   orderBy,
   serverTimestamp
 } from 'firebase/firestore';
-import { app } from '../firebase/config';
-
-const storage = getStorage(app);
-const db = getFirestore(app);
+import { guaranteedStorage as storage, guaranteedDb as db } from '../firebase/config';
 
 // Image metadata interface
 export interface ImageMetadata {

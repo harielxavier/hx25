@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Native Supabase Test - Hariel Xavier Photography</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 1000px; margin: 0 auto; }
+        .status { padding: 15px; border-radius: 5px; margin: 10px 0; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .warning { background: #fff3cd; color: #856404; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 5px; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .user-info { background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .test-section { border: 1px solid #dee2e6; padding: 20px; margin: 20px 0; border-radius: 5px; }
+        h2 { color: #495057; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🚀 Native Supabase Integration Test</h1>
+
+    <div class="status info">
+        <strong>Testing:</strong> Native Supabase integration (no Firebase shim)
+    </div>
+
+    <div class="test-section">
+        <h2>Integration Status</h2>
+        <div id="integrationStatus">Checking integration...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>Current User</h2>
+        <div id="currentUser" class="user-info">No user logged in</div>
+    </div>
+
+    <div class="test-section">
+        <h2>Authentication Tests</h2>
+        <button onclick="testGoogleSignIn()">Test Google Sign-In</button>
+        <button onclick="testEmailSignIn()">Test Email Sign-In</button>
+        <button onclick="testSignOut()">Test Sign-Out</button>
+        <button onclick="testAuthState()">Test Auth State</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Results</h2>
+        <div id="testResults"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Main Site Test</h2>
+        <p>Test the main site with native Supabase integration:</p>
+        <button onclick="window.open('/', '_blank')">Open Main Site</button>
+        <button onclick="window.open('/admin/dashboard.html', '_blank')">Open Admin Dashboard</button>
+    </div>
+
+    <script>
+        function logResult(message, type = 'info') {
+            const resultDiv = document.getElementById('testResults');
+            const timestamp = new Date().toLocaleTimeString();
+            const messageHtml = `<div class="status ${type}">[${timestamp}] ${message}</div>`;
+            resultDiv.innerHTML = messageHtml + resultDiv.innerHTML;
+        }
+
+        function updateUserDisplay(user) {
+            const userDiv = document.getElementById('currentUser');
+            if (user) {
+                userDiv.innerHTML = `
+                    <strong>Logged In User:</strong><br>
+                    Email: ${user.email}<br>
+                    ID: ${user.id}<br>
+                    Provider: ${user.app_metadata?.provider || 'email'}<br>
+                    Created: ${new Date(user.created_at).toLocaleDateString()}
+                `;
+                userDiv.className = 'user-info success';
+            } else {
+                userDiv.innerHTML = 'No user logged in';
+                userDiv.className = 'user-info';
+            }
+        }
+
+        async function testIntegration() {
+            try {
+                // Check if native Supabase is loaded
+                if (window.auth && window.auth.currentUser !== undefined) {
+                    document.getElementById('integrationStatus').innerHTML =
+                        '<div class="status success">✅ Native Supabase integration loaded successfully!</div>';
+                    logResult('Native Supabase integration detected', 'success');
+                    
+                    // Check for existing session
+                    if (window.auth.currentUser) {
+                        updateUserDisplay(window.auth.currentUser);
+                        logResult(`Found existing session for ${window.auth.currentUser.email}`, 'info');
+                    }
+                } else {
+                    document.getElementById('integrationStatus').innerHTML =
+                        '<div class="status error">❌ Native Supabase integration not found</div>';
+                    logResult('Native Supabase integration not detected', 'error');
+                }
+            } catch (error) {
+                document.getElementById('integrationStatus').innerHTML =
+                    `<div class="status error">❌ Integration test failed: ${error.message}</div>`;
+                logResult(`Integration error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testGoogleSignIn() {
+            try {
+                logResult('Testing Google sign-in...', 'info');
+                if (!window.auth) {
+                    throw new Error('Auth object not available');
+                }
+                
+                const result = await window.auth.signInWithPopup(null, new window.GoogleAuthProvider());
+                logResult(`Google sign-in successful: ${result.user.email}`, 'success');
+                updateUserDisplay(result.user);
+            } catch (error) {
+                logResult(`Google sign-in error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testEmailSignIn() {
+            const email = prompt('Enter email:');
+            const password = prompt('Enter password:');
+            
+            if (!email || !password) {
+                logResult('Email sign-in cancelled', 'warning');
+                return;
+            }
+
+            try {
+                logResult(`Testing email sign-in for ${email}...`, 'info');
+                if (!window.auth) {
+                    throw new Error('Auth object not available');
+                }
+                
+                const result = await window.auth.signInWithEmailAndPassword(null, email, password);
+                logResult(`Email sign-in successful: ${result.user.email}`, 'success');
+                updateUserDisplay(result.user);
+            } catch (error) {
+                logResult(`Email sign-in error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testSignOut() {
+            try {
+                logResult('Testing sign-out...', 'info');
+                if (!window.auth) {
+                    throw new Error('Auth object not available');
+                }
+                
+                await window.auth.signOut();
+                logResult('Sign-out successful', 'success');
+                updateUserDisplay(null);
+            } catch (error) {
+                logResult(`Sign-out error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testAuthState() {
+            try {
+                logResult('Testing auth state listener...', 'info');
+                if (!window.auth) {
+                    throw new Error('Auth object not available');
+                }
+                
+                const unsubscribe = window.auth.onAuthStateChanged((user) => {
+                    if (user) {
+                        logResult(`Auth state changed: User signed in - ${user.email}`, 'success');
+                        updateUserDisplay(user);
+                    } else {
+                        logResult('Auth state changed: User signed out', 'info');
+                        updateUserDisplay(null);
+                    }
+                });
+                
+                logResult('Auth state listener set up successfully', 'success');
+                
+                // Clean up after 10 seconds
+                setTimeout(() => {
+                    if (typeof unsubscribe === 'function') {
+                        unsubscribe();
+                        logResult('Auth state listener cleaned up', 'info');
+                    }
+                }, 10000);
+            } catch (error) {
+                logResult(`Auth state test error: ${error.message}`, 'error');
+            }
+        }
+
+        // Initialize test
+        window.addEventListener('load', () => {
+            setTimeout(testIntegration, 1000); // Wait for scripts to load
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Hariel Xavier Photography</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-email {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            color: #999;
+            text-transform: uppercase;
+        }
+
+        /* Layout */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            color: #666;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .nav-item.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-item i {
+            width: 20px;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            min-height: 600px;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .stat-change {
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .stat-change.positive {
+            color: #4caf50;
+        }
+
+        .stat-change.negative {
+            color: #f44336;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th {
+            background: #f5f5f5;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .data-table tr:hover {
+            background: #f9f9f9;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sections */
+        .section {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .gallery-thumbnail {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .gallery-info {
+            padding: 1rem;
+        }
+
+        .gallery-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-meta {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        /* Charts placeholder */
+        .chart-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            border: 1px solid #e0e0e0;
+        }
+
+        .chart-placeholder {
+            height: 300px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Quick actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .action-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .action-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+            border-color: #667eea;
+        }
+
+        .action-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .action-title {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .action-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">📸 Hariel Xavier Photography</a>
+            <div class="user-menu">
+                <div class="user-info">
+                    <div id="userEmail" class="user-email">Loading...</div>
+                    <div class="user-role">Administrator</div>
+                </div>
+                <button class="btn btn-secondary" onclick="signOut()">Sign Out</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav>
+                <a href="#dashboard" class="nav-item active" onclick="showSection('dashboard')">
+                    <i>📊</i> Dashboard
+                </a>
+                <a href="#galleries" class="nav-item" onclick="showSection('galleries')">
+                    <i>🖼️</i> Galleries
+                </a>
+                <a href="#leads" class="nav-item" onclick="showSection('leads')">
+                    <i>👥</i> Leads
+                </a>
+                <a href="#calendar" class="nav-item" onclick="showSection('calendar')">
+                    <i>📅</i> Calendar
+                </a>
+                <a href="#settings" class="nav-item" onclick="showSection('settings')">
+                    <i>⚙️</i> Settings
+                </a>
+                <a href="#analytics" class="nav-item" onclick="showSection('analytics')">
+                    <i>📈</i> Analytics
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="content-section">
+                <h1 class="page-title">Dashboard</h1>
+
+                <div id="alerts"></div>
+
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalGalleries">0</div>
+                        <div class="stat-label">Total Galleries</div>
+                        <div class="stat-change positive">+12% from last month</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalLeads">0</div>
+                        <div class="stat-label">New Leads</div>
+                        <div class="stat-change positive">+8% from last week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalViews">0</div>
+                        <div class="stat-label">Page Views</div>
+                        <div class="stat-change negative">-3% from yesterday</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="upcomingEvents">0</div>
+                        <div class="stat-label">Upcoming Events</div>
+                        <div class="stat-change">This month</div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="section">
+                    <h2 class="section-title">Quick Actions</h2>
+                    <div class="quick-actions">
+                        <a href="#" class="action-card" onclick="openCreateGallery()">
+                            <div class="action-icon">➕</div>
+                            <div class="action-title">Create Gallery</div>
+                            <div class="action-description">Add a new photo gallery</div>
+                        </a>
+                        <a href="#" class="action-card" onclick="showSection('leads')">
+                            <div class="action-icon">📧</div>
+                            <div class="action-title">View Leads</div>
+                            <div class="action-description">Check new inquiries</div>
+                        </a>
+                        <a href="#" class="action-card" onclick="showSection('calendar')">
+                            <div class="action-icon">📅</div>
+                            <div class="action-title">Calendar</div>
+                            <div class="action-description">Manage your schedule</div>
+                        </a>
+                        <a href="#" class="action-card" onclick="showSection('settings')">
+                            <div class="action-icon">⚙️</div>
+                            <div class="action-title">Settings</div>
+                            <div class="action-description">Configure your site</div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="section">
+                    <h2 class="section-title">Recent Activity</h2>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Action</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activityLog">
+                            <tr>
+                                <td colspan="3" style="text-align: center; color: #666;">Loading activity...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Galleries Section -->
+            <div id="galleries-section" class="content-section" style="display: none;">
+                <h1 class="page-title">Galleries</h1>
+
+                <button class="btn btn-primary" onclick="openCreateGallery()">+ Create New Gallery</button>
+
+                <div class="gallery-grid" id="galleryGrid">
+                    <!-- Galleries will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Leads Section -->
+            <div id="leads-section" class="content-section" style="display: none;">
+                <h1 class="page-title">Leads</h1>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Event Type</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsTable">
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: #666;">Loading leads...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Calendar Section -->
+            <div id="calendar-section" class="content-section" style="display: none;">
+                <h1 class="page-title">Calendar</h1>
+
+                <div class="chart-container">
+                    <div class="chart-placeholder">
+                        Calendar Integration Coming Soon
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings-section" class="content-section" style="display: none;">
+                <h1 class="page-title">Settings</h1>
+
+                <div class="section">
+                    <h2 class="section-title">Site Settings</h2>
+                    <form id="settingsForm">
+                        <div class="form-group">
+                            <label class="form-label">Site Title</label>
+                            <input type="text" class="form-input" id="siteTitle" value="Hariel Xavier Photography">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Contact Email</label>
+                            <input type="email" class="form-input" id="contactEmail" value="contact@harielxavier.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Instagram Handle</label>
+                            <input type="text" class="form-input" id="instagram" value="@harielxavier">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div id="analytics-section" class="content-section" style="display: none;">
+                <h1 class="page-title">Analytics</h1>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">1,234</div>
+                        <div class="stat-label">Total Visitors</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">5.2k</div>
+                        <div class="stat-label">Page Views</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">3:24</div>
+                        <div class="stat-label">Avg. Session</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">42%</div>
+                        <div class="stat-label">Bounce Rate</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-placeholder">
+                        Analytics Charts Loading...
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Create Gallery Modal -->
+    <div id="createGalleryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Create New Gallery</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="createGalleryForm">
+                <div class="form-group">
+                    <label class="form-label">Gallery Title</label>
+                    <input type="text" class="form-input" id="galleryTitle" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="galleryDescription"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Visibility</label>
+                    <select class="form-select" id="galleryVisibility">
+                        <option value="public">Public</option>
+                        <option value="private">Private</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Gallery</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Supabase Integration -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+        // Initialize Supabase
+        const supabase = createClient(
+            'https://egoyqdbolmjfngjzllwl.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVnb3lxZGJvbG1qZm5nanpsbHdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3MjAyNDgsImV4cCI6MjA3MDI5NjI0OH0.O4Q5-rQbUa2_vGYLjMw7UBpODonjJvgBsrfHlHJhFGk'
+        );
+
+        let currentUser = null;
+
+        // Check authentication
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+
+            if (!session) {
+                window.location.href = '/app-with-supabase.html';
+                return;
+            }
+
+            currentUser = session.user;
+            document.getElementById('userEmail').textContent = currentUser.email;
+
+            // Load dashboard data
+            loadDashboardData();
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            // Load galleries count
+            const { count: galleryCount } = await supabase
+                .from('galleries')
+                .select('*', { count: 'exact', head: true });
+            document.getElementById('totalGalleries').textContent = galleryCount || 0;
+
+            // Load leads count
+            const { count: leadCount } = await supabase
+                .from('leads')
+                .select('*', { count: 'exact', head: true });
+            document.getElementById('totalLeads').textContent = leadCount || 0;
+
+            // Set placeholder values
+            document.getElementById('totalViews').textContent = '1,234';
+            document.getElementById('upcomingEvents').textContent = '5';
+
+            // Load recent activity
+            loadRecentActivity();
+        }
+
+        // Load recent activity
+        async function loadRecentActivity() {
+            const activityLog = document.getElementById('activityLog');
+
+            // Simulate activity for now
+            const activities = [
+                { time: '2 hours ago', action: 'Gallery Created', details: 'Wedding Portfolio added' },
+                { time: '5 hours ago', action: 'New Lead', details: 'Contact form submission' },
+                { time: '1 day ago', action: 'Settings Updated', details: 'Site title changed' },
+                { time: '2 days ago', action: 'Gallery Updated', details: 'Portrait Session edited' }
+            ];
+
+            activityLog.innerHTML = activities.map(activity => `
+                <tr>
+                    <td>${activity.time}</td>
+                    <td>${activity.action}</td>
+                    <td>${activity.details}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Load galleries
+        async function loadGalleries() {
+            const { data: galleries } = await supabase
+                .from('galleries')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            const galleryGrid = document.getElementById('galleryGrid');
+
+            if (!galleries || galleries.length === 0) {
+                galleryGrid.innerHTML = '<p style="text-align: center; color: #666;">No galleries yet. Create your first gallery!</p>';
+                return;
+            }
+
+            galleryGrid.innerHTML = galleries.map(gallery => `
+                <div class="gallery-item" onclick="editGallery('${gallery.id}')">
+                    <div class="gallery-thumbnail">📷</div>
+                    <div class="gallery-info">
+                        <div class="gallery-title">${gallery.title}</div>
+                        <div class="gallery-meta">${gallery.is_public ? 'Public' : 'Private'} • ${new Date(gallery.created_at).toLocaleDateString()}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load leads
+        async function loadLeads() {
+            const { data: leads } = await supabase
+                .from('leads')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            const leadsTable = document.getElementById('leadsTable');
+
+            if (!leads || leads.length === 0) {
+                leadsTable.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #666;">No leads yet</td></tr>';
+                return;
+            }
+
+            leadsTable.innerHTML = leads.map(lead => `
+                <tr>
+                    <td>${new Date(lead.created_at).toLocaleDateString()}</td>
+                    <td>${lead.name}</td>
+                    <td>${lead.email}</td>
+                    <td>${lead.phone || '-'}</td>
+                    <td>${lead.event_type || '-'}</td>
+                    <td><span class="badge">${lead.status || 'New'}</span></td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="viewLead('${lead.id}')">View</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Show section
+        window.showSection = function(section) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(s => {
+                s.style.display = 'none';
+            });
+
+            // Show selected section
+            document.getElementById(`${section}-section`).style.display = 'block';
+
+            // Update nav
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Load section data
+            switch(section) {
+                case 'galleries':
+                    loadGalleries();
+                    break;
+                case 'leads':
+                    loadLeads();
+                    break;
+            }
+        };
+
+        // Sign out
+        window.signOut = async function() {
+            await supabase.auth.signOut();
+            window.location.href = '/';
+        };
+
+        // Gallery functions
+        window.openCreateGallery = function() {
+            document.getElementById('createGalleryModal').classList.add('active');
+        };
+
+        window.closeModal = function() {
+            document.getElementById('createGalleryModal').classList.remove('active');
+        };
+
+        window.editGallery = function(id) {
+            console.log('Edit gallery:', id);
+        };
+
+        window.viewLead = function(id) {
+            console.log('View lead:', id);
+        };
+
+        // Create gallery form
+        document.getElementById('createGalleryForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById('galleryTitle').value;
+            const description = document.getElementById('galleryDescription').value;
+            const is_public = document.getElementById('galleryVisibility').value === 'public';
+
+            const { error } = await supabase
+                .from('galleries')
+                .insert({
+                    title,
+                    description,
+                    is_public,
+                    created_by: currentUser.id
+                });
+
+            if (error) {
+                showAlert('Error creating gallery: ' + error.message, 'error');
+            } else {
+                showAlert('Gallery created successfully!', 'success');
+                closeModal();
+                loadGalleries();
+                loadDashboardData();
+            }
+        });
+
+        // Settings form
+        document.getElementById('settingsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showAlert('Settings saved successfully!', 'success');
+        });
+
+        // Show alert
+        function showAlert(message, type = 'info') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+
+            document.getElementById('alerts').appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        // Initialize on load
+        checkAuth();
+    </script>
+</body>
+</html>

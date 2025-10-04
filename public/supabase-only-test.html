@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Only Test - Clean</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .status { 
+            padding: 15px; 
+            border-radius: 5px; 
+            margin: 10px 0; 
+        }
+        .success { background: #2d5a2d; color: #90ee90; }
+        .error { background: #5a2d2d; color: #ffb6c1; }
+        .info { background: #2d4a5a; color: #87ceeb; }
+        button { 
+            padding: 12px 24px; 
+            margin: 5px; 
+            cursor: pointer; 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            font-size: 16px; 
+        }
+        button:hover { background: #0056b3; }
+        .user-info { 
+            background: #2a2a2a; 
+            padding: 15px; 
+            border-radius: 5px; 
+            margin: 20px 0; 
+            border: 1px solid #444;
+        }
+        input {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #444;
+            border-radius: 3px;
+            background: #333;
+            color: #fff;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Supabase Only Test - Clean</h1>
+    
+    <div class="status info">
+        <strong>Testing:</strong> Pure Supabase authentication with NO Firebase, Clerk, or Google interference
+    </div>
+
+    <div id="status"></div>
+    <div id="userInfo" class="user-info">No user logged in</div>
+
+    <div>
+        <h3>Email/Password Authentication:</h3>
+        <input type="email" id="email" placeholder="Email" value="test@example.com">
+        <input type="password" id="password" placeholder="Password" value="password123">
+        <br>
+        <button onclick="testEmailSignIn()">Sign In with Email</button>
+        <button onclick="testEmailSignUp()">Sign Up with Email</button>
+    </div>
+
+    <div>
+        <h3>Google OAuth:</h3>
+        <button onclick="testGoogleSignIn()">Sign In with Google</button>
+    </div>
+
+    <div>
+        <h3>Session Management:</h3>
+        <button onclick="testSignOut()">Sign Out</button>
+        <button onclick="checkAuth()">Check Auth Status</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+        // Initialize Supabase
+        const supabase = createClient(
+            'https://egoyqdbolmjfngjzllwl.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVnb3lxZGJvbG1qZm5nanpsbHdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3MjAyNDgsImV4cCI6MjA3MDI5NjI0OH0.O4Q5-rQbUa2_vGYLjMw7UBpODonjJvgBsrfHlHJhFGk'
+        );
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const resultHtml = `<div class="status ${type}">[${timestamp}] ${message}</div>`;
+            document.getElementById('results').innerHTML = resultHtml + document.getElementById('results').innerHTML;
+        }
+
+        function updateUserInfo(user) {
+            const userDiv = document.getElementById('userInfo');
+            if (user) {
+                userDiv.innerHTML = `
+                    <strong>✅ Logged In:</strong><br>
+                    Email: ${user.email}<br>
+                    ID: ${user.id}<br>
+                    Provider: ${user.app_metadata?.provider || 'email'}<br>
+                    Created: ${new Date(user.created_at).toLocaleString()}
+                `;
+                userDiv.className = 'user-info success';
+            } else {
+                userDiv.innerHTML = 'No user logged in';
+                userDiv.className = 'user-info';
+            }
+        }
+
+        // Test email sign-in
+        window.testEmailSignIn = async function() {
+            try {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                log(`Testing email sign-in with ${email}...`, 'info');
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+                
+                if (error) throw error;
+                log('✅ Email sign-in successful', 'success');
+                updateUserInfo(data.user);
+            } catch (error) {
+                log(`❌ Email sign-in error: ${error.message}`, 'error');
+            }
+        };
+
+        // Test email sign-up
+        window.testEmailSignUp = async function() {
+            try {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                log(`Testing email sign-up with ${email}...`, 'info');
+                const { data, error } = await supabase.auth.signUp({
+                    email,
+                    password
+                });
+                
+                if (error) throw error;
+                log('✅ Email sign-up successful', 'success');
+                updateUserInfo(data.user);
+            } catch (error) {
+                log(`❌ Email sign-up error: ${error.message}`, 'error');
+            }
+        };
+
+        // Test Google sign-in
+        window.testGoogleSignIn = async function() {
+            try {
+                log('Testing Google sign-in...', 'info');
+                const { data, error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: window.location.href
+                    }
+                });
+                
+                if (error) throw error;
+                log('✅ Google OAuth redirect initiated', 'success');
+            } catch (error) {
+                log(`❌ Google sign-in error: ${error.message}`, 'error');
+            }
+        };
+
+        // Test sign-out
+        window.testSignOut = async function() {
+            try {
+                log('Testing sign-out...', 'info');
+                const { error } = await supabase.auth.signOut();
+                if (error) throw error;
+                
+                log('✅ Sign-out successful', 'success');
+                updateUserInfo(null);
+            } catch (error) {
+                log(`❌ Sign-out error: ${error.message}`, 'error');
+            }
+        };
+
+        // Check auth status
+        window.checkAuth = async function() {
+            try {
+                log('Checking auth status...', 'info');
+                const { data: { user }, error } = await supabase.auth.getUser();
+                if (error) throw error;
+                
+                if (user) {
+                    log(`✅ User found: ${user.email}`, 'success');
+                    updateUserInfo(user);
+                } else {
+                    log('ℹ️ No user found', 'info');
+                    updateUserInfo(null);
+                }
+            } catch (error) {
+                log(`❌ Auth check error: ${error.message}`, 'error');
+            }
+        };
+
+        // Initialize
+        document.getElementById('status').innerHTML = '<div class="status success">✅ Supabase client loaded successfully - NO Firebase, Clerk, or Google interference</div>';
+        
+        // Check for existing session
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+            log(`✅ Existing session found: ${session.user.email}`, 'success');
+            updateUserInfo(session.user);
+        } else {
+            log('ℹ️ No existing session', 'info');
+        }
+
+        // Listen for auth changes
+        supabase.auth.onAuthStateChange((event, session) => {
+            log(`🔐 Auth event: ${event}`, 'info');
+            if (event === 'SIGNED_IN' && session) {
+                log(`✅ User signed in: ${session.user.email}`, 'success');
+                updateUserInfo(session.user);
+            } else if (event === 'SIGNED_OUT') {
+                log('ℹ️ User signed out', 'info');
+                updateUserInfo(null);
+            }
+        });
+    </script>
+</body>
+</html>
+

@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import * as Sentry from "@sentry/react";
-import { AuthProvider } from './contexts/AuthContext';
+import { SupabaseAuthProvider } from './contexts/SupabaseAuthContext';
 import App from './App';
 import './index.css';
 
@@ -9,7 +9,10 @@ import './index.css';
 import { initializeSecurity } from './utils/securityBootstrap';
 import logger from './utils/logger';
 
-// Import the Firebase configuration
+// Import Supabase client first (PRIMARY authentication)
+import './lib/supabase';
+
+// Import Firebase (needed for storage and legacy services only)
 import './firebase/config';
 
 // Initialize Sentry
@@ -88,11 +91,21 @@ if (!rootElement) {
     const root = createRoot(rootElement);
     
     logger.debug('Rendering React application');
+    
+    // Force remove loading spinner
+    setTimeout(() => {
+      const spinner = document.querySelector('.loading-container');
+      if (spinner) {
+        spinner.remove();
+        logger.info('Loading spinner removed');
+      }
+    }, 100);
+    
     root.render(
       <StrictMode>
-        <AuthProvider>
+        <SupabaseAuthProvider>
           <App />
-        </AuthProvider>
+        </SupabaseAuthProvider>
       </StrictMode>
     );
     

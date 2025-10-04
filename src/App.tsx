@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext';
+import { useSupabaseAuth as useAuth } from './contexts/SupabaseAuthContext';
 import AnalyticsProvider from './components/AnalyticsProvider';
 import GoogleAnalytics from './components/GoogleAnalytics';
 import { initializeAnalytics } from './utils/analytics';
@@ -95,6 +95,7 @@ import SuperDealLandingPage from './pages/SuperDealLandingPage'; // Import the S
 // import AIPricingPage from './pages/AIPricingPage'; // This will be replaced
 import PricingPage from './pages/PricingPage'; // CORRECT IMPORT for the main pricing page
 import MissionControlPage from './pages/admin/MissionControlPage'; // Import the Mission Control analytics page
+import AuthCallback from './pages/AuthCallback'; // Magic link callback
 
 // Auth routing component
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
@@ -152,6 +153,7 @@ const App: React.FC = () => {
             {GA_MEASUREMENT_ID && <GoogleAnalytics measurementId={GA_MEASUREMENT_ID} />}
             <Routes>
               <Route path="/" element={<LandingPage />} />
+              <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/jackie-chris" element={<JackieChrisGalleryPage />} />
               <Route path="/ansimon-mina" element={<AnsimonMinaGalleryPage />} />
               <Route path="/bianca-jeffrey" element={<BiancaJeffreyGalleryPage />} />

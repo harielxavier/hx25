@@ -1,6 +1,6 @@
 import { Bell, Search, Calendar, ChevronDown, Activity, HardDrive, Zap, Info, Home } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useSupabaseAuth as useAuth } from '../../contexts/SupabaseAuthContext';
 import { useLocation, Link } from 'react-router-dom';
 import { getAllGalleries, getPublicGalleries } from '../../services/galleryService';
 
@@ -182,13 +182,13 @@ export default function AdminHeader({ title }: AdminHeaderProps) {
           <div className="flex items-center gap-3 pl-3 border-l border-gray-200">
             <div className="w-8 h-8 bg-gray-200 rounded-full overflow-hidden">
               <img 
-                src={user?.photoURL || "/MoStuff/black.png"} 
-                alt={user?.displayName || "Admin"} 
+                src={user?.user_metadata?.avatar_url || "/MoStuff/black.png"} 
+                alt={user?.email || "Admin"} 
                 className="w-full h-full object-cover" 
               />
             </div>
             <div className="hidden md:block">
-              <p className="text-sm font-medium text-gray-800">{user?.displayName || "Admin"}</p>
+              <p className="text-sm font-medium text-gray-800">{user?.user_metadata?.full_name || user?.email || "Admin"}</p>
               <p className="text-xs text-gray-500">{user?.email || "admin@example.com"}</p>
             </div>
           </div>

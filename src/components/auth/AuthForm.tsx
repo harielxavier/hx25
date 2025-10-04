@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useAuth } from '../../contexts/AuthContext';
+import { useSupabaseAuth as useAuth } from '../../contexts/SupabaseAuthContext';
 import { Camera } from 'lucide-react';
 
 const authSchema = z.object({

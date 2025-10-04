@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
-import ManagedImage from '../shared/ManagedImage';
+import { Menu, X, Phone, MessageCircle } from 'lucide-react';
 
 export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -18,13 +17,36 @@ export default function Navigation() {
   // Tool links removed as requested
 
   return (
-    <nav 
-      role="navigation"
-      aria-label="Main navigation"
-      className="fixed w-full z-50 bg-white shadow-sm py-4"
-    >
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between">
+    <>
+      {/* New Number Announcement Banner */}
+      <div className="fixed w-full top-0 z-50 bg-gradient-to-r from-gray-900 to-black text-white py-2.5 shadow-md">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-center gap-3 text-sm flex-wrap">
+            <div className="flex items-center gap-2">
+              <Phone className="w-4 h-4 animate-pulse" />
+              <MessageCircle className="w-4 h-4" />
+            </div>
+            <span className="font-light">📢 New Number Alert!</span>
+            <span className="font-light hidden sm:inline">Call or text us at our new number:</span>
+            <span className="font-light sm:hidden">Our new number:</span>
+            <a 
+              href="tel:+18622904349" 
+              className="font-semibold hover:text-gray-300 transition-colors underline decoration-dotted underline-offset-4"
+            >
+              (862) 290-4349
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <nav 
+        role="navigation"
+        aria-label="Main navigation"
+        className="fixed w-full z-50 bg-white shadow-sm py-4"
+        style={{ marginTop: '42px' }}
+      >
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between">
           {/* Logo */}
           <Link 
             to="/" 
@@ -116,5 +138,6 @@ export default function Navigation() {
         )}
       </div>
     </nav>
+    </>
   );
 }

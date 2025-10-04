@@ -1,26 +1,102 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TQTDH1JY1L"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-TQTDH1JY1L");
+  </script>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/MoStuff/faviconhx.png" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-site-verification" content="D-OgHJaP_s1orUin2tIW4yMNCf06SkfvQvi6v8t-lRA" />
     <title>Hariel Xavier Photography</title>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-V9HYY5GS0D"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+    <meta name="description" content="Professional wedding and portrait photography by Hariel Xavier. Capturing your most precious moments with artistic vision and technical excellence." />
+    <meta name="keywords" content="wedding photography, portrait photography, professional photographer, Hariel Xavier" />
+    <meta name="author" content="Hariel Xavier Photography" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://harielxavierphotography.com/" />
+    <meta property="og:title" content="Hariel Xavier Photography" />
+    <meta property="og:description" content="Professional wedding and portrait photography by Hariel Xavier. Capturing your most precious moments with artistic vision and technical excellence." />
+    <meta property="og:image" content="/placeholder-image.jpg" />
 
-      gtag('config', 'G-V9HYY5GS0D');
-    </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://harielxavierphotography.com/" />
+    <meta property="twitter:title" content="Hariel Xavier Photography" />
+    <meta property="twitter:description" content="Professional wedding and portrait photography by Hariel Xavier. Capturing your most precious moments with artistic vision and technical excellence." />
+    <meta property="twitter:image" content="/placeholder-image.jpg" />
+
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://res.cloudinary.com" />
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Prevent flash of unstyled content -->
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: #ffffff;
+      }
+      
+      /* Loading spinner styles */
+      .loading-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+      
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #000000;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      /* Hide loading when React app loads */
+      #root:not(:empty) + .loading-container {
+        display: none;
+      }
+    </style>
+    <!-- Supabase Only - No Clerk -->
+    <!-- Authentication is handled by Supabase via /src/lib/supabase.ts -->
   </head>
   <body>
-    <div id="root"><!-- React root --></div>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Loading fallback -->
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+    </div>
   </body>
 </html>

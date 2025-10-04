@@ -19,7 +19,7 @@ import {
   Sliders,
   Home
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+import { useSupabaseAuth as useAuth } from '../contexts/SupabaseAuthContext';
 import { useState } from 'react';
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';

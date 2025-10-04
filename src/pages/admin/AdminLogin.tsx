@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useSupabaseAuth as useAuth } from '../../contexts/SupabaseAuthContext';
 import { AlertCircle, Info, ArrowLeft, X } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
 import { useLocation, useNavigate, Link } from 'react-router-dom';

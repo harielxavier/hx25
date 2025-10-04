@@ -59,34 +59,45 @@ export default function BookingForm({ services, onSuccess }: BookingFormProps) {
       setIsSubmitting(true);
 
       const bookingData = {
-        service_id: selectedService.id,
-        slot_id: selectedSlot.id,
-        date: selectedSlot.date,
+        client_name: `${data.firstName} ${data.lastName}`,
+        client_email: data.email,
+        client_phone: data.phone,
+        booking_date: selectedSlot.date,
         start_time: selectedSlot.start_time,
         end_time: selectedSlot.end_time,
-        location: data.location,
-        notes: data.notes,
+        service_type: selectedService.name,
+        status: 'pending' as const,
+        notes: data.notes || '',
+        location: data.location || '',
         total_amount: selectedService.price,
         deposit_amount: selectedService.deposit_amount
       };
 
-      const reminders = [
-        {
-          type: 'email',
-          send_before: '1 day',
-          template_id: 'booking-confirmation'
-        },
-        {
-          type: 'email',
-          send_before: '1 week',
-          template_id: 'booking-reminder'
-        }
-      ];
-
-      const bookingId = await createBooking(bookingData, reminders);
+      const bookingId = await createBooking(bookingData);
+      
+      // Send confirmation email via EmailJS
+      try {
+        const { sendBookingEmail } = await import('../../services/emailjsService');
+        await sendBookingEmail({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          serviceName: selectedService.name,
+          date: selectedSlot.date.toLocaleDateString(),
+          startTime: selectedSlot.start_time,
+          location: data.location || 'To be determined',
+          totalAmount: selectedService.price,
+          depositAmount: selectedService.deposit_amount
+        });
+      } catch (emailError) {
+        console.error('Error sending booking email:', emailError);
+        // Don't fail the booking if email fails
+      }
+      
       onSuccess(bookingId);
     } catch (error) {
       console.error('Error creating booking:', error);
+      alert('There was an error creating your booking. Please try again or call us at (862) 290-4349.');
     } finally {
       setIsSubmitting(false);
     }

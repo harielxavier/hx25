@@ -136,7 +136,7 @@ export function LandingPage() {
         }
       }) }} />
 
-      <div className="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
+      <div className="fixed top-0 left-0 w-full h-1 bg-gray-200 z-[60]">
         <div 
           className="h-full bg-black transition-all duration-150"
           style={{ width: `${scrollProgress}%` }}
@@ -145,7 +145,7 @@ export function LandingPage() {
 
       <Navigation />
       
-      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32" style={{ height: '100vh' }}>
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ height: '100vh', paddingTop: '170px' }}>
         {/* Video Background REMOVED - Using static image HeroPageUrl as primary background */}
         {/* 
         <video
@@ -797,166 +797,6 @@ export function LandingPage() {
         </div>
       </section>
 
-{/* Revolutionary AI Wedding Consultant Hero Section */}
-      <section className="py-24 bg-black text-white relative overflow-hidden">
-        {/* Animated Dot Matrix Background */}
-        <div className="absolute inset-0 animated-dots"></div>
-        
-        {/* Overlay for content readability */}
-        <div className="absolute inset-0 animated-dots-overlay"></div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
-              
-              {/* Left Column - Content */}
-              <div className="space-y-8">
-                {/* Innovation Badge */}
-                <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-white/20 to-gray-300/20 backdrop-blur-sm rounded-full border border-white/20">
-                  <div className="w-2 h-2 bg-gradient-to-r from-white to-gray-300 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-medium tracking-wide">HARIEL XAVIER'S AI WEDDING CONSULTANT</span>
-                  <div className="w-2 h-2 bg-gradient-to-r from-white to-gray-300 rounded-full animate-pulse"></div>
-                </div>
-
-                {/* Main Headline */}
-                <div className="space-y-4">
-                  <h2 className="text-5xl lg:text-6xl xl:text-7xl font-light leading-tight">
-                    Meet
-                    <span className="block font-serif text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-400">
-                      Sarah
-                    </span>
-                  </h2>
-                  <p className="text-2xl lg:text-3xl text-gray-300 font-light">
-                    Your Wedding Photography Strategist
-                  </p>
-                </div>
-
-                {/* Value Proposition */}
-                <div className="space-y-6">
-                  <p className="text-xl text-gray-200 leading-relaxed max-w-2xl">
-                    Powered by Hariel Xavier's 14+ years of wedding expertise and 300+ sophisticated celebrations. Sarah analyzes your vision, style preferences, and celebration details to recommend the perfect photography collection that matches your refined aesthetic and timeless taste.
-                  </p>
-                  
-                  {/* Key Benefits */}
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-gradient-to-r from-white to-gray-300 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-xs text-black">✓</span>
-                      </div>
-                      <div>
-                        <p className="font-medium text-white">Sophisticated Style Matching</p>
-                        <p className="text-sm text-gray-400">AI analysis of your aesthetic preferences</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-gradient-to-r from-white to-gray-300 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-xs text-black">✓</span>
-                      </div>
-                      <div>
-                        <p className="font-medium text-white">Intimate Celebration Expertise</p>
-                        <p className="text-sm text-gray-400">Specialized guidance for elegant elopements</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-gradient-to-r from-white to-gray-300 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-xs text-black">✓</span>
-                      </div>
-                      <div>
-                        <p className="font-medium text-white">Investment Optimization</p>
-                        <p className="text-sm text-gray-400">Maximum artistry within your budget</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-gradient-to-r from-white to-gray-300 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-xs text-black">✓</span>
-                      </div>
-                      <div>
-                        <p className="font-medium text-white">Instant Consultations</p>
-                        <p className="text-sm text-gray-400">Available 24/7 for immediate guidance</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Social Proof */}
-                <div className="flex items-center gap-8 pt-4">
-                  <div className="text-center">
-                    <p className="text-3xl font-bold text-white">300+</p>
-                    <p className="text-sm text-gray-400">Weddings Analyzed</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-3xl font-bold text-white">14+</p>
-                    <p className="text-sm text-gray-400">Years of Data</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-3xl font-bold text-white">98%</p>
-                    <p className="text-sm text-gray-400">Match Accuracy</p>
-                  </div>
-                </div>
-
-                {/* CTA Buttons */}
-                <div className="flex justify-center pt-6">
-                  <Link
-                    to="/pricing"
-                    className="group inline-flex items-center justify-center px-8 py-4 bg-white text-black font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-white/25 border border-gray-300"
-                  >
-                    <span>Consult with Sarah</span>
-                    <ArrowRight className="ml-2 w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
-              </div>
-
-              {/* Right Column - Sarah's Image & Tech Showcase */}
-              <div className="relative">
-                {/* Main Sarah Image Container */}
-                <div className="relative max-w-md mx-auto">
-                  {/* Glowing Ring Effect */}
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-white via-gray-300 to-gray-500 p-1 animate-spin-slow">
-                    <div className="w-full h-full rounded-full bg-gradient-to-br from-black to-gray-900"></div>
-                  </div>
-                  
-                  {/* Sarah's Image */}
-                  <div className="relative z-10 p-6">
-                    <div className="w-80 h-80 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl mx-auto">
-                      <img
-                        src="/images/sarahai.jpg"
-                        alt="Sarah - World's First AI Wedding Consultant"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* Data Visualization Elements */}
-                  <div className="absolute top-8 left-8 bg-black/40 backdrop-blur-sm rounded-lg p-3 border border-white/10">
-                    <div className="flex items-center gap-2 text-xs text-white">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                      <span>AI Active</span>
-                    </div>
-                  </div>
-                  
-                  <div className="absolute bottom-8 right-8 bg-black/40 backdrop-blur-sm rounded-lg p-3 border border-white/10">
-                    <div className="text-xs text-white">
-                      <div className="flex justify-between gap-4 mb-1">
-                        <span>Match Rate:</span>
-                        <span className="text-green-400 font-bold">98%</span>
-                      </div>
-                      <div className="w-16 h-1 bg-gray-600 rounded-full overflow-hidden">
-                        <div className="w-full h-full bg-gradient-to-r from-green-400 to-emerald-400 animate-pulse"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Background Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-rose-500/20 to-amber-500/20 rounded-full blur-3xl scale-150 -z-10"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
       <PhotographyStyleSlider />
 
 

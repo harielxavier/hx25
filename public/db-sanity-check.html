@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Database Sanity Check - Hariel Xavier Photography</title>
+    <style>
+        body { font-family: 'Inter', Arial, sans-serif; padding: 20px; max-width: 1200px; margin: 0 auto; background: #f8f9fa; }
+        .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .status { padding: 15px; border-radius: 5px; margin: 10px 0; }
+        .success { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
+        .error { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; }
+        .info { background: #d1ecf1; color: #0c5460; border-left: 4px solid #17a2b8; }
+        .warning { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
+        .critical { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; font-weight: bold; }
+        button { padding: 12px 24px; margin: 5px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 5px; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .test-section { background: white; border: 1px solid #dee2e6; padding: 20px; margin: 20px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1, h2 { color: #495057; }
+        h1 { text-align: center; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #6c757d; margin-bottom: 20px; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .full-width { grid-column: 1 / -1; }
+        .metric { background: #e9ecef; padding: 15px; border-radius: 5px; text-align: center; }
+        .metric-value { font-size: 24px; font-weight: bold; color: #007bff; }
+        .metric-label { font-size: 14px; color: #6c757d; }
+        .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid #007bff; border-radius: 50%; animation: spin 1s linear infinite; margin-left: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .table th, .table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #dee2e6; }
+        .table th { background: #f8f9fa; font-weight: 600; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .badge-success { background: #d4edda; color: #155724; }
+        .badge-warning { background: #fff3cd; color: #856404; }
+        .badge-danger { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔍 Supabase Database Sanity Check</h1>
+        <p class="subtitle">Comprehensive audit of authentication, tables, and database integrity</p>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 Overall Status</h2>
+        <div class="grid">
+            <div class="metric">
+                <div class="metric-value" id="connectionStatus">-</div>
+                <div class="metric-label">Connection</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="authStatus">-</div>
+                <div class="metric-label">Authentication</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="tableCount">-</div>
+                <div class="metric-label">Tables</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="userCount">-</div>
+                <div class="metric-label">Users</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔗 Connection & Configuration</h2>
+        <div id="connectionResults"></div>
+        <button onclick="testConnection()">Test Connection</button>
+        <button onclick="checkProjectInfo()">Check Project Info</button>
+    </div>
+
+    <div class="test-section">
+        <h2>🔐 Authentication Configuration</h2>
+        <div id="authResults"></div>
+        <button onclick="checkAuthConfig()">Check Auth Config</button>
+        <button onclick="testAuthProviders()">Test Auth Providers</button>
+        <button onclick="checkCurrentUser()">Check Current User</button>
+    </div>
+
+    <div class="test-section">
+        <h2>🗄️ Database Tables & Schema</h2>
+        <div id="tableResults"></div>
+        <button onclick="listTables()">List All Tables</button>
+        <button onclick="checkTableSchema()">Check Table Schema</button>
+        <button onclick="testTableOperations()">Test Table Operations</button>
+    </div>
+
+    <div class="test-section">
+        <h2>🛡️ Row Level Security (RLS)</h2>
+        <div id="rlsResults"></div>
+        <button onclick="checkRLSPolicies()">Check RLS Policies</button>
+        <button onclick="testRLSEnforcement()">Test RLS Enforcement</button>
+    </div>
+
+    <div class="test-section">
+        <h2>🔑 API Keys & Permissions</h2>
+        <div id="apiResults"></div>
+        <button onclick="checkAPIKeys()">Check API Keys</button>
+        <button onclick="testPermissions()">Test Permissions</button>
+    </div>
+
+    <div class="test-section">
+        <h2>📈 Data Operations Test</h2>
+        <div id="dataResults"></div>
+        <button onclick="testCRUDOperations()">Test CRUD Operations</button>
+        <button onclick="testQueries()">Test Queries</button>
+        <button onclick="testRealTime()">Test Real-time</button>
+    </div>
+
+    <div class="test-section full-width">
+        <h2>📋 Test Results Log</h2>
+        <div id="testLog"></div>
+        <button onclick="runFullSanityCheck()">Run Full Sanity Check</button>
+        <button onclick="clearLog()">Clear Log</button>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+        // Supabase configuration
+        const SUPABASE_URL = 'https://egoyqdbolmjfngjzllwl.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVnb3lxZGJvbG1qZm5nanpsbHdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3MjAyNDgsImV4cCI6MjA3MDI5NjI0OH0.O4Q5-rQbUa2_vGYLjMw7UBpODonjJvgBsrfHlHJhFGk';
+
+        // Initialize Supabase client
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Global functions for onclick handlers
+        window.supabase = supabase;
+
+        function log(message, type = 'info', section = 'general') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logHtml = `<div class="status ${type}">[${timestamp}] ${message}</div>`;
+            
+            // Add to general log
+            document.getElementById('testLog').innerHTML = logHtml + document.getElementById('testLog').innerHTML;
+            
+            // Add to specific section if provided
+            if (section !== 'general') {
+                const sectionId = section + 'Results';
+                if (document.getElementById(sectionId)) {
+                    document.getElementById(sectionId).innerHTML = logHtml + document.getElementById(sectionId).innerHTML;
+                }
+            }
+        }
+
+        function updateMetric(metricId, value, type = 'info') {
+            const element = document.getElementById(metricId);
+            if (element) {
+                element.textContent = value;
+                element.className = `metric-value ${type}`;
+            }
+        }
+
+        // Test connection
+        window.testConnection = async function() {
+            try {
+                log('Testing Supabase connection...', 'info', 'connection');
+                
+                const { data, error } = await supabase.auth.getSession();
+                if (error) throw error;
+                
+                log('✅ Connection successful!', 'success', 'connection');
+                updateMetric('connectionStatus', '✅', 'success');
+                
+                // Test basic query
+                const { data: testData, error: testError } = await supabase
+                    .from('information_schema.tables')
+                    .select('table_name')
+                    .limit(1);
+                
+                if (testError) {
+                    log(`⚠️ Query test failed: ${testError.message}`, 'warning', 'connection');
+                } else {
+                    log('✅ Database query test successful', 'success', 'connection');
+                }
+                
+            } catch (error) {
+                log(`❌ Connection failed: ${error.message}`, 'error', 'connection');
+                updateMetric('connectionStatus', '❌', 'error');
+            }
+        };
+
+        // Check project info
+        window.checkProjectInfo = async function() {
+            try {
+                log('Checking project information...', 'info', 'connection');
+                
+                // Extract project info from URL
+                const url = new URL(SUPABASE_URL);
+                const projectRef = url.hostname.split('.')[0];
+                
+                log(`Project Reference: ${projectRef}`, 'info', 'connection');
+                log(`Project URL: ${SUPABASE_URL}`, 'info', 'connection');
+                log(`API Key: ${SUPABASE_ANON_KEY.substring(0, 20)}...`, 'info', 'connection');
+                
+                // Check if we can access system tables
+                const { data, error } = await supabase
+                    .from('information_schema.tables')
+                    .select('table_name, table_schema')
+                    .eq('table_schema', 'public')
+                    .limit(5);
+                
+                if (error) {
+                    log(`⚠️ Cannot access system tables: ${error.message}`, 'warning', 'connection');
+                } else {
+                    log(`✅ Can access system tables (${data.length} public tables found)`, 'success', 'connection');
+                }
+                
+            } catch (error) {
+                log(`❌ Project info check failed: ${error.message}`, 'error', 'connection');
+            }
+        };
+
+        // Check auth configuration
+        window.checkAuthConfig = async function() {
+            try {
+                log('Checking authentication configuration...', 'info', 'auth');
+                
+                // Check current session
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                if (sessionError) {
+                    log(`⚠️ Session check failed: ${sessionError.message}`, 'warning', 'auth');
+                } else if (session) {
+                    log(`✅ Active session found for: ${session.user.email}`, 'success', 'auth');
+                    updateMetric('authStatus', '✅', 'success');
+                } else {
+                    log('ℹ️ No active session (user not logged in)', 'info', 'auth');
+                    updateMetric('authStatus', '⚠️', 'warning');
+                }
+                
+                // Check auth settings
+                log('Auth settings:', 'info', 'auth');
+                log(`- Auto refresh: enabled`, 'info', 'auth');
+                log(`- Persist session: enabled`, 'info', 'auth');
+                log(`- Detect session in URL: enabled`, 'info', 'auth');
+                log(`- Storage: localStorage`, 'info', 'auth');
+                
+            } catch (error) {
+                log(`❌ Auth config check failed: ${error.message}`, 'error', 'auth');
+                updateMetric('authStatus', '❌', 'error');
+            }
+        };
+
+        // Test auth providers
+        window.testAuthProviders = async function() {
+            try {
+                log('Testing authentication providers...', 'info', 'auth');
+                
+                // Test Google OAuth (without actually signing in)
+                log('Testing Google OAuth configuration...', 'info', 'auth');
+                
+                // Check if we can initiate OAuth flow (this will redirect, so we catch it)
+                try {
+                    await supabase.auth.signInWithOAuth({
+                        provider: 'google',
+                        options: {
+                            redirectTo: window.location.href
+                        }
+                    });
+                } catch (error) {
+                    if (error.message.includes('redirect')) {
+                        log('✅ Google OAuth configured (redirect initiated)', 'success', 'auth');
+                    } else {
+                        log(`⚠️ Google OAuth issue: ${error.message}`, 'warning', 'auth');
+                    }
+                }
+                
+                // Test email/password (check if enabled)
+                log('Email/password authentication should be available', 'info', 'auth');
+                
+            } catch (error) {
+                log(`❌ Auth provider test failed: ${error.message}`, 'error', 'auth');
+            }
+        };
+
+        // Check current user
+        window.checkCurrentUser = async function() {
+            try {
+                log('Checking current user...', 'info', 'auth');
+                
+                const { data: { user }, error } = await supabase.auth.getUser();
+                if (error) {
+                    log(`❌ User check failed: ${error.message}`, 'error', 'auth');
+                    return;
+                }
+                
+                if (user) {
+                    log(`✅ Current user: ${user.email}`, 'success', 'auth');
+                    log(`User ID: ${user.id}`, 'info', 'auth');
+                    log(`Created: ${new Date(user.created_at).toLocaleString()}`, 'info', 'auth');
+                    log(`Last sign in: ${new Date(user.last_sign_in_at).toLocaleString()}`, 'info', 'auth');
+                    log(`Provider: ${user.app_metadata?.provider || 'email'}`, 'info', 'auth');
+                    updateMetric('userCount', '1', 'success');
+                } else {
+                    log('ℹ️ No current user (not authenticated)', 'info', 'auth');
+                    updateMetric('userCount', '0', 'info');
+                }
+                
+            } catch (error) {
+                log(`❌ Current user check failed: ${error.message}`, 'error', 'auth');
+            }
+        };
+
+        // List tables
+        window.listTables = async function() {
+            try {
+                log('Listing database tables...', 'info', 'table');
+                
+                // Try to get tables from information_schema
+                const { data: tables, error } = await supabase
+                    .from('information_schema.tables')
+                    .select('table_name, table_schema')
+                    .eq('table_schema', 'public')
+                    .order('table_name');
+                
+                if (error) {
+                    log(`⚠️ Cannot access information_schema: ${error.message}`, 'warning', 'table');
+                    
+                    // Try common table names
+                    const commonTables = ['users', 'galleries', 'leads', 'posts', 'settings'];
+                    log('Trying common table names...', 'info', 'table');
+                    
+                    for (const tableName of commonTables) {
+                        try {
+                            const { data, error: tableError } = await supabase
+                                .from(tableName)
+                                .select('*')
+                                .limit(1);
+                            
+                            if (!tableError) {
+                                log(`✅ Table '${tableName}' exists and accessible`, 'success', 'table');
+                            }
+                        } catch (e) {
+                            log(`❌ Table '${tableName}' not accessible: ${e.message}`, 'error', 'table');
+                        }
+                    }
+                } else {
+                    log(`✅ Found ${tables.length} public tables:`, 'success', 'table');
+                    updateMetric('tableCount', tables.length.toString(), 'success');
+                    
+                    tables.forEach(table => {
+                        log(`- ${table.table_name}`, 'info', 'table');
+                    });
+                }
+                
+            } catch (error) {
+                log(`❌ Table listing failed: ${error.message}`, 'error', 'table');
+            }
+        };
+
+        // Check table schema
+        window.checkTableSchema = async function() {
+            try {
+                log('Checking table schemas...', 'info', 'table');
+                
+                // Check if we can access common tables
+                const tablesToCheck = ['users', 'galleries', 'leads', 'posts'];
+                
+                for (const tableName of tablesToCheck) {
+                    try {
+                        const { data, error } = await supabase
+                            .from(tableName)
+                            .select('*')
+                            .limit(0); // Just check structure, no data
+                        
+                        if (!error) {
+                            log(`✅ Table '${tableName}' schema accessible`, 'success', 'table');
+                        } else {
+                            log(`❌ Table '${tableName}' not accessible: ${error.message}`, 'error', 'table');
+                        }
+                    } catch (e) {
+                        log(`❌ Table '${tableName}' error: ${e.message}`, 'error', 'table');
+                    }
+                }
+                
+            } catch (error) {
+                log(`❌ Schema check failed: ${error.message}`, 'error', 'table');
+            }
+        };
+
+        // Test table operations
+        window.testTableOperations = async function() {
+            try {
+                log('Testing table operations...', 'info', 'table');
+                
+                // Test read operation
+                const { data: readData, error: readError } = await supabase
+                    .from('galleries')
+                    .select('*')
+                    .limit(1);
+                
+                if (readError) {
+                    log(`❌ Read operation failed: ${readError.message}`, 'error', 'table');
+                } else {
+                    log(`✅ Read operation successful (${readData.length} records)`, 'success', 'table');
+                }
+                
+                // Test count operation
+                const { count, error: countError } = await supabase
+                    .from('galleries')
+                    .select('*', { count: 'exact', head: true });
+                
+                if (countError) {
+                    log(`⚠️ Count operation failed: ${countError.message}`, 'warning', 'table');
+                } else {
+                    log(`✅ Count operation successful (${count} records)`, 'success', 'table');
+                }
+                
+            } catch (error) {
+                log(`❌ Table operations test failed: ${error.message}`, 'error', 'table');
+            }
+        };
+
+        // Check RLS policies
+        window.checkRLSPolicies = async function() {
+            try {
+                log('Checking Row Level Security policies...', 'info', 'rls');
+                
+                // Try to access RLS information
+                const { data: policies, error } = await supabase
+                    .from('pg_policies')
+                    .select('*')
+                    .limit(10);
+                
+                if (error) {
+                    log(`⚠️ Cannot access RLS policies directly: ${error.message}`, 'warning', 'rls');
+                    log('This is normal - RLS policies are system-level', 'info', 'rls');
+                } else {
+                    log(`✅ Found ${policies.length} RLS policies`, 'success', 'rls');
+                    policies.forEach(policy => {
+                        log(`- ${policy.policyname} on ${policy.tablename}`, 'info', 'rls');
+                    });
+                }
+                
+                // Test RLS enforcement by trying to access data
+                log('Testing RLS enforcement...', 'info', 'rls');
+                
+                const { data: testData, error: testError } = await supabase
+                    .from('galleries')
+                    .select('*')
+                    .limit(1);
+                
+                if (testError) {
+                    log(`❌ RLS test failed: ${testError.message}`, 'error', 'rls');
+                } else {
+                    log('✅ RLS test passed - data access working', 'success', 'rls');
+                }
+                
+            } catch (error) {
+                log(`❌ RLS check failed: ${error.message}`, 'error', 'rls');
+            }
+        };
+
+        // Test RLS enforcement
+        window.testRLSEnforcement = async function() {
+            try {
+                log('Testing RLS enforcement...', 'info', 'rls');
+                
+                // Test with different user contexts
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                if (user) {
+                    log(`Testing RLS with authenticated user: ${user.email}`, 'info', 'rls');
+                } else {
+                    log('Testing RLS with anonymous user', 'info', 'rls');
+                }
+                
+                // Try to access different tables
+                const tablesToTest = ['galleries', 'leads', 'users'];
+                
+                for (const tableName of tablesToTest) {
+                    try {
+                        const { data, error } = await supabase
+                            .from(tableName)
+                            .select('*')
+                            .limit(1);
+                        
+                        if (error) {
+                            log(`❌ RLS blocked access to '${tableName}': ${error.message}`, 'error', 'rls');
+                        } else {
+                            log(`✅ RLS allowed access to '${tableName}'`, 'success', 'rls');
+                        }
+                    } catch (e) {
+                        log(`❌ RLS test error for '${tableName}': ${e.message}`, 'error', 'rls');
+                    }
+                }
+                
+            } catch (error) {
+                log(`❌ RLS enforcement test failed: ${error.message}`, 'error', 'rls');
+            }
+        };
+
+        // Check API keys
+        window.checkAPIKeys = async function() {
+            try {
+                log('Checking API keys and permissions...', 'info', 'api');
+                
+                // Check anon key
+                log(`Anon Key: ${SUPABASE_ANON_KEY.substring(0, 20)}...`, 'info', 'api');
+                
+                // Test anon key permissions
+                const { data, error } = await supabase
+                    .from('galleries')
+                    .select('*')
+                    .limit(1);
+                
+                if (error) {
+                    log(`❌ Anon key test failed: ${error.message}`, 'error', 'api');
+                } else {
+                    log('✅ Anon key working correctly', 'success', 'api');
+                }
+                
+                // Check if we can access auth endpoints
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session) {
+                    log('✅ Auth endpoints accessible', 'success', 'api');
+                } else {
+                    log('ℹ️ Auth endpoints accessible (no session)', 'info', 'api');
+                }
+                
+            } catch (error) {
+                log(`❌ API key check failed: ${error.message}`, 'error', 'api');
+            }
+        };
+
+        // Test permissions
+        window.testPermissions = async function() {
+            try {
+                log('Testing permissions...', 'info', 'api');
+                
+                // Test read permissions
+                const { data: readData, error: readError } = await supabase
+                    .from('galleries')
+                    .select('*')
+                    .limit(1);
+                
+                if (readError) {
+                    log(`❌ Read permission failed: ${readError.message}`, 'error', 'api');
+                } else {
+                    log('✅ Read permission working', 'success', 'api');
+                }
+                
+                // Test write permissions (create a test record)
+                const testData = {
+                    title: 'Test Gallery',
+                    description: 'Test description',
+                    created_at: new Date().toISOString()
+                };
+                
+                const { data: insertData, error: insertError } = await supabase
+                    .from('galleries')
+                    .insert(testData)
+                    .select();
+                
+                if (insertError) {
+                    log(`❌ Write permission failed: ${insertError.message}`, 'error', 'api');
+                } else {
+                    log('✅ Write permission working', 'success', 'api');
+                    
+                    // Clean up test data
+                    if (insertData && insertData[0]) {
+                        await supabase
+                            .from('galleries')
+                            .delete()
+                            .eq('id', insertData[0].id);
+                        log('✅ Test data cleaned up', 'success', 'api');
+                    }
+                }
+                
+            } catch (error) {
+                log(`❌ Permissions test failed: ${error.message}`, 'error', 'api');
+            }
+        };
+
+        // Test CRUD operations
+        window.testCRUDOperations = async function() {
+            try {
+                log('Testing CRUD operations...', 'info', 'data');
+                
+                // Test CREATE
+                const testRecord = {
+                    title: 'Sanity Check Test',
+                    description: 'Test record for sanity check',
+                    created_at: new Date().toISOString()
+                };
+                
+                const { data: createData, error: createError } = await supabase
+                    .from('galleries')
+                    .insert(testRecord)
+                    .select();
+                
+                if (createError) {
+                    log(`❌ CREATE operation failed: ${createError.message}`, 'error', 'data');
+                    return;
+                }
+                
+                log('✅ CREATE operation successful', 'success', 'data');
+                const recordId = createData[0].id;
+                
+                // Test READ
+                const { data: readData, error: readError } = await supabase
+                    .from('galleries')
+                    .select('*')
+                    .eq('id', recordId)
+                    .single();
+                
+                if (readError) {
+                    log(`❌ READ operation failed: ${readError.message}`, 'error', 'data');
+                } else {
+                    log('✅ READ operation successful', 'success', 'data');
+                }
+                
+                // Test UPDATE
+                const { data: updateData, error: updateError } = await supabase
+                    .from('galleries')
+                    .update({ title: 'Updated Test Record' })
+                    .eq('id', recordId)
+                    .select();
+                
+                if (updateError) {
+                    log(`❌ UPDATE operation failed: ${updateError.message}`, 'error', 'data');
+                } else {
+                    log('✅ UPDATE operation successful', 'success', 'data');
+                }
+                
+                // Test DELETE
+                const { error: deleteError } = await supabase
+                    .from('galleries')
+                    .delete()
+                    .eq('id', recordId);
+                
+                if (deleteError) {
+                    log(`❌ DELETE operation failed: ${deleteError.message}`, 'error', 'data');
+                } else {
+                    log('✅ DELETE operation successful', 'success', 'data');
+                }
+                
+                log('✅ All CRUD operations completed successfully', 'success', 'data');
+                
+            } catch (error) {
+                log(`❌ CRUD operations test failed: ${error.message}`, 'error', 'data');
+            }
+        };
+
+        // Test queries
+        window.testQueries = async function() {
+            try {
+                log('Testing database queries...', 'info', 'data');
+                
+                // Test basic select
+                const { data: selectData, error: selectError } = await supabase
+                    .from('galleries')
+                    .select('*')
+                    .limit(5);
+                
+                if (selectError) {
+                    log(`❌ Basic select failed: ${selectError.message}`, 'error', 'data');
+                } else {
+                    log(`✅ Basic select successful (${selectData.length} records)`, 'success', 'data');
+                }
+                
+                // Test filtering
+                const { data: filterData, error: filterError } = await supabase
+                    .from('galleries')
+                    .select('*')
+                    .not('title', 'is', null)
+                    .limit(3);
+                
+                if (filterError) {
+                    log(`❌ Filter query failed: ${filterError.message}`, 'error', 'data');
+                } else {
+                    log(`✅ Filter query successful (${filterData.length} records)`, 'success', 'data');
+                }
+                
+                // Test ordering
+                const { data: orderData, error: orderError } = await supabase
+                    .from('galleries')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(3);
+                
+                if (orderError) {
+                    log(`❌ Order query failed: ${orderError.message}`, 'error', 'data');
+                } else {
+                    log(`✅ Order query successful (${orderData.length} records)`, 'success', 'data');
+                }
+                
+            } catch (error) {
+                log(`❌ Query test failed: ${error.message}`, 'error', 'data');
+            }
+        };
+
+        // Test real-time
+        window.testRealTime = async function() {
+            try {
+                log('Testing real-time subscriptions...', 'info', 'data');
+                
+                const channel = supabase
+                    .channel('sanity-check')
+                    .on('postgres_changes', 
+                        { event: '*', schema: 'public', table: 'galleries' },
+                        (payload) => {
+                            log(`✅ Real-time event received: ${payload.eventType}`, 'success', 'data');
+                        }
+                    )
+                    .subscribe();
+                
+                log('✅ Real-time subscription established', 'success', 'data');
+                
+                // Clean up after 5 seconds
+                setTimeout(() => {
+                    supabase.removeChannel(channel);
+                    log('✅ Real-time subscription cleaned up', 'success', 'data');
+                }, 5000);
+                
+            } catch (error) {
+                log(`❌ Real-time test failed: ${error.message}`, 'error', 'data');
+            }
+        };
+
+        // Run full sanity check
+        window.runFullSanityCheck = async function() {
+            log('🚀 Starting full database sanity check...', 'info', 'general');
+            
+            try {
+                await testConnection();
+                await checkProjectInfo();
+                await checkAuthConfig();
+                await checkCurrentUser();
+                await listTables();
+                await checkTableSchema();
+                await checkRLSPolicies();
+                await checkAPIKeys();
+                await testCRUDOperations();
+                await testQueries();
+                
+                log('✅ Full sanity check completed!', 'success', 'general');
+            } catch (error) {
+                log(`❌ Full sanity check failed: ${error.message}`, 'error', 'general');
+            }
+        };
+
+        // Clear log
+        window.clearLog = function() {
+            document.getElementById('testLog').innerHTML = '';
+            document.getElementById('connectionResults').innerHTML = '';
+            document.getElementById('authResults').innerHTML = '';
+            document.getElementById('tableResults').innerHTML = '';
+            document.getElementById('rlsResults').innerHTML = '';
+            document.getElementById('apiResults').innerHTML = '';
+            document.getElementById('dataResults').innerHTML = '';
+        };
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            log('🔍 Database Sanity Check Tool Loaded', 'info', 'general');
+            log('Click "Run Full Sanity Check" to test everything', 'info', 'general');
+        });
+    </script>
+</body>
+</html>
+

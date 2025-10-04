@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { useInView } from 'react-intersection-observer';
-import { Check, Sparkles, Gem, Crown, Zap, Film, Gift, CalendarDays, MessageSquareHeart, Users, Video, Package2, Bot } from 'lucide-react'; // Added Bot icon
-import { grokAI, GrokServicePricingPackage } from '../services/ai/GrokAIService';
-import SarahAIWidget from '../components/pricing/SarahAIWidget'; // Import the new widget
+import { Check, Sparkles, Gem, Crown, Zap, Film, Gift, CalendarDays, Users, Video, Package2 } from 'lucide-react';
 import Navigation from '../components/landing/Navigation';
 import SEO from '../components/layout/SEO';
 import ReversibleVideo from '../components/shared/ReversibleVideo';
-import CalendarAvailability from '../components/wedding/CalendarAvailability';
 
 interface FeatureDetail {
   text: string;
@@ -166,53 +163,6 @@ const PricingSectionWrapper: React.FC<{ title: string; subtitle?: string; childr
 };
 
 export default function PricingPage() {
-  const [aiSuggestion, setAiSuggestion] = useState<string>('');
-  const [isLoadingAI, setIsLoadingAI] = useState<boolean>(false);
-
-  const elopementPackages: Package[] = [
-    { id: 'elopement-intimate', name: "The Intimate", price: "1,595", monthlyPrice: "133", tier: 'elopement',
-      features: [
-        { text: "3 hours of heartfelt coverage", icon: CalendarDays }, 
-        { text: "200+ professionally edited, high-resolution images", icon: Sparkles },
-        { text: "Online gallery for sharing & downloads (6 months)", icon: Gift }, 
-        { text: "10 breathtaking sneak peeks within 24 hours", icon: Zap },
-        { text: "Travel within 25 miles of Sparta, NJ included", icon: Check }, 
-        "Personal consultation to dream up your day",
-        "Timeline planning assistance for a seamless experience"
-      ],
-      perfectFor: ["City hall vows", "Cozy backyard ceremonies", "Charming micro-venues"], 
-      usp: "Perfectly capturing the pure essence of your intimate celebration."
-    },
-    { id: 'elopement-adventure', name: "The Adventure", price: "2,195", monthlyPrice: "183", tier: 'elopement', popular: true, themeColor: 'bg-champagneRose', textColor: 'text-black',
-      features: [
-        { text: "4 hours of adventurous coverage", icon: CalendarDays }, 
-        { text: "300+ professionally edited, high-resolution images", icon: Sparkles },
-        { text: "Online gallery for sharing & downloads (1 year)", icon: Gift }, 
-        { text: "15 stunning sneak peeks within 12 hours", icon: Zap },
-        { text: "Travel within 50 miles of Sparta, NJ included", icon: Check },
-        "Location scouting assistance for epic backdrops",
-        "Guidance on permits & local vendor connections",
-        "Emergency weather backup planning"
-      ],
-      perfectFor: ["Breathtaking beach elopements", "Majestic mountain vows", "Unique destination spots"], 
-      usp: "Our most loved choice for spirited couples ready to say 'I do' in style."
-    },
-    { id: 'elopement-escape', name: "The Escape", price: "2,895", monthlyPrice: "241", tier: 'elopement',
-      features: [
-        { text: "6 hours of immersive coverage (ceremony + celebration)", icon: CalendarDays }, 
-        { text: "400+ professionally edited, high-resolution images", icon: Sparkles },
-        { text: "Lifetime gallery hosting - your memories, forever", icon: Gem }, 
-        { text: "20 captivating sneak peeks within just 6 hours!", icon: Zap },
-        { text: "Travel within 100 miles of Sparta, NJ included", icon: Check },
-        "Complimentary mini engagement session (1 hour, local)",
-        "Day-of coordination support for a stress-free flow",
-        "Curated vendor recommendations"
-      ],
-      perfectFor: ["Romantic weekend getaways", "Multi-location elopement stories"], 
-      usp: "The ultimate elopement journey, capturing every cherished detail from start to finish."
-    }
-  ];
-
   const singleShooterWeddingPackages: Package[] = [
     { id: 'wedding-sparta-sparkler', name: "The Sparta Sparkler", price: "2,795", monthlyPrice: "233", tier: 'single-shooter',
       features: [
@@ -308,20 +258,6 @@ export default function PricingPage() {
     { title: "Share the Love Referral", value: "$200 Credit Each", icon: Sparkles, notes:"When your friend books" }
   ];
 
-  const allPackagesForAI = [
-    ...elopementPackages, 
-    ...singleShooterWeddingPackages, 
-    ...duoCoverageWeddingPackages
-  ].map(p => ({
-    id: p.id,
-    name: p.name,
-    price: p.price,
-    tier: p.tier,
-    coverage: p.coverage,
-    highlights: p.highlights || p.signatureTouches || p.whyTwoShooters, // Consolidate for AI
-    features: [] // Keep features minimal for AI prompt if needed, or expand later
-  }));
-
   return (
     <>
       <SEO 
@@ -350,28 +286,8 @@ export default function PricingPage() {
           </div>
         </section>
 
-        <PricingSectionWrapper 
-          title="Feeling Overwhelmed? Meet Sarah, Your AI Wedding Ally!" 
-          subtitle="Planning your dream wedding is exciting, but choosing the right photography package can feel like a puzzle. That's where Sarah comes in!" 
-          bgClass="bg-white"
-          textAlignment="text-center"
-        >
-          <SarahAIWidget allPackages={allPackagesForAI as GrokServicePricingPackage[]} />
-        </PricingSectionWrapper>
-        
         <div id="collections-title"></div> {/* Anchor for manual exploration */}
 
-        <PricingSectionWrapper
-          title="Elopement Collections"
-          subtitle="Intimate, adventurous, unforgettable. Weekday & Off-Peak Friendly. *12-month, interest-free auto-pay."
-          bgClass="bg-black" titleClass="text-white" subtitleClass="text-gray-300"
-        >
-          <div className="flex justify-center">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl">
-              {elopementPackages.map(pkg => <PricingCard key={pkg.id} pkg={pkg} />)}
-            </div>
-          </div>
-        </PricingSectionWrapper>
 
         <PricingSectionWrapper
           title="Wedding Collections: Single Photographer"

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Camera, Bell, Settings, User } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useSupabaseAuth as useAuth } from '../../contexts/SupabaseAuthContext';
 
 export default function Header() {
   const { user, signOut } = useAuth();
@@ -58,7 +58,7 @@ export default function Header() {
                   <User className="w-5 h-5 text-gray-600" />
                 </div>
                 <span className="hidden md:block font-medium text-gray-700">
-                  {user?.fullName || 'Account'}
+                  {user?.user_metadata?.full_name || user?.email || 'Account'}
                 </span>
               </button>
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block">
