@@ -1,3 +1,16 @@
+# Service Account Keys & Secrets
+firebase-service-account.json
+*service-account*.json
+*-key.json
+*.pem
+*.key
+
+# Backup folders (may contain secrets)
+FULL_PROJECT_BACKUP_*/
+*-backup/
+cleanup-backup/
+deploy-build/
+
 # Logs
 logs
 *.log
