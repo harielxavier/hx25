@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Heart, Filter, Upload } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { HowItsGoingSubmission, MILESTONE_TYPES } from '../types/howItsGoing';
+import { mockGalleryData } from '../data/mockHowItsGoingData';
 import Navigation from '../components/landing/Navigation';
 import Footer from '../components/landing/Footer';
 import SEOHead from '../components/common/SEOHead';
@@ -37,12 +38,20 @@ export default function HowItsGoingPage() {
         .order('submitted_at', { ascending: false });
 
       if (error) throw error;
-      if (data) {
+      
+      // Use real data if available, otherwise use mock data
+      if (data && data.length > 0) {
         setSubmissions(data);
         setFilteredSubmissions(data);
+      } else {
+        setSubmissions(mockGalleryData);
+        setFilteredSubmissions(mockGalleryData);
       }
     } catch (error) {
       console.error('Error fetching submissions:', error);
+      // Fallback to mock data on error
+      setSubmissions(mockGalleryData);
+      setFilteredSubmissions(mockGalleryData);
     } finally {
       setLoading(false);
     }
