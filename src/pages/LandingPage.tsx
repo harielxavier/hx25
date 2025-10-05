@@ -8,6 +8,7 @@ import SEOHead from '../components/common/SEOHead';
 import FeaturedGalleries from '../components/landing/FeaturedGalleries';
 import CuratorSocialFeed from '../components/social/CuratorSocialFeed';
 import PhotographyStyleSlider from '../components/portfolio/PhotographyStyleSlider';
+import HowItsGoingTeaser from '../components/HowItsGoingTeaser';
 // Removed FOMO element
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
@@ -319,6 +320,8 @@ export function LandingPage() {
       </section>
 
       <FeaturedGalleries />
+
+      <HowItsGoingTeaser />
 
       <section className="py-20">
         <div className="container mx-auto px-4">

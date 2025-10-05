@@ -98,6 +98,8 @@ import MissionControlPage from './pages/admin/MissionControlPage'; // Import the
 import AuthCallback from './pages/AuthCallback'; // Magic link callback
 import NewAdminDashboard from './pages/admin/NewAdminDashboard'; // NEW: Beautiful analytics dashboard
 import VisitorTracker from './components/VisitorTracker'; // NEW: Automatic visitor tracking
+import HowItsGoingPage from './pages/HowItsGoingPage'; // NEW: How It's Going feature
+import HowItsGoingSubmit from './pages/HowItsGoingSubmit'; // NEW: Submit form
 
 // Auth routing component
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
@@ -192,6 +194,8 @@ const App: React.FC = () => {
               <Route path="/book-session" element={<BookingPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/super-deal" element={<SuperDealLandingPage />} />
+              <Route path="/how-its-going" element={<HowItsGoingPage />} />
+              <Route path="/how-its-going/submit" element={<HowItsGoingSubmit />} />
               
               {/* Authentication routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
