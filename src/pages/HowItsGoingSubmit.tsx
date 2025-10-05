@@ -204,7 +204,7 @@ export default function HowItsGoingSubmit() {
                     }`}
                   >
                     <span className="text-2xl mb-2 block">{value.emoji}</span>
-                    <span className="text-sm font-medium">{value.label.replace(/[🌴🎂👶🏡💕✨]\s/, '')}</span>
+                    <span className="text-sm font-medium">{value.label.replace(/[\u{1F334}\u{1F382}\u{1F476}\u{1F3E1}\u{1F495}\u{2728}]\s/u, '')}</span>
                   </button>
                 ))}
               </div>

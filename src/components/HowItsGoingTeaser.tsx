@@ -9,7 +9,6 @@ export default function HowItsGoingTeaser() {
   const [featured, setFeatured] = useState<HowItsGoingSubmission[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [useMockData, setUseMockData] = useState(false);
 
   useEffect(() => {
     fetchFeaturedSubmissions();
@@ -40,16 +39,13 @@ export default function HowItsGoingTeaser() {
       // Use real data if available, otherwise use mock data
       if (data && data.length > 0) {
         setFeatured(data);
-        setUseMockData(false);
       } else {
         setFeatured(mockHowItsGoingData);
-        setUseMockData(true);
       }
     } catch (error) {
       console.error('Error fetching featured submissions:', error);
       // Fallback to mock data on error
       setFeatured(mockHowItsGoingData);
-      setUseMockData(true);
     } finally {
       setLoading(false);
     }
