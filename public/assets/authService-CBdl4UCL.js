@@ -527,7 +527,7 @@ const descriptors = {};
   "ERR_CANCELED",
   "ERR_NOT_SUPPORT",
   "ERR_INVALID_URL"
-  // eslint-disable-next-line func-names
+   
 ].forEach((code) => {
   descriptors[code] = { value: code };
 });
@@ -613,7 +613,7 @@ function toFormData$1(obj, formData, options) {
         key = removeBrackets(key);
         arr.forEach(function each(el, index) {
           !(utils$1.isUndefined(el) || el === null) && formData.append(
-            // eslint-disable-next-line no-nested-ternary
+             
             indexes === true ? renderKey([key], index, dots) : indexes === null ? key : key + "[]",
             convertValue(el)
           );
@@ -800,7 +800,7 @@ const hasBrowserEnv = typeof window !== "undefined" && typeof document !== "unde
 const _navigator = typeof navigator === "object" && navigator || void 0;
 const hasStandardBrowserEnv = hasBrowserEnv && (!_navigator || ["ReactNative", "NativeScript", "NS"].indexOf(_navigator.product) < 0);
 const hasStandardBrowserWebWorkerEnv = (() => {
-  return typeof WorkerGlobalScope !== "undefined" && // eslint-disable-next-line no-undef
+  return typeof WorkerGlobalScope !== "undefined" &&  
   self instanceof WorkerGlobalScope && typeof self.importScripts === "function";
 })();
 const origin = hasBrowserEnv && window.location.href || "http://localhost";

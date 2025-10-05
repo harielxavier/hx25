@@ -3,7 +3,16 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import ScheduleIcon from '@mui/icons-material/Schedule';
-import { ReactElement } from 'react';
+import { ReactElement, ComponentProps } from 'react';
+
+interface TimelineEvent {
+  id: string;
+  title: string;
+  category: string;
+  startTime: string;
+  endTime: string;
+  location: string;
+}
 
 // Utility function to get color for timeline categories
 export const getCategoryColor = (category: string): string => {
@@ -22,7 +31,7 @@ export const getCategoryColor = (category: string): string => {
 };
 
 // Utility function to get icon for timeline categories
-export const getCategoryIcon = (category: string, props?: any): ReactElement => {
+export const getCategoryIcon = (category: string, props?: ComponentProps<'svg'>): ReactElement => {
   switch (category) {
     case 'preparation':
       return <PeopleIcon {...props} />;
@@ -79,13 +88,13 @@ export const formatDuration = (durationInMinutes: number): string => {
 
 // Generate default timeline events from a template and wedding details
 export const generateDefaultEvents = (
-  template: any, 
+  template: Record<string, unknown>, 
   weddingDate: string, 
   primaryVenue: string, 
   ceremonyTime: string, 
-  hasSunsetPhotos: boolean = true,
-  sunsetTime?: string
-): any[] => {
+  _hasSunsetPhotos: boolean = true,
+  _sunsetTime?: string
+): TimelineEvent[] => {
   if (!template || !weddingDate || !primaryVenue || !ceremonyTime) {
     return [];
   }

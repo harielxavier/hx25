@@ -1,0 +1,369 @@
+════════════════════════════════════════════════════════════════════
+  🚀 COMPLETE FIREBASE → SUPABASE MIGRATION GUIDE
+════════════════════════════════════════════════════════════════════
+
+📋 OVERVIEW
+-----------
+This guide will help you migrate your entire app from Firebase to Supabase.
+All the code is ready - you just need to configure Supabase and run the migration.
+
+════════════════════════════════════════════════════════════════════
+STEP 1: CREATE SUPABASE PROJECT
+════════════════════════════════════════════════════════════════════
+
+1. Go to https://supabase.com
+2. Click "Start your project"
+3. Create a new project:
+   - Project Name: harielxavier-photography
+   - Database Password: [Save this securely!]
+   - Region: Choose closest to your users (e.g., US East)
+
+4. Wait 2-3 minutes for project to be ready
+
+════════════════════════════════════════════════════════════════════
+STEP 2: GET YOUR SUPABASE CREDENTIALS
+════════════════════════════════════════════════════════════════════
+
+In your Supabase dashboard:
+
+1. Go to Settings → API
+2. Copy these values:
+
+   Project URL: https://xxxxxxxxxxxxx.supabase.co
+   anon/public key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+   service_role key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+3. Add to your .env file:
+
+VITE_SUPABASE_URL=https://xxxxxxxxxxxxx.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJI...
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJI... (for migration only)
+
+════════════════════════════════════════════════════════════════════
+STEP 3: CREATE DATABASE TABLES
+════════════════════════════════════════════════════════════════════
+
+In Supabase Dashboard → SQL Editor, run this SQL:
+
+```sql
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Posts (Blog)
+CREATE TABLE IF NOT EXISTS posts (
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  title TEXT NOT NULL,
+  slug TEXT UNIQUE NOT NULL,
+  excerpt TEXT,
+  content TEXT,
+  featured_image TEXT,
+  category TEXT,
+  tags TEXT[] DEFAULT '{}',
+  status TEXT DEFAULT 'draft',
+  featured BOOLEAN DEFAULT false,
+  author TEXT DEFAULT 'Hariel Xavier',
+  views INTEGER DEFAULT 0,
+  seo_title TEXT,
+  seo_description TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  published_at TIMESTAMP WITH TIME ZONE
+);
+
+-- Galleries
+CREATE TABLE IF NOT EXISTS galleries (
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  title TEXT NOT NULL,
+  slug TEXT UNIQUE,
+  description TEXT,
+  cover_image TEXT,
+  images JSONB DEFAULT '[]',
+  category TEXT,
+  date TIMESTAMP WITH TIME ZONE,
+  location TEXT,
+  featured BOOLEAN DEFAULT false,
+  published BOOLEAN DEFAULT true,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Clients
+CREATE TABLE IF NOT EXISTS clients (
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  name TEXT NOT NULL,
+  email TEXT,
+  phone TEXT,
+  event_date TIMESTAMP WITH TIME ZONE,
+  event_type TEXT,
+  status TEXT DEFAULT 'active',
+  notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Jobs
+CREATE TABLE IF NOT EXISTS jobs (
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  client_id TEXT REFERENCES clients(id),
+  title TEXT NOT NULL,
+  type TEXT,
+  date TIMESTAMP WITH TIME ZONE,
+  location TEXT,
+  status TEXT DEFAULT 'pending',
+  package_info JSONB,
+  total_amount NUMERIC(10,2),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Leads
+CREATE TABLE IF NOT EXISTS leads (
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  name TEXT,
+  email TEXT,
+  phone TEXT,
+  event_type TEXT,
+  event_date TEXT,
+  message TEXT,
+  source TEXT,
+  status TEXT DEFAULT 'new',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Visitors (Analytics)
+CREATE TABLE IF NOT EXISTS visitors (
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  visitor_id TEXT NOT NULL,
+  page_url TEXT NOT NULL,
+  referrer TEXT,
+  device TEXT,
+  browser TEXT,
+  country TEXT,
+  city TEXT,
+  duration INTEGER DEFAULT 0,
+  timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create indexes for better performance
+CREATE INDEX IF NOT EXISTS idx_posts_slug ON posts(slug);
+CREATE INDEX IF NOT EXISTS idx_posts_status ON posts(status);
+CREATE INDEX IF NOT EXISTS idx_posts_category ON posts(category);
+CREATE INDEX IF NOT EXISTS idx_galleries_slug ON galleries(slug);
+CREATE INDEX IF NOT EXISTS idx_galleries_published ON galleries(published);
+CREATE INDEX IF NOT EXISTS idx_visitors_visitor_id ON visitors(visitor_id);
+CREATE INDEX IF NOT EXISTS idx_visitors_timestamp ON visitors(timestamp);
+CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status);
+CREATE INDEX IF NOT EXISTS idx_clients_email ON clients(email);
+
+-- Enable Row Level Security (RLS)
+ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE galleries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE clients ENABLE ROW LEVEL SECURITY;
+ALTER TABLE jobs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE visitors ENABLE ROW LEVEL SECURITY;
+
+-- Create policies (allow public read for published content)
+CREATE POLICY "Public can view published posts" ON posts
+  FOR SELECT USING (status = 'published');
+
+CREATE POLICY "Public can view published galleries" ON galleries
+  FOR SELECT USING (published = true);
+
+-- Authenticated users (admins) can do everything
+CREATE POLICY "Authenticated users can manage posts" ON posts
+  FOR ALL USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Authenticated users can manage galleries" ON galleries
+  FOR ALL USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Authenticated users can manage clients" ON clients
+  FOR ALL USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Authenticated users can manage jobs" ON jobs
+  FOR ALL USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Authenticated users can manage leads" ON leads
+  FOR ALL USING (auth.role() = 'authenticated');
+
+-- Analytics can be inserted by anyone but read only by authenticated
+CREATE POLICY "Anyone can insert visitors" ON visitors
+  FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Authenticated can read visitors" ON visitors
+  FOR SELECT USING (auth.role() = 'authenticated');
+```
+
+════════════════════════════════════════════════════════════════════
+STEP 4: CREATE STORAGE BUCKETS
+════════════════════════════════════════════════════════════════════
+
+In Supabase Dashboard → Storage → Create bucket:
+
+1. galleries (Public)
+2. blog-images (Public)
+3. profile-images (Public)
+4. documents (Private)
+
+Or run this in SQL Editor:
+
+```sql
+-- Create storage buckets
+INSERT INTO storage.buckets (id, name, public)
+VALUES 
+  ('galleries', 'galleries', true),
+  ('blog-images', 'blog-images', true),
+  ('profile-images', 'profile-images', true),
+  ('documents', 'documents', false)
+ON CONFLICT (id) DO NOTHING;
+
+-- Storage policies for public buckets
+CREATE POLICY "Public can view gallery images" ON storage.objects
+  FOR SELECT USING (bucket_id = 'galleries');
+
+CREATE POLICY "Authenticated can upload gallery images" ON storage.objects
+  FOR INSERT WITH CHECK (bucket_id = 'galleries' AND auth.role() = 'authenticated');
+
+CREATE POLICY "Public can view blog images" ON storage.objects
+  FOR SELECT USING (bucket_id = 'blog-images');
+
+CREATE POLICY "Authenticated can upload blog images" ON storage.objects
+  FOR INSERT WITH CHECK (bucket_id = 'blog-images' AND auth.role() = 'authenticated');
+```
+
+════════════════════════════════════════════════════════════════════
+STEP 5: SET UP AUTHENTICATION
+════════════════════════════════════════════════════════════════════
+
+In Supabase Dashboard → Authentication → Providers:
+
+1. Enable Email provider (enabled by default)
+2. Enable Google OAuth:
+   - Get credentials from Google Cloud Console
+   - Add to Supabase settings
+
+3. Configure Email Templates (optional):
+   - Customize confirmation emails
+   - Customize password reset emails
+
+════════════════════════════════════════════════════════════════════
+STEP 6: MIGRATE YOUR DATA
+════════════════════════════════════════════════════════════════════
+
+Run the migration script:
+
+```bash
+node migrate-to-supabase.mjs
+```
+
+This will:
+✅ Connect to both Firebase and Supabase
+✅ Migrate all Firestore collections to Supabase tables
+✅ Preserve all data, timestamps, and relationships
+✅ Show progress and summary
+
+════════════════════════════════════════════════════════════════════
+STEP 7: UPDATE YOUR APP TO USE SUPABASE
+════════════════════════════════════════════════════════════════════
+
+The new Supabase services are in src/services/supabase/
+
+To switch to Supabase services, update imports in your components:
+
+OLD:
+  import { blogService } from '../services/blogService';
+
+NEW:
+  import { blogService } from '../services/supabase/blogService';
+
+Services available:
+✅ blogService - Blog/posts management
+✅ galleryService - Gallery management
+✅ clientService - Client database
+✅ leadService - Lead management
+✅ storageService - File uploads
+✅ analyticsService - Visitor tracking
+
+════════════════════════════════════════════════════════════════════
+STEP 8: UPDATE AUTHENTICATION
+════════════════════════════════════════════════════════════════════
+
+Your auth is already set up! Just update App.tsx:
+
+OLD:
+  import { useAuth } from './contexts/AuthContext';
+
+NEW:
+  import { useSupabaseAuth as useAuth } from './contexts/SupabaseAuthContext';
+
+The SupabaseAuthContext provides:
+- signIn(email, password)
+- signInWithGoogle()
+- signInWithMagicLink(email)
+- signUp(email, password)
+- signOut()
+- resetPassword(email)
+- user (current user)
+- session (current session)
+
+════════════════════════════════════════════════════════════════════
+STEP 9: TEST EVERYTHING
+════════════════════════════════════════════════════════════════════
+
+1. Start your dev server:
+   npm run dev
+
+2. Test authentication:
+   ✓ Login with email/password
+   ✓ Google OAuth
+   ✓ Password reset
+
+3. Test admin features:
+   ✓ Blog CRUD operations
+   ✓ Gallery management
+   ✓ Client database
+   ✓ Lead management
+   ✓ Image uploads
+
+4. Check public pages:
+   ✓ Blog posts display
+   ✓ Galleries display
+   ✓ Contact forms submit
+
+════════════════════════════════════════════════════════════════════
+STEP 10: GO LIVE
+════════════════════════════════════════════════════════════════════
+
+1. Update production .env with Supabase credentials
+2. Deploy your app
+3. Monitor Supabase dashboard for:
+   - Database queries
+   - Storage usage
+   - Authentication metrics
+
+════════════════════════════════════════════════════════════════════
+BENEFITS OF SUPABASE
+════════════════════════════════════════════════════════════════════
+
+✅ PostgreSQL - More powerful than Firestore
+✅ Real-time subscriptions - Built-in
+✅ Row Level Security - Fine-grained permissions
+✅ SQL queries - More flexible than NoSQL
+✅ Storage - Similar to Firebase Storage
+✅ Auth - Similar to Firebase Auth
+✅ Free tier - 500MB database, 1GB storage
+✅ Better pricing - More affordable at scale
+✅ Open source - Can self-host if needed
+
+════════════════════════════════════════════════════════════════════
+NEED HELP?
+════════════════════════════════════════════════════════════════════
+
+📖 Supabase Docs: https://supabase.com/docs
+💬 Supabase Discord: https://discord.supabase.com
+📧 Support: support@supabase.io
+
+Your migration is ready to go! 🚀
+
+════════════════════════════════════════════════════════════════════

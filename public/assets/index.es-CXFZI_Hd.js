@@ -10,8 +10,8 @@ function requireGlobalThis() {
     return it && it.Math === Math && it;
   };
   globalThis_1 = // eslint-disable-next-line es/no-global-this -- safe
-  check(typeof globalThis == "object" && globalThis) || check(typeof window == "object" && window) || // eslint-disable-next-line no-restricted-globals -- safe
-  check(typeof self == "object" && self) || check(typeof commonjsGlobal == "object" && commonjsGlobal) || check(typeof globalThis_1 == "object" && globalThis_1) || // eslint-disable-next-line no-new-func -- fallback
+  check(typeof globalThis == "object" && globalThis) || check(typeof window == "object" && window) ||  
+  check(typeof self == "object" && self) || check(typeof commonjsGlobal == "object" && commonjsGlobal) || check(typeof globalThis_1 == "object" && globalThis_1) ||  
   /* @__PURE__ */ function() {
     return this;
   }() || Function("return this")();

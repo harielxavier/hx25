@@ -261,7 +261,7 @@ export default function BlogEditor() {
       
       // Prepare timestamps
       const now = Timestamp.now();
-      let createdAt = post.createdAt || now;
+      const createdAt = post.createdAt || now;
       let publishedAt = post.publishedAt;
       
       // Set published_at if status is published and it wasn't before

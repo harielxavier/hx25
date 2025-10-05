@@ -42,9 +42,9 @@ const PhotoswipeResponsiveGallery: React.FC<PhotoswipeResponsiveGalleryProps> = 
 
   // PhotoSwipe options to ensure proper handling of portrait/landscape images
   const photoswipeOptions = useMemo(() => ({
-    showHideAnimationType: 'fade' as 'fade',
+    showHideAnimationType: 'fade' as const,
     wheelToZoom: true,
-    initialZoomLevel: 'fit' as 'fit',
+    initialZoomLevel: 'fit' as const,
     secondaryZoomLevel: 2,
     maxZoomLevel: 4,
     pinchToClose: false,

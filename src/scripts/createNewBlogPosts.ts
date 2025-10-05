@@ -25,7 +25,7 @@ const newBlogPosts = [
       <h2>Follow the Natural Flow</h2>
       <p>The best wedding stories unfold naturally. While having a shot list is important, being present and responsive to unplanned moments often results in the most meaningful images.</p>
     `,
-    featured_image: 'https://firebasestorage.googleapis.com/v0/b/harielxavierphotography-18d17.firebasestorage.app/o/blog%2Fwedding-storytelling.jpg?alt=media',
+    featured_image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&q=80',
     category: 'Wedding',
     tags: ['wedding photography', 'storytelling', 'photojournalism'],
     author: 'Hariel Xavier',
@@ -55,7 +55,7 @@ const newBlogPosts = [
       <h2>Essential Light Modifiers</h2>
       <p>Even in natural settings, modifiers can dramatically improve your portraits. 5-in-1 reflectors, diffusers, and portable flash units are valuable tools for outdoor portrait photographers.</p>
     `,
-    featured_image: 'https://firebasestorage.googleapis.com/v0/b/harielxavierphotography-18d17.firebasestorage.app/o/blog%2Foutdoor-lighting.jpg?alt=media',
+    featured_image: 'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1200&q=80',
     category: 'Portrait',
     tags: ['lighting', 'outdoor photography', 'portrait techniques'],
     author: 'Hariel Xavier',
@@ -84,7 +84,7 @@ const newBlogPosts = [
       <h2>Capture the In-Between</h2>
       <p>Often the most genuine moments happen between posed shots. Keep your camera ready to capture laughs, glances, and small gestures that happen spontaneously.</p>
     `,
-    featured_image: 'https://firebasestorage.googleapis.com/v0/b/harielxavierphotography-18d17.firebasestorage.app/o/blog%2Fengagement-authentic.jpg?alt=media',
+    featured_image: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=1200&q=80',
     category: 'Engagement',
     tags: ['engagement photography', 'couples', 'authentic moments'],
     author: 'Hariel Xavier',
@@ -114,7 +114,7 @@ const newBlogPosts = [
       <h2>Maintaining Consistency Across Environments</h2>
       <p>Different lighting conditions present challenges for maintaining a consistent look. Learn techniques for adapting your color grading approach while preserving your signature style.</p>
     `,
-    featured_image: 'https://firebasestorage.googleapis.com/v0/b/harielxavierphotography-18d17.firebasestorage.app/o/blog%2Fcolor-grading.jpg?alt=media',
+    featured_image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1200&q=80',
     category: 'Editing',
     tags: ['color grading', 'editing', 'photography style'],
     author: 'Hariel Xavier',
@@ -143,7 +143,7 @@ const newBlogPosts = [
       <h2>Working with Local Vendors</h2>
       <p>Building relationships with local wedding vendors can enhance your work and provide valuable local knowledge. Learn how to connect and collaborate effectively across cultural and language barriers.</p>
     `,
-    featured_image: 'https://firebasestorage.googleapis.com/v0/b/harielxavierphotography-18d17.firebasestorage.app/o/blog%2Fdestination-wedding.jpg?alt=media',
+    featured_image: 'https://images.unsplash.com/photo-1464047736614-af63643285bf?w=1200&q=80',
     category: 'Wedding',
     tags: ['destination wedding', 'travel photography', 'wedding planning'],
     author: 'Hariel Xavier',
@@ -172,7 +172,7 @@ const newBlogPosts = [
       <h2>Showcasing Diversity Within Consistency</h2>
       <p>While maintaining a consistent style is important, showing range within that style demonstrates versatility. This section explores how to balance consistency with variety in your portfolio.</p>
     `,
-    featured_image: 'https://firebasestorage.googleapis.com/v0/b/harielxavierphotography-18d17.firebasestorage.app/o/blog%2Fportfolio-building.jpg?alt=media',
+    featured_image: 'https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=1200&q=80',
     category: 'Business',
     tags: ['portfolio', 'client attraction', 'photography business'],
     author: 'Hariel Xavier',
@@ -201,7 +201,7 @@ const newBlogPosts = [
       <h2>Incorporating Family Stories</h2>
       <p>The most impactful family photography goes beyond appearances to capture unique family dynamics and stories. Learn techniques for discovering and incorporating these narratives into your sessions.</p>
     `,
-    featured_image: 'https://firebasestorage.googleapis.com/v0/b/harielxavierphotography-18d17.firebasestorage.app/o/blog%2Fmodern-family.jpg?alt=media',
+    featured_image: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?w=1200&q=80',
     category: 'Family',
     tags: ['family photography', 'documentary', 'lifestyle'],
     author: 'Hariel Xavier',

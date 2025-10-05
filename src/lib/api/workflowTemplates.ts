@@ -472,7 +472,7 @@ const workflowTemplates: WorkflowTemplate[] = [
 ];
 
 // Mock active workflows
-let activeWorkflows: Workflow[] = [];
+const activeWorkflows: Workflow[] = [];
 
 // Mock tasks
 let tasks: Task[] = [];

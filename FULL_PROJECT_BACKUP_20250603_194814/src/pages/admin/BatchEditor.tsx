@@ -189,7 +189,7 @@ const BatchEditor: React.FC = () => {
       
       for (const item of selectedItems) {
         let docRef;
-        let updateData: any = {};
+        const updateData: any = {};
         
         if (item.type === 'portfolio') {
           docRef = doc(db, 'portfolioImages', item.id);

@@ -9,8 +9,7 @@ import {
   updateDoc, 
   deleteDoc,
   orderBy,
-  serverTimestamp,
-  Timestamp
+  serverTimestamp
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { VenueCategory, Venue } from '../types/portfolio';

@@ -12,7 +12,7 @@ import { HelmetProvider } from 'react-helmet-async';
 // TawkToChat component removed as requested
 
 // Import client routes
-import clientRoutes from './routes/clientRoutes.tsx';
+// import clientRoutes from './routes/clientRoutes.tsx'; // Unused
 
 // Page components
 import { LandingPage } from './pages/LandingPage';
@@ -27,7 +27,7 @@ import AdminGallery from './pages/admin/AdminGallery';
 import AdminGalleryDetail from './pages/admin/AdminGalleryDetail';
 import AdminVideoUpload from './pages/admin/AdminVideoUpload';
 import NotFoundPage from './pages/NotFoundPage';
-import LeadPage from './pages/LeadPage';
+// import LeadPage from './pages/LeadPage'; // Unused
 import FirebaseAuthDebugger from './components/admin/FirebaseAuthDebugger';
 import WeddingPhotography from './pages/WeddingPhotography';
 import WeddingVideoPage from './pages/WeddingVideoPage';
@@ -51,7 +51,7 @@ import PortfolioCategoriesPage from './pages/admin/PortfolioCategoriesPage';
 import ClientsPage from './pages/admin/ClientsPage';
 import JobsPage from './pages/admin/JobsPage';
 import JobDetailPage from './pages/admin/JobDetailPage';
-import AdminGalleriesPage from './pages/admin/GalleriesPage';
+// import AdminGalleriesPage from './pages/admin/GalleriesPage'; // Unused
 import RecentActivities from './pages/admin/RecentActivities';
 import UpcomingSessions from './pages/admin/UpcomingSessions';
 import LeadManagement from './pages/admin/LeadManagement';
@@ -87,7 +87,7 @@ import ShowcasePage from './pages/ShowcasePage'; // Import the new Showcase page
 import CrystaDavidGalleryPage from './pages/CrystaDavidGalleryPage'; // Import the Crysta & David gallery page
 import KarniZilvinasGalleryPage from './pages/KarniZilvinasGalleryPage'; // Import the Karni & Zilvinas gallery page
 import JudyMikeGalleryPage from './pages/JudyMikeGalleryPage'; // Import the Judy & Mike gallery page
-import EmergencyLandingPage from './pages/EmergencyLandingPage'; // Import the emergency landing page
+// import EmergencyLandingPage from './pages/EmergencyLandingPage'; // Import the emergency landing page // Unused
 import AmandaAlexGalleryPage from './pages/AmandaAlexGalleryPage'; // Import the Amanda & Alex gallery page
 import BookingPage from './pages/BookingPage'; // Import the new BookingPage
 import ContactPage from './pages/ContactPage'; // Import the ContactPage component
@@ -96,6 +96,8 @@ import SuperDealLandingPage from './pages/SuperDealLandingPage'; // Import the S
 import PricingPage from './pages/PricingPage'; // CORRECT IMPORT for the main pricing page
 import MissionControlPage from './pages/admin/MissionControlPage'; // Import the Mission Control analytics page
 import AuthCallback from './pages/AuthCallback'; // Magic link callback
+import NewAdminDashboard from './pages/admin/NewAdminDashboard'; // NEW: Beautiful analytics dashboard
+import VisitorTracker from './components/VisitorTracker'; // NEW: Automatic visitor tracking
 
 // Auth routing component
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
@@ -147,6 +149,7 @@ const App: React.FC = () => {
     >
       <Router>
         <ScrollToTop />
+        <VisitorTracker />
         <HelmetProvider>
           <ThemeProvider>
           <AnalyticsProvider>
@@ -201,8 +204,17 @@ const App: React.FC = () => {
               <Route path="/admin/blog" element={<Navigate to="/admin/blog-manager" replace />} />
 
               {/* Protected admin routes */}
-              {/* Dashboard */}
+              {/* Dashboard - NEW BEAUTIFUL VERSION */}
               <Route path="/admin/dashboard" element={
+                <PrivateRoute>
+                  <AdminLayout>
+                    <NewAdminDashboard />
+                  </AdminLayout>
+                </PrivateRoute>
+              } />
+              
+              {/* Old Dashboard (backup) */}
+              <Route path="/admin/dashboard-old" element={
                 <PrivateRoute>
                   <AdminLayout>
                     <AdminDashboard />

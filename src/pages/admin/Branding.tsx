@@ -132,7 +132,7 @@ const Branding: React.FC = () => {
     setSaveMessage(null);
     
     try {
-      let updatedSettings = { ...settings };
+      const updatedSettings = { ...settings };
       
       // Upload logos if new files were selected
       if (logoFiles.primary) {
