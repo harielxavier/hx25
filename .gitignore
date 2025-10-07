@@ -1,15 +1,39 @@
-# Service Account Keys & Secrets
+# Service Account Keys & Secrets (CRITICAL!)
 firebase-service-account.json
 *service-account*.json
 *-key.json
 *.pem
 *.key
+bluehost_key
+*_key
+*.cert
 
 # Backup folders (may contain secrets)
 FULL_PROJECT_BACKUP_*/
 *-backup/
 cleanup-backup/
 deploy-build/
+archive/
+
+# Migration scripts (cleanup)
+*.mjs
+migrate-*.js
+setup-*.mjs
+test-*.mjs
+create-*.mjs
+fix-*.mjs
+check-*.mjs
+delete-*.mjs
+update-*.mjs
+
+# Documentation files (move to docs/)
+*SETUP*.txt
+*SETUP*.md
+*CHECKLIST*.txt
+*NOTES*.md
+*GUIDE*.md
+*PLAN*.md
+*INSTRUCTIONS*.md
 
 # Logs
 logs

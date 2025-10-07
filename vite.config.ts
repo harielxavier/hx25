@@ -13,8 +13,32 @@ export default defineConfig({
         'dns',
         'child_process',
         'nodemailer',
-      ]
-    }
+      ],
+      output: {
+        manualChunks: {
+          // Vendor splitting for better caching
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'firebase-vendor': ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/storage'],
+          'supabase-vendor': ['@supabase/supabase-js'],
+          'ui-vendor': ['lucide-react', 'framer-motion'],
+          'admin': [
+            './src/pages/admin/AdminDashboard',
+            './src/pages/admin/NewAdminDashboard',
+            './src/pages/admin/AdminLogin',
+          ],
+        }
+      }
+    },
+    target: 'esnext',
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true, // Remove console logs in production
+        drop_debugger: true,
+      }
+    },
+    chunkSizeWarningLimit: 1000,
+    sourcemap: false, // Disable sourcemaps for smaller build
   },
   optimizeDeps: {
     exclude: ['lucide-react'],

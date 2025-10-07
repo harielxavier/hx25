@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useSupabaseAuth as useAuth } from './contexts/SupabaseAuthContext';
 import AnalyticsProvider from './components/AnalyticsProvider';
@@ -9,97 +9,110 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { GA_MEASUREMENT_ID } from './config/analytics';
 import { ThemeProvider } from './context/ThemeContext';
 import { HelmetProvider } from 'react-helmet-async';
-// TawkToChat component removed as requested
 
-// Import client routes
-// import clientRoutes from './routes/clientRoutes.tsx'; // Unused
+// Loading component
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+  </div>
+);
 
-// Page components
+// Eager load critical pages (landing, about, galleries)
 import { LandingPage } from './pages/LandingPage';
-import GalleriesPage from './pages/GalleriesPage';
-import ClientGalleryPage from './pages/ClientGalleryPage';
 import AboutPage from './pages/AboutPage';
-import BlogPage from './pages/BlogPage';
-import BlogPostPage from './pages/BlogPostPage';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminLogin from './pages/admin/AdminLogin';
-import AdminGallery from './pages/admin/AdminGallery';
-import AdminGalleryDetail from './pages/admin/AdminGalleryDetail';
-import AdminVideoUpload from './pages/admin/AdminVideoUpload';
 import NotFoundPage from './pages/NotFoundPage';
-// import LeadPage from './pages/LeadPage'; // Unused
-import FirebaseAuthDebugger from './components/admin/FirebaseAuthDebugger';
-import WeddingPhotography from './pages/WeddingPhotography';
-import WeddingVideoPage from './pages/WeddingVideoPage';
-import BookNowPage from './pages/BookNowPage';
-import AdminLayout from './components/admin/AdminLayout';
-// PortfolioPage import removed as requested
-import VenueLightingTool from './pages/VenueLightingTool.tsx'; // Updated import to .tsx
-import ImagesPage from './pages/ImagesPage';
-import GalleryManagementHub from './pages/admin/GalleryManagementHub';
-import BlogManager from './pages/admin/BlogManager';
-import BlogEditor from './pages/admin/BlogEditor';
-import BlogCategories from './pages/admin/BlogCategories';
-import BlogComments from './pages/admin/BlogComments';
-import PagesManager from './pages/admin/PagesManager';
-import PageEditor from './pages/admin/PageEditor';
-import GeneralSettings from './pages/admin/GeneralSettings';
-// import PricingPage from './pages/PricingPage'; // This will be the one we want
-import InitBlog from './pages/InitBlog';
-import ImageManager from './pages/admin/ImageManager';
-import PortfolioCategoriesPage from './pages/admin/PortfolioCategoriesPage';
-import ClientsPage from './pages/admin/ClientsPage';
-import JobsPage from './pages/admin/JobsPage';
-import JobDetailPage from './pages/admin/JobDetailPage';
-// import AdminGalleriesPage from './pages/admin/GalleriesPage'; // Unused
-import RecentActivities from './pages/admin/RecentActivities';
-import UpcomingSessions from './pages/admin/UpcomingSessions';
-import LeadManagement from './pages/admin/LeadManagement';
-import BookingsCalendar from './pages/admin/BookingsCalendar';
-import ClientCommunication from './pages/admin/ClientCommunication';
-import ContractsAndForms from './pages/admin/ContractsAndForms';
-import InvoicingPayments from './pages/admin/InvoicingPayments';
-import PaymentsPage from './pages/admin/PaymentsPage';
-import LandingEditor from './pages/admin/LandingEditor';
-import EmailCampaigns from './pages/admin/EmailCampaigns';
-import LeadGeneration from './pages/admin/LeadGeneration';
-import SocialMedia from './pages/admin/SocialMedia';
-import SeoTools from './pages/admin/SeoTools';
-import Branding from './pages/admin/Branding';
-import Integrations from './pages/admin/Integrations';
-import BusinessSettings from './pages/admin/BusinessSettings';
-import WeddingSliderSettings from './pages/admin/WeddingSliderSettings';
-import GalleryManager from './pages/admin/GalleryManager';
-import JackieChrisGalleryPage from './pages/JackieChrisGalleryPage';
-import AnsimonMinaGalleryPage from './pages/AnsimonMinaGalleryPage';
-import BiancaJeffreyGalleryPage from './pages/BiancaJeffreyGalleryPage';
-import AnaJoseGalleryPage from './pages/AnaJoseGalleryPage';
-import UniversalMediaManager from './pages/admin/UniversalMediaManager';
-import ClientGalleryViewPage from './pages/ClientGalleryViewPage';
-import ViewGalleryPage from './pages/admin/ViewGalleryPage';
-import PicatinnyClubPage from './pages/PicatinnyClubPage';
-import WeddingTimelineToolPage from './pages/WeddingTimelineToolPage';
-import { default as WeddingToolsPage } from './pages/WeddingToolsPage';
-import LeadAnalyticsPage from './pages/admin/LeadAnalyticsPage';
-import MultiPhotographerCoordinationToolPage from './pages/MultiPhotographerCoordinationToolPage'; // Import the multi-photographer tool page
-import BlogPostOptimizer from './scripts/optimize-all-blog-posts';
-import ShowcasePage from './pages/ShowcasePage'; // Import the new Showcase page
-import CrystaDavidGalleryPage from './pages/CrystaDavidGalleryPage'; // Import the Crysta & David gallery page
-import KarniZilvinasGalleryPage from './pages/KarniZilvinasGalleryPage'; // Import the Karni & Zilvinas gallery page
-import JudyMikeGalleryPage from './pages/JudyMikeGalleryPage'; // Import the Judy & Mike gallery page
-// import EmergencyLandingPage from './pages/EmergencyLandingPage'; // Import the emergency landing page // Unused
-import AmandaAlexGalleryPage from './pages/AmandaAlexGalleryPage'; // Import the Amanda & Alex gallery page
-import BookingPage from './pages/BookingPage'; // Import the new BookingPage
-import ContactPage from './pages/ContactPage'; // Import the ContactPage component
-import SuperDealLandingPage from './pages/SuperDealLandingPage'; // Import the Super Deal page
-// import AIPricingPage from './pages/AIPricingPage'; // This will be replaced
-import PricingPage from './pages/PricingPage'; // CORRECT IMPORT for the main pricing page
-import MissionControlPage from './pages/admin/MissionControlPage'; // Import the Mission Control analytics page
-import AuthCallback from './pages/AuthCallback'; // Magic link callback
-import NewAdminDashboard from './pages/admin/NewAdminDashboard'; // NEW: Beautiful analytics dashboard
-import VisitorTracker from './components/VisitorTracker'; // NEW: Automatic visitor tracking
-import HowItsGoingPage from './pages/HowItsGoingPage'; // NEW: How It's Going feature
-import HowItsGoingSubmit from './pages/HowItsGoingSubmit'; // NEW: Submit form
+
+// Lazy load everything else
+const GalleriesPage = lazy(() => import('./pages/GalleriesPage'));
+const ClientGalleryPage = lazy(() => import('./pages/ClientGalleryPage'));
+const BlogPage = lazy(() => import('./pages/BlogPage'));
+const BlogPostPage = lazy(() => import('./pages/BlogPostPage'));
+
+// Admin pages - lazy loaded (biggest bundle savings)
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
+const AdminGallery = lazy(() => import('./pages/admin/AdminGallery'));
+const AdminGalleryDetail = lazy(() => import('./pages/admin/AdminGalleryDetail'));
+const AdminVideoUpload = lazy(() => import('./pages/admin/AdminVideoUpload'));
+
+// Public pages - lazy loaded
+const WeddingPhotography = lazy(() => import('./pages/WeddingPhotography'));
+const WeddingVideoPage = lazy(() => import('./pages/WeddingVideoPage'));
+const BookNowPage = lazy(() => import('./pages/BookNowPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
+const PricingPage = lazy(() => import('./pages/PricingPage'));
+const BookingPage = lazy(() => import('./pages/BookingPage'));
+const ShowcasePage = lazy(() => import('./pages/ShowcasePage'));
+
+// Gallery pages - lazy loaded
+const JackieChrisGalleryPage = lazy(() => import('./pages/JackieChrisGalleryPage'));
+const AnsimonMinaGalleryPage = lazy(() => import('./pages/AnsimonMinaGalleryPage'));
+const BiancaJeffreyGalleryPage = lazy(() => import('./pages/BiancaJeffreyGalleryPage'));
+const AnaJoseGalleryPage = lazy(() => import('./pages/AnaJoseGalleryPage'));
+const CrystaDavidGalleryPage = lazy(() => import('./pages/CrystaDavidGalleryPage'));
+const KarniZilvinasGalleryPage = lazy(() => import('./pages/KarniZilvinasGalleryPage'));
+const JudyMikeGalleryPage = lazy(() => import('./pages/JudyMikeGalleryPage'));
+const AmandaAlexGalleryPage = lazy(() => import('./pages/AmandaAlexGalleryPage'));
+const ClientGalleryViewPage = lazy(() => import('./pages/ClientGalleryViewPage'));
+
+// Tools - lazy loaded
+const VenueLightingTool = lazy(() => import('./pages/VenueLightingTool'));
+const WeddingTimelineToolPage = lazy(() => import('./pages/WeddingTimelineToolPage'));
+const WeddingToolsPage = lazy(() => import('./pages/WeddingToolsPage'));
+const MultiPhotographerCoordinationToolPage = lazy(() => import('./pages/MultiPhotographerCoordinationToolPage'));
+const PicatinnyClubPage = lazy(() => import('./pages/PicatinnyClubPage'));
+
+// New features
+const HowItsGoingPage = lazy(() => import('./pages/HowItsGoingPage'));
+const HowItsGoingSubmit = lazy(() => import('./pages/HowItsGoingSubmit'));
+const SuperDealLandingPage = lazy(() => import('./pages/SuperDealLandingPage'));
+
+// Admin - all lazy loaded (huge bundle savings)
+const AdminLayout = lazy(() => import('./components/admin/AdminLayout'));
+const NewAdminDashboard = lazy(() => import('./pages/admin/NewAdminDashboard'));
+const GalleryManagementHub = lazy(() => import('./pages/admin/GalleryManagementHub'));
+const BlogManager = lazy(() => import('./pages/admin/BlogManager'));
+const BlogEditor = lazy(() => import('./pages/admin/BlogEditor'));
+const BlogCategories = lazy(() => import('./pages/admin/BlogCategories'));
+const BlogComments = lazy(() => import('./pages/admin/BlogComments'));
+const PagesManager = lazy(() => import('./pages/admin/PagesManager'));
+const PageEditor = lazy(() => import('./pages/admin/PageEditor'));
+const GeneralSettings = lazy(() => import('./pages/admin/GeneralSettings'));
+const ImageManager = lazy(() => import('./pages/admin/ImageManager'));
+const PortfolioCategoriesPage = lazy(() => import('./pages/admin/PortfolioCategoriesPage'));
+const ClientsPage = lazy(() => import('./pages/admin/ClientsPage'));
+const JobsPage = lazy(() => import('./pages/admin/JobsPage'));
+const JobDetailPage = lazy(() => import('./pages/admin/JobDetailPage'));
+const RecentActivities = lazy(() => import('./pages/admin/RecentActivities'));
+const UpcomingSessions = lazy(() => import('./pages/admin/UpcomingSessions'));
+const LeadManagement = lazy(() => import('./pages/admin/LeadManagement'));
+const BookingsCalendar = lazy(() => import('./pages/admin/BookingsCalendar'));
+const ClientCommunication = lazy(() => import('./pages/admin/ClientCommunication'));
+const ContractsAndForms = lazy(() => import('./pages/admin/ContractsAndForms'));
+const InvoicingPayments = lazy(() => import('./pages/admin/InvoicingPayments'));
+const PaymentsPage = lazy(() => import('./pages/admin/PaymentsPage'));
+const LandingEditor = lazy(() => import('./pages/admin/LandingEditor'));
+const EmailCampaigns = lazy(() => import('./pages/admin/EmailCampaigns'));
+const LeadGeneration = lazy(() => import('./pages/admin/LeadGeneration'));
+const SocialMedia = lazy(() => import('./pages/admin/SocialMedia'));
+const SeoTools = lazy(() => import('./pages/admin/SeoTools'));
+const Branding = lazy(() => import('./pages/admin/Branding'));
+const Integrations = lazy(() => import('./pages/admin/Integrations'));
+const BusinessSettings = lazy(() => import('./pages/admin/BusinessSettings'));
+const WeddingSliderSettings = lazy(() => import('./pages/admin/WeddingSliderSettings'));
+const GalleryManager = lazy(() => import('./pages/admin/GalleryManager'));
+const UniversalMediaManager = lazy(() => import('./pages/admin/UniversalMediaManager'));
+const ViewGalleryPage = lazy(() => import('./pages/admin/ViewGalleryPage'));
+const LeadAnalyticsPage = lazy(() => import('./pages/admin/LeadAnalyticsPage'));
+const MissionControlPage = lazy(() => import('./pages/admin/MissionControlPage'));
+
+// Utilities
+const ImagesPage = lazy(() => import('./pages/ImagesPage'));
+const InitBlog = lazy(() => import('./pages/InitBlog'));
+const AuthCallback = lazy(() => import('./pages/AuthCallback'));
+const VisitorTracker = lazy(() => import('./components/VisitorTracker'));
+const BlogPostOptimizer = lazy(() => import('./scripts/optimize-all-blog-posts'));
+const FirebaseAuthDebugger = lazy(() => import('./components/admin/FirebaseAuthDebugger'));
 
 // Auth routing component
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
@@ -151,12 +164,15 @@ const App: React.FC = () => {
     >
       <Router>
         <ScrollToTop />
-        <VisitorTracker />
+        <Suspense fallback={<PageLoader />}>
+          <VisitorTracker />
+        </Suspense>
         <HelmetProvider>
           <ThemeProvider>
           <AnalyticsProvider>
             {GA_MEASUREMENT_ID && <GoogleAnalytics measurementId={GA_MEASUREMENT_ID} />}
-            <Routes>
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/jackie-chris" element={<JackieChrisGalleryPage />} />
@@ -704,6 +720,7 @@ const App: React.FC = () => {
               {/* Error handling */}
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
+            </Suspense>
           </AnalyticsProvider>
           </ThemeProvider>
         </HelmetProvider>
