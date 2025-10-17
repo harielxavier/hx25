@@ -41,8 +41,9 @@ const WeddingVideoPage = lazy(() => import('./pages/WeddingVideoPage'));
 const BookNowPage = lazy(() => import('./pages/BookNowPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 const PricingPage = lazy(() => import('./pages/PricingPage'));
+const FAQPage = lazy(() => import('./pages/FAQPage'));
 const BookingPage = lazy(() => import('./pages/BookingPage'));
-const ShowcasePage = lazy(() => import('./pages/ShowcasePage'));
+const PortfolioPage = lazy(() => import('./pages/PortfolioPage'));
 
 // Gallery pages - lazy loaded
 const JackieChrisGalleryPage = lazy(() => import('./pages/JackieChrisGalleryPage'));
@@ -63,13 +64,12 @@ const MultiPhotographerCoordinationToolPage = lazy(() => import('./pages/MultiPh
 const PicatinnyClubPage = lazy(() => import('./pages/PicatinnyClubPage'));
 
 // New features
-const HowItsGoingPage = lazy(() => import('./pages/HowItsGoingPage'));
-const HowItsGoingSubmit = lazy(() => import('./pages/HowItsGoingSubmit'));
 const SuperDealLandingPage = lazy(() => import('./pages/SuperDealLandingPage'));
 
 // Admin - all lazy loaded (huge bundle savings)
 const AdminLayout = lazy(() => import('./components/admin/AdminLayout'));
 const NewAdminDashboard = lazy(() => import('./pages/admin/NewAdminDashboard'));
+const TrafficAnalytics = lazy(() => import('./pages/admin/TrafficAnalytics'));
 const GalleryManagementHub = lazy(() => import('./pages/admin/GalleryManagementHub'));
 const BlogManager = lazy(() => import('./pages/admin/BlogManager'));
 const BlogEditor = lazy(() => import('./pages/admin/BlogEditor'));
@@ -192,7 +192,7 @@ const App: React.FC = () => {
               <Route path="/wedding" element={<WeddingPhotography />} />
               <Route path="/wedding-video" element={<WeddingVideoPage />} />
               <Route path="/book-now" element={<BookNowPage />} />
-              <Route path="/showcase" element={<ShowcasePage />} />
+              <Route path="/portfolio" element={<PortfolioPage />} />
               <Route path="/amanda-alex" element={<AmandaAlexGalleryPage />} />
               {/* Portfolio Routes */}
               {/* Portfolio route removed as requested */}
@@ -200,6 +200,7 @@ const App: React.FC = () => {
               <Route path="/venue-lighting-tool" element={<VenueLightingTool />} />
               <Route path="/images" element={<ImagesPage />} />
               <Route path="/pricing" element={<PricingPage />} /> {/* Corrected route */}
+              <Route path="/faq" element={<FAQPage />} />
               {/* <Route path="/ai-pricing" element={<AIPricingPage />} /> REMOVED */}
               {/* <Route path="/old-pricing" element={<PricingPage />} /> REMOVED */}
               <Route path="/picatinny-club" element={<PicatinnyClubPage />} />
@@ -210,9 +211,7 @@ const App: React.FC = () => {
               <Route path="/book-session" element={<BookingPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/super-deal" element={<SuperDealLandingPage />} />
-              <Route path="/how-its-going" element={<HowItsGoingPage />} />
-              <Route path="/how-its-going/submit" element={<HowItsGoingSubmit />} />
-              
+
               {/* Authentication routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/login" element={<AdminLogin />} />
@@ -232,7 +231,16 @@ const App: React.FC = () => {
                   </AdminLayout>
                 </PrivateRoute>
               } />
-              
+
+              {/* Traffic Analytics - REAL DATA */}
+              <Route path="/admin/analytics" element={
+                <PrivateRoute>
+                  <AdminLayout>
+                    <TrafficAnalytics />
+                  </AdminLayout>
+                </PrivateRoute>
+              } />
+
               {/* Old Dashboard (backup) */}
               <Route path="/admin/dashboard-old" element={
                 <PrivateRoute>

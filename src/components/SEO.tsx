@@ -71,8 +71,9 @@ export default function SEO({
       "description": description,
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "Sussex County",
+        "addressLocality": "Sparta",
         "addressRegion": "NJ",
+        "postalCode": "07871",
         "addressCountry": "US"
       },
       "geo": {
@@ -81,8 +82,57 @@ export default function SEO({
         "longitude": "-74.6974"
       },
       "url": window.location.origin,
-      "telephone": "+1-234-567-8900",
-      "priceRange": "$$$"
+      "telephone": "+1-973-729-5555",
+      "priceRange": "$$$",
+      "areaServed": [
+        {
+          "@type": "City",
+          "name": "Sparta",
+          "containedInPlace": {
+            "@type": "State",
+            "name": "New Jersey"
+          }
+        },
+        {
+          "@type": "City", 
+          "name": "Sussex County",
+          "containedInPlace": {
+            "@type": "State",
+            "name": "New Jersey"
+          }
+        }
+      ],
+      "serviceArea": {
+        "@type": "GeoCircle",
+        "geoMidpoint": {
+          "@type": "GeoCoordinates",
+          "latitude": "41.1399",
+          "longitude": "-74.6974"
+        },
+        "geoRadius": "50000"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Wedding Photography Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Wedding Photography",
+              "description": "Professional wedding photography services in Sparta, NJ and Sussex County"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service", 
+              "name": "Engagement Photography",
+              "description": "Engagement photography sessions in Sussex County, NJ"
+            }
+          }
+        ]
+      }
       };
     } else if (type === 'article') {
       schema = {

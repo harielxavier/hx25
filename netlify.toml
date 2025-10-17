@@ -12,6 +12,11 @@
   port = 5173
   targetPort = 5173
 
+# Edge Function for Analytics Capture
+[[edge_functions]]
+  path = "/*"
+  function = "telemetry"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

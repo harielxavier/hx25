@@ -1,391 +1,565 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
-import { Check, Sparkles, Gem, Crown, Zap, Film, Gift, CalendarDays, Users, Video, Package2 } from 'lucide-react';
+import { 
+  Check, 
+  Sparkles, 
+  Gem, 
+  Crown, 
+  Zap, 
+  Film, 
+  Gift, 
+  CalendarDays, 
+  Users, 
+  Video, 
+  Package2,
+  Camera,
+  Clock,
+  Image,
+  Eye,
+  Heart,
+  Star,
+  Award,
+  Plus,
+  ArrowRight
+} from 'lucide-react';
 import Navigation from '../components/landing/Navigation';
 import SEO from '../components/layout/SEO';
-import ReversibleVideo from '../components/shared/ReversibleVideo';
-
-interface FeatureDetail {
-  text: string;
-  icon?: React.ElementType;
-}
 
 interface Package {
   id: string;
   name: string;
   price: string;
-  monthlyPrice?: string;
-  coverage?: string; 
-  highlights?: string; 
-  idealFor?: string; 
-  signatureTouches?: string; 
-  whyTwoShooters?: string; 
-  features: (string | FeatureDetail)[]; // This will be used by PricingCard
+  coverage: string;
+  images: string;
+  features: string[];
   popular?: boolean;
-  tier?: 'elopement' | 'single-shooter' | 'duo-coverage' | 'premium' | 'luxury'; 
-  usp?: string;
-  perfectFor?: string[]; 
+  tier?: 'single' | 'duo' | 'event';
   themeColor?: string;
   textColor?: string;
-  notes?: string; 
+  icon?: React.ElementType;
 }
 
-interface ALaCarteCategory {
-  title: string;
-  items: ALaCarteItemDetail[];
-}
-
-interface ALaCarteItemDetail {
+interface ALaCarteItem {
   title: string;
   price: string;
   description?: string;
+  category: string;
 }
 
 interface BonusOffer {
   title: string;
   value: string;
+  description: string;
   icon?: React.ElementType;
-  notes?: string; 
 }
 
-// Reusable PricingCard component (enhanced for new structure)
-const PricingCard: React.FC<{ pkg: Package; className?: string }> = ({ pkg, className = '' }) => {
-  const navigate = useNavigate();
-  const cardBaseStyle = "bg-white p-8 md:p-12 border relative transition-all duration-300 hover:shadow-2xl hover:translate-y-[-2px] rounded-lg flex flex-col"; // Increased md padding
-  const popularStyle = "border-champagneRose shadow-xl ring-2 ring-champagneRose";
-  const defaultStyle = "border-gray-200 shadow-md";
-  
-  let currentThemeColor = 'bg-gray-800';
-  let currentTextColor = 'text-gray-300';
+const PricingPage: React.FC = () => {
+  const [selectedPhotographerType, setSelectedPhotographerType] = useState<'single' | 'duo'>('single');
+  const { ref: heroRef, inView: heroInView } = useInView({ triggerOnce: true, threshold: 0.1 });
+  const { ref: packagesRef, inView: packagesInView } = useInView({ triggerOnce: true, threshold: 0.1 });
+  const { ref: eventsRef, inView: eventsInView } = useInView({ triggerOnce: true, threshold: 0.1 });
+  const { ref: alacarteRef, inView: alacarteInView } = useInView({ triggerOnce: true, threshold: 0.1 });
 
-  if (pkg.themeColor) {
-    currentThemeColor = pkg.themeColor;
-    currentTextColor = pkg.textColor || 'text-white';
-  } else if (pkg.popular) {
-    currentThemeColor = 'bg-champagneRose'; 
-    currentTextColor = 'text-black';      
-  } else if (pkg.tier === 'luxury') {
-    currentThemeColor = 'bg-black';
-    currentTextColor = 'text-champagneRose';
-  }
+  // Single Photographer Packages
+  const singlePackages: Package[] = [
+    {
+      id: 'petite-spark',
+      name: 'Petite Spark',
+      price: '2,295',
+      coverage: '6 hours',
+      images: '400+',
+      tier: 'single',
+      icon: Sparkles,
+      features: [
+        '6 hours coverage by Hariel Xavier',
+        '400+ fully edited, high-res images',
+        'Complimentary Sparta engagement mini-session',
+        '5 sneak peeks delivered within 24 hours',
+        '1-year online gallery',
+        'Full print and personal use rights',
+        'Pre-wedding consultation and timeline planning'
+      ]
+    },
+    {
+      id: 'sparta-sparkler',
+      name: 'Sparta Sparkler',
+      price: '2,795',
+      coverage: '8 hours',
+      images: '500+',
+      tier: 'single',
+      popular: true,
+      icon: Gem,
+      features: [
+        '8 hours coverage by Hariel Xavier',
+        '500+ meticulously edited, high-res images',
+        'Complimentary Sparta engagement session',
+        '10 sneak peeks within 48 hours',
+        '1-year online gallery',
+        'Timeline crafting consult',
+        'Full print and personal rights'
+      ]
+    },
+    {
+      id: 'xavier-classic',
+      name: 'Xavier Classic',
+      price: '3,295',
+      coverage: '9 hours',
+      images: '600+',
+      tier: 'single',
+      icon: Crown,
+      features: [
+        '9 hours coverage by Hariel Xavier',
+        '600+ artistically edited, high-res images',
+        'Engagement session at your choice of location in Sussex County',
+        '15 sneak peeks delivered within 24-48 hours',
+        '$150 credit towards fine art prints or products',
+        'Personalized timeline planning and vendor coordination assistance',
+        'Advanced online gallery (1 year)'
+      ]
+    }
+  ];
 
+  // Duo Photographer Packages
+  const duoPackages: Package[] = [
+    {
+      id: 'sussex-duo-essence',
+      name: 'Sussex Duo Essence',
+      price: '3,295',
+      coverage: '7 hours',
+      images: '500+',
+      tier: 'duo',
+      icon: Users,
+      features: [
+        '7 hours coverage with Hariel Xavier + second shooter',
+        'Coverage includes bride & groom prep, ceremony, and reception',
+        '500+ edited, high-res images capturing multiple perspectives',
+        'Engagement mini-session included',
+        '10 sneak peeks delivered within 24 hours',
+        '1.5-year expanded online gallery'
+      ]
+    },
+    {
+      id: 'storyteller-duo',
+      name: 'Storyteller Duo',
+      price: '3,995',
+      coverage: '9 hours',
+      images: '700+',
+      tier: 'duo',
+      popular: true,
+      icon: Video,
+      features: [
+        '9 hours coverage with two photographers',
+        'Simultaneous bride & groom prep coverage',
+        '700+ edited images from multiple angles',
+        '20 sneak peeks delivered within 24 hours',
+        'Full engagement session in Sussex County',
+        '$200 credit toward albums or wall art',
+        '2-year online gallery with guest access',
+        'Priority editing and timeline assistance'
+      ]
+    },
+    {
+      id: 'skylands-signature-duo',
+      name: 'Skylands Signature Duo',
+      price: '5,495',
+      coverage: '10 hours',
+      images: '900+',
+      tier: 'duo',
+      icon: Award,
+      themeColor: 'bg-gradient-to-br from-amber-100 to-amber-50',
+      textColor: 'text-amber-900',
+      features: [
+        '10 hours coverage with Hariel Xavier, second photographer, and assistant',
+        '900+ masterfully edited images',
+        'Next-day mini-movie sneak peek (30-60s social media teaser)',
+        'Premium engagement session with multiple locations/outfits',
+        'Custom 10x10 fine art album (20 pages)',
+        '$400 credit for albums/prints/wall art',
+        'Lifetime secure online gallery hosting',
+        'Capturai Same-Day Slideshow included',
+        'Hariel Xavier Photography product included free'
+      ]
+    }
+  ];
 
-  return (
-    <div className={`${cardBaseStyle} ${pkg.popular ? popularStyle : defaultStyle} ${className}`}>
-      {pkg.popular && (
-        <div className={`absolute top-0 right-0 ${currentThemeColor} ${currentTextColor} py-1.5 px-6 text-sm tracking-wider font-semibold transform translate-x-2 -translate-y-2 rounded-tr-lg rounded-bl-lg`}>
-          Most Popular
-        </div>
-      )}
-      <h3 className={`font-serif text-3xl mb-3 ${pkg.tier === 'luxury' ? 'text-champagneRose' : 'text-black'}`}>{pkg.name}</h3>
-      <div className="flex items-baseline mb-1">
-        <span className={`text-5xl font-light ${pkg.tier === 'luxury' ? 'text-champagneRose' : 'text-black'}`}>${pkg.price}</span>
-      </div>
-      {pkg.monthlyPrice && <p className="text-md text-gray-600 mb-6">or ${pkg.monthlyPrice}/mo\*</p>}
-      
-      {pkg.usp && <p className="text-sm text-gray-700 italic mb-6">{pkg.usp}</p>}
+  // Event Photography Packages
+  const eventPackages: Package[] = [
+    {
+      id: 'essential-event',
+      name: 'Essential Event',
+      price: '995',
+      coverage: '3 hours',
+      images: '150+',
+      tier: 'event',
+      icon: Camera,
+      features: [
+        '3 hours coverage by Hariel Xavier',
+        '150+ professionally edited images',
+        'Online gallery with 3-month access',
+        'Event highlights slideshow included',
+        'Full print/personal use rights'
+      ]
+    },
+    {
+      id: 'premier-event',
+      name: 'Premier Event',
+      price: '1,795',
+      coverage: '5 hours',
+      images: '300+',
+      tier: 'event',
+      popular: true,
+      icon: Star,
+      features: [
+        '5 hours coverage by Hariel Xavier',
+        '300+ edited images',
+        'Online gallery with 6-month access',
+        'Customized event slideshow',
+        'Priority editing'
+      ]
+    },
+    {
+      id: 'deluxe-event-duo',
+      name: 'Deluxe Event Duo',
+      price: '3,495',
+      coverage: '6 hours',
+      images: '450+',
+      tier: 'event',
+      icon: Crown,
+      features: [
+        '6 hours coverage with two photographers',
+        '450+ edited images from multiple angles',
+        'Online gallery with 1-year access',
+        'Event highlights mini-movie (3-5 minutes)',
+        'Full print and personal use rights'
+      ]
+    }
+  ];
 
-      <div className="space-y-4 mb-8 flex-grow">
-        {pkg.features.map((feature, index) => {
-          const featureText = typeof feature === 'string' ? feature : feature.text;
-          const IconComponent = typeof feature === 'string' ? Check : (feature.icon || Check);
-          return (
-            <div key={index} className="flex items-start gap-3 group">
-              <div className={`w-5 h-5 rounded-full ${currentThemeColor} flex items-center justify-center mt-0.5 group-hover:scale-110 transition-transform duration-300 shrink-0`}>
-                <IconComponent className={`w-3 h-3 ${currentTextColor}`} />
-              </div>
-              <span className="text-gray-700 text-sm">{featureText}</span>
-            </div>
-          );
-        })}
-      </div>
-      
-      {pkg.perfectFor && pkg.perfectFor.length > 0 && (
-        <div className="mb-6 mt-auto">
-          <p className="text-xs text-gray-500 font-medium mb-2">PERFECT FOR:</p>
-          <div className="flex flex-wrap gap-2">
-            {pkg.perfectFor.map((item, index) => (
-              <span key={index} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
-                {item}
-              </span>
-            ))}
+  // À La Carte Options
+  const alaCarteItems: ALaCarteItem[] = [
+    // Additional Coverage
+    { title: 'Additional Hour (Lead Photographer)', price: '300', category: 'Coverage' },
+    { title: 'Additional Hour (Second Photographer)', price: '175', category: 'Coverage' },
+    { title: 'Rehearsal Dinner Coverage (3 hours)', price: '650', category: 'Coverage' },
+    
+    // Special Sessions
+    { title: 'Bridal Boudoir Session (tasteful & empowering)', price: '500', category: 'Sessions' },
+    { title: 'Day-After / "Trash the Dress" Creative Session', price: '600', category: 'Sessions' },
+    
+    // Albums & Products
+    { title: '10×10 Fine Art Wedding Album (20 pages)', price: '695', category: 'Albums' },
+    { title: '12×12 Luxury Heirloom Album (30 pages)', price: '1,095', category: 'Albums' },
+    { title: 'Parent Album (8×8 replica)', price: '355', category: 'Albums' },
+    { title: 'Album Page Expansions (per spread)', price: '60', category: 'Albums' },
+    
+    // Stationery
+    { title: 'Thank You Cards (set of 100)', price: '150', category: 'Stationery' },
+    { title: 'Save-the-Date Postcards (set of 100)', price: '150', category: 'Stationery' },
+    
+    // Wall Art
+    { title: 'Custom Wall Art (canvas, metal, acrylic)', price: '250', description: 'Starting at', category: 'Wall Art' },
+    
+    // Special Services
+    { title: 'Next-Day Sneak Peek Gallery (full gallery in 48h)', price: '295', category: 'Services' },
+    { title: 'Rush Full Gallery Editing (14 days)', price: '300', category: 'Services' },
+    { title: 'Slideshow for Reception (30+ images)', price: '450', category: 'Services' },
+    { title: 'Drone Photo/Video Footage', price: '350', description: 'location/weather permitting', category: 'Services' },
+    { title: 'Cinematic Highlight Film (5–7 minutes)', price: '2,000', category: 'Services' },
+    { title: 'USB Keepsake Box with select prints', price: '195', category: 'Services' },
+    { title: 'Extra Online Gallery Year', price: '75', category: 'Services' }
+  ];
+
+  // Bonus Offers
+  const bonusOffers: BonusOffer[] = [
+    {
+      title: 'Early Bird Booking Credit',
+      value: '$275 off',
+      description: 'when booked 12+ months out',
+      icon: CalendarDays
+    },
+    {
+      title: 'Parent Album Discount',
+      value: '25% off',
+      description: 'with primary album purchase',
+      icon: Heart
+    },
+    {
+      title: 'Referral Credit',
+      value: '$250 for you and your friend',
+      description: 'when they book',
+      icon: Gift
+    }
+  ];
+
+  const PackageCard: React.FC<{ pkg: Package }> = ({ pkg }) => {
+    const IconComponent = pkg.icon || Camera;
+    
+    return (
+      <div className={`bg-gradient-to-br from-white to-champagneRose/5 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden border border-champagneRose/20 ${
+        pkg.popular ? 'ring-4 ring-champagneRose/30 scale-105' : ''
+      }`}>
+        {pkg.popular && (
+          <div className="bg-gradient-to-r from-accent to-rose-dark text-white text-center py-2 text-sm font-semibold">
+            Most Popular
           </div>
+        )}
+        
+        <div className="p-8">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-accent to-rose-dark rounded-xl flex items-center justify-center">
+              <IconComponent className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="font-serif text-2xl font-bold text-primary">{pkg.name}</h3>
+              <p className="text-gray-600 text-sm">{pkg.coverage} • {pkg.images} images</p>
+            </div>
+          </div>
+          
+          <div className="mb-6">
+            <span className="text-4xl font-light text-primary">${pkg.price}</span>
+          </div>
+          
+          <ul className="space-y-3 mb-8">
+            {pkg.features.map((feature, index) => (
+              <li key={index} className="flex items-start gap-3">
+                <div className="w-5 h-5 bg-champagneRose rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
+                  <Check className="w-3 h-3 text-accent" />
+                </div>
+                <span className="text-gray-700 text-sm">{feature}</span>
+              </li>
+            ))}
+          </ul>
+          
+          <a
+            href="https://calendly.com/harielxavierphotography/hariel-xavier-photography-meeting"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`w-full py-4 px-6 rounded-xl font-semibold text-center transition-all duration-300 ${
+              pkg.popular 
+                ? 'bg-gradient-to-r from-accent to-rose-dark text-white hover:from-rose-dark hover:to-accent shadow-lg' 
+                : 'bg-primary text-white hover:bg-gray-800'
+            }`}
+          >
+            Book Your Consultation
+          </a>
         </div>
+      </div>
+    );
+  };
+
+  const ALaCarteCard: React.FC<ALaCarteItem> = ({ title, price, description, category }) => (
+    <div className="bg-gradient-to-br from-white to-champagneRose/5 rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-champagneRose/10">
+      <div className="flex justify-between items-start mb-2">
+        <h4 className="font-semibold text-primary">{title}</h4>
+        <span className="text-lg font-light text-gray-700">${price}</span>
+      </div>
+      {description && (
+        <p className="text-sm text-gray-500 mb-2">{description}</p>
       )}
-      <a
-        href="https://calendly.com/harielxavierphotography/hariel-xavier-photography-meeting"
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`w-full mt-auto py-3.5 ${
-          pkg.popular || pkg.tier === 'luxury' ? 'bg-black text-white hover:bg-gray-800' : 'bg-white text-black border border-black hover:bg-black hover:text-white'
-        } transition-all duration-300 tracking-wider text-sm font-semibold uppercase inline-block text-center rounded-md`}
-      >
-        Book Your Consultation
-      </a>
+      <span className="inline-block px-3 py-1 bg-champagneRose text-accent text-xs font-medium rounded-full">
+        {category}
+      </span>
     </div>
   );
-};
 
-const ALaCarteItemDisplay: React.FC<ALaCarteItemDetail> = ({ title, price, description }) => (
-  <div className="py-4 border-b border-gray-200 group transition-all duration-300 hover:bg-gray-50/50 px-2">
-    <div className="flex justify-between items-start">
-      <div>
-        <h4 className="font-semibold text-gray-800 group-hover:text-black transition-colors">{title}</h4>
-        {description && <p className="text-sm text-gray-500 mt-1 max-w-md">{description}</p>}
+  const BonusCard: React.FC<BonusOffer> = ({ title, value, description, icon: IconComponent }) => (
+    <div className="bg-gradient-to-br from-rose-light to-champagneRose rounded-xl p-6 border border-champagneRose">
+      <div className="flex items-center gap-4">
+        {IconComponent && (
+          <div className="w-12 h-12 bg-accent rounded-xl flex items-center justify-center">
+            <IconComponent className="w-6 h-6 text-white" />
+          </div>
+        )}
+        <div>
+          <h4 className="font-semibold text-primary">{title}</h4>
+          <p className="text-accent font-bold">{value}</p>
+          <p className="text-gray-600 text-sm">{description}</p>
+        </div>
       </div>
-      <div className="text-lg font-light text-gray-700 whitespace-nowrap pl-4">${price}</div>
     </div>
-  </div>
-);
-
-const PricingSectionWrapper: React.FC<{ title: string; subtitle?: string; children: React.ReactNode; bgClass?: string; titleClass?: string; subtitleClass?: string; textAlignment?: 'text-center' | 'text-left'; contentMaxWidth?: string; id?: string; }> = 
-  ({ title, subtitle, children, bgClass = "bg-white", titleClass = "text-black", subtitleClass = "text-gray-600", textAlignment = "text-center", contentMaxWidth = "max-w-7xl", id }) => {
-  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
-  return (
-    <section ref={ref} className={`py-20 md:py-28 ${bgClass}`} id={id}> {/* Increased vertical padding */}
-      <div className={`container mx-auto px-4 ${contentMaxWidth}`}>
-        <div className={`${textAlignment} mb-14 md:mb-20 transform transition-all duration-1000 ${inView ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}> {/* Increased bottom margin */}
-          <h2 className={`font-serif text-4xl md:text-5xl mb-4 ${titleClass}`}>{title}</h2>
-          {subtitle && (
-            <>
-              <div className={`w-20 h-px ${titleClass === 'text-white' ? 'bg-white' : 'bg-black'} ${textAlignment === 'text-center' ? 'mx-auto' : ''} mb-4 opacity-70`}></div>
-              <p className={`max-w-2xl ${textAlignment === 'text-center' ? 'mx-auto' : ''} text-lg ${subtitleClass}`}>{subtitle}</p>
-            </>
-          )}
-        </div>
-        <div className={`transform transition-all duration-1000 delay-100 ${inView ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          {children}
-        </div>
-      </div>
-    </section>
   );
-};
 
-export default function PricingPage() {
-  const singleShooterWeddingPackages: Package[] = [
-    { id: 'wedding-sparta-sparkler', name: "The Sparta Sparkler", price: "2,795", monthlyPrice: "233", tier: 'single-shooter',
-      features: [
-        {text: "8 hours of continuous coverage by Hariel Xavier", icon: CalendarDays},
-        {text: "500+ meticulously edited, high-resolution images", icon: Sparkles},
-        {text: "Online gallery for easy sharing, viewing, and print ordering (1 year access)", icon: Gift},
-        {text: "10 exciting sneak peek images delivered within 48 hours", icon: Zap},
-        {text: "Complimentary engagement session at a local Sparta, NJ location", icon: Users},
-        "In-depth pre-wedding consultation and timeline planning",
-        "Full printing and personal use rights"
-      ],
-      usp: "Essential, beautiful coverage capturing the heart of your Sparta wedding."
-    },
-    { id: 'wedding-xavier-classic', name: "The Xavier Classic", price: "3,295", monthlyPrice: "275", tier: 'single-shooter',
-      features: [
-        {text: "9 hours of comprehensive coverage by Hariel Xavier", icon: CalendarDays},
-        {text: "600+ artistically edited, high-resolution images", icon: Sparkles},
-        {text: "Online gallery with advanced features (1 year access)", icon: Gift},
-        {text: "15 captivating sneak peek images delivered within 24-48 hours", icon: Zap},
-        {text: "$150 credit towards fine art prints or products", icon: Package2},
-        "Choice of location for your engagement session (within Sussex County)",
-        "Personalized timeline crafting and vendor coordination assistance"
-      ],
-      usp: "A classic, enhanced experience for a truly memorable wedding day."
+  const groupedAlaCarte = alaCarteItems.reduce((acc, item) => {
+    if (!acc[item.category]) {
+      acc[item.category] = [];
     }
-  ];
-
-  const duoCoverageWeddingPackages: Package[] = [
-    { id: 'duo-sussex-storyteller', name: "Sussex Storyteller Duo", price: "3,995", monthlyPrice: "333", tier: 'duo-coverage', popular: true, themeColor: 'bg-champagneRose', textColor: 'text-black', notes: "*Most Popular",
-      features: [
-        {text: "9 hours of dynamic coverage with Hariel Xavier & a skilled second photographer", icon: Users},
-        {text: "700+ stunningly edited, high-resolution images, capturing multiple perspectives", icon: Sparkles},
-        {text: "Simultaneous coverage of bride & groom preparations", icon: Check},
-        {text: "Expanded online gallery with guest access options (2 years access)", icon: Gift},
-        {text: "20 breathtaking sneak peek images delivered within 24 hours", icon: Zap},
-        {text: "$200 credit towards luxurious albums or wall art", icon: Package2},
-        "Full engagement session at your choice of Sussex County location",
-        "Priority post-production timeline"
-      ],
-      usp: "Our most popular choice! Two photographers ensure every angle and emotion is beautifully preserved."
-    },
-    { id: 'duo-skylands-signature', name: "Skylands Signature Duo", price: "5,495", monthlyPrice: "458", tier: 'duo-coverage',
-      features: [
-        {text: "10 hours of immersive coverage with Hariel Xavier, a second photographer, & a dedicated assistant", icon: Users},
-        {text: "900+ masterfully edited, high-resolution images, offering unparalleled depth", icon: Sparkles},
-        {text: "Next-day 'mini-movie' sneak peek (30-60s social media teaser)", icon: Film},
-        {text: "Premium engagement session (extended time, multiple locations/outfits)", icon: Gem},
-        {text: "Custom-designed 10x10 Fine Art Wedding Album (20 pages/40 sides)", icon: Gift},
-        {text: "$400 credit towards albums, prints, or wall art collections", icon: Package2},
-        "Lifetime secure online gallery hosting for your peace of mind"
-      ],
-      usp: "A signature experience from engagement to heirloom album, capturing every detail with an expert team."
-    },
-    { id: 'duo-xavier-xperience', name: "The Xavier Xperience", price: "7,995+", tier: 'luxury', themeColor: 'bg-black', textColor: 'text-champagneRose',
-      features: [
-        {text: "Full Weekend Coverage: Up to 12 hours on wedding day + 3 hours rehearsal dinner", icon: Crown},
-        {text: "Elite Team: Hariel Xavier, expert second photographer, and dedicated lighting assistant", icon: Users},
-        {text: "1200+ meticulously edited, magazine-quality images", icon: Sparkles},
-        {text: "Same-Day Slideshow: A curated selection of images showcased at your reception", icon: Film},
-        {text: "Next-Day 'First Look' Gallery: ~50-75 images to relive the magic immediately", icon: Zap},
-        {text: "Cinematic Highlight Film (5-7 minutes) by our dedicated film team", icon: Video},
-        {text: "Luxury Heirloom Collection: Bespoke 12x12 Album, 2 Parent Albums, Fine Art Print Box", icon: Gift},
-        {text: "Exclusive Engagement Xperience: Styled session with hair & makeup consultation", icon: Gem},
-        {text: "Personalized planning & concierge service throughout your journey", icon: Check},
-        {text: "$750 credit towards statement wall art or album upgrades", icon: Package2}
-      ],
-      usp: "The ultimate, all-inclusive photography and cinematography experience for the discerning couple."
-    }
-  ];
-  
-  const cinematographyAddOns: ALaCarteItemDetail[] = [
-    { title: "Wedding Film Package", price: "2,200", description: "8h dedicated filmmaker, 5–7 min highlight film, full ceremony & main speeches edit, drone footage (venue/weather permitting)." },
-    { title: "Same-Day Reception Slideshow", price: "500", description: "A heartwarming slideshow of 30+ images from your day, curated & projected during dinner." },
-    { title: "Drone Photo/Video Footage", price: "400", description: "Breathtaking aerial artistry of your venue and surroundings (subject to location & weather)." }
-  ];
-
-  const aLaCarteAtelier: ALaCarteItemDetail[] = [
-    { title: "Additional Hour of Photography (Lead Photographer)", price: "350" },
-    { title: "Additional Hour of Photography (Second Photographer)", price: "200" },
-    { title: "Rehearsal Dinner Coverage (3 hours)", price: "750" },
-    { title: "Bridal Boudoir Session (tasteful & empowering)", price: "600" },
-    { title: "Day-After / 'Trash the Dress' Creative Session", price: "700" },
-    { title: "10×10 Fine-Art Wedding Album (20 pages)", price: "795" },
-    { title: "12×12 Luxury Heirloom Album (30 pages)", price: "1,295" },
-    { title: "Parent Album (8×8 replica)", price: "395" },
-    { title: "Custom Wall Art (Canvas, Metal, Acrylic)", price: "Starting at $295" },
-    { title: "Rush Editing (full gallery in 2 weeks)", price: "500" }
-  ];
-
-  const limitedTimeBonuses: BonusOffer[] = [
-    { title: "Early-Bird Credit", value: "$250 OFF", icon: CalendarDays, notes:"Book 12+ months out" },
-    { title: "Album Trio Special", value: "20% OFF Parent Albums", icon: Gift, notes:"With primary album order" },
-    { title: "Share the Love Referral", value: "$200 Credit Each", icon: Sparkles, notes:"When your friend books" }
-  ];
+    acc[item.category].push(item);
+    return acc;
+  }, {} as Record<string, ALaCarteItem[]>);
 
   return (
     <>
-      <SEO 
-        title="Wedding Photography Pricing NJ | Elopements & Weddings | Hariel Xavier"
-        description="Discover Hariel Xavier Photography's competitive elopement and wedding packages in Sparta & Sussex County, NJ. Single & duo photographer options, cinematic films, and luxury albums. Starting $133/mo."
+      <SEO
+        title="Wedding Photography Packages & Pricing | Hariel Xavier Photography"
+        description="Discover our comprehensive wedding photography packages in Sparta, NJ. Single photographer, duo coverage, and event photography options with transparent pricing."
+        keywords="wedding photography pricing, Sparta NJ photographer, wedding packages, duo photographer, event photography, wedding photographer rates"
+        ogImage="https://harielxavierphotography.com/MoStuff/LandingPage/HeroPage.jpg"
+        type="website"
       />
+      
       <Navigation />
       
-      <main id="main-content" className="pt-20 md:pt-24 bg-gray-50">
-        <section className="relative h-[60vh] md:h-[70vh] flex items-center justify-center text-center text-white bg-black">
-          <div className="absolute inset-0">
-            <ReversibleVideo 
-              src="/MoStuff/meettheteam/1moving.mp4"
-              className="w-full h-full object-cover opacity-50"
-              playbackRate={0.5} autoPlay playsInline muted data-component-name="PricingPageHero"
-            />
-          </div>
-          <div className="relative z-10 p-4">
-            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4 leading-tight">
-              Your Story, <span className="italic text-champagneRose">Masterfully Told</span>
-            </h1>
-            <p className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto mb-8">
-            “Your wedding photographs aren’t just files on a hard-drive; they are the first heirlooms of a brand-new family.” – Hariel Xavier
+      {/* Hero Section */}
+      <section ref={heroRef} className="relative bg-gradient-to-br from-primary via-gray-800 to-black text-white pt-32 pb-20 md:pt-40 md:pb-32">
+        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="relative container mx-auto px-4 text-center">
+          <div className={`transform transition-all duration-1000 ${heroInView ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+            <h1 className="font-serif text-5xl md:text-7xl mb-6">Photography Packages</h1>
+            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+              Transparent, comprehensive pricing designed for every celebration in Sparta, NJ and beyond
             </p>
-            <div className="w-24 h-px bg-champagneRose mx-auto mb-8"></div>
-          </div>
-        </section>
-
-        <div id="collections-title"></div> {/* Anchor for manual exploration */}
-
-
-        <PricingSectionWrapper
-          title="Wedding Collections: Single Photographer"
-          subtitle="Focused, artistic coverage by Hariel Xavier, perfect for capturing the essence of your day with elegance and intimacy. These options already undercut competing single-shooter packages that begin at $3,495."
-        >
-          <div className="flex justify-center">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
-              {singleShooterWeddingPackages.map(pkg => <PricingCard key={pkg.id} pkg={pkg} />)}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="https://calendly.com/harielxavierphotography/hariel-xavier-photography-meeting"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-accent hover:bg-rose-dark text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
+              >
+                Book Free Consultation
+              </a>
+              <a
+                href="#packages"
+                className="border-2 border-white text-white hover:bg-white hover:text-primary px-8 py-4 rounded-xl font-semibold transition-all duration-300"
+              >
+                View Packages
+              </a>
             </div>
           </div>
-        </PricingSectionWrapper>
+        </div>
+      </section>
 
-        <PricingSectionWrapper
-          title="Wedding Collections: Duo Coverage"
-          subtitle="Two storytellers, one seamless narrative. Ensure every angle, every emotion, every fleeting moment is captured with our lead and second photographer teams. Compared with the nearest local peers—whose two-photographer 8-hour 'Gold' runs $4,895—our Duo line saves you ≈ $900 while adding an extra hour and richer deliverables."
-          bgClass="bg-gray-100"
-        >
-          <div className="space-y-8">
-            {/* Regular duo packages in centered grid */}
-            <div className="flex justify-center">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
-                {duoCoverageWeddingPackages.filter(pkg => pkg.tier !== 'luxury').map(pkg => (
-                  <PricingCard key={pkg.id} pkg={pkg} />
-                ))}
-              </div>
-            </div>
-            
-            {/* Luxury package centered and highlighted */}
-            {duoCoverageWeddingPackages.filter(pkg => pkg.tier === 'luxury').map(pkg => (
-              <div key={pkg.id} className="flex justify-center mt-12">
-                <div className="max-w-2xl w-full">
-                  <div className="text-center mb-6">
-                    <span className="inline-block px-4 py-2 bg-gradient-to-r from-amber-400 to-rose-400 text-white text-sm font-semibold rounded-full mb-4">
-                      ✨ LUXURY EXPERIENCE ✨
-                    </span>
-                  </div>
-                  <PricingCard pkg={pkg} className="transform hover:scale-105 transition-all duration-300" />
+      {/* Photographer Type Toggle */}
+      <section id="packages" ref={packagesRef} className="py-16 bg-gradient-to-br from-white to-champagneRose/10">
+        <div className="container mx-auto px-4">
+          <div className={`transform transition-all duration-1000 ${packagesInView ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+            <div className="text-center mb-12">
+              <h2 className="font-serif text-4xl md:text-5xl text-primary mb-4">Wedding Photography Packages</h2>
+              <p className="text-xl text-gray-600 mb-8">Choose the perfect coverage for your special day</p>
+              
+              {/* Toggle */}
+              <div className="flex justify-center mb-12">
+                <div className="bg-white rounded-xl p-2 shadow-lg">
+                  <button
+                    onClick={() => setSelectedPhotographerType('single')}
+                    className={`px-8 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                      selectedPhotographerType === 'single'
+                        ? 'bg-accent text-white shadow-md'
+                        : 'text-gray-600 hover:text-primary'
+                    }`}
+                  >
+                    Single Photographer
+                  </button>
+                  <button
+                    onClick={() => setSelectedPhotographerType('duo')}
+                    className={`px-8 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                      selectedPhotographerType === 'duo'
+                        ? 'bg-accent text-white shadow-md'
+                        : 'text-gray-600 hover:text-primary'
+                    }`}
+                  >
+                    Duo Photographer
+                  </button>
                 </div>
               </div>
-            ))}
-          </div>
-        </PricingSectionWrapper>
+            </div>
 
-        <PricingSectionWrapper 
-          title="Cinematic Storytelling: Add a Wedding Film" 
-          subtitle="Elevate your memories with a breathtaking wedding film. Bundle any Duo collection with the Film Package & save $300!"
-          bgClass="bg-black" titleClass="text-white" subtitleClass="text-gray-300"
-        >
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {cinematographyAddOns.map(item => (
-              <div key={item.title} className="bg-gray-800 p-6 rounded-lg text-center flex flex-col items-center">
-                <Video className="w-12 h-12 text-champagneRose mb-4" />
-                <h4 className="text-xl font-semibold text-white mb-2">{item.title}</h4>
-                <p className="text-3xl font-light text-champagneRose mb-3">${item.price}</p>
-                <p className="text-sm text-gray-400 leading-relaxed">{item.description}</p>
-              </div>
-            ))}
+            {/* Packages Grid */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {(selectedPhotographerType === 'single' ? singlePackages : duoPackages).map((pkg) => (
+                <PackageCard key={pkg.id} pkg={pkg} />
+              ))}
+            </div>
           </div>
-        </PricingSectionWrapper>
-
-        <PricingSectionWrapper title="The À La Carte Atelier" subtitle="Customize your collection with these popular additions and fine-art products.">
-          <div className="max-w-3xl mx-auto bg-white p-6 md:p-8 border border-gray-200 shadow-lg rounded-lg">
-            {aLaCarteAtelier.map(item => <ALaCarteItemDisplay key={item.title} {...item} />)}
-          </div>
-        </PricingSectionWrapper>
-        
-        <PricingSectionWrapper 
-            title="Limited-Time Bonuses" 
-            subtitle="Book by July 31st to unlock these extras and make your investment even sweeter!"
-            bgClass="bg-gray-100"
-        >
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {limitedTimeBonuses.map(offer => (
-              <div key={offer.title} className="bg-white p-6 rounded-lg text-center shadow-md hover:shadow-xl transition-shadow flex flex-col items-center">
-                {offer.icon && <offer.icon className="w-12 h-12 text-champagneRose mb-4" />}
-                <h4 className="text-xl font-semibold text-black mb-2">{offer.title}</h4>
-                <p className="text-gray-700 mb-1 font-medium">{offer.value}</p>
-                {offer.notes && <p className="text-xs text-gray-500">({offer.notes})</p>}
-              </div>
-            ))}
-          </div>
-          <p className="text-center text-gray-600 mt-10 text-lg italic">“Because memories fade—but regret lasts a lifetime.”</p>
-        </PricingSectionWrapper>
-
-        <PricingSectionWrapper title="Contact Me" subtitle="Ready to capture your story? Fill out the form below to get in touch!">
-          <div className="max-w-2xl mx-auto">
-            <iframe height="699" style={{minWidth: '100%', maxWidth: '600px', border: 0, margin: '0 auto'}} id="sn-form-09sk9"
-              src="https://app.studioninja.co/contactform/parser/0a800fc8-7fbb-1621-817f-cbe6e7e26016/0a800fc8-7fbb-1621-817f-d37610217750"
-              allowFullScreen>
-            </iframe>
-            <script type="text/javascript" data-iframe-id="sn-form-09sk9"
-              src="https://app.studioninja.co/client-assets/form-render/assets/scripts/iframeResizer.js"></script>
-          </div>
-        </PricingSectionWrapper>
-        <div className="text-center py-10 bg-gray-50 text-xs text-gray-500">
-          \*Payment plans up to 18 months available. All prices subject to NJ sales tax where applicable. Travel fees may apply for locations outside included mileage.
         </div>
-      </main>
+      </section>
+
+      {/* Event Photography */}
+      <section ref={eventsRef} className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className={`transform transition-all duration-1000 ${eventsInView ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+            <div className="text-center mb-12">
+              <h2 className="font-serif text-4xl md:text-5xl text-primary mb-4">Event Photography</h2>
+              <p className="text-xl text-gray-600 mb-8">Perfect for birthdays, charity events, corporate gatherings, and special celebrations</p>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-8">
+              {eventPackages.map((pkg) => (
+                <PackageCard key={pkg.id} pkg={pkg} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* À La Carte Options */}
+      <section ref={alacarteRef} className="py-16 bg-gradient-to-br from-white to-champagneRose/10">
+        <div className="container mx-auto px-4">
+          <div className={`transform transition-all duration-1000 ${alacarteInView ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+            <div className="text-center mb-12">
+              <h2 className="font-serif text-4xl md:text-5xl text-primary mb-4">À La Carte Options</h2>
+              <p className="text-xl text-gray-600 mb-8">Customize your experience with these popular add-ons</p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Object.entries(groupedAlaCarte).map(([category, items]) => (
+                <div key={category} className="space-y-4">
+                  <h3 className="font-serif text-2xl text-gray-900 mb-6 text-center">{category}</h3>
+                  {items.map((item, index) => (
+                    <ALaCarteCard key={index} {...item} />
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Bonus Offers */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="font-serif text-4xl md:text-5xl text-primary mb-4">Exclusive Bonuses</h2>
+            <p className="text-xl text-gray-600 mb-8">Special incentives for our valued clients</p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {bonusOffers.map((bonus, index) => (
+              <BonusCard key={index} {...bonus} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-br from-primary via-gray-800 to-black text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="font-serif text-4xl md:text-5xl mb-6">Ready to Capture Your Story?</h2>
+          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            Let's discuss your vision and create a custom package that perfectly fits your needs and budget.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="https://calendly.com/harielxavierphotography/hariel-xavier-photography-meeting"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-accent hover:bg-rose-dark text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+            >
+              Book Free Consultation
+              <ArrowRight className="w-5 h-5" />
+            </a>
+            <a
+              href="mailto:contact@harielxavierphotography.com"
+              className="border-2 border-white text-white hover:bg-white hover:text-primary px-8 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2"
+            >
+              Email Us Directly
+              <Plus className="w-5 h-5" />
+            </a>
+          </div>
+        </div>
+      </section>
     </>
   );
-}
+};
+
+export default PricingPage;

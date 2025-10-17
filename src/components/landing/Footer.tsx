@@ -616,9 +616,37 @@ export default function Footer() {
       {/* <BrandCaptureForm /> */}
       
       {/* Footer */}
-      <footer className="bg-black text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+      <footer className="bg-black text-white">
+        {/* Elegant Contact Announcement Banner */}
+        <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b border-accent/20 py-6">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="flex items-center justify-center mb-3">
+                <div className="w-3 h-3 bg-accent rounded-full mr-3 animate-pulse"></div>
+                <span className="text-accent text-sm font-medium tracking-[0.2em] uppercase">Important Update</span>
+              </div>
+              <h2 className="font-serif text-2xl md:text-3xl text-white mb-2">
+                New Dedicated Contact Line
+              </h2>
+              <p className="text-gray-300 text-lg leading-relaxed max-w-2xl mx-auto">
+                We're pleased to introduce our new primary contact number for all wedding photography consultations and inquiries.
+              </p>
+              <div className="mt-4">
+                <a 
+                  href="tel:+18623914179" 
+                  className="inline-flex items-center bg-gradient-to-r from-accent to-rose-dark text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                >
+                  <span className="mr-2">📞</span>
+                  Call (862) 391-4179
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="py-12">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             <div>
               <h3 className="text-xl font-serif mb-4">Hariel Xavier Photography</h3>
               <p className="text-gray-400 mb-6">
@@ -678,18 +706,31 @@ export default function Footer() {
             
             <div>
               <h3 className="text-xl font-serif mb-4">Contact</h3>
-              <address className="not-italic text-gray-400 space-y-2">
-                <p>Sussex County, NJ</p>
+              
+              {/* Elegant New Number Announcement */}
+              <div className="bg-gradient-to-r from-accent/20 to-rose-dark/20 border border-accent/30 rounded-lg p-4 mb-4">
+                <div className="flex items-center mb-2">
+                  <div className="w-2 h-2 bg-accent rounded-full mr-2 animate-pulse"></div>
+                  <span className="text-accent text-sm font-medium tracking-wide uppercase">New Contact Number</span>
+                </div>
+                <p className="text-white text-lg font-serif leading-relaxed">
+                  We're delighted to announce our new dedicated line for all wedding photography inquiries and consultations.
+                </p>
+              </div>
+              
+              <address className="not-italic text-gray-400 space-y-3">
+                <p className="text-white/80">Sussex County, NJ</p>
                 <p>
                   <a href="mailto:Hi@HarielXavier.com" className="hover:text-white transition-colors">
                     Hi@HarielXavier.com
                   </a>
                 </p>
-                <p>
-                  <a href="tel:+18623914179" className="hover:text-white transition-colors">
+                <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+                  <p className="text-xs text-gray-400 mb-1">Primary Contact Line</p>
+                  <a href="tel:+18623914179" className="text-white text-lg font-medium hover:text-accent transition-colors">
                     (862) 391-4179
                   </a>
-                </p>
+                </div>
               </address>
               <ul className="space-y-2 mt-4">
                 <li>
@@ -711,6 +752,7 @@ export default function Footer() {
               </p>
             </div>
             <div className="flex space-x-6 mt-4 md:mt-0"></div>
+          </div>
           </div>
         </div>
       </footer>

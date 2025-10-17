@@ -8,9 +8,10 @@ export default function Navigation() {
 
   const navLinks = [
     // Portfolio link removed as requested
-    { label: 'Showcase', path: '/showcase' },
+    { label: 'Portfolio', path: '/portfolio' },
     { label: 'About', path: '/about' },
     { label: 'Pricing', path: '/pricing' },
+    { label: 'FAQ', path: '/faq' },
     { label: 'Blog', path: '/blog' }
   ];
 

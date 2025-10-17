@@ -17,7 +17,14 @@ interface WeddingGalleryItem {
   featured?: boolean;
 }
 
-const ShowcasePage: React.FC = () => {
+interface EngagementPhoto {
+  id: string;
+  imageUrl: string;
+  caption: string;
+  location: string;
+}
+
+const PortfolioPage: React.FC = () => {
   const { ref: galleryRef, inView } = useInView({
     threshold: 0.1,
     triggerOnce: true
@@ -182,6 +189,190 @@ const ShowcasePage: React.FC = () => {
     }
   ];
 
+  // Engagement photos data
+  const engagementPhotos: EngagementPhoto[] = [
+    {
+      id: 'engagement-1',
+      imageUrl: '/images/engagements/engagement-1.jpg',
+      caption: 'Alexa & Marc',
+      location: 'Sussex County, NJ'
+    },
+    {
+      id: 'engagement-2',
+      imageUrl: '/images/engagements/engagement-2.jpg',
+      caption: 'Amanda & Matthews',
+      location: 'Sparta, NJ'
+    },
+    {
+      id: 'engagement-3',
+      imageUrl: '/images/engagements/engagement-3.jpg',
+      caption: 'Ansimon & Mina',
+      location: 'Newton, NJ'
+    },
+    {
+      id: 'engagement-4',
+      imageUrl: '/images/engagements/engagement-4.jpg',
+      caption: 'Catherine & Tyler',
+      location: 'Sussex County, NJ'
+    },
+    {
+      id: 'engagement-5',
+      imageUrl: '/images/engagements/engagement-5.jpg',
+      caption: 'Christina & Tiju',
+      location: 'Vernon, NJ'
+    },
+    {
+      id: 'engagement-6',
+      imageUrl: '/images/engagements/engagement-6.jpg',
+      caption: 'Karni & Zilvinas',
+      location: 'Sparta, NJ'
+    },
+    {
+      id: 'engagement-7',
+      imageUrl: '/images/engagements/engagement-7.jpg',
+      caption: 'Liv & Zach',
+      location: 'Newton, NJ'
+    },
+    {
+      id: 'engagement-8',
+      imageUrl: '/images/engagements/engagement-8.jpg',
+      caption: 'Marisa & Kyle',
+      location: 'Sussex County, NJ'
+    },
+    {
+      id: 'engagement-9',
+      imageUrl: '/images/engagements/engagement-9.jpg',
+      caption: 'Noelia & Joe',
+      location: 'Hopatcong, NJ'
+    },
+    {
+      id: 'engagement-10',
+      imageUrl: '/images/engagements/engagement-10.jpg',
+      caption: 'Raquel & TJ',
+      location: 'Sparta, NJ'
+    },
+    {
+      id: 'engagement-11',
+      imageUrl: '/images/engagements/engagement-11.jpg',
+      caption: 'Amanda & Matthews',
+      location: 'Sparta, NJ'
+    },
+    {
+      id: 'engagement-12',
+      imageUrl: '/images/engagements/engagement-12.jpg',
+      caption: 'Ansimon & Mina',
+      location: 'Sussex County, NJ'
+    },
+    {
+      id: 'engagement-13',
+      imageUrl: '/images/engagements/engagement-13.jpg',
+      caption: 'Catherine & Tyler',
+      location: 'Newton, NJ'
+    },
+    {
+      id: 'engagement-14',
+      imageUrl: '/images/engagements/engagement-14.jpg',
+      caption: 'Christina & Tiju',
+      location: 'Vernon, NJ'
+    },
+    {
+      id: 'engagement-15',
+      imageUrl: '/images/engagements/engagement-15.jpg',
+      caption: 'Karni & Zilvinas',
+      location: 'Sparta, NJ'
+    },
+    {
+      id: 'engagement-16',
+      imageUrl: '/images/engagements/engagement-16.jpg',
+      caption: 'Liv & Zach',
+      location: 'Sussex County, NJ'
+    },
+    {
+      id: 'engagement-17',
+      imageUrl: '/images/engagements/engagement-17.jpg',
+      caption: 'Marisa & Kyle',
+      location: 'Newton, NJ'
+    },
+    {
+      id: 'engagement-18',
+      imageUrl: '/images/engagements/engagement-18.jpg',
+      caption: 'Noelia & Joe',
+      location: 'Hopatcong, NJ'
+    },
+    {
+      id: 'engagement-19',
+      imageUrl: '/images/engagements/engagement-19.jpg',
+      caption: 'Raquel & TJ',
+      location: 'Sparta, NJ'
+    },
+    {
+      id: 'engagement-20',
+      imageUrl: '/images/engagements/engagement-20.jpg',
+      caption: 'Amanda & Matthews',
+      location: 'Sussex County, NJ'
+    },
+    {
+      id: 'engagement-21',
+      imageUrl: '/images/engagements/engagement-21.jpg',
+      caption: 'Ansimon & Mina',
+      location: 'Sussex County, NJ'
+    },
+    {
+      id: 'engagement-22',
+      imageUrl: '/images/engagements/engagement-22.jpg',
+      caption: 'Catherine & Tyler',
+      location: 'Newton, NJ'
+    },
+    {
+      id: 'engagement-23',
+      imageUrl: '/images/engagements/engagement-23.jpg',
+      caption: 'Christina & Tiju',
+      location: 'Sparta, NJ'
+    },
+    {
+      id: 'engagement-24',
+      imageUrl: '/images/engagements/engagement-24.jpg',
+      caption: 'Karni & Zilvinas',
+      location: 'Hopatcong, NJ'
+    },
+    {
+      id: 'engagement-25',
+      imageUrl: '/images/engagements/engagement-25.jpg',
+      caption: 'Marisa & Kyle',
+      location: 'Vernon, NJ'
+    },
+    {
+      id: 'engagement-26',
+      imageUrl: '/images/engagements/engagement-26.jpg',
+      caption: 'Noelia & Joe',
+      location: 'Sparta, NJ'
+    },
+    {
+      id: 'engagement-27',
+      imageUrl: '/images/engagements/engagement-27.jpg',
+      caption: 'Raquel & TJ',
+      location: 'Newton, NJ'
+    },
+    {
+      id: 'engagement-28',
+      imageUrl: '/images/engagements/engagement-28.jpg',
+      caption: 'Ansimon & Mina',
+      location: 'Sussex County, NJ'
+    },
+    {
+      id: 'engagement-29',
+      imageUrl: '/images/engagements/engagement-29.jpg',
+      caption: 'Karni & Zilvinas',
+      location: 'Sparta, NJ'
+    },
+    {
+      id: 'engagement-30',
+      imageUrl: '/images/engagements/engagement-30.jpg',
+      caption: 'Marisa & Kyle',
+      location: 'Sussex County, NJ'
+    }
+  ];
+
   // Get featured gallery
   const featuredGallery = weddingGalleries.find(gallery => gallery.featured) || weddingGalleries[0];
   
@@ -191,9 +382,9 @@ const ShowcasePage: React.FC = () => {
   return (
     <>
       <SEO 
-        title="Wedding Photography Showcase in NJ | Hariel Xavier Photography"
-        description="Explore our wedding photography showcase featuring stunning celebrations at top New Jersey venues. View our portfolio of real weddings and book your NJ wedding photographer today."
-        keywords="NJ wedding photographer, New Jersey wedding photography, wedding photography showcase, luxury wedding photos NJ, Hariel Xavier Photography, wedding venues NJ"
+        title="Wedding Photography Portfolio Sparta NJ | Sussex County Wedding Photos"
+        description="View our stunning wedding photography portfolio from Sparta, NJ and Sussex County venues. Real weddings at Picatinny Club and luxury venues. Book your consultation today."
+        keywords="wedding photography portfolio Sparta NJ, Sussex County wedding photos, Picatinny Club wedding photographer, New Jersey wedding photography, luxury wedding photographer Sparta, Hariel Xavier Photography"
         ogImage="https://harielxavierphotography.com/MoStuff/LandingPage/HeroPage.jpg"
         type="website"
       />
@@ -210,7 +401,7 @@ const ShowcasePage: React.FC = () => {
           />
         </div>
         <div className="relative z-10 text-center text-white px-4 max-w-5xl mx-auto">
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl mb-6">Wedding Photography Showcase</h1>
+          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl mb-6">Wedding Photography Portfolio Sparta NJ</h1>
           <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto">
             A collection of beautiful wedding moments captured across New Jersey
           </p>
@@ -326,9 +517,67 @@ const ShowcasePage: React.FC = () => {
         </div>
       </section>
       
+      {/* Engagement Photos Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-serif mb-4">Engagement Sessions</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Intimate moments and authentic connections captured during engagement photography sessions across Sussex County, Sparta, Newton, Vernon, and Hopatcong, New Jersey. Professional engagement photography that tells your unique love story.
+            </p>
+          </div>
+          
+          {/* Masonry Grid for Engagement Photos */}
+          <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
+            {engagementPhotos.map((photo, index) => (
+              <div 
+                key={photo.id}
+                className="break-inside-avoid group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <div className="relative">
+                  <img 
+                    src={photo.imageUrl} 
+                    alt={photo.caption}
+                    className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+                    onError={(e) => {
+                      console.error(`Failed to load engagement image: ${photo.imageUrl}`);
+                      e.currentTarget.src = '/images/placeholders/portrait.jpg';
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                      <p className="text-sm font-medium">{photo.caption}</p>
+                      <p className="text-xs text-white/80">{photo.location}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Form Section */}
+      <section id="contact-form" className="py-16 md:py-24 bg-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-light mb-8">Contact Me</h2>
+          <p className="max-w-2xl mx-auto text-gray-600 mb-12">
+            Ready to capture your story? Fill out the form below to get in touch!
+          </p>
+          <div className="max-w-2xl mx-auto">
+            <iframe height="699" style={{minWidth: '100%', maxWidth: '600px', border: 0, margin: '0 auto'}} id="sn-form-09sk9"
+              src="https://app.studioninja.co/contactform/parser/0a800fc8-7fbb-1621-817f-cbe6e7e26016/0a800fc8-7fbb-1621-817f-d37610217750"
+              allowFullScreen>
+            </iframe>
+            <script type="text/javascript" data-iframe-id="sn-form-09sk9"
+              src="https://app.studioninja.co/client-assets/form-render/assets/scripts/iframeResizer.js"></script>
+          </div>
+        </div>
+      </section>
+      
       <Footer />
     </>
   );
 };
 
-export default ShowcasePage;
+export default PortfolioPage;

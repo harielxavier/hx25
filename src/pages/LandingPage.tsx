@@ -8,7 +8,7 @@ import SEOHead from '../components/common/SEOHead';
 import FeaturedGalleries from '../components/landing/FeaturedGalleries';
 import CuratorSocialFeed from '../components/social/CuratorSocialFeed';
 import PhotographyStyleSlider from '../components/portfolio/PhotographyStyleSlider';
-import HowItsGoingTeaser from '../components/HowItsGoingTeaser';
+import BlurText from '../components/BlurText';
 // Removed FOMO element
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
@@ -273,7 +273,13 @@ export function LandingPage() {
         }`}>
           <p className="text-sm uppercase tracking-[0.3em] mb-6">Wedding Photography</p>
           <h1 className="text-6xl md:text-7xl lg:text-8xl font-light mb-8">
-            Capturing Timeless
+            <BlurText
+              text="Capturing Timeless"
+              delay={500}
+              animateBy="words"
+              direction="top"
+              className="font-light"
+            />
             <br />
             <span className="font-serif">Love Stories</span>
           </h1>
@@ -320,8 +326,6 @@ export function LandingPage() {
       </section>
 
       <FeaturedGalleries />
-
-      <HowItsGoingTeaser />
 
       <section className="py-20">
         <div className="container mx-auto px-4">

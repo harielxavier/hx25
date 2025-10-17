@@ -34,7 +34,7 @@ const calculateReadTime = (content: string): number => {
 // Sample blog posts with consistent field naming and properly structured data
 const blogPosts = [
   {
-    title: 'The Art of Wedding Storytelling',
+    title: 'Wedding Photography Storytelling in Sparta NJ | Sussex County Weddings',
     slug: 'art-of-wedding-storytelling',
     excerpt: 'How to capture the complete narrative of a wedding day through thoughtful photography.',
     content: `
@@ -67,12 +67,12 @@ const blogPosts = [
     views: 0,
     featured: true,
     seoTitle: 'The Art of Wedding Storytelling | Capturing Your Complete Wedding Day',
-    seoDescription: 'Learn how to document the complete narrative of a wedding day through thoughtful photography that captures emotions, relationships, and meaningful moments.',
+    seoDescription: 'Learn how to document the complete narrative of your Sparta NJ wedding day through thoughtful photography that captures emotions, relationships, and meaningful moments.',
     videoEmbed: '',
     commentsEnabled: true
   },
   {
-    title: 'Lighting Techniques for Outdoor Portrait Sessions',
+    title: 'Outdoor Portrait Photography Sparta NJ | Sussex County Engagement Sessions',
     slug: 'lighting-techniques-outdoor-portrait-sessions',
     excerpt: 'Master the art of working with natural light and modifiers for stunning outdoor portraits.',
     content: `
@@ -107,7 +107,7 @@ const blogPosts = [
     commentsEnabled: true
   },
   {
-    title: 'Creating Authentic Moments in Engagement Photography',
+    title: 'Engagement Photography Sparta NJ | Authentic Moments Sussex County',
     slug: 'authentic-moments-engagement-photography',
     excerpt: 'How to guide couples into natural, meaningful interactions during engagement sessions.',
     content: `
@@ -142,7 +142,7 @@ const blogPosts = [
     commentsEnabled: true
   },
   {
-    title: 'Essential Gear for Wedding Photographers in 2025',
+    title: 'Wedding Photography Equipment Guide | Sparta NJ Wedding Photographer',
     slug: 'essential-gear-wedding-photographers-2025',
     excerpt: 'The must-have equipment for modern wedding photography that balances quality, reliability, and portability.',
     content: `
