@@ -34,6 +34,90 @@ const calculateReadTime = (content: string): number => {
 // Sample blog posts with consistent field naming and properly structured data
 const blogPosts = [
   {
+    title: 'Skylands Manor Engagement Photography Sparta NJ | Marisa & Kyle\'s Pre-Wedding Session',
+    slug: 'skylands-manor-engagement-marisa-kyle',
+    excerpt: 'Discover our approach to engagement photography at Skylands Manor in Sparta, NJ. See how we prepare couples like Marisa & Kyle for their upcoming Perona Farms wedding through guided poses and authentic moments.',
+    content: `
+      <p>When Marisa and Kyle reached out about their upcoming wedding at Perona Farms, we knew we had to create something special for their engagement session. They wanted something that would not only capture their love story but also prepare them for their big day. That's when we suggested Skylands Manor—a stunning location that perfectly complements their rustic-chic Perona Farms wedding vision.</p>
+      
+      <h2>Our Trending "Micro-Wedding Training" Approach</h2>
+      <p>Here's the thing about engagement sessions that most couples don't realize: they're not just pretty photos for your save-the-dates. Think of them as your wedding day dress rehearsal. We've developed what we call our "micro-wedding training" approach—it's trending in the wedding industry because it actually works.</p>
+      
+      <p>During Marisa and Kyle's session, we started with simple, fun prompts that got them laughing and comfortable in front of the camera. "Walk toward each other like you're seeing each other for the first time" became "Now look at each other and think about your first date." These guided moments teach couples how to move naturally, how to interact authentically, and most importantly, how to trust the process.</p>
+      
+      <h2>Building Confidence Through Guided Authenticity</h2>
+      <p>Our approach is all about building confidence. We start with what we call "training wheels poses"—simple, flattering positions that anyone can nail. For Marisa and Kyle, this meant starting with classic embraces and gentle walking shots around Skylands Manor's beautiful stone architecture.</p>
+      
+      <p>As the session progressed, we gradually introduced more dynamic moments. "Now let's try something a little different," we'd say, and suddenly they're creating these incredible candid moments that felt completely natural. This is the magic of our process—by the end of the session, couples are moving and posing like they've been doing it their whole lives.</p>
+      
+      <h2>Planning Conversations That Matter</h2>
+      <p>While we're capturing these beautiful moments, we're also diving deep into wedding day planning. With Marisa and Kyle, we discussed everything from timeline logistics to emotional moments. One of the biggest decisions we helped them navigate? Whether to do a first look.</p>
+      
+      <p>For their Perona Farms wedding, we talked through the pros and cons. A first look means more time for couple portraits during golden hour, but it also means missing that traditional aisle moment. We showed them how both scenarios would play out photographically, helping them make an informed decision that felt right for their story.</p>
+      
+      <h2>Why Skylands Manor Was Perfect for Their Story</h2>
+      <p>Skylands Manor provided the perfect backdrop for Marisa and Kyle's engagement session. The rustic stone architecture, sprawling gardens, and natural light created a romantic atmosphere that felt both intimate and grand. It's the kind of location that makes our job easy—every corner offers a new opportunity for beautiful imagery.</p>
+      
+      <p>The variety of settings within Skylands Manor also gave us the chance to practice different types of shots they'll want on their wedding day. From intimate close-ups in the garden to sweeping romantic shots with the manor in the background, we covered all the bases.</p>
+      
+      <h2>Preparing for Perona Farms</h2>
+      <p>Since Marisa and Kyle are getting married at Perona Farms in Andover, we used their engagement session to discuss how we'll approach their wedding day photography. Perona Farms offers incredible variety—from rustic barn settings to elegant indoor spaces—and we wanted to make sure they felt confident about every aspect of their coverage.</p>
+      
+      <p>We talked about timing, lighting, and how to make the most of Perona Farms' beautiful grounds. By the end of their engagement session, they had a clear vision of how their wedding day would flow and felt completely prepared for what to expect.</p>
+      
+      <h2>The Psychology Behind Our Approach</h2>
+      <p>There's a psychology to our engagement session approach that's become incredibly popular in the wedding industry. We're not just taking pretty pictures—we're building trust, establishing comfort, and creating a foundation for an amazing wedding day experience.</p>
+      
+      <p>When couples arrive at their wedding day having already worked with us, there's this incredible ease and confidence. They know how we work, they trust our vision, and they're excited rather than nervous. It's like having a friend photograph your wedding instead of a stranger.</p>
+      
+      <h2>Creating Lasting Memories</h2>
+      <p>Marisa and Kyle's engagement session at Skylands Manor resulted in a collection of images that perfectly capture their personalities and love story. But more importantly, it gave them the confidence and preparation they needed for their upcoming Perona Farms wedding.</p>
+      
+      <p>These images will serve as beautiful save-the-dates and social media announcements, but they'll also be treasured memories of this exciting time in their lives. The engagement session is often when couples really start to feel like they're getting married, and we love being part of that magical transition.</p>
+      
+      <h2>Ready for Your Own Engagement Session?</h2>
+      <p>If you're planning a wedding in Sussex County, Sparta, or anywhere in Northern New Jersey, we'd love to help you prepare for your big day with an engagement session that's both beautiful and purposeful. Whether you're getting married at Perona Farms, Skylands Manor, or another stunning venue, we'll create an experience that builds confidence and captures your unique love story.</p>
+      
+      <p>Contact us today to start planning your engagement session and wedding day photography. Let's create something beautiful together.</p>
+    `,
+    author: 'Hariel Xavier',
+    publishedAt: new Date('2025-10-16'),
+    updatedAt: new Date('2025-10-16'),
+    category: 'Engagement Photography',
+    tags: ['Skylands Manor', 'Engagement Photography', 'Sparta NJ', 'Sussex County', 'Perona Farms', 'Northern NJ', 'Wedding Preparation'],
+    featuredImage: 'https://cdn.marblism.com/GPMtj94zVZE.jpg',
+    readTime: 6,
+    seoTitle: 'Skylands Manor Engagement Photography Sparta NJ | Marisa & Kyle\'s Pre-Wedding Session',
+    seoDescription: 'Discover our trending approach to engagement photography at Skylands Manor in Sparta, NJ. See how we prepare couples like Marisa & Kyle for their upcoming Perona Farms wedding through guided poses and authentic moments.',
+    seoKeywords: 'Skylands Manor engagement photography, Sparta NJ engagement photographer, Sussex County engagement sessions, Perona Farms wedding preparation, Northern NJ engagement photography, wedding day training, engagement session approach',
+    isPublished: true,
+    views: 0,
+    likes: 0,
+    comments: [],
+    gallery: [
+      {
+        url: 'https://cdn.marblism.com/GPMtj94zVZE.jpg',
+        alt: 'Romantic Garden Embrace at Skylands Manor',
+        caption: 'Romantic Garden Embrace'
+      },
+      {
+        url: 'https://cdn.marblism.com/_pCOgR6C731.jpg',
+        alt: 'Sunlit Garden Engagement at Skylands Manor',
+        caption: 'Sunlit Garden Engagement'
+      },
+      {
+        url: 'https://cdn.marblism.com/8hyFjgHgmyj.jpg',
+        alt: 'Engaged Couple at Stone Venue',
+        caption: 'Engaged Couple at Stone Venue'
+      },
+      {
+        url: 'https://cdn.marblism.com/gogZtRHEzCm.jpg',
+        alt: 'Romantic Wedding Dip by the Pond',
+        caption: 'Romantic Wedding Dip by the Pond'
+      }
+    ]
+  },
+  {
     title: 'Wedding Photography Storytelling in Sparta NJ | Sussex County Weddings',
     slug: 'art-of-wedding-storytelling',
     excerpt: 'How to capture the complete narrative of a wedding day through thoughtful photography.',

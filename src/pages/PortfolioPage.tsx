@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, ArrowRight } from 'lucide-react';
+import { MapPin, ArrowRight, Calendar, Clock } from 'lucide-react';
 import SEO from '../components/SEO';
 import Navigation from '../components/landing/Navigation';
 import Footer from '../components/landing/Footer';
 import { useInView } from 'react-intersection-observer';
+import { getAllPosts } from '../services/blogService';
 
 interface WeddingGalleryItem {
   id: string;
@@ -29,6 +30,29 @@ const PortfolioPage: React.FC = () => {
     threshold: 0.1,
     triggerOnce: true
   });
+
+  const [latestBlogPosts, setLatestBlogPosts] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchLatestBlogs = async () => {
+      try {
+        const posts = await getAllPosts();
+        // Get the 3 most recent published posts
+        const recentPosts = posts
+          .sort((a, b) => {
+            const aTime = a.publishedAt ? a.publishedAt.seconds : 0;
+            const bTime = b.publishedAt ? b.publishedAt.seconds : 0;
+            return bTime - aTime;
+          })
+          .slice(0, 3);
+        setLatestBlogPosts(recentPosts);
+      } catch (error) {
+        console.error('Error fetching blog posts:', error);
+      }
+    };
+
+    fetchLatestBlogs();
+  }, []);
 
   // Example wedding galleries
   const weddingGalleries: WeddingGalleryItem[] = [
@@ -571,6 +595,77 @@ const PortfolioPage: React.FC = () => {
             </iframe>
             <script type="text/javascript" data-iframe-id="sn-form-09sk9"
               src="https://app.studioninja.co/client-assets/form-render/assets/scripts/iframeResizer.js"></script>
+          </div>
+        </div>
+      </section>
+
+      {/* Latest Blog Posts Section */}
+      <section className="py-16 md:py-24 bg-gradient-to-br from-gray-50 to-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-serif mb-4">Latest from Our Blog</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Discover wedding photography tips, venue highlights, and behind-the-scenes stories from our recent work.
+            </p>
+          </div>
+          
+          {latestBlogPosts.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {latestBlogPosts.map((post) => (
+                <article key={post.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group">
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={post.featuredImage}
+                      alt={post.title}
+                      className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                      onError={(e) => {
+                        e.currentTarget.src = '/images/placeholders/default.jpg';
+                      }}
+                    />
+                    <div className="absolute top-4 left-4">
+                      <span className="bg-white/90 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">
+                        {post.category}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="p-6">
+                    <div className="flex items-center text-sm text-gray-500 mb-3">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      <span>{post.publishedAt ? new Date(post.publishedAt.seconds * 1000).toLocaleDateString() : 'Recently'}</span>
+                      <Clock className="w-4 h-4 ml-4 mr-2" />
+                      <span>{post.readTime || '5'} min read</span>
+                    </div>
+                    
+                    <h3 className="text-xl font-serif mb-3 line-clamp-2 group-hover:text-accent transition-colors">
+                      {post.title}
+                    </h3>
+                    
+                    <p className="text-gray-600 mb-4 line-clamp-3">
+                      {post.excerpt}
+                    </p>
+                    
+                    <Link
+                      to={`/blog/${post.slug}`}
+                      className="inline-flex items-center text-accent hover:text-rose-dark font-medium transition-colors"
+                    >
+                      Read More
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+          
+          <div className="text-center mt-12">
+            <Link
+              to="/blog"
+              className="inline-flex items-center bg-gradient-to-r from-accent to-rose-dark text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:from-rose-dark hover:to-accent transform hover:-translate-y-1"
+            >
+              View All Blog Posts
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Link>
           </div>
         </div>
       </section>
