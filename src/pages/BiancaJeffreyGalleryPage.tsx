@@ -42,19 +42,19 @@ function BiancaJeffreyGalleryPage() {
         <title>Park Chateau Estate Wedding Photography | Bianca & Jeffrey | Hariel Xavier Photography</title>
         <meta name="description" content="View this elegant wedding at Park Chateau Estate in East Brunswick, NJ. Professional wedding photography showcasing the luxury and grandeur of this premier New Jersey venue." />
         <meta name="keywords" content="Park Chateau Estate, East Brunswick wedding venue, NJ luxury wedding venue, French-inspired wedding venue, Hariel Xavier Photography, Bianca and Jeffrey wedding" />
-        <link rel="canonical" href="https://harielxavierphotography.com/bianca-jeffrey" />
+        <link rel="canonical" href="https://harielxavier.com/bianca-jeffrey" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Park Chateau Estate Wedding Photography | Bianca & Jeffrey" />
         <meta property="og:description" content="View this elegant wedding at Park Chateau Estate in East Brunswick, NJ. Professional wedding photography showcasing the luxury and grandeur of this premier New Jersey venue." />
-        <meta property="og:image" content="https://harielxavierphotography.com/MoStuff/Featured Wedding/Bianca & Jeffrey's Wedding/The Ceremony/Bianca & Jeff_s Wedding-826.jpg" />
+        <meta property="og:image" content="https://harielxavier.com/MoStuff/Featured Wedding/Bianca & Jeffrey's Wedding/The Ceremony/Bianca & Jeff_s Wedding-826.jpg" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Park Chateau Estate Wedding Photography | Bianca & Jeffrey" />
         <meta name="twitter:description" content="View this elegant wedding at Park Chateau Estate in East Brunswick, NJ. Professional wedding photography showcasing the luxury and grandeur of this premier New Jersey venue." />
-        <meta name="twitter:image" content="https://harielxavierphotography.com/MoStuff/Featured Wedding/Bianca & Jeffrey's Wedding/The Ceremony/Bianca & Jeff_s Wedding-826.jpg" />
+        <meta name="twitter:image" content="https://harielxavier.com/MoStuff/Featured Wedding/Bianca & Jeffrey's Wedding/The Ceremony/Bianca & Jeff_s Wedding-826.jpg" />
         
         {/* Schema.org structured data */}
         <script type="application/ld+json">
@@ -63,11 +63,11 @@ function BiancaJeffreyGalleryPage() {
             "@type": "ImageGallery",
             "name": "Park Chateau Estate Wedding Photography | Bianca & Jeffrey",
             "description": "Professional wedding photography at Park Chateau Estate in East Brunswick, New Jersey. Featuring the elegant wedding of Bianca and Jeffrey.",
-            "image": "https://harielxavierphotography.com/MoStuff/Featured Wedding/Bianca & Jeffrey's Wedding/The Ceremony/Bianca & Jeff_s Wedding-826.jpg",
+            "image": "https://harielxavier.com/MoStuff/Featured Wedding/Bianca & Jeffrey's Wedding/The Ceremony/Bianca & Jeff_s Wedding-826.jpg",
             "author": {
               "@type": "Person",
               "name": "Hariel Xavier",
-              "url": "https://harielxavierphotography.com"
+              "url": "https://harielxavier.com"
             },
             "contentLocation": {
               "@type": "Place",

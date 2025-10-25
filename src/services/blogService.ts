@@ -77,6 +77,12 @@ export const getAllPosts = async (includeUnpublished = false): Promise<BlogPost[
   try {
     console.log('Fetching all blog posts...');
     
+    // Check if Firebase is initialized
+    if (!db) {
+      console.log('Firebase not initialized - returning empty blog posts');
+      return [];
+    }
+    
     // Use a simpler query that doesn't require composite indexes
     const postsRef = collection(db, 'posts');
     const postsSnapshot = await getDocs(postsRef);
@@ -112,6 +118,12 @@ export const getAllPosts = async (includeUnpublished = false): Promise<BlogPost[
 // Get a single blog post by slug
 export const getPostBySlug = async (slug: string): Promise<BlogPost | null> => {
   try {
+    // Check if Firebase is initialized
+    if (!db) {
+      console.log('Firebase not initialized - cannot fetch blog post');
+      return null;
+    }
+    
     // Query for the post with the matching slug
     const postsRef = collection(db, 'posts');
     const q = query(postsRef, where('slug', '==', slug));
@@ -134,6 +146,11 @@ export const getPostBySlug = async (slug: string): Promise<BlogPost | null> => {
 // Get a single blog post by ID
 export const getPostById = async (id: string): Promise<BlogPost | null> => {
   try {
+    if (!db) {
+      console.log('Firebase not initialized - cannot fetch blog post');
+      return null;
+    }
+    
     const postRef = doc(db, 'posts', id);
     const postSnap = await getDoc(postRef);
     
@@ -304,6 +321,11 @@ export const deletePost = async (id: string): Promise<boolean> => {
 // Increment post view count
 export const incrementPostViews = async (id: string): Promise<boolean> => {
   try {
+    if (!db) {
+      console.log('Firebase not initialized - skipping view increment');
+      return false;
+    }
+    
     const postRef = doc(db, 'posts', id);
     await updateDoc(postRef, {
       views: increment(1)

@@ -668,26 +668,6 @@ export default function Footer() {
               </div>
             </div>
             
-            <div>
-              <h3 className="text-xl font-serif mb-4">Quick Links</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link to="/" className="text-gray-400 hover:text-white transition-colors">Home</Link>
-                </li>
-                <li>
-                  <Link to="/about" className="text-gray-400 hover:text-white transition-colors">About</Link>
-                </li>
-                <li>
-                  <Link to="/gallery" className="text-gray-400 hover:text-white transition-colors">Gallery</Link>
-                </li>
-                <li>
-                  <Link to="/pricing" className="text-gray-400 hover:text-white transition-colors">Pricing</Link>
-                </li>
-                <li>
-                  <Link to="/blog" className="text-gray-400 hover:text-white transition-colors">Blog</Link>
-                </li>
-              </ul>
-            </div>
             
             <div>
               <h3 className="text-xl font-serif mb-4">Wedding Planning Tools</h3>
@@ -707,17 +687,6 @@ export default function Footer() {
             <div>
               <h3 className="text-xl font-serif mb-4">Contact</h3>
               
-              {/* Elegant New Number Announcement */}
-              <div className="bg-gradient-to-r from-accent/20 to-rose-dark/20 border border-accent/30 rounded-lg p-4 mb-4">
-                <div className="flex items-center mb-2">
-                  <div className="w-2 h-2 bg-accent rounded-full mr-2 animate-pulse"></div>
-                  <span className="text-accent text-sm font-medium tracking-wide uppercase">New Contact Number</span>
-                </div>
-                <p className="text-white text-lg font-serif leading-relaxed">
-                  We're delighted to announce our new dedicated line for all wedding photography inquiries and consultations.
-                </p>
-              </div>
-              
               <address className="not-italic text-gray-400 space-y-3">
                 <p className="text-white/80">Sussex County, NJ</p>
                 <p>
@@ -725,16 +694,17 @@ export default function Footer() {
                     Hi@HarielXavier.com
                   </a>
                 </p>
-                <div className="bg-white/5 rounded-lg p-3 border border-white/10">
-                  <p className="text-xs text-gray-400 mb-1">Primary Contact Line</p>
-                  <a href="tel:+18623914179" className="text-white text-lg font-medium hover:text-accent transition-colors">
-                    (862) 391-4179
-                  </a>
-                </div>
               </address>
-              <ul className="space-y-2 mt-4">
+            </div>
+            
+            <div>
+              <h3 className="text-xl font-serif mb-4">Resources</h3>
+              <ul className="space-y-2">
                 <li>
-                  <Link to="/contact" className="text-gray-400 hover:text-white transition-colors">Contact Form</Link>
+                  <Link to="/faq" className="text-gray-400 hover:text-white transition-colors">FAQ</Link>
+                </li>
+                <li>
+                  <Link to="/admin" className="text-gray-400 hover:text-white transition-colors">Admin Login</Link>
                 </li>
               </ul>
             </div>
@@ -746,8 +716,8 @@ export default function Footer() {
                 &copy; {currentYear} Hariel Xavier Photography. All rights reserved.
               </p>
               <p className="text-gray-500">
-                <a href="https://www.knightswatchit.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-                  A KnightsWatchIT Website
+                <a href="https://www.devority.io" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                  A Devority Website
                 </a>
               </p>
             </div>

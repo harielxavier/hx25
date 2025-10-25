@@ -1,20 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Image as ImageIcon, Save, ArrowLeft, Globe, X, Tag, Upload, Video, Share, Link } from 'lucide-react';
-import { db, storage } from '../../lib/firebase';
-import { 
-  doc, 
-  getDoc, 
-  setDoc,
-  Timestamp
-} from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-
-interface Author {
-  name: string;
-  avatar: string;
-  bio?: string;
-}
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Save, X, Eye, Image as ImageIcon, Link as LinkIcon, Trash2, Plus } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
+import toast from 'react-hot-toast';
 
 interface BlogPost {
   id?: string;
@@ -22,674 +10,520 @@ interface BlogPost {
   slug: string;
   excerpt: string;
   content: string;
-  image: string;
+  featured_image: string;
   category: string;
   tags: string[];
   status: 'draft' | 'published';
-  createdAt: any;
-  updatedAt: any;
-  publishedAt: any;
   featured: boolean;
-  author: Author;
-  seo: {
-    title: string;
-    description: string;
-    keywords: string[];
-    ogImage: string;
+  author: {
+    name: string;
+    avatar: string;
+    bio?: string;
   };
-  views: number;
-  readTime?: string;
-  videoEmbed: string;
-  shareEnabled: boolean;
-  commentsEnabled: boolean;
+  video_embed?: string;
+  share_enabled: boolean;
+  comments_enabled: boolean;
 }
+
+const CATEGORIES = [
+  'Wedding Venues',
+  'Wedding Planning',
+  'Engagement Photography',
+  'Photography Tips',
+  'Real Weddings',
+  'Behind the Scenes',
+  'Wedding Day Tips',
+  'Pricing & Packages',
+  'Style Guide',
+  'Uncategorized'
+];
 
 export default function BlogEditor() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [uploadingImage, setUploadingImage] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showPreview, setShowPreview] = useState(false);
+  const [newTag, setNewTag] = useState('');
+  
   const [post, setPost] = useState<BlogPost>({
     title: '',
     slug: '',
     excerpt: '',
     content: '',
-    image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
-    category: 'Photography Tips',
+    featured_image: '',
+    category: 'Uncategorized',
     tags: [],
     status: 'draft',
-    createdAt: null,
-    updatedAt: null,
-    publishedAt: null,
     featured: false,
     author: {
-      name: "Hariel Xavier",
-      avatar: "/images/author.jpg",
-      bio: "Professional photographer with over 10 years of experience capturing life's precious moments."
+      name: 'Hariel Xavier',
+      avatar: '/images/hariel-xavier.jpg',
+      bio: 'Award-winning wedding photographer with 10+ years capturing love stories in New Jersey'
     },
-    seo: {
-      title: '',
-      description: '',
-      keywords: [],
-      ogImage: ''
-    },
-    views: 0,
-    readTime: '5 min read',
-    videoEmbed: '',
-    shareEnabled: true,
-    commentsEnabled: true
+    video_embed: '',
+    share_enabled: true,
+    comments_enabled: true
   });
 
-  // Tag input state
-  const [tagInput, setTagInput] = useState('');
-
   useEffect(() => {
-    if (id) {
-      loadPost(id);
+    if (id && id !== 'new') {
+      fetchPost();
     }
   }, [id]);
 
-  async function loadPost(postId: string) {
+  const fetchPost = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      setError(null);
-      const postRef = doc(db, 'posts', postId);
-      const postSnap = await getDoc(postRef);
-      
-      if (postSnap.exists()) {
-        setPost({
-          id: postId,
-          ...postSnap.data()
-        } as BlogPost);
-      } else {
-        setError('Post not found');
-        navigate('/admin/blog');
-      }
-    } catch (error) {
-      console.error('Error loading post:', error);
-      setError('Failed to load post. Please try again.');
+      const { data, error } = await supabase
+        .from('posts')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) throw error;
+      if (data) setPost(data);
+    } catch (error: any) {
+      toast.error('Failed to load post: ' + error.message);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  function handleAddTag() {
-    if (tagInput.trim() && !post.tags.includes(tagInput.trim().toLowerCase())) {
-      setPost({
-        ...post,
-        tags: [...post.tags, tagInput.trim().toLowerCase()]
-      });
-      setTagInput('');
-    }
-  }
+  const generateSlug = (title: string) => {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
 
-  function handleRemoveTag(tag: string) {
-    setPost({
-      ...post,
-      tags: post.tags.filter(t => t !== tag)
-    });
-  }
+  const handleTitleChange = (title: string) => {
+    setPost(prev => ({
+      ...prev,
+      title,
+      slug: generateSlug(title)
+    }));
+  };
 
-  function calculateReadTime(content: string) {
-    const wordsPerMinute = 200;
-    const wordCount = content.split(/\s+/).length;
-    const readTime = Math.ceil(wordCount / wordsPerMinute);
-    return `${readTime} min read`;
-  }
-
-  // Handle image upload
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-    
-    const file = files[0];
-    
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      setError('Please upload an image file (JPEG, PNG, etc.)');
+  const handleSave = async (status: 'draft' | 'published') => {
+    if (!post.title || !post.content) {
+      toast.error('Title and content are required');
       return;
     }
-    
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setError('Image size should be less than 5MB');
-      return;
-    }
-    
+
+    setSaving(true);
     try {
-      setUploadingImage(true);
-      setError(null);
-      
-      // Create a reference to the storage location
-      const fileExtension = file.name.split('.').pop();
-      const fileName = `blog-${Date.now()}.${fileExtension}`;
-      const storageRef = ref(storage, `blog-images/${fileName}`);
-      
-      // Upload the file
-      await uploadBytes(storageRef, file);
-      
-      // Get the download URL
-      const downloadURL = await getDownloadURL(storageRef);
-      
-      // Update the post state with the new image URL
-      setPost({
-        ...post,
-        image: downloadURL
-      });
-      
-      // Reset the file input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      setError('Failed to upload image. Please try again.');
-    } finally {
-      setUploadingImage(false);
-    }
-  };
-
-  // Insert video embed code
-  const handleVideoEmbedChange = (url: string) => {
-    setPost({
-      ...post,
-      videoEmbed: url
-    });
-  };
-
-  // Generate embed code for preview
-  const getEmbedCode = (url: string) => {
-    if (!url) return '';
-    
-    // YouTube embed
-    if (url.includes('youtube.com') || url.includes('youtu.be')) {
-      const videoId = url.includes('youtube.com/watch?v=') 
-        ? url.split('v=')[1].split('&')[0]
-        : url.includes('youtu.be/') 
-          ? url.split('youtu.be/')[1].split('?')[0] 
-          : '';
-      
-      if (videoId) {
-        return `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-      }
-    }
-    
-    // Vimeo embed
-    if (url.includes('vimeo.com')) {
-      const videoId = url.split('vimeo.com/')[1]?.split('/')[0]?.split('?')[0];
-      
-      if (videoId) {
-        return `<iframe src="https://player.vimeo.com/video/${videoId}" width="560" height="315" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
-      }
-    }
-    
-    return '';
-  };
-
-  async function handleSave() {
-    try {
-      setSaving(true);
-      setError(null);
-      
-      // Validate required fields
-      if (!post.title) {
-        setError('Title is required');
-        return;
-      }
-      
-      // Generate slug if empty
-      let slug = post.slug;
-      if (!slug) {
-        slug = post.title
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/(^-|-$)/g, '');
-      }
-      
-      // Calculate read time
-      const readTime = calculateReadTime(post.content);
-      
-      // Prepare SEO data if empty
-      const seo = post.seo || {};
-      if (!seo.title) seo.title = post.title;
-      if (!seo.description) seo.description = post.excerpt;
-      if (!seo.keywords || seo.keywords.length === 0) seo.keywords = post.tags;
-      if (!seo.ogImage) seo.ogImage = post.image;
-      
-      // Prepare timestamps
-      const now = Timestamp.now();
-      const createdAt = post.createdAt || now;
-      let publishedAt = post.publishedAt;
-      
-      // Set published_at if status is published and it wasn't before
-      if (post.status === 'published' && !publishedAt) {
-        publishedAt = now;
-      }
-      
-      // Prepare post data
       const postData = {
         ...post,
-        slug,
-        readTime,
-        seo,
-        createdAt,
-        updatedAt: now,
-        publishedAt
+        status,
+        published_at: status === 'published' ? new Date().toISOString() : null,
+        updated_at: new Date().toISOString()
       };
-      
-      // Save to Firestore
-      const postRef = doc(db, 'posts', post.id || slug);
-      await setDoc(postRef, postData, { merge: true });
-      
-      // Navigate back to blog list
-      navigate('/admin/blog');
-    } catch (error) {
-      console.error('Error saving post:', error);
-      setError('Failed to save post. Please try again.');
+
+      let error;
+      if (id && id !== 'new') {
+        const result = await supabase
+          .from('posts')
+          .update(postData)
+          .eq('id', id);
+        error = result.error;
+      } else {
+        const result = await supabase
+          .from('posts')
+          .insert([postData])
+          .select()
+          .single();
+        error = result.error;
+        if (result.data) {
+          navigate(`/admin/blog/edit/${result.data.id}`, { replace: true });
+        }
+      }
+
+      if (error) throw error;
+      toast.success(`Post ${status === 'published' ? 'published' : 'saved'} successfully!`);
+    } catch (error: any) {
+      toast.error('Failed to save: ' + error.message);
     } finally {
       setSaving(false);
     }
-  }
+  };
+
+  const handleDelete = async () => {
+    if (!confirm('Are you sure you want to delete this post?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('posts')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      toast.success('Post deleted successfully');
+      navigate('/admin/blog');
+    } catch (error: any) {
+      toast.error('Failed to delete: ' + error.message);
+    }
+  };
+
+  const addTag = () => {
+    if (newTag && !post.tags.includes(newTag)) {
+      setPost(prev => ({
+        ...prev,
+        tags: [...prev.tags, newTag]
+      }));
+      setNewTag('');
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    setPost(prev => ({
+      ...prev,
+      tags: prev.tags.filter(tag => tag !== tagToRemove)
+    }));
+  };
+
+  const insertFormatting = (type: string) => {
+    const textarea = document.getElementById('content-editor') as HTMLTextAreaElement;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = post.content.substring(start, end);
+    let replacement = '';
+
+    switch (type) {
+      case 'h2':
+        replacement = `<h2>${selectedText || 'Heading'}</h2>`;
+        break;
+      case 'h3':
+        replacement = `<h3>${selectedText || 'Subheading'}</h3>`;
+        break;
+      case 'p':
+        replacement = `<p>${selectedText || 'Paragraph'}</p>`;
+        break;
+      case 'bold':
+        replacement = `<strong>${selectedText || 'bold text'}</strong>`;
+        break;
+      case 'italic':
+        replacement = `<em>${selectedText || 'italic text'}</em>`;
+        break;
+      case 'link':
+        const url = prompt('Enter URL:');
+        replacement = `<a href="${url || '#'}">${selectedText || 'link text'}</a>`;
+        break;
+      case 'ul':
+        replacement = `<ul>\n  <li>${selectedText || 'List item'}</li>\n</ul>`;
+        break;
+      case 'ol':
+        replacement = `<ol>\n  <li>${selectedText || 'List item'}</li>\n</ol>`;
+        break;
+      case 'image':
+        const imgUrl = prompt('Enter image URL:');
+        replacement = `<img src="${imgUrl || ''}" alt="${selectedText || 'Image description'}" />`;
+        break;
+    }
+
+    const newContent = post.content.substring(0, start) + replacement + post.content.substring(end);
+    setPost(prev => ({ ...prev, content: newContent }));
+  };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
-        </div>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
+      </div>
     );
   }
 
   return (
-    <div className="py-6">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => navigate('/admin/blog')}
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
-            >
-              <ArrowLeft size={20} />
-            </button>
-            <h1 className="text-2xl font-bold">
-              {id ? 'Edit Blog Post' : 'Create New Blog Post'}
-            </h1>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setPost({ ...post, status: post.status === 'draft' ? 'published' : 'draft' })}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${
-                post.status === 'published' 
-                  ? 'bg-green-50 text-green-700 border-green-200' 
-                  : 'bg-gray-50 text-gray-700 border-gray-200'
-              }`}
-            >
-              <Globe size={18} />
-              {post.status === 'published' ? 'Published' : 'Draft'}
-            </button>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => navigate('/admin/blog')}
+                className="text-gray-600 hover:text-black"
+              >
+                <X className="h-6 w-6" />
+              </button>
+              <h1 className="text-2xl font-bold">
+                {id === 'new' ? 'New Post' : 'Edit Post'}
+              </h1>
+            </div>
             
-            <button
-              onClick={handleSave}
-              disabled={saving || loading}
-              className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <Save size={18} />
-              {saving ? 'Saving...' : 'Save Post'}
-            </button>
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => setShowPreview(!showPreview)}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center space-x-2"
+              >
+                <Eye className="h-4 w-4" />
+                <span>Preview</span>
+              </button>
+              
+              <button
+                onClick={() => handleSave('draft')}
+                disabled={saving}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+              >
+                Save Draft
+              </button>
+              
+              <button
+                onClick={() => handleSave('published')}
+                disabled={saving}
+                className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 flex items-center space-x-2"
+              >
+                <Save className="h-4 w-4" />
+                <span>{saving ? 'Publishing...' : 'Publish'}</span>
+              </button>
+              
+              {id && id !== 'new' && (
+                <button
+                  onClick={handleDelete}
+                  className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Error message */}
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-            {error}
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {showPreview ? (
+          /* Preview Mode */
+          <div className="bg-white rounded-lg shadow-sm p-8">
+            <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
+            <p className="text-xl text-gray-600 mb-6">{post.excerpt}</p>
+            {post.featured_image && (
+              <img src={post.featured_image} alt={post.title} className="w-full rounded-lg mb-6" />
+            )}
+            <div 
+              className="blog-content prose prose-lg max-w-none"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
           </div>
-        )}
-
-        <div className="grid grid-cols-3 gap-6">
-          {/* Main Content */}
-          <div className="col-span-2 space-y-6">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <input
-                type="text"
-                placeholder="Post Title"
-                value={post.title}
-                onChange={(e) => setPost({ ...post, title: e.target.value })}
-                className="w-full bg-transparent text-2xl font-light text-gray-900 border-0 border-b border-gray-200 pb-4 mb-6 focus:ring-0 focus:border-gray-900"
-              />
-              
-              <textarea
-                placeholder="Post excerpt..."
-                value={post.excerpt}
-                onChange={(e) => setPost({ ...post, excerpt: e.target.value })}
-                className="w-full bg-transparent text-gray-900 border border-gray-200 rounded-lg p-4 mb-6 focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
-                rows={3}
-              />
-
-              <textarea
-                placeholder="Write your post content here..."
-                value={post.content}
-                onChange={(e) => setPost({ ...post, content: e.target.value })}
-                className="w-full bg-transparent text-gray-900 border border-gray-200 rounded-lg p-4 focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
-                rows={20}
-              />
-            </div>
-
-            {/* Video Embed Section */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2">
-                <Video className="w-5 h-5" />
-                Video Embed
-              </h2>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">YouTube or Vimeo URL</label>
-                  <input
-                    type="text"
-                    placeholder="https://www.youtube.com/watch?v=..."
-                    value={post.videoEmbed}
-                    onChange={(e) => handleVideoEmbedChange(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    Paste a YouTube or Vimeo URL to embed a video in your post
-                  </p>
-                </div>
-                
-                {post.videoEmbed && getEmbedCode(post.videoEmbed) && (
-                  <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Video Preview</label>
-                    <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden" 
-                         dangerouslySetInnerHTML={{ __html: getEmbedCode(post.videoEmbed) }}>
-                    </div>
-                  </div>
-                )}
+        ) : (
+          /* Edit Mode */
+          <div className="grid grid-cols-3 gap-6">
+            {/* Main Content */}
+            <div className="col-span-2 space-y-6">
+              {/* Title */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <label className="block text-sm font-medium mb-2">Title</label>
+                <input
+                  type="text"
+                  value={post.title}
+                  onChange={(e) => handleTitleChange(e.target.value)}
+                  className="w-full text-3xl font-bold border-none focus:ring-0 focus:outline-none"
+                  placeholder="Enter post title..."
+                />
               </div>
-            </div>
 
-            {/* SEO Settings */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2">
-                <Globe className="w-5 h-5" />
-                SEO Settings
-              </h2>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">SEO Title</label>
+              {/* Slug */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <label className="block text-sm font-medium mb-2">URL Slug</label>
+                <div className="flex items-center space-x-2 text-gray-600">
+                  <span>harielxavier.co/blog/</span>
                   <input
                     type="text"
-                    placeholder="SEO Title (defaults to post title)"
-                    value={post.seo?.title || ''}
-                    onChange={(e) => setPost({ 
-                      ...post, 
-                      seo: { ...post.seo, title: e.target.value } 
-                    })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
-                  <textarea
-                    placeholder="Meta description (defaults to post excerpt)"
-                    value={post.seo?.description || ''}
-                    onChange={(e) => setPost({ 
-                      ...post, 
-                      seo: { ...post.seo, description: e.target.value } 
-                    })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    rows={3}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Post Settings */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">Post Settings</h2>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">URL Slug</label>
-                  <input
-                    type="text"
-                    placeholder="post-url-slug"
                     value={post.slug}
-                    onChange={(e) => setPost({ ...post, slug: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    onChange={(e) => setPost(prev => ({ ...prev, slug: e.target.value }))}
+                    className="flex-1 border-b border-gray-300 focus:border-black focus:ring-0 focus:outline-none"
+                    placeholder="post-url-slug"
                   />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                  <input
-                    type="text"
-                    placeholder="Category"
-                    value={post.category}
-                    onChange={(e) => setPost({ ...post, category: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Featured Image</label>
-                  <div className="mt-1 flex items-center">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      ref={fileInputRef}
-                      onChange={handleImageUpload}
-                      className="hidden"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      disabled={uploadingImage}
-                      className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                      {uploadingImage ? (
-                        <>
-                          <div className="w-4 h-4 mr-2 border-2 border-gray-500 border-t-transparent rounded-full animate-spin"></div>
-                          Uploading...
-                        </>
-                      ) : (
-                        <>
-                          <Upload className="w-4 h-4 mr-2" />
-                          Upload Image
-                        </>
-                      )}
-                    </button>
-                    <span className="ml-2 text-xs text-gray-500">
-                      Recommended size: 1200x630px (max 5MB)
-                    </span>
-                  </div>
-                  
-                  <div className="mt-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Or use image URL</label>
-                    <input
-                      type="text"
-                      placeholder="https://example.com/image.jpg"
-                      value={post.image}
-                      onChange={(e) => setPost({ ...post, image: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                  
-                  {post.image && (
-                    <div className="mt-2 relative aspect-video rounded-lg overflow-hidden">
-                      <img 
-                        src={post.image} 
-                        alt="Featured" 
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = "https://via.placeholder.com/800x450?text=Image+Not+Found";
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-                
-                <div>
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={post.featured}
-                      onChange={(e) => setPost({ ...post, featured: e.target.checked })}
-                      className="rounded text-blue-600 focus:ring-blue-500"
-                    />
-                    <span className="text-sm font-medium text-gray-700">Featured Post</span>
-                  </label>
-                </div>
-                
-                <div className="flex items-center space-x-2 mb-4">
-                  <label className="flex items-center cursor-pointer">
-                    <div className="relative">
-                      <input 
-                        type="checkbox" 
-                        className="sr-only" 
-                        checked={post.shareEnabled}
-                        onChange={() => setPost({...post, shareEnabled: !post.shareEnabled})}
-                      />
-                      <div className={`block w-10 h-6 rounded-full ${post.shareEnabled ? 'bg-green-400' : 'bg-gray-400'}`}></div>
-                      <div className={`dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition ${post.shareEnabled ? 'transform translate-x-4' : ''}`}></div>
-                    </div>
-                    <div className="ml-3 text-gray-700 font-medium">
-                      Enable Social Sharing
-                    </div>
-                  </label>
-                </div>
-                
-                <div className="flex items-center space-x-2 mb-6">
-                  <label className="flex items-center cursor-pointer">
-                    <div className="relative">
-                      <input 
-                        type="checkbox" 
-                        className="sr-only" 
-                        checked={post.commentsEnabled}
-                        onChange={() => setPost({...post, commentsEnabled: !post.commentsEnabled})}
-                      />
-                      <div className={`block w-10 h-6 rounded-full ${post.commentsEnabled ? 'bg-green-400' : 'bg-gray-400'}`}></div>
-                      <div className={`dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition ${post.commentsEnabled ? 'transform translate-x-4' : ''}`}></div>
-                    </div>
-                    <div className="ml-3 text-gray-700 font-medium">
-                      Enable Comments
-                    </div>
-                  </label>
                 </div>
               </div>
-            </div>
-            
-            {/* Tags */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2">
-                <Tag className="w-5 h-5" />
-                Tags
-              </h2>
-              
-              <div className="space-y-4">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Add a tag"
-                    value={tagInput}
-                    onChange={(e) => setTagInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        handleAddTag();
-                      }
-                    }}
-                    className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  <button
-                    onClick={handleAddTag}
-                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                  >
-                    Add
+
+              {/* Excerpt */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <label className="block text-sm font-medium mb-2">Excerpt</label>
+                <textarea
+                  value={post.excerpt}
+                  onChange={(e) => setPost(prev => ({ ...prev, excerpt: e.target.value }))}
+                  className="w-full h-24 border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-black focus:border-transparent"
+                  placeholder="Brief description for SEO and preview..."
+                />
+              </div>
+
+              {/* Content Editor */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <label className="block text-sm font-medium mb-2">Content</label>
+                
+                {/* Formatting Toolbar */}
+                <div className="flex flex-wrap gap-2 mb-4 p-3 bg-gray-50 rounded-lg">
+                  <button onClick={() => insertFormatting('h2')} className="px-3 py-1 bg-white border rounded hover:bg-gray-100" title="Heading 2">
+                    H2
+                  </button>
+                  <button onClick={() => insertFormatting('h3')} className="px-3 py-1 bg-white border rounded hover:bg-gray-100" title="Heading 3">
+                    H3
+                  </button>
+                  <button onClick={() => insertFormatting('p')} className="px-3 py-1 bg-white border rounded hover:bg-gray-100" title="Paragraph">
+                    P
+                  </button>
+                  <button onClick={() => insertFormatting('bold')} className="px-3 py-1 bg-white border rounded hover:bg-gray-100 font-bold" title="Bold">
+                    B
+                  </button>
+                  <button onClick={() => insertFormatting('italic')} className="px-3 py-1 bg-white border rounded hover:bg-gray-100 italic" title="Italic">
+                    I
+                  </button>
+                  <button onClick={() => insertFormatting('link')} className="px-3 py-1 bg-white border rounded hover:bg-gray-100" title="Link">
+                    <LinkIcon className="h-4 w-4" />
+                  </button>
+                  <button onClick={() => insertFormatting('ul')} className="px-3 py-1 bg-white border rounded hover:bg-gray-100" title="Bullet List">
+                    UL
+                  </button>
+                  <button onClick={() => insertFormatting('ol')} className="px-3 py-1 bg-white border rounded hover:bg-gray-100" title="Numbered List">
+                    OL
+                  </button>
+                  <button onClick={() => insertFormatting('image')} className="px-3 py-1 bg-white border rounded hover:bg-gray-100" title="Image">
+                    <ImageIcon className="h-4 w-4" />
                   </button>
                 </div>
-                
+
+                <textarea
+                  id="content-editor"
+                  value={post.content}
+                  onChange={(e) => setPost(prev => ({ ...prev, content: e.target.value }))}
+                  className="w-full h-96 border border-gray-300 rounded-lg p-4 font-mono text-sm focus:ring-2 focus:ring-black focus:border-transparent"
+                  placeholder="Write your content in HTML..."
+                />
+                <p className="text-sm text-gray-500 mt-2">
+                  Use HTML tags for formatting. The toolbar above helps insert common tags.
+                </p>
+              </div>
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Status */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h3 className="font-medium mb-4">Status</h3>
+                <select
+                  value={post.status}
+                  onChange={(e) => setPost(prev => ({ ...prev, status: e.target.value as 'draft' | 'published' }))}
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                >
+                  <option value="draft">Draft</option>
+                  <option value="published">Published</option>
+                </select>
+              </div>
+
+              {/* Featured Image */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h3 className="font-medium mb-4">Featured Image</h3>
+                <input
+                  type="text"
+                  value={post.featured_image}
+                  onChange={(e) => setPost(prev => ({ ...prev, featured_image: e.target.value }))}
+                  className="w-full border border-gray-300 rounded-lg p-2 mb-2"
+                  placeholder="Image URL..."
+                />
+                {post.featured_image && (
+                  <img src={post.featured_image} alt="Preview" className="w-full rounded-lg mt-2" />
+                )}
+              </div>
+
+              {/* Category */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h3 className="font-medium mb-4">Category</h3>
+                <select
+                  value={post.category}
+                  onChange={(e) => setPost(prev => ({ ...prev, category: e.target.value }))}
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                >
+                  {CATEGORIES.map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Tags */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h3 className="font-medium mb-4">Tags</h3>
+                <div className="flex gap-2 mb-2">
+                  <input
+                    type="text"
+                    value={newTag}
+                    onChange={(e) => setNewTag(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
+                    className="flex-1 border border-gray-300 rounded-lg p-2"
+                    placeholder="Add tag..."
+                  />
+                  <button
+                    onClick={addTag}
+                    className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </button>
+                </div>
                 <div className="flex flex-wrap gap-2">
-                  {post.tags.map((tag) => (
+                  {post.tags.map(tag => (
                     <span
                       key={tag}
-                      className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
+                      className="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full text-sm"
                     >
                       {tag}
                       <button
-                        onClick={() => handleRemoveTag(tag)}
-                        className="text-gray-400 hover:text-gray-700"
+                        onClick={() => removeTag(tag)}
+                        className="ml-2 text-gray-500 hover:text-black"
                       >
-                        <X className="w-3 h-3" />
+                        <X className="h-3 w-3" />
                       </button>
                     </span>
                   ))}
-                  {post.tags.length === 0 && (
-                    <span className="text-sm text-gray-400">No tags added yet</span>
-                  )}
                 </div>
+              </div>
+
+              {/* Video Embed */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h3 className="font-medium mb-4">Video Embed (Optional)</h3>
+                <input
+                  type="text"
+                  value={post.video_embed || ''}
+                  onChange={(e) => setPost(prev => ({ ...prev, video_embed: e.target.value }))}
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                  placeholder="YouTube/Vimeo URL..."
+                />
+              </div>
+
+              {/* Options */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h3 className="font-medium mb-4">Options</h3>
+                <label className="flex items-center space-x-2 mb-3">
+                  <input
+                    type="checkbox"
+                    checked={post.featured}
+                    onChange={(e) => setPost(prev => ({ ...prev, featured: e.target.checked }))}
+                    className="rounded"
+                  />
+                  <span>Featured Post</span>
+                </label>
+                <label className="flex items-center space-x-2 mb-3">
+                  <input
+                    type="checkbox"
+                    checked={post.share_enabled}
+                    onChange={(e) => setPost(prev => ({ ...prev, share_enabled: e.target.checked }))}
+                    className="rounded"
+                  />
+                  <span>Enable Sharing</span>
+                </label>
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={post.comments_enabled}
+                    onChange={(e) => setPost(prev => ({ ...prev, comments_enabled: e.target.checked }))}
+                    className="rounded"
+                  />
+                  <span>Enable Comments</span>
+                </label>
               </div>
             </div>
-            
-            {/* Social Sharing Preview */}
-            {post.shareEnabled && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h2 className="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2">
-                  <Share className="w-5 h-5" />
-                  Social Sharing
-                </h2>
-                
-                <div className="space-y-4">
-                  <div className="border border-gray-200 rounded-lg overflow-hidden">
-                    <div className="aspect-video bg-gray-100">
-                      {post.image ? (
-                        <img 
-                          src={post.image} 
-                          alt="Social preview" 
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = "https://via.placeholder.com/800x450?text=Image+Not+Found";
-                          }}
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-400">
-                          <ImageIcon className="w-12 h-12" />
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-medium text-gray-900 truncate">
-                        {post.seo?.title || post.title || 'Post Title'}
-                      </h3>
-                      <p className="text-sm text-gray-500 mt-1 line-clamp-2">
-                        {post.seo?.description || post.excerpt || 'Post description will appear here'}
-                      </p>
-                      <div className="flex items-center mt-2 text-xs text-gray-400">
-                        <Link className="w-3 h-3 mr-1" />
-                        yourdomain.com/blog/{post.slug || 'post-slug'}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <p className="text-xs text-gray-500">
-                    This is how your post will appear when shared on social media platforms
-                  </p>
-                </div>
-              </div>
-            )}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

@@ -72,9 +72,11 @@ const NewAdminDashboard = lazy(() => import('./pages/admin/NewAdminDashboard'));
 const TrafficAnalytics = lazy(() => import('./pages/admin/TrafficAnalytics'));
 const GalleryManagementHub = lazy(() => import('./pages/admin/GalleryManagementHub'));
 const BlogManager = lazy(() => import('./pages/admin/BlogManager'));
-const BlogEditor = lazy(() => import('./pages/admin/BlogEditor'));
+const BlogManagement = lazy(() => import('./pages/admin/BlogManagement'));
+const BlogEditor = lazy(() => import('./pages/admin/EnhancedBlogEditor'));
 const BlogCategories = lazy(() => import('./pages/admin/BlogCategories'));
 const BlogComments = lazy(() => import('./pages/admin/BlogComments'));
+const CommentModeration = lazy(() => import('./pages/admin/CommentModeration'));
 const PagesManager = lazy(() => import('./pages/admin/PagesManager'));
 const PageEditor = lazy(() => import('./pages/admin/PageEditor'));
 const GeneralSettings = lazy(() => import('./pages/admin/GeneralSettings'));
@@ -415,6 +417,19 @@ const App: React.FC = () => {
                 </PrivateRoute>
               } />
               
+              {/* NEW Professional Blog Management */}
+              <Route path="/admin/blog" element={
+                <PrivateRoute>
+                  <BlogManagement />
+                </PrivateRoute>
+              } />
+              
+              <Route path="/admin/blog/edit/:id" element={
+                <PrivateRoute>
+                  <BlogEditor />
+                </PrivateRoute>
+              } />
+              
               <Route path="/admin/blog-editor" element={
                 <PrivateRoute>
                   <AdminLayout>
@@ -451,6 +466,14 @@ const App: React.FC = () => {
                 <PrivateRoute>
                   <AdminLayout>
                     <BlogComments />
+                  </AdminLayout>
+                </PrivateRoute>
+              } />
+              
+              <Route path="/admin/comment-moderation" element={
+                <PrivateRoute>
+                  <AdminLayout>
+                    <CommentModeration />
                   </AdminLayout>
                 </PrivateRoute>
               } />

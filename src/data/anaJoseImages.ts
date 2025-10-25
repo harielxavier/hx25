@@ -1,5 +1,15 @@
 // Anna & Jose's Wedding Gallery Images
 export const anaJoseImages = [
+  // Featured/Cover image
+  {
+    id: 'ana-jose-featured',
+    url: '/MoStuff/Featured Wedding/Anna & Jose\'s Wedding/aj-189.jpg',
+    width: 1200,
+    height: 800,
+    alt: 'Anna & Jose\'s Wedding at The Meadow Wood in Randolph, NJ',
+    caption: 'Anna & Jose\'s beautiful wedding at The Meadow Wood',
+    featured: true
+  },
   {
     id: 'ana-jose-3',
     url: '/MoStuff/Featured Wedding/Anna & Jose\'s Wedding/aj-3.jpg',
@@ -591,14 +601,5 @@ export const anaJoseImages = [
     height: 800,
     alt: 'Anna & Jose\'s Wedding at The Meadow Wood',
     caption: 'Anna & Jose\'s beautiful wedding at The Meadow Wood in Randolph, NJ'
-  },
-  // Featured image (used as cover)
-  {
-    id: 'ana-jose-featured',
-    url: '/MoStuff/Featured Wedding/Anna & Jose\'s Wedding/aj-189.jpg',
-    width: 1200,
-    height: 800,
-    alt: 'Anna & Jose\'s Wedding at The Meadow Wood in Randolph, NJ',
-    caption: 'Anna & Jose\'s beautiful wedding at The Meadow Wood'
   }
 ];

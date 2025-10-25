@@ -607,3 +607,28 @@ const MetricCard: React.FC<{
       {grade && (
         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
           grade === 'excellent' ? 'bg-green-100 text-green-700' :
+          grade === 'good' ? 'bg-blue-100 text-blue-700' :
+          grade === 'fair' ? 'bg-yellow-100 text-yellow-700' :
+          'bg-red-100 text-red-700'
+        }`}>
+          {grade.charAt(0).toUpperCase() + grade.slice(1)}
+        </span>
+      )}
+    </div>
+    <div className="mt-4">
+      <h3 className="text-sm text-gray-600">{title}</h3>
+      <p className="text-2xl font-bold mt-1">{value}</p>
+      {trend && (
+        <div className={`flex items-center mt-2 text-sm ${
+          trend.direction === 'up' ? 'text-green-600' :
+          trend.direction === 'down' ? 'text-red-600' :
+          'text-gray-600'
+        }`}>
+          <span>{trend.value}</span>
+        </div>
+      )}
+    </div>
+  </div>
+);
+
+export default EnterpriseSEODashboard;

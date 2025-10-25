@@ -196,7 +196,7 @@ class DynamicSEOService {
       "@type": "LocalBusiness",
       "name": "Hariel Xavier Photography",
       "description": `Professional wedding photography serving ${location.city}, ${location.county}, New Jersey`,
-      "url": "https://harielxavierphotography.com",
+      "url": "https://harielxavier.com",
       "telephone": "+1-XXX-XXX-XXXX",
       "address": {
         "@type": "PostalAddress",

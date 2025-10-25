@@ -106,7 +106,10 @@ export function getDeviceInfo() {
 // Track visitor session
 export async function trackVisitorSession(sessionData: Partial<VisitorData>): Promise<string | null> {
   try {
-    if (!db) throw new Error('Firestore not initialized');
+    if (!db) {
+      console.log('Firestore not initialized - skipping visitor tracking');
+      return null;
+    }
     const visitorsRef = collection(db, 'visitors');
     const docRef = await addDoc(visitorsRef, {
       ...sessionData,

@@ -101,7 +101,7 @@ export const getBlogPostSchema = (post: BlogPost) => {
       'name': 'Hariel Xavier Photography',
       'logo': {
         '@type': 'ImageObject',
-        'url': 'https://harielxavierphotography.com/logo.png'
+        'url': 'https://harielxavier.com/logo.png'
       }
     },
     'datePublished': post.publishedAt ? new Date(post.publishedAt.seconds * 1000).toISOString() : new Date().toISOString(),
@@ -110,7 +110,7 @@ export const getBlogPostSchema = (post: BlogPost) => {
     'keywords': post.tags?.join(', ') || '',
     'mainEntityOfPage': {
       '@type': 'WebPage',
-      '@id': `https://harielxavierphotography.com/blog/${post.slug}`
+      '@id': `https://harielxavier.com/blog/${post.slug}`
     }
   };
 };

@@ -95,7 +95,7 @@ export default function WeddingToolsPage() {
     accentColor: '#d4af37',
     contactEmail: 'Hi@HarielXavier.com',
     contactPhone: '(862) 290-4349',
-    website: 'harielxavierphotography.com'
+    website: 'harielxavier.com'
   });
   
   // Timeline Builder State with AI

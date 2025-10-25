@@ -1,4 +1,4 @@
-import { BlogPost } from '../services/blogService';
+import { BlogPost } from '../services/supabaseBlogService';
 import { ImageWithFallback } from './ImageWithFallback';
 
 export const BlogPostCard = ({ post }: { post: BlogPost }) => (

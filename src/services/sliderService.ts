@@ -25,7 +25,7 @@ const ensureAuthentication = async () => {
       // These should be environment variables in production
       await signInWithEmailAndPassword(
         auth, 
-        "admin@harielxavierphotography.com", 
+        "admin@harielxavier.com", 
         "HXPhoto2023!"
       );
       console.log("Authenticated successfully for storage operations");

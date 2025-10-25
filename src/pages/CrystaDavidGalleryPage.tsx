@@ -42,21 +42,21 @@ function CrystaDavidGalleryPage() {
         <title>Luxury Castle Wedding Photography at Skylands Manor | Crysta & David | Hariel Xavier Photography</title>
         <meta name="description" content="Explore Crysta & David's enchanting fairytale wedding at Skylands Manor in Ringwood, NJ. View stunning photography capturing the Tudor-style castle, botanical gardens, and romantic details of this historic New Jersey wedding venue." />
         <meta name="keywords" content="Skylands Manor, Ringwood wedding venue, NJ wedding photographer, castle wedding venue New Jersey, Hariel Xavier Photography, Crysta and David wedding, luxury castle wedding NJ, Skylands Manor wedding photos, historic wedding venue NJ, Ringwood NJ wedding photography, NJ botanical garden wedding" />
-        <link rel="canonical" href="https://harielxavierphotography.com/crysta-david" />
+        <link rel="canonical" href="https://harielxavier.com/crysta-david" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Luxury Castle Wedding Photography at Skylands Manor | Crysta & David" />
         <meta property="og:description" content="Explore Crysta & David's enchanting fairytale wedding at Skylands Manor in Ringwood, NJ. View stunning photography capturing the Tudor-style castle, botanical gardens, and romantic details of this historic New Jersey wedding venue." />
-        <meta property="og:image" content="https://harielxavierphotography.com/MoStuff/Portfolio/crystadavid/cd14.jpg" />
-        <meta property="og:url" content="https://harielxavierphotography.com/crysta-david" />
+        <meta property="og:image" content="https://harielxavier.com/MoStuff/Portfolio/crystadavid/cd14.jpg" />
+        <meta property="og:url" content="https://harielxavier.com/crysta-david" />
         <meta property="og:site_name" content="Hariel Xavier Photography" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Luxury Castle Wedding Photography at Skylands Manor | Crysta & David" />
         <meta name="twitter:description" content="Explore Crysta & David's enchanting fairytale wedding at Skylands Manor in Ringwood, NJ. View stunning photography capturing the Tudor-style castle, botanical gardens, and romantic details of this historic New Jersey wedding venue." />
-        <meta name="twitter:image" content="https://harielxavierphotography.com/MoStuff/Portfolio/crystadavid/cd14.jpg" />
+        <meta name="twitter:image" content="https://harielxavier.com/MoStuff/Portfolio/crystadavid/cd14.jpg" />
         <meta name="twitter:site" content="@HarielXavier" />
         
         {/* Schema.org structured data */}
@@ -66,12 +66,12 @@ function CrystaDavidGalleryPage() {
             "@type": "ImageGallery",
             "name": "Luxury Castle Wedding Photography at Skylands Manor | Crysta & David",
             "description": "Explore stunning wedding photography of Crysta & David's fairytale wedding at Skylands Manor in Ringwood, NJ. Capturing the Tudor-style castle, botanical gardens, and romantic details of this historic New Jersey wedding venue.",
-            "url": "https://harielxavierphotography.com/crysta-david",
-            "image": "https://harielxavierphotography.com/MoStuff/Portfolio/crystadavid/cd14.jpg",
+            "url": "https://harielxavier.com/crysta-david",
+            "image": "https://harielxavier.com/MoStuff/Portfolio/crystadavid/cd14.jpg",
             "author": {
               "@type": "Person",
               "name": "Hariel Xavier",
-              "url": "https://harielxavierphotography.com",
+              "url": "https://harielxavier.com",
               "sameAs": [
                 "https://www.instagram.com/harielxavierphotography/",
                 "https://www.facebook.com/HarielXavierPhotography/"
@@ -123,11 +123,11 @@ function CrystaDavidGalleryPage() {
                   "addressCountry": "US"
                 }
               },
-              "image": "https://harielxavierphotography.com/MoStuff/Portfolio/crystadavid/cd14.jpg",
+              "image": "https://harielxavier.com/MoStuff/Portfolio/crystadavid/cd14.jpg",
               "organizer": {
                 "@type": "Person",
                 "name": "Hariel Xavier",
-                "url": "https://harielxavierphotography.com"
+                "url": "https://harielxavier.com"
               }
             }
           })}

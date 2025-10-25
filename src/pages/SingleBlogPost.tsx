@@ -5,7 +5,7 @@ import { Calendar, Clock, ArrowLeft, Share2, Facebook, Twitter, Linkedin, Copy, 
 import Navigation from '../components/landing/Navigation';
 import Footer from '../components/landing/Footer';
 import SEO from '../components/SEO';
-import { BlogPost, getPostBySlug, incrementPostViews } from '../services/blogService';
+import { BlogPost, getPostBySlug, incrementPostViews } from '../services/supabaseBlogService';
 
 export default function SingleBlogPost() {
   const { slug } = useParams<{ slug: string }>();

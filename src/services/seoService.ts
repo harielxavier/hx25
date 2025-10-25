@@ -48,7 +48,7 @@ class SEOService {
   private apiKey: string;
 
   constructor() {
-    this.domain = getEnv('VITE_DOMAIN', 'https://harielxavierphotography.com');
+    this.domain = getEnv('VITE_DOMAIN', 'https://harielxavier.com');
     this.apiKey = getEnv('VITE_SEO_API_KEY', '');
   }
 
@@ -267,7 +267,7 @@ class SEOService {
         description: 'Professional wedding photography services in Sparta, NJ and surrounding areas',
         url: this.domain,
         telephone: '+1-973-XXX-XXXX',
-        email: 'info@harielxavierphotography.com',
+        email: 'info@harielxavier.com',
         address: {
           '@type': 'PostalAddress',
           streetAddress: 'Sparta',

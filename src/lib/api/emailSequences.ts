@@ -661,9 +661,9 @@ export const processEmailTemplate = (
   
   // Replace placeholders with default values
   body = body.replace(/\[BOOKING_LINK\]/g, 'https://calendly.com/harielxavier');
-  body = body.replace(/\[PORTFOLIO_LINK\]/g, 'https://www.harielxavierphotography.com/portfolio');
-  body = body.replace(/\[PAYMENT_LINK\]/g, 'https://www.harielxavierphotography.com/client-portal');
-  body = body.replace(/\[CONTACT_INFO\]/g, 'Email: info@harielxavierphotography.com\nPhone: (555) 123-4567\nWebsite: www.harielxavierphotography.com');
+  body = body.replace(/\[PORTFOLIO_LINK\]/g, 'https://www.harielxavier.com/portfolio');
+  body = body.replace(/\[PAYMENT_LINK\]/g, 'https://www.harielxavier.com/client-portal');
+  body = body.replace(/\[CONTACT_INFO\]/g, 'Email: info@harielxavier.com\nPhone: (555) 123-4567\nWebsite: www.harielxavier.com');
   
   return { subject, body };
 };
@@ -754,7 +754,7 @@ export const sendTestEmail = async (
   } as Payment;
   
   const mockGallery = testData.gallery || {
-    url: 'https://gallery.harielxavierphotography.com/test-gallery',
+    url: 'https://gallery.harielxavier.com/test-gallery',
     password: 'gallery123'
   };
   

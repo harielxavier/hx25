@@ -1,12 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Calendar, Clock, ArrowRight, Share2, Facebook, Twitter, Linkedin, Mail, Bookmark, Heart, ChevronLeft } from 'lucide-react';
+// Firebase imports removed - using Supabase
 import Navigation from '../components/landing/Navigation';
 import Footer from '../components/landing/Footer';
 import SEO from '../components/SEO';
 import LeadMagnet from '../components/LeadMagnet';
+import Breadcrumbs from '../components/Breadcrumbs';
+import BlogStructuredData from '../components/BlogStructuredData';
+import BlogComments from '../components/BlogComments';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import { BlogPost, getPostBySlug, incrementPostViews, getPostsByCategory } from '../services/blogService';
+import '../styles/blog-content.css';
+import { BlogPost, getPostBySlug, incrementPostViews, getPostsByCategory } from '../services/supabaseBlogService';
 import { getStockImage } from '../utils/images';
 import { ImageWithFallback } from '../components/ImageWithFallback';
 import imageOptimizationUtils from '../utils/imageOptimizationUtils';
@@ -21,6 +26,8 @@ export default function BlogPostPage() {
   const [showShareOptions, setShowShareOptions] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   // Calculate read time based on content length
   const calculateReadTime = (content: string) => {
@@ -59,6 +66,24 @@ export default function BlogPostPage() {
     }
   };
 
+  // Reading progress bar
+  useEffect(() => {
+    const handleScroll = () => {
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight - windowHeight;
+      const scrolled = window.scrollY;
+      const progress = (scrolled / documentHeight) * 100;
+      
+      const progressBar = document.getElementById('reading-progress');
+      if (progressBar) {
+        progressBar.style.width = `${Math.min(progress, 100)}%`;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   useEffect(() => {
     const fetchPost = async () => {
       if (!slug) return;
@@ -79,10 +104,19 @@ export default function BlogPostPage() {
         // Update view count
         await incrementPostViews(postData.id);
         
-        // Ensure the post has a valid image
-        if (!postData.featuredImage) {
+        // Ensure the post has a valid image (check both field names)
+        if (!postData.featuredImage && !postData.featured_image) {
           postData.featuredImage = getStockImage('wedding');
+          postData.featured_image = getStockImage('wedding');
+        } else if (!postData.featuredImage) {
+          // If only featured_image exists, copy it to featuredImage
+          postData.featuredImage = postData.featured_image;
+        } else if (!postData.featured_image) {
+          // If only featuredImage exists, copy it to featured_image
+          postData.featured_image = postData.featuredImage;
         }
+        
+        console.log('🖼️ Post image:', postData.featuredImage || postData.featured_image);
         
         setPost(postData);
         
@@ -96,10 +130,15 @@ export default function BlogPostPage() {
             .slice(0, 3);
             
           // Ensure all related posts have valid images
-          const relatedWithImages = filteredRelatedPosts.map(post => ({
-            ...post,
-            featuredImage: sanitizeImageUrl(post.featuredImage)
-          }));
+          const relatedWithImages = filteredRelatedPosts.map(post => {
+            const imageUrl = post.featuredImage || post.featured_image || '';
+            const sanitized = sanitizeImageUrl(imageUrl);
+            return {
+              ...post,
+              featuredImage: sanitized,
+              featured_image: sanitized
+            };
+          });
           
           setRelatedPosts(relatedWithImages);
         }
@@ -163,6 +202,41 @@ export default function BlogPostPage() {
     navigate('/blog');
   };
 
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!newsletterEmail || !newsletterEmail.includes('@')) {
+      setNewsletterStatus('error');
+      return;
+    }
+
+    setNewsletterStatus('submitting');
+
+    try {
+      await addDoc(collection(db, 'leads'), {
+        email: newsletterEmail,
+        source: 'blog_post_newsletter',
+        status: 'new',
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+
+      setNewsletterStatus('success');
+      setNewsletterEmail('');
+      
+      setTimeout(() => {
+        setNewsletterStatus('idle');
+      }, 5000);
+    } catch (error) {
+      console.error('Newsletter subscription error:', error);
+      setNewsletterStatus('error');
+      
+      setTimeout(() => {
+        setNewsletterStatus('idle');
+      }, 3000);
+    }
+  };
+
   if (loading) {
     return (
       <>
@@ -195,12 +269,16 @@ export default function BlogPostPage() {
 
   return (
     <>
+      {/* Reading Progress Bar */}
+      <div className="blog-reading-progress" style={{ width: '0%' }} id="reading-progress"></div>
+      
       <SEO 
         title={post.seoTitle || `${post.title} | Hariel Xavier Photography`}
         description={post.seoDescription || post.excerpt}
         type="article"
-        image={post.featuredImage}
+        image={post.featuredImage || post.featured_image}
       />
+      <BlogStructuredData post={post} />
       <Navigation />
       <LeadMagnet delay={60000} exitIntent={true} />
       
@@ -209,7 +287,7 @@ export default function BlogPostPage() {
         <div className="relative h-[50vh] md:h-[60vh] flex items-center justify-center mb-12">
           <div className="absolute inset-0 overflow-hidden">
             <ImageWithFallback
-              src={post.featuredImage}
+              src={post.featuredImage || post.featured_image || ''}
               alt={post.title}
               category="wedding"
               className="w-full h-full object-cover"
@@ -239,6 +317,15 @@ export default function BlogPostPage() {
 
         {/* Main Content */}
         <div className="container mx-auto px-4">
+          {/* Breadcrumbs */}
+          <Breadcrumbs 
+            items={[
+              { label: 'Blog', path: '/blog' },
+              { label: post.title }
+            ]}
+            className="mb-6"
+          />
+          
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Article Content */}
             <article className="lg:w-2/3 bg-white rounded-xl shadow-sm p-6 md:p-10">
@@ -250,7 +337,7 @@ export default function BlogPostPage() {
               
               {/* Article Body */}
               <div 
-                className="prose prose-lg max-w-none" 
+                className="blog-content prose prose-lg max-w-none" 
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
               
@@ -306,24 +393,32 @@ export default function BlogPostPage() {
                     <button 
                       onClick={() => handleShare('facebook')}
                       className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700"
+                      aria-label="Share on Facebook"
+                      title="Share on Facebook"
                     >
                       <Facebook className="h-5 w-5" />
                     </button>
                     <button 
                       onClick={() => handleShare('twitter')}
                       className="p-2 bg-sky-500 text-white rounded-full hover:bg-sky-600"
+                      aria-label="Share on Twitter"
+                      title="Share on Twitter"
                     >
                       <Twitter className="h-5 w-5" />
                     </button>
                     <button 
                       onClick={() => handleShare('linkedin')}
                       className="p-2 bg-blue-700 text-white rounded-full hover:bg-blue-800"
+                      aria-label="Share on LinkedIn"
+                      title="Share on LinkedIn"
                     >
                       <Linkedin className="h-5 w-5" />
                     </button>
                     <button 
                       onClick={() => handleShare('email')}
                       className="p-2 bg-gray-600 text-white rounded-full hover:bg-gray-700"
+                      aria-label="Share via Email"
+                      title="Share via Email"
                     >
                       <Mail className="h-5 w-5" />
                     </button>
@@ -350,6 +445,11 @@ export default function BlogPostPage() {
                   </div>
                 </div>
               )}
+
+              {/* Comments Section */}
+              {post.commentsEnabled !== false && (
+                <BlogComments postId={post.id} postSlug={post.slug} />
+              )}
             </article>
             
             {/* Sidebar */}
@@ -367,7 +467,7 @@ export default function BlogPostPage() {
                       >
                         <div className="w-24 h-24 flex-shrink-0 overflow-hidden rounded-lg">
                           <ImageWithFallback
-                            src={relatedPost.featuredImage}
+                            src={relatedPost.featuredImage || relatedPost.featured_image || ''}
                             alt={relatedPost.title}
                             category="wedding"
                             className="w-full h-full object-cover transition-transform group-hover:scale-110"
@@ -400,18 +500,29 @@ export default function BlogPostPage() {
               <div className="bg-black text-white rounded-xl shadow-sm p-6">
                 <h3 className="text-xl font-medium mb-4">Subscribe to Our Newsletter</h3>
                 <p className="text-gray-300 mb-4">Get the latest photography tips, tutorials, and inspiration delivered to your inbox.</p>
-                <form className="space-y-3">
+                <form onSubmit={handleNewsletterSubmit} className="space-y-3">
                   <input 
                     type="email" 
-                    placeholder="Your email address" 
-                    className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/30"
+                    placeholder="Your email address"
+                    value={newsletterEmail}
+                    onChange={(e) => setNewsletterEmail(e.target.value)}
+                    disabled={newsletterStatus === 'submitting'}
+                    className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/30 disabled:opacity-50"
+                    required
                   />
                   <button 
                     type="submit"
-                    className="w-full px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-100 transition-colors"
+                    disabled={newsletterStatus === 'submitting'}
+                    className="w-full px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Subscribe
+                    {newsletterStatus === 'submitting' ? 'Subscribing...' : 'Subscribe'}
                   </button>
+                  {newsletterStatus === 'success' && (
+                    <p className="text-green-400 text-sm">✓ Successfully subscribed!</p>
+                  )}
+                  {newsletterStatus === 'error' && (
+                    <p className="text-red-400 text-sm">✗ Please enter a valid email</p>
+                  )}
                 </form>
               </div>
             </aside>

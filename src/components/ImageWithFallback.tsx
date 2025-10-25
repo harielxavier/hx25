@@ -39,7 +39,7 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
     try {
       new URL(url);
       return url;
-    } catch (e) {
+    } catch {
       // If not a valid URL, return fallback
       return getFallbackImage();
     }

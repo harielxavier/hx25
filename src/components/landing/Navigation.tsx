@@ -11,7 +11,6 @@ export default function Navigation() {
     { label: 'Portfolio', path: '/portfolio' },
     { label: 'About', path: '/about' },
     { label: 'Pricing', path: '/pricing' },
-    { label: 'FAQ', path: '/faq' },
     { label: 'Blog', path: '/blog' }
   ];
 
@@ -76,16 +75,10 @@ export default function Navigation() {
             {/* Tools Dropdown removed as requested */}
             
             <Link 
-              to="/book-now"
+              to="/#contact-form"
               className="px-6 py-2 text-base tracking-wide transition-colors bg-black text-white hover:bg-gray-900"
             >
-              Book Now
-            </Link>
-            <Link 
-              to="/admin"
-              className="text-base tracking-wide transition-colors text-gray-500 hover:text-black"
-            >
-              Admin
+              Contact Us
             </Link>
           </div>
 
@@ -121,18 +114,11 @@ export default function Navigation() {
               {/* Mobile Photography Tools Links removed as requested */}
               
               <Link 
-                to="/book-now"
+                to="/#contact-form"
                 className="block w-full bg-rose text-white text-center py-3 text-sm tracking-wide hover:bg-rose-dark"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Book Now
-              </Link>
-              <Link 
-                to="/admin"
-                className="block text-gray-500 hover:text-black transition-colors py-2 text-sm tracking-wide"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Admin
+                Contact Us
               </Link>
             </div>
           </div>

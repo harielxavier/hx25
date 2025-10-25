@@ -127,12 +127,12 @@ export default function Footer() {
             <p>&copy; {new Date().getFullYear()} Hariel Xavier Photography. All rights reserved.</p>
             <p className="mt-2">
               <a 
-                href="https://knightswatchit.com" 
+                href="https://www.devority.io" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-500 hover:text-gray-300 transition-colors"
               >
-                Website by KnightsWatchIT.com
+                A Devority Website
               </a>
             </p>
           </div>

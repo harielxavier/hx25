@@ -42,7 +42,7 @@ export default function Contact() {
     setTimeout(() => {
       // Log what would happen in a real submission
       console.log('\n===== SIMULATED LEAD NOTIFICATION EMAIL TO ADMIN =====');
-      console.log('To: info@harielxavierphotography.com');
+      console.log('To: info@harielxavier.com');
       console.log(`Subject: New Lead: ${formData.name || 'John Smith'} - website_contact_form`);
       console.log('\nBody:');
       console.log(`

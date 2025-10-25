@@ -1,0 +1,24 @@
+# Netlify Redirects
+# https://docs.netlify.com/routing/redirects/
+
+# Handle SPA routing - must be last
+/*    /index.html   200
+
+# Force HTTPS (if not already handled by Netlify)
+# http://harielxavier.com/*    https://harielxavier.com/:splat  301!
+# http://www.harielxavier.com/*    https://harielxavier.com/:splat  301!
+
+# Redirect www to non-www (SEO best practice - choose one canonical domain)
+https://www.harielxavier.com/*    https://harielxavier.com/:splat  301!
+
+# Legacy URL redirects (add your old URLs here)
+# /old-page    /new-page    301
+# /old-blog/*  /blog/:splat  301
+
+# Handle common 404s
+# /favicon.ico  /favicon.ico  200
+# /robots.txt   /robots.txt   200
+# /sitemap.xml  /sitemap.xml  200
+
+
+

@@ -6,7 +6,7 @@ interface PDFFooterProps {
 }
 
 const PDFFooter: React.FC<PDFFooterProps> = ({ 
-  websiteUrl = 'harielxavierphotography.com',
+  websiteUrl = 'harielxavier.com',
   includeDate = true 
 }) => {
   const currentDate = new Date().toLocaleDateString('en-US', {

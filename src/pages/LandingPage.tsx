@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom'; // Import useLocation
-import { ArrowRight, Check, MapPin } from 'lucide-react';
+import { ArrowRight, Check, MapPin, Calendar, Clock } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import Navigation from '../components/landing/Navigation';
 import Footer from '../components/landing/Footer';
@@ -15,6 +15,7 @@ import { useWindowSize } from 'react-use';
 // Import lens flare styles
 import '../styles/lens-flare.css';
 import '../styles/animated-dots.css';
+import { getAllPosts } from '../services/supabaseBlogService';
 
 const HeroPageUrl = '/MoStuff/LandingPage/HeroPage.jpg';
 const PortraitUrl = '/MoStuff/portrait.jpg';
@@ -25,7 +26,8 @@ export function LandingPage() {
   const [showConfetti] = useState(false);
   const { width, height } = useWindowSize();
   const location = useLocation(); // Get location object
-  
+  const [latestBlogPosts, setLatestBlogPosts] = useState<any[]>([]);
+
   const [heroRef, heroInView] = useInView({ threshold: 0.1, triggerOnce: true });
   const [processRef, processInView] = useInView({ threshold: 0.1, triggerOnce: true });
 
@@ -82,13 +84,34 @@ export function LandingPage() {
     }
   }, [location]);
 
+  useEffect(() => {
+    const fetchLatestBlogs = async () => {
+      try {
+        const posts = await getAllPosts();
+        // Get the 3 most recent published posts
+        const recentPosts = posts
+          .sort((a, b) => {
+            const aTime = a.published_at ? new Date(a.published_at).getTime() : 0;
+            const bTime = b.published_at ? new Date(b.published_at).getTime() : 0;
+            return bTime - aTime;
+          })
+          .slice(0, 3);
+        setLatestBlogPosts(recentPosts);
+      } catch (error) {
+        console.error('Error fetching blog posts:', error);
+      }
+    };
+
+    fetchLatestBlogs();
+  }, []);
+
   return (
     <>
       <SEOHead 
         title="Hariel Xavier Photography | Wedding Photographer in Sparta, NJ"
         description="Professional wedding photography services in Sparta, NJ and surrounding areas. Capturing timeless moments with a modern approach for your dream wedding day."
         keywords={["wedding photographer Sparta NJ", "NJ wedding photography", "professional wedding photographer New Jersey", "luxury wedding photos NJ", "Hariel Xavier Photography", "wedding photography services"]}
-        imageUrl="https://harielxavierphotography.com/MoStuff/LandingPage/HeroPage.jpg"
+        imageUrl="https://harielxavier.com/MoStuff/LandingPage/HeroPage.jpg"
         type="photography"
         location={{
           city: "Sparta",
@@ -105,7 +128,7 @@ export function LandingPage() {
         '@context': 'https://schema.org',
         '@type': 'Photographer',
         'name': 'Hariel Xavier Photography',
-        'image': 'https://harielxavierphotography.com/MoStuff/LandingPage/HeroPage.jpg',
+        'image': 'https://harielxavier.com/MoStuff/LandingPage/HeroPage.jpg',
         'description': 'Professional wedding photography services in Sparta, NJ and surrounding areas. Capturing timeless moments with a modern approach for your dream wedding day.',
         'address': {
           '@type': 'PostalAddress',
@@ -116,7 +139,7 @@ export function LandingPage() {
           'addressCountry': 'US'
         },
         'telephone': '+1-862-391-4179',
-        'url': 'https://harielxavierphotography.com',
+        'url': 'https://harielxavier.com',
         'priceRange': '$$$',
         'sameAs': [
           'https://instagram.com/harielxavierphotography',
@@ -144,7 +167,7 @@ export function LandingPage() {
         'itemReviewed': {
           '@type': 'LocalBusiness',
           'name': 'Hariel Xavier Photography',
-          'image': 'https://harielxavierphotography.com/MoStuff/LandingPage/HeroPage.jpg',
+          'image': 'https://harielxavier.com/MoStuff/LandingPage/HeroPage.jpg',
           'telephone': '+1-862-391-4179',
           'address': {
             '@type': 'PostalAddress',
@@ -171,17 +194,17 @@ export function LandingPage() {
         '@type': 'VideoObject',
         'name': 'Morgan & Michael\'s Wedding - Farmstead Golf & Country Club',
         'description': 'Cinematic wedding film capturing the love story of Morgan and Michael at Farmstead Golf & Country Club in Lafayette, NJ. Professional wedding videography by Hariel Xavier Photography.',
-        'thumbnailUrl': 'https://harielxavierphotography.com/MoStuff/images/morganvideocover.jpg',
+        'thumbnailUrl': 'https://harielxavier.com/MoStuff/images/morganvideocover.jpg',
         'uploadDate': '2024-06-15',
         'duration': 'PT5M30S',
-        'contentUrl': 'https://harielxavierphotography.com/MoStuff/images/Morgan & Michael\'s Wedding.mp4',
-        'embedUrl': 'https://harielxavierphotography.com',
+        'contentUrl': 'https://harielxavier.com/MoStuff/images/Morgan & Michael\'s Wedding.mp4',
+        'embedUrl': 'https://harielxavier.com',
         'publisher': {
           '@type': 'Organization',
           'name': 'Hariel Xavier Photography',
           'logo': {
             '@type': 'ImageObject',
-            'url': 'https://harielxavierphotography.com/black.png'
+            'url': 'https://harielxavier.com/black.png'
           }
         },
         'locationCreated': {
@@ -205,7 +228,7 @@ export function LandingPage() {
           '@type': 'ListItem',
           'position': 1,
           'name': 'Home',
-          'item': 'https://harielxavierphotography.com'
+          'item': 'https://harielxavier.com'
         }]
       }) }} />
 
@@ -563,37 +586,48 @@ export function LandingPage() {
         </div>
       </section>
 
+      {/* Testimonials Section - Elegant Dark Theme */}
       <section 
-        className="py-24 bg-[url('/images/backgroundclient.jpg')] bg-cover bg-center bg-bottom bg-no-repeat relative overflow-hidden"
-        style={{ backgroundPositionY: '65%' }}
+        className="py-24 bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white relative overflow-hidden"
         data-component-name="LandingPage"
       >
-        <div className="container mx-auto px-4">
+        {/* Decorative subtle orbs - matching pricing page */}
+        <div className="absolute top-10 right-10 w-96 h-96 bg-champagneRose rounded-full opacity-10 blur-3xl"></div>
+        <div className="absolute bottom-10 left-10 w-96 h-96 bg-champagneRose rounded-full opacity-5 blur-3xl"></div>
+        
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto mb-16 text-center">
-            <h2 className="font-serif text-4xl md:text-5xl mb-6 text-white">Love Notes</h2>
-            <p className="text-white text-lg">
-              Words from the heart of couples who trusted us to capture their special day.
+            <div className="inline-block mb-4">
+              <span className="text-champagneRose uppercase tracking-[0.3em] text-sm font-semibold">Client Reviews</span>
+            </div>
+            <h2 className="font-serif text-4xl md:text-5xl mb-6 text-white">
+              Love Notes
+            </h2>
+            <p className="text-gray-300 text-xl max-w-2xl mx-auto font-light">
+              Words from the heart of couples who trusted us to capture their special day
             </p>
           </div>
           
-          <div className="relative max-w-4xl mx-auto md:ml-24">
+          <div className="relative max-w-4xl mx-auto">
             <div 
-              className="bg-white/90 backdrop-blur-sm p-10 shadow-2xl rounded-2xl text-center relative overflow-hidden transition-all duration-500 border border-white/20"
+              className="bg-white p-10 shadow-2xl rounded-2xl text-center relative overflow-hidden transition-all duration-500 border border-champagneRose/20"
               style={{
                 opacity: currentTestimonial === 0 ? 1 : 0,
                 position: 'relative',
                 zIndex: currentTestimonial === 0 ? 1 : 0,
                 transition: 'all 0.5s ease-in-out',
                 transform: currentTestimonial === 0 ? 'translateY(0) scale(1.02)' : 'translateY(10px) scale(1)',
-                boxShadow: currentTestimonial === 0 ? '0 25px 50px -12px rgba(0, 0, 0, 0.25)' : ''
+                boxShadow: currentTestimonial === 0 ? '0 25px 50px -12px rgba(0, 0, 0, 0.5)' : ''
               }}
               data-component-name="LandingPage"
             >
-              <div className="absolute top-6 left-6 text-8xl font-serif text-rose-200 opacity-80">"</div>
+              <div className="absolute top-6 left-6 text-8xl font-serif text-champagneRose opacity-20">"</div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-champagneRose/10 to-transparent rounded-tr-2xl"></div>
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-champagneRose/10 to-transparent rounded-bl-2xl"></div>
               
-              <div className="flex justify-center mb-6">
+              <div className="flex justify-center mb-6 gap-1">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <svg key={star} className="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                  <svg key={star} className="w-6 h-6 text-champagneRose" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                   </svg>
                 ))}
@@ -601,27 +635,30 @@ export function LandingPage() {
               <blockquote className="text-xl italic mb-8 relative z-10 max-w-2xl mx-auto text-gray-700 leading-relaxed">
                 "We couldn't have picked a better wedding photographer than Mauricio from Hariel Xavier Photography. From the moment he showed up, his fun personality and energy made our day even more special. He kept us relaxed and made everything so easy. The photos turned out amazing!"
               </blockquote>
+              <div className="h-px bg-gradient-to-r from-transparent via-champagneRose/30 to-transparent mb-6"></div>
               <div className="pt-4 mt-auto">
-                <p className="font-medium text-xl">Roberto Tatis</p>
-                <p className="text-rose-500 text-sm mt-1">Wedding Client</p>
+                <p className="font-semibold text-xl text-gray-900">Roberto Tatis</p>
+                <p className="text-gray-500 text-sm mt-1">Wedding Client • Sparta, NJ</p>
               </div>
             </div>
             
             <div 
-              className="bg-white/90 backdrop-blur-sm p-10 shadow-2xl rounded-2xl text-center absolute top-0 left-0 right-0 transition-all duration-500 border border-white/20"
+              className="bg-white p-10 shadow-2xl rounded-2xl text-center absolute top-0 left-0 right-0 transition-all duration-500 border border-champagneRose/20"
               style={{
                 opacity: currentTestimonial === 1 ? 1 : 0,
                 zIndex: currentTestimonial === 1 ? 1 : 0,
                 transition: 'all 0.5s ease-in-out',
                 transform: currentTestimonial === 1 ? 'translateY(0) scale(1.02)' : 'translateY(10px) scale(1)',
-                boxShadow: currentTestimonial === 1 ? '0 25px 50px -12px rgba(0, 0, 0, 0.25)' : ''
+                boxShadow: currentTestimonial === 1 ? '0 25px 50px -12px rgba(0, 0, 0, 0.5)' : ''
               }}
             >
-              <div className="absolute top-6 left-6 text-8xl font-serif text-rose-200 opacity-80">"</div>
+              <div className="absolute top-6 left-6 text-8xl font-serif text-champagneRose opacity-20">"</div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-champagneRose/10 to-transparent rounded-tr-2xl"></div>
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-champagneRose/10 to-transparent rounded-bl-2xl"></div>
               
-              <div className="flex justify-center mb-6">
+              <div className="flex justify-center mb-6 gap-1">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <svg key={star} className="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                  <svg key={star} className="w-6 h-6 text-champagneRose" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                   </svg>
                 ))}
@@ -629,27 +666,30 @@ export function LandingPage() {
               <blockquote className="text-xl italic mb-8 relative z-10 max-w-2xl mx-auto text-gray-700 leading-relaxed">
                 "Mauricio and the rest of the team at Hariel Xavier Photography are now like family to my wife and I! We carefully chose Mauricio and his team and from day one at our engagement photos we KNEW the right choice was made."
               </blockquote>
+              <div className="h-px bg-gradient-to-r from-transparent via-champagneRose/30 to-transparent mb-6"></div>
               <div className="pt-4 mt-auto">
-                <p className="font-medium text-xl">Jose Rojas</p>
-                <p className="text-rose-500 text-sm mt-1">Wedding Client</p>
+                <p className="font-semibold text-xl text-gray-900">Jose Rojas</p>
+                <p className="text-gray-500 text-sm mt-1">Wedding Client • Morris County, NJ</p>
               </div>
             </div>
             
             <div 
-              className="bg-white/90 backdrop-blur-sm p-10 shadow-2xl rounded-2xl text-center absolute top-0 left-0 right-0 transition-all duration-500 border border-white/20"
+              className="bg-white p-10 shadow-2xl rounded-2xl text-center absolute top-0 left-0 right-0 transition-all duration-500 border border-champagneRose/20"
               style={{
                 opacity: currentTestimonial === 2 ? 1 : 0,
                 zIndex: currentTestimonial === 2 ? 1 : 0,
                 transition: 'all 0.5s ease-in-out',
                 transform: currentTestimonial === 2 ? 'translateY(0) scale(1.02)' : 'translateY(10px) scale(1)',
-                boxShadow: currentTestimonial === 2 ? '0 25px 50px -12px rgba(0, 0, 0, 0.25)' : ''
+                boxShadow: currentTestimonial === 2 ? '0 25px 50px -12px rgba(0, 0, 0, 0.5)' : ''
               }}
             >
-              <div className="absolute top-6 left-6 text-8xl font-serif text-rose-200 opacity-80">"</div>
+              <div className="absolute top-6 left-6 text-8xl font-serif text-champagneRose opacity-20">"</div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-champagneRose/10 to-transparent rounded-tr-2xl"></div>
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-champagneRose/10 to-transparent rounded-bl-2xl"></div>
               
-              <div className="flex justify-center mb-6">
+              <div className="flex justify-center mb-6 gap-1">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <svg key={star} className="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                  <svg key={star} className="w-6 h-6 text-champagneRose" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                   </svg>
                 ))}
@@ -657,27 +697,30 @@ export function LandingPage() {
               <blockquote className="text-xl italic mb-8 relative z-10 max-w-2xl mx-auto text-gray-700 leading-relaxed">
                 "Just writing this review brings tears to my eyes and joy to my heart. We're so glad we chose Hariel Xavier Photography for our engagement session and for our wedding day photos. From the moment we met with you it felt like we knew you our entire lives."
               </blockquote>
+              <div className="h-px bg-gradient-to-r from-transparent via-champagneRose/30 to-transparent mb-6"></div>
               <div className="pt-4 mt-auto">
-                <p className="font-medium text-xl">Jazmine Ortiz</p>
-                <p className="text-rose-500 text-sm mt-1">Wedding Client</p>
+                <p className="font-semibold text-xl text-gray-900">Jazmine Ortiz</p>
+                <p className="text-gray-500 text-sm mt-1">Wedding Client • Sussex County, NJ</p>
               </div>
             </div>
             
             <div 
-              className="bg-white/90 backdrop-blur-sm p-10 shadow-2xl rounded-2xl text-center absolute top-0 left-0 right-0 transition-all duration-500 border border-white/20"
+              className="bg-white p-10 shadow-2xl rounded-2xl text-center absolute top-0 left-0 right-0 transition-all duration-500 border border-champagneRose/20"
               style={{
                 opacity: currentTestimonial === 3 ? 1 : 0,
                 zIndex: currentTestimonial === 3 ? 1 : 0,
                 transition: 'all 0.5s ease-in-out',
                 transform: currentTestimonial === 3 ? 'translateY(0) scale(1.02)' : 'translateY(10px) scale(1)',
-                boxShadow: currentTestimonial === 3 ? '0 25px 50px -12px rgba(0, 0, 0, 0.25)' : ''
+                boxShadow: currentTestimonial === 3 ? '0 25px 50px -12px rgba(0, 0, 0, 0.5)' : ''
               }}
             >
-              <div className="absolute top-6 left-6 text-8xl font-serif text-rose-200 opacity-80">"</div>
+              <div className="absolute top-6 left-6 text-8xl font-serif text-champagneRose opacity-20">"</div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-champagneRose/10 to-transparent rounded-tr-2xl"></div>
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-champagneRose/10 to-transparent rounded-bl-2xl"></div>
               
-              <div className="flex justify-center mb-6">
+              <div className="flex justify-center mb-6 gap-1">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <svg key={star} className="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                  <svg key={star} className="w-6 h-6 text-champagneRose" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                   </svg>
                 ))}
@@ -685,9 +728,10 @@ export function LandingPage() {
               <blockquote className="text-xl italic mb-8 relative z-10 max-w-2xl mx-auto text-gray-700 leading-relaxed">
                 "Our wedding photos are absolutely stunning! Mauricio has such an eye for capturing those special moments. He made us feel comfortable in front of the camera and was so professional throughout the entire process. We'll cherish these photos forever."
               </blockquote>
+              <div className="h-px bg-gradient-to-r from-transparent via-champagneRose/30 to-transparent mb-6"></div>
               <div className="pt-4 mt-auto">
-                <p className="font-medium text-xl">Marcia Martinez</p>
-                <p className="text-rose-500 text-sm mt-1">Wedding Client</p>
+                <p className="font-semibold text-xl text-gray-900">Marcia Martinez</p>
+                <p className="text-gray-500 text-sm mt-1">Wedding Client • Bergen County, NJ</p>
               </div>
             </div>
             
@@ -697,7 +741,7 @@ export function LandingPage() {
                   key={index}
                   onClick={() => setCurrentTestimonial(index)}
                   className={`w-3 h-3 mx-1 rounded-full transition-all duration-300 ${
-                    currentTestimonial === index ? 'bg-rose-500 scale-125' : 'bg-gray-300'
+                    currentTestimonial === index ? 'bg-champagneRose scale-125' : 'bg-white/40'
                   }`}
                   aria-label={`View testimonial ${index + 1}`}
                 />
@@ -891,6 +935,77 @@ export function LandingPage() {
         </div>
       </section>
 
+      {/* Latest Blog Posts Section */}
+      <section className="py-16 md:py-24 bg-gradient-to-br from-gray-50 to-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-serif mb-4">Latest from Our Blog</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Discover wedding photography tips, venue highlights, and behind-the-scenes stories from our recent work.
+            </p>
+          </div>
+
+          {latestBlogPosts.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {latestBlogPosts.map((post) => (
+                <article key={post.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group">
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={post.featured_image}
+                      alt={post.title}
+                      className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                      onError={(e) => {
+                        e.currentTarget.src = '/images/placeholders/default.jpg';
+                      }}
+                    />
+                    <div className="absolute top-4 left-4">
+                      <span className="bg-white/90 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">
+                        {post.category}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-6">
+                    <div className="flex items-center text-sm text-gray-500 mb-3">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      <span>{post.published_at ? new Date(post.published_at).toLocaleDateString() : 'Recently'}</span>
+                      <Clock className="w-4 h-4 ml-4 mr-2" />
+                      <span>{post.read_time || '5 min read'}</span>
+                    </div>
+
+                    <h3 className="text-xl font-serif mb-3 line-clamp-2 group-hover:text-accent transition-colors">
+                      {post.title}
+                    </h3>
+
+                    <p className="text-gray-600 mb-4 line-clamp-3">
+                      {post.excerpt}
+                    </p>
+
+                    <Link
+                      to={`/blog/${post.slug}`}
+                      className="inline-flex items-center text-accent hover:text-rose-dark font-medium transition-colors"
+                    >
+                      Read More
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+
+          <div className="text-center mt-12">
+            <Link
+              to="/blog"
+              className="inline-flex items-center bg-gradient-to-r from-accent to-rose-dark text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:from-rose-dark hover:to-accent transform hover:-translate-y-1"
+            >
+              View All Blog Posts
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section id="contact-form" className="py-16 md:py-24 bg-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-light mb-8">Contact Me</h2>
@@ -993,13 +1108,13 @@ export function LandingPage() {
             }
           },
           'image': [
-            'https://harielxavierphotography.com/MoStuff/LandingPage/HeroPage.jpg'
+            'https://harielxavier.com/MoStuff/LandingPage/HeroPage.jpg'
           ],
           'description': 'Join us for a special wedding photography event at Sparta Grand! Featuring live shoots, Q&A, and exclusive offers.',
           'organizer': {
             '@type': 'Organization',
             'name': 'Hariel Xavier Photography',
-            'url': 'https://harielxavierphotography.com'
+            'url': 'https://harielxavier.com'
           }
         })}} />
         */}

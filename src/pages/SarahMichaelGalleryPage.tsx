@@ -41,19 +41,19 @@ function SarahMichaelGalleryPage() {
         <title>The Mansion on Main Street Wedding Photography | Sarah & Michael | Hariel Xavier Photography</title>
         <meta name="description" content="Explore the breathtaking wedding of Sarah & Michael at The Mansion on Main Street in Voorhees Township, NJ. Professional wedding photography capturing the elegance of this premier New Jersey wedding venue by Hariel Xavier Photography." />
         <meta name="keywords" content="The Mansion on Main Street, Voorhees Township NJ wedding venue, luxury wedding venue New Jersey, elegant wedding venue, Hariel Xavier Photography, Sarah and Michael wedding" />
-        <link rel="canonical" href="https://harielxavierphotography.com/sarah-michael" />
+        <link rel="canonical" href="https://harielxavier.com/sarah-michael" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:title" content="The Mansion on Main Street Wedding Photography | Sarah & Michael" />
         <meta property="og:description" content="Explore the breathtaking wedding of Sarah & Michael at The Mansion on Main Street in Voorhees Township, NJ. Professional wedding photography capturing the elegance of this premier New Jersey wedding venue by Hariel Xavier Photography." />
-        <meta property="og:image" content="https://harielxavierphotography.com/mostuff/Amanda & Alex's Wedding/Amanda & Alexander's Wedding-07196_websize.jpg" />
+        <meta property="og:image" content="https://harielxavier.com/mostuff/Amanda & Alex's Wedding/Amanda & Alexander's Wedding-07196_websize.jpg" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="The Mansion on Main Street Wedding Photography | Sarah & Michael" />
         <meta name="twitter:description" content="Explore the breathtaking wedding of Sarah & Michael at The Mansion on Main Street in Voorhees Township, NJ. Professional wedding photography capturing the elegance of this premier New Jersey wedding venue by Hariel Xavier Photography." />
-        <meta name="twitter:image" content="https://harielxavierphotography.com/mostuff/Amanda & Alex's Wedding/Amanda & Alexander's Wedding-07196_websize.jpg" />
+        <meta name="twitter:image" content="https://harielxavier.com/mostuff/Amanda & Alex's Wedding/Amanda & Alexander's Wedding-07196_websize.jpg" />
         
         {/* Schema.org structured data */}
         <script type="application/ld+json">
@@ -62,11 +62,11 @@ function SarahMichaelGalleryPage() {
             "@type": "ImageGallery",
             "name": "The Mansion on Main Street Wedding Photography | Sarah & Michael",
             "description": "Professional wedding photography at The Mansion on Main Street in Voorhees Township, New Jersey. Featuring the beautiful wedding of Sarah and Michael.",
-            "image": "https://harielxavierphotography.com/mostuff/Amanda & Alex's Wedding/Amanda & Alexander's Wedding-07196_websize.jpg",
+            "image": "https://harielxavier.com/mostuff/Amanda & Alex's Wedding/Amanda & Alexander's Wedding-07196_websize.jpg",
             "author": {
               "@type": "Person",
               "name": "Hariel Xavier",
-              "url": "https://harielxavierphotography.com"
+              "url": "https://harielxavier.com"
             },
             "contentLocation": {
               "@type": "Place",

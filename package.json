@@ -7,7 +7,13 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "generate:sitemap": "node generate-dynamic-sitemap.mjs",
+    "prebuild": "npm run generate:sitemap"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.65.0",
@@ -69,6 +75,7 @@
     "ogl": "^1.0.11",
     "photoswipe": "^5.4.4",
     "qrcode": "^1.5.3",
+    "quill": "^2.0.3",
     "react": "^18.3.1",
     "react-beautiful-dnd": "^13.1.1",
     "react-calendar": "^5.1.0",
@@ -90,6 +97,7 @@
     "react-loading-skeleton": "^3.4.0",
     "react-masonry-css": "^1.0.16",
     "react-photoswipe-gallery": "^3.1.1",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^6.22.3",
     "react-toastify": "^11.0.5",
     "react-use": "^17.6.0",
@@ -102,6 +110,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
+    "@playwright/test": "^1.56.1",
     "@types/file-saver": "^2.0.7",
     "@types/nodemailer": "^6.4.17",
     "@types/qrcode": "^1.5.5",

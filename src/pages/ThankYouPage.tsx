@@ -274,8 +274,8 @@ export default function ThankYouPage() {
                 (123) 456-7890
               </a>{' '}
               or email{' '}
-              <a href="mailto:hello@harielxavierphotography.com" className="text-rose-dark hover:underline font-medium">
-                hello@harielxavierphotography.com
+              <a href="mailto:hello@harielxavier.com" className="text-rose-dark hover:underline font-medium">
+                hello@harielxavier.com
               </a>
             </p>
           </motion.div>

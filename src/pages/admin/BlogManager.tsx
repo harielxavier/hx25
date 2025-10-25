@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Edit, Trash2, Eye, Plus, Search, Filter, AlertCircle, BookPlus, Star, StarOff, Globe, FileText, Link, Copy, Check } from 'lucide-react';
-import { BlogPost, getAllPosts, deletePost, incrementPostViews, updatePost } from '../../services/blogService';
+import { BlogPost, getAllPosts, incrementPostViews } from '../../services/supabaseBlogService';
+import { supabase } from '../../lib/supabase';
 import { createEnhancedBlogPosts } from '../../utils/enhancedBlogInitializer';
 import imageOptimizationUtils from '../../utils/imageOptimizationUtils';
 import './BlogManagerFix.css'; // Import the CSS fix
@@ -82,12 +83,14 @@ export default function BlogManager() {
   const handleDeletePost = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this post?')) {
       try {
-        const success = await deletePost(id);
-        if (success) {
-          setPosts(posts.filter(post => post.id !== id));
-        } else {
-          throw new Error('Failed to delete post');
-        }
+        const { error } = await supabase
+          .from('posts')
+          .delete()
+          .eq('id', id);
+        
+        if (error) throw error;
+        
+        setPosts(posts.filter(post => post.id !== id));
       } catch (error) {
         console.error('Error deleting post:', error);
         setError('Failed to delete post. Please try again.');
@@ -112,19 +115,20 @@ export default function BlogManager() {
       const newStatus = post.status === 'published' ? 'draft' : 'published';
       
       // Update the post status
-      const success = await updatePost(post.id, { status: newStatus });
+      const { error } = await supabase
+        .from('posts')
+        .update({ status: newStatus })
+        .eq('id', post.id);
       
-      if (success) {
-        // Update the local state
-        setPosts(posts.map(p => 
-          p.id === post.id ? { ...p, status: newStatus } : p
-        ));
-        
-        setSuccessMessage(`Post "${post.title}" is now ${newStatus}`);
-        setTimeout(() => setSuccessMessage(null), 3000);
-      } else {
-        throw new Error('Failed to update post status');
-      }
+      if (error) throw error;
+      
+      // Update the local state
+      setPosts(posts.map(p => 
+        p.id === post.id ? { ...p, status: newStatus } : p
+      ));
+      
+      setSuccessMessage(`Post "${post.title}" is now ${newStatus}`);
+      setTimeout(() => setSuccessMessage(null), 3000);
     } catch (error) {
       console.error('Error updating post status:', error);
       setError('Failed to update post status. Please try again.');
@@ -141,15 +145,19 @@ export default function BlogManager() {
         const currentlyFeaturedPosts = posts.filter(p => p.featured && p.id !== post.id);
         
         // First update the clicked post to be featured
-        const success = await updatePost(post.id, { featured: true });
+        const { error: error1 } = await supabase
+          .from('posts')
+          .update({ featured: true })
+          .eq('id', post.id);
         
-        if (!success) {
-          throw new Error('Failed to update featured status');
-        }
+        if (error1) throw error1;
         
         // Then un-feature any previously featured posts
         for (const featuredPost of currentlyFeaturedPosts) {
-          await updatePost(featuredPost.id, { featured: false });
+          await supabase
+            .from('posts')
+            .update({ featured: false })
+            .eq('id', featuredPost.id);
         }
         
         // Update the local state to reflect all changes
@@ -165,18 +173,19 @@ export default function BlogManager() {
         setSuccessMessage(`Post "${post.title}" is now featured and any previously featured posts have been unfeatured`);
       } else {
         // Just un-featuring a post
-        const success = await updatePost(post.id, { featured: false });
+        const { error } = await supabase
+          .from('posts')
+          .update({ featured: false })
+          .eq('id', post.id);
         
-        if (success) {
-          // Update the local state
-          setPosts(posts.map(p => 
-            p.id === post.id ? { ...p, featured: false } : p
-          ));
-          
-          setSuccessMessage(`Post "${post.title}" is now unfeatured`);
-        } else {
-          throw new Error('Failed to update featured status');
-        }
+        if (error) throw error;
+        
+        // Update the local state
+        setPosts(posts.map(p => 
+          p.id === post.id ? { ...p, featured: false } : p
+        ));
+        
+        setSuccessMessage(`Post "${post.title}" is now unfeatured`);
       }
       
       setTimeout(() => setSuccessMessage(null), 3000);

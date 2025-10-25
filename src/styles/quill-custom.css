@@ -1,0 +1,133 @@
+/* Custom Quill Editor Styles */
+
+.prose-editor .ql-container {
+  min-height: 400px;
+  font-family: 'Georgia', serif;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.prose-editor .ql-editor {
+  min-height: 400px;
+  padding: 20px;
+}
+
+.prose-editor .ql-editor.ql-blank::before {
+  font-style: normal;
+  color: #9ca3af;
+}
+
+.prose-editor .ql-editor h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.prose-editor .ql-editor h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.prose-editor .ql-editor h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose-editor .ql-editor p {
+  margin-bottom: 1.25rem;
+}
+
+.prose-editor .ql-editor ul,
+.prose-editor .ql-editor ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.prose-editor .ql-editor li {
+  margin-bottom: 0.5rem;
+}
+
+.prose-editor .ql-editor blockquote {
+  border-left: 4px solid #3b82f6;
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: #4b5563;
+}
+
+.prose-editor .ql-editor a {
+  color: #3b82f6;
+  text-decoration: underline;
+}
+
+.prose-editor .ql-editor img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.prose-editor .ql-editor code {
+  background-color: #f3f4f6;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 0.875rem;
+}
+
+.prose-editor .ql-editor pre {
+  background-color: #1f2937;
+  color: #f9fafb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.prose-editor .ql-toolbar {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb !important;
+  border-bottom: none !important;
+  border-radius: 0.5rem 0.5rem 0 0;
+  padding: 12px;
+}
+
+.prose-editor .ql-container {
+  border: 1px solid #e5e7eb !important;
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.prose-editor .ql-toolbar button {
+  width: 32px;
+  height: 32px;
+}
+
+.prose-editor .ql-toolbar button:hover {
+  background-color: #e5e7eb;
+  border-radius: 0.25rem;
+}
+
+.prose-editor .ql-toolbar button.ql-active {
+  background-color: #dbeafe;
+  border-radius: 0.25rem;
+}
+
+.prose-editor .ql-stroke {
+  stroke: #4b5563;
+}
+
+.prose-editor .ql-fill {
+  fill: #4b5563;
+}
+
+.prose-editor .ql-picker-label {
+  color: #4b5563;
+}
+

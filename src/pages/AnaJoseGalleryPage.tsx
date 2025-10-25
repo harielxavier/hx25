@@ -14,7 +14,7 @@ const anaJoseGallery = {
   description: 'A beautiful celebration of love at The Meadow Wood in Randolph, NJ',
   venue: 'The Meadow Wood',
   location: 'Randolph, New Jersey',
-  coverImage: '/view/josehero.jpg'
+  coverImage: '/MoStuff/Featured Wedding/Anna & Jose\'s Wedding/aj-189.jpg'
 };
 
 // Gallery images
@@ -41,19 +41,19 @@ function AnaJoseGalleryPage() {
         <title>The Meadow Wood Wedding Photography | Anna & Jose | Hariel Xavier Photography</title>
         <meta name="description" content="View this breathtaking wedding at The Meadow Wood in Randolph, NJ. Professional wedding photography showcasing the elegant venue and beautiful grounds of this premier New Jersey wedding destination." />
         <meta name="keywords" content="The Meadow Wood, Randolph NJ wedding venue, luxury wedding venue New Jersey, elegant wedding venue, Hariel Xavier Photography, Anna and Jose wedding" />
-        <link rel="canonical" href="https://harielxavierphotography.com/ana-jose" />
+        <link rel="canonical" href="https://harielxavier.com/ana-jose" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:title" content="The Meadow Wood Wedding Photography | Anna & Jose" />
         <meta property="og:description" content="View this breathtaking wedding at The Meadow Wood in Randolph, NJ. Professional wedding photography showcasing the elegant venue and beautiful grounds of this premier New Jersey wedding destination." />
-        <meta property="og:image" content="https://harielxavierphotography.com/MoStuff/Featured Wedding/Anna & Jose's Wedding/aj-189.jpg" />
+        <meta property="og:image" content="https://harielxavier.com/MoStuff/Featured Wedding/Anna & Jose's Wedding/aj-189.jpg" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="The Meadow Wood Wedding Photography | Anna & Jose" />
         <meta name="twitter:description" content="View this breathtaking wedding at The Meadow Wood in Randolph, NJ. Professional wedding photography showcasing the elegant venue and beautiful grounds of this premier New Jersey wedding destination." />
-        <meta name="twitter:image" content="https://harielxavierphotography.com/MoStuff/Featured Wedding/Anna & Jose's Wedding/aj-189.jpg" />
+        <meta name="twitter:image" content="https://harielxavier.com/MoStuff/Featured Wedding/Anna & Jose's Wedding/aj-189.jpg" />
         
         {/* Schema.org structured data */}
         <script type="application/ld+json">
@@ -62,11 +62,11 @@ function AnaJoseGalleryPage() {
             "@type": "ImageGallery",
             "name": "The Meadow Wood Wedding Photography | Anna & Jose",
             "description": "Professional wedding photography at The Meadow Wood in Randolph, New Jersey. Featuring the beautiful wedding of Anna and Jose.",
-            "image": "https://harielxavierphotography.com/MoStuff/Featured Wedding/Anna & Jose's Wedding/aj-189.jpg",
+            "image": "https://harielxavier.com/MoStuff/Featured Wedding/Anna & Jose's Wedding/aj-189.jpg",
             "author": {
               "@type": "Person",
               "name": "Hariel Xavier",
-              "url": "https://harielxavierphotography.com"
+              "url": "https://harielxavier.com"
             },
             "contentLocation": {
               "@type": "Place",

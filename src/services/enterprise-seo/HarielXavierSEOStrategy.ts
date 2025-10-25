@@ -9,7 +9,7 @@
 import { SEOConfiguration } from './EnterpriseSEOPlatform';
 
 export const harielXavierSEOConfig: SEOConfiguration = {
-  domain: 'https://harielxavierphotography.com',
+  domain: 'https://harielxavier.com',
   
   // Strategic keyword targeting to outrank Anthony Ziccardi
   targetKeywords: [
@@ -91,7 +91,7 @@ export const harielXavierSEOConfig: SEOConfiguration = {
       longitude: -74.6396
     },
     phone: '+1-973-XXX-XXXX',
-    email: 'info@harielxavierphotography.com',
+    email: 'info@harielxavier.com',
     businessType: 'Professional Photography Services',
     serviceAreas: [
       'Sparta, NJ',

@@ -15,13 +15,13 @@ const BookingPage: React.FC = () => {
         <title>Book Your Wedding Photography Session | Hariel Xavier Photography</title>
         <meta name="description" content="Schedule your wedding photography consultation or engagement session with Hariel Xavier Photography. Easy online booking system for New Jersey wedding photographer. Book your session today!" />
         <meta name="keywords" content="book wedding photographer, schedule photography session, wedding photography booking, engagement session booking, Hariel Xavier Photography, New Jersey photographer booking" />
-        <link rel="canonical" href="https://harielxavierphotography.com/booking" />
+        <link rel="canonical" href="https://harielxavier.com/booking" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Book Your Wedding Photography Session | Hariel Xavier Photography" />
         <meta property="og:description" content="Schedule your wedding photography consultation or engagement session with Hariel Xavier Photography. Easy online booking system for New Jersey wedding photographer." />
-        <meta property="og:url" content="https://harielxavierphotography.com/booking" />
+        <meta property="og:url" content="https://harielxavier.com/booking" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary" />
@@ -35,7 +35,7 @@ const BookingPage: React.FC = () => {
             "@type": "WebPage",
             "name": "Book Your Wedding Photography Session",
             "description": "Online booking system for wedding photography sessions with Hariel Xavier Photography",
-            "url": "https://harielxavierphotography.com/booking",
+            "url": "https://harielxavier.com/booking",
             "mainEntity": {
               "@type": "Service",
               "name": "Wedding Photography Booking",

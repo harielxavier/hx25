@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronLeft, MapPin, Camera } from 'lucide-react';
+import { ChevronLeft, MapPin, Camera, Phone, Mail, Globe, Clock, Users, Heart, Sun, Snowflake } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import Navigation from '../components/landing/Navigation';
 import Footer from '../components/landing/Footer';
@@ -35,24 +35,24 @@ function AnsimonMinaGalleryPage() {
   return (
     <div className="min-h-screen bg-white">
       <Helmet>
-        <title>Luxury Wedding Photography at The Legacy Castle | Ansimon & Mina | Hariel Xavier Photography</title>
-        <meta name="description" content="Explore Ansimon & Mina's elegant wedding at The Legacy Castle in Pompton Plains, NJ. View stunning photography capturing the grand ballroom, purple uplighting, and luxurious details of this premier New Jersey wedding venue." />
-        <meta name="keywords" content="The Legacy Castle, Pompton Plains wedding venue, NJ wedding photographer, luxury wedding venue New Jersey, Hariel Xavier Photography, Ansimon and Mina wedding, Legacy Castle ballroom, purple wedding lighting, NJ luxury wedding, Pompton Plains wedding photography, Legacy Castle wedding photos" />
-        <link rel="canonical" href="https://harielxavierphotography.com/ansimon-mina" />
+        <title>Legacy Castle Wedding Photographer | Pompton Plains NJ Wedding Photography | Hariel Xavier</title>
+        <meta name="description" content="Expert wedding photography at The Legacy Castle in Pompton Plains, NJ. View Ansimon & Mina's stunning gallery and discover why couples choose us for their Legacy Castle wedding. Contact info, best photo spots & venue insights included." />
+        <meta name="keywords" content="Legacy Castle wedding photographer, Pompton Plains NJ wedding photographer, Legacy Castle wedding photography, luxury wedding venue New Jersey, Legacy Castle reviews, Pompton Plains New Jersey wedding venues, Morris County wedding photographer, preferred wedding photographer Legacy Castle" />
+        <link rel="canonical" href="https://harielxavier.com/ansimon-mina" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Luxury Wedding Photography at The Legacy Castle | Ansimon & Mina" />
         <meta property="og:description" content="Explore Ansimon & Mina's elegant wedding at The Legacy Castle in Pompton Plains, NJ. View stunning photography capturing the grand ballroom, purple uplighting, and luxurious details of this premier New Jersey wedding venue." />
-        <meta property="og:image" content="https://harielxavierphotography.com/view/2.jpg" />
-        <meta property="og:url" content="https://harielxavierphotography.com/ansimon-mina" />
+        <meta property="og:image" content="https://harielxavier.com/view/2.jpg" />
+        <meta property="og:url" content="https://harielxavier.com/ansimon-mina" />
         <meta property="og:site_name" content="Hariel Xavier Photography" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Luxury Wedding Photography at The Legacy Castle | Ansimon & Mina" />
         <meta name="twitter:description" content="Explore Ansimon & Mina's elegant wedding at The Legacy Castle in Pompton Plains, NJ. View stunning photography capturing the grand ballroom, purple uplighting, and luxurious details of this premier New Jersey wedding venue." />
-        <meta name="twitter:image" content="https://harielxavierphotography.com/view/2.jpg" />
+        <meta name="twitter:image" content="https://harielxavier.com/view/2.jpg" />
         <meta name="twitter:site" content="@HarielXavier" />
         
         {/* Schema.org structured data */}
@@ -62,12 +62,12 @@ function AnsimonMinaGalleryPage() {
             "@type": "ImageGallery",
             "name": "Luxury Wedding Photography at The Legacy Castle | Ansimon & Mina",
             "description": "Explore stunning wedding photography of Ansimon & Mina's elegant wedding at The Legacy Castle in Pompton Plains, NJ. Capturing the grand ballroom, purple uplighting, and luxurious details of this premier New Jersey wedding venue.",
-            "url": "https://harielxavierphotography.com/ansimon-mina",
-            "image": "https://harielxavierphotography.com/view/2.jpg",
+            "url": "https://harielxavier.com/ansimon-mina",
+            "image": "https://harielxavier.com/view/2.jpg",
             "author": {
               "@type": "Person",
               "name": "Hariel Xavier",
-              "url": "https://harielxavierphotography.com",
+              "url": "https://harielxavier.com",
               "sameAs": [
                 "https://www.instagram.com/harielxavierphotography/",
                 "https://www.facebook.com/HarielXavierPhotography/"
@@ -119,11 +119,11 @@ function AnsimonMinaGalleryPage() {
                   "addressCountry": "US"
                 }
               },
-              "image": "https://harielxavierphotography.com/view/2.jpg",
+              "image": "https://harielxavier.com/view/2.jpg",
               "organizer": {
                 "@type": "Person",
                 "name": "Hariel Xavier",
-                "url": "https://harielxavierphotography.com"
+                "url": "https://harielxavier.com"
               }
             }
           })}
@@ -192,26 +192,240 @@ function AnsimonMinaGalleryPage() {
           </div>
         )}
         
-        {/* Venue Highlight */}
-        <div className="bg-gray-50 rounded-xl p-8 md:p-12 my-16">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h2 className="text-3xl font-serif mb-4">The Legacy Castle - Premier NJ Wedding Venue</h2>
-              <p className="mb-4"><strong>The Legacy Castle</strong> in Pompton Plains, New Jersey provided the perfect backdrop for Ansimon and Mina's special day. With its elegant European-inspired architecture and luxurious surroundings, it created a magical atmosphere for their celebration, making it one of the most sought-after wedding venues in NJ.</p>
-              <p className="mb-4">From the grand ballrooms with stunning chandeliers to the beautiful outdoor spaces with a picturesque lake setting, every corner of this venue offered incredible photo opportunities to capture their love story. The Legacy Castle is renowned for its opulent design, featuring marble floors, intricate moldings, and customizable lighting options like the purple uplighting that made Ansimon & Mina's wedding reception truly spectacular.</p>
-              <p className="mb-4">Located at 141 NJ-23, Pompton Plains, NJ 07444, The Legacy Castle offers multiple event spaces including the Grand Legacy Ballroom, Mayfair Gardens, and Oxford Hall, making it ideal for luxury weddings of any size. Its proximity to New York City (just 30 minutes away) makes it a convenient yet breathtaking destination for couples seeking a fairytale wedding experience in New Jersey.</p>
-              <p className="mt-4">
-                <a href="https://thelegacycastle.com/" target="_blank" rel="noopener noreferrer" className="text-gray-800 hover:underline font-medium">
-                  Visit The Legacy Castle Website →
-                </a>
-              </p>
+        {/* Comprehensive Venue Guide */}
+        <div className="my-20">
+          <h2 className="text-4xl font-serif text-center mb-16">Complete Guide to The Legacy Castle</h2>
+          
+          {/* Venue Overview with Contact */}
+          <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-8 md:p-12 mb-12 shadow-lg">
+            <div className="grid md:grid-cols-2 gap-10 items-start">
+              <div>
+                <h3 className="text-3xl font-serif mb-6">About The Legacy Castle</h3>
+                <p className="text-lg mb-4 leading-relaxed">
+                  <strong>The Legacy Castle</strong> in Pompton Plains, New Jersey, is a luxury wedding destination that brings European castle elegance to the Garden State. Located just 30 minutes from New York City, this premier venue has become the dream location for couples seeking a fairytale wedding experience.
+                </p>
+                <p className="mb-4 leading-relaxed">
+                  As an experienced wedding photographer at The Legacy Castle, I've captured countless celebrations here and intimately know every stunning detail—from the grand marble staircases to the crystal chandeliers, from the lakeside ceremony spots to the opulent ballrooms. The venue's customizable lighting creates magic, whether it's romantic purple uplighting like Ansimon & Mina chose, or any color to match your vision.
+                </p>
+                
+                {/* Contact Information */}
+                <div className="bg-white p-6 rounded-lg shadow-md mt-6 border border-gray-200">
+                  <h4 className="text-xl font-semibold mb-4 flex items-center">
+                    <MapPin className="w-5 h-5 mr-2 text-rose-dark" />
+                    Venue Contact Information
+                  </h4>
+                  <div className="space-y-3 text-gray-700">
+                    <p className="flex items-start">
+                      <MapPin className="w-4 h-4 mr-3 mt-1 flex-shrink-0" />
+                      <span>141 Route 23 South, Pompton Plains, NJ 07444</span>
+                    </p>
+                    <p className="flex items-center">
+                      <Phone className="w-4 h-4 mr-3 flex-shrink-0" />
+                      <a href="tel:973-907-7750" className="hover:text-rose-dark transition-colors">(973) 907-7750</a>
+                    </p>
+                    <p className="flex items-center">
+                      <Mail className="w-4 h-4 mr-3 flex-shrink-0" />
+                      <a href="mailto:info@thelegacycastle.com" className="hover:text-rose-dark transition-colors">info@thelegacycastle.com</a>
+                    </p>
+                    <p className="flex items-center">
+                      <Globe className="w-4 h-4 mr-3 flex-shrink-0" />
+                      <a href="https://thelegacycastle.com/" target="_blank" rel="noopener noreferrer" className="hover:text-rose-dark transition-colors underline">
+                        Visit Venue Website
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="rounded-lg overflow-hidden shadow-xl">
+                  <img 
+                    src="/MoStuff/Featured Wedding/Ansimon & Mina's Wedding/Annie & Steve Ansimon & Mina Wedding additional-1060_websize.jpg" 
+                    alt="The Legacy Castle Wedding Venue - Grand Ballroom with Crystal Chandeliers" 
+                    className="w-full h-auto"
+                  />
+                </div>
+                <p className="text-sm text-gray-600 italic">The grand ballroom with magnificent chandeliers and customizable lighting</p>
+              </div>
             </div>
-            <div className="rounded-lg overflow-hidden shadow-xl">
-              <img 
-                src="/MoStuff/Featured Wedding/Ansimon & Mina's Wedding/legacy.jpg" 
-                alt="The Legacy Castle in Pompton Plains, NJ - Luxury Wedding Venue with Grand Ballroom" 
-                className="w-full h-auto"
-              />
+          </div>
+
+          {/* Best Photo Locations */}
+          <div className="bg-white p-8 md:p-12 mb-12 rounded-xl shadow-lg border border-gray-100">
+            <h3 className="text-3xl font-serif mb-8 flex items-center">
+              <Camera className="w-8 h-8 mr-3 text-rose-dark" />
+              Best Photo Locations at The Legacy Castle
+            </h3>
+            <p className="text-lg mb-8 text-gray-700">
+              After photographing numerous weddings here, I've discovered the absolute best spots for capturing stunning images. Here's my insider guide:
+            </p>
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h4 className="text-xl font-semibold mb-3">✨ The Grand Marble Staircase</h4>
+                <p className="text-gray-700">The iconic curved staircase with ornate railings is perfect for dramatic bridal portraits. Best time: After getting ready, use the natural light from the skylight above.</p>
+              </div>
+              
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h4 className="text-xl font-semibold mb-3">💎 Crystal Chandelier Ballrooms</h4>
+                <p className="text-gray-700">The Grand Legacy Ballroom's crystal chandeliers create magical overhead lighting. Perfect for first dances and reception details with customizable uplighting.</p>
+              </div>
+              
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h4 className="text-xl font-semibold mb-3">🏰 European Architecture Exterior</h4>
+                <p className="text-gray-700">The castle's stone facade and turrets provide a dramatic backdrop. Golden hour (one hour before sunset) makes the stonework glow beautifully.</p>
+              </div>
+              
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h4 className="text-xl font-semibold mb-3">🌊 Lakeside Ceremony Area</h4>
+                <p className="text-gray-700">The outdoor ceremony space overlooks a serene lake with the castle as backdrop. Ideal for afternoon ceremonies with soft, flattering light.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Timeline & Tips */}
+          <div className="bg-gradient-to-br from-rose-light to-white p-8 md:p-12 mb-12 rounded-xl shadow-lg border border-gray-100">
+            <h3 className="text-3xl font-serif mb-8 flex items-center">
+              <Clock className="w-8 h-8 mr-3 text-rose-dark" />
+              Photographer's Timeline Recommendations
+            </h3>
+            <div className="prose prose-lg max-w-none">
+              <p className="text-lg mb-6">
+                Based on my experience photographing multiple weddings at The Legacy Castle, here's the optimal timeline for the best photos:
+              </p>
+              
+              <div className="space-y-4">
+                <div className="bg-white p-5 rounded-lg shadow-sm">
+                  <p className="font-semibold text-lg mb-2">1:30 PM - Getting Ready Photos</p>
+                  <p className="text-gray-700">Start in the luxurious bridal suites. The large windows provide beautiful natural light for detail shots and preparations.</p>
+                </div>
+                
+                <div className="bg-white p-5 rounded-lg shadow-sm">
+                  <p className="font-semibold text-lg mb-2">3:00 PM - First Look</p>
+                  <p className="text-gray-700">The grand staircase or lakeside area are perfect for first looks. This allows time for relaxed couple portraits before guests arrive.</p>
+                </div>
+                
+                <div className="bg-white p-5 rounded-lg shadow-sm">
+                  <p className="font-semibold text-lg mb-2">4:00 PM - Ceremony</p>
+                  <p className="text-gray-700">Outdoor lakeside ceremony or indoor ballroom both look incredible. Afternoon light is perfect without harsh shadows.</p>
+                </div>
+                
+                <div className="bg-white p-5 rounded-lg shadow-sm">
+                  <p className="font-semibold text-lg mb-2">5:00 PM - Cocktail Hour & Golden Hour Portraits</p>
+                  <p className="text-gray-700">While guests enjoy cocktails, we'll capture magical golden hour photos by the lake and around the castle exterior.</p>
+                </div>
+                
+                <div className="bg-white p-5 rounded-lg shadow-sm">
+                  <p className="font-semibold text-lg mb-2">6:00 PM - Grand Entrance & Reception</p>
+                  <p className="text-gray-700">The ballroom's custom lighting (like the purple uplighting) transforms beautifully as evening sets in. The chandeliers create stunning ambiance.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Seasonal Guide */}
+          <div className="bg-white p-8 md:p-12 mb-12 rounded-xl shadow-lg border border-gray-100">
+            <h3 className="text-3xl font-serif mb-8 text-center">Seasonal Photography at The Legacy Castle</h3>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="text-center p-6 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="inline-block p-3 bg-rose-light rounded-full mb-4">
+                  <Heart className="w-8 h-8 text-rose-dark" />
+                </div>
+                <h4 className="text-xl font-semibold mb-3">Spring</h4>
+                <p className="text-gray-700">Blooming gardens around the lake, fresh greenery, and mild weather perfect for outdoor ceremonies and lakeside portraits.</p>
+              </div>
+              
+              <div className="text-center p-6 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="inline-block p-3 bg-rose-light rounded-full mb-4">
+                  <Sun className="w-8 h-8 text-rose-dark" />
+                </div>
+                <h4 className="text-xl font-semibold mb-3">Summer</h4>
+                <p className="text-gray-700">Long daylight hours for extended golden hour. Lakeside ceremonies look stunning, and evening receptions transition beautifully.</p>
+              </div>
+              
+              <div className="text-center p-6 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="inline-block p-3 bg-rose-light rounded-full mb-4">
+                  <Heart className="w-8 h-8 text-rose-dark" />
+                </div>
+                <h4 className="text-xl font-semibold mb-3">Fall</h4>
+                <p className="text-gray-700">Spectacular autumn foliage surrounds the castle. The changing leaves create a romantic, colorful backdrop for portraits.</p>
+              </div>
+              
+              <div className="text-center p-6 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="inline-block p-3 bg-rose-light rounded-full mb-4">
+                  <Snowflake className="w-8 h-8 text-rose-dark" />
+                </div>
+                <h4 className="text-xl font-semibold mb-3">Winter</h4>
+                <p className="text-gray-700">Snow-covered castle creates a true fairytale. The heated ballrooms are cozy, and evening photos with uplighting are magical.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Why Choose This Venue */}
+          <div className="bg-gradient-to-br from-gray-900 to-gray-800 text-white p-8 md:p-12 rounded-xl shadow-2xl mb-12">
+            <h3 className="text-3xl font-serif mb-8 text-center">Why Couples Love The Legacy Castle</h3>
+            
+            <div className="grid md:grid-cols-3 gap-8 mb-8">
+              <div className="text-center">
+                <div className="inline-block p-4 bg-white/10 rounded-full mb-4">
+                  <Users className="w-8 h-8" />
+                </div>
+                <h4 className="text-xl font-semibold mb-3">Flexible Capacity</h4>
+                <p className="text-gray-300">Accommodates 50-350 guests across multiple ballrooms. Multiple spaces allow for intimate to grand celebrations.</p>
+              </div>
+              
+              <div className="text-center">
+                <div className="inline-block p-4 bg-white/10 rounded-full mb-4">
+                  <MapPin className="w-8 h-8" />
+                </div>
+                <h4 className="text-xl font-semibold mb-3">European Luxury</h4>
+                <p className="text-gray-300">Authentic castle architecture with marble, crystal chandeliers, and opulent details. A true fairytale setting in New Jersey.</p>
+              </div>
+              
+              <div className="text-center">
+                <div className="inline-block p-4 bg-white/10 rounded-full mb-4">
+                  <Camera className="w-8 h-8" />
+                </div>
+                <h4 className="text-xl font-semibold mb-3">Photographer's Dream</h4>
+                <p className="text-gray-300">Endless stunning backdrops—from grand staircases to lakeside views. Customizable lighting for any vision.</p>
+              </div>
+            </div>
+            
+            <p className="text-center text-lg text-gray-300">
+              As a photographer who knows this venue intimately, I can help you make the most of every beautiful space. The Legacy Castle isn't just a venue—it's where fairytales come true.
+            </p>
+          </div>
+
+          {/* FAQ Section */}
+          <div className="bg-white p-8 md:p-12 rounded-xl shadow-lg border border-gray-100">
+            <h3 className="text-3xl font-serif mb-8">Frequently Asked Questions</h3>
+            
+            <div className="space-y-6">
+              <div className="border-b border-gray-200 pb-6">
+                <h4 className="text-xl font-semibold mb-3">Is The Legacy Castle good for photos?</h4>
+                <p className="text-gray-700">Absolutely! It's one of the most photogenic wedding venues in New Jersey. The European castle architecture, grand staircases, crystal chandeliers, and lakeside setting create countless stunning photo opportunities. Every corner is Instagram-worthy.</p>
+              </div>
+              
+              <div className="border-b border-gray-200 pb-6">
+                <h4 className="text-xl font-semibold mb-3">What's the best time of year for a wedding here?</h4>
+                <p className="text-gray-700">Every season is spectacular! Fall offers beautiful foliage, spring brings blooming gardens, summer provides long daylight, and winter creates a magical snowy castle. The indoor ballrooms are stunning year-round with customizable lighting.</p>
+              </div>
+              
+              <div className="border-b border-gray-200 pb-6">
+                <h4 className="text-xl font-semibold mb-3">How long should we allocate for photos?</h4>
+                <p className="text-gray-700">I recommend 30-45 minutes for couple portraits. With a first look, we can capture most formal photos before the ceremony. Golden hour photos by the lake during cocktail hour are essential—they're always clients' favorites.</p>
+              </div>
+              
+              <div className="border-b border-gray-200 pb-6">
+                <h4 className="text-xl font-semibold mb-3">Are you familiar with working at this venue?</h4>
+                <p className="text-gray-700">Yes! I've photographed numerous weddings at The Legacy Castle and know the property intimately. I know exactly where the best light falls, which locations work for different shots, and how to maximize your time for stunning photos.</p>
+              </div>
+              
+              <div className="pb-6">
+                <h4 className="text-xl font-semibold mb-3">What makes you the right photographer for this venue?</h4>
+                <p className="text-gray-700">My experience with The Legacy Castle means we won't waste time scouting on your wedding day. I already know the perfect spots, angles, and lighting. This means more beautiful, relaxed photos and less stress for you. Plus, I understand how to work with the venue's customizable lighting to create your perfect ambiance.</p>
+              </div>
             </div>
           </div>
         </div>

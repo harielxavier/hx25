@@ -10,13 +10,13 @@ const ContactPage: React.FC = () => {
         <title>Contact Hariel Xavier Photography | Wedding Photographer Sussex County NJ</title>
         <meta name="description" content="Contact Hariel Xavier Photography for your wedding photography needs in Sussex County, NJ. Professional wedding photographer serving New Jersey and surrounding areas. Call (862) 290-4349 or email Hi@HarielXavier.com." />
         <meta name="keywords" content="contact wedding photographer, Sussex County NJ photographer, Hariel Xavier Photography contact, wedding photography inquiry, New Jersey wedding photographer" />
-        <link rel="canonical" href="https://harielxavierphotography.com/contact" />
+        <link rel="canonical" href="https://harielxavier.com/contact" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Contact Hariel Xavier Photography | Wedding Photographer Sussex County NJ" />
         <meta property="og:description" content="Contact Hariel Xavier Photography for your wedding photography needs in Sussex County, NJ. Professional wedding photographer serving New Jersey and surrounding areas." />
-        <meta property="og:url" content="https://harielxavierphotography.com/contact" />
+        <meta property="og:url" content="https://harielxavier.com/contact" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary" />
@@ -30,11 +30,11 @@ const ContactPage: React.FC = () => {
             "@type": "ContactPage",
             "name": "Contact Hariel Xavier Photography",
             "description": "Contact information for Hariel Xavier Photography, professional wedding photographer in Sussex County, New Jersey",
-            "url": "https://harielxavierphotography.com/contact",
+            "url": "https://harielxavier.com/contact",
             "mainEntity": {
               "@type": "LocalBusiness",
               "name": "Hariel Xavier Photography",
-              "image": "https://harielxavierphotography.com/logo.svg",
+              "image": "https://harielxavier.com/logo.svg",
               "telephone": "+1-862-391-4179",
               "email": "Hi@HarielXavier.com",
               "address": {

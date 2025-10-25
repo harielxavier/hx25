@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Calendar, Clock, ArrowRight, Search, Eye, AlertCircle } from 'lucide-react';
+// Firebase imports removed - using Supabase
 import LeadMagnet from '../components/LeadMagnet';
 import Navigation from '../components/landing/Navigation';
 import Footer from '../components/landing/Footer';
 import SEO from '../components/SEO';
-import { BlogPost, getAllPosts, getFeaturedPosts } from '../services/blogService';
+import { BlogPost, getAllPosts, getFeaturedPosts } from '../services/supabaseBlogService';
 import { initializeBlogPosts } from '../utils/blogInitializer';
 import imageOptimizationUtils from '../utils/imageOptimizationUtils';
 import 'react-lazy-load-image-component/src/effects/blur.css';
@@ -55,12 +56,26 @@ export default function BlogPage() {
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchInput, setSearchInput] = useState<string>(''); // Immediate input state
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [allTags, setAllTags] = useState<string[]>([]);
   const [initializing, setInitializing] = useState(false);
   const [initializationComplete, setInitializationComplete] = useState(false);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [postsPerPage] = useState(6); // Show 6 posts initially
+  const [displayedPostsCount, setDisplayedPostsCount] = useState(6);
+
+  // Debounce search input (wait 500ms after user stops typing)
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setSearchQuery(searchInput);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchInput]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -109,11 +124,16 @@ export default function BlogPage() {
           }
         }
         
-        // Sanitize image URLs in all posts
-        fetchedPosts = fetchedPosts.map(post => ({
-          ...post,
-          featuredImage: sanitizeImageUrl(post.featuredImage)
-        }));
+        // Sanitize image URLs in all posts and ensure both field names exist
+        fetchedPosts = fetchedPosts.map(post => {
+          const imageUrl = post.featuredImage || post.featured_image || '';
+          const sanitized = sanitizeImageUrl(imageUrl);
+          return {
+            ...post,
+            featuredImage: sanitized,
+            featured_image: sanitized
+          };
+        });
         
         // Extract unique categories
         const uniqueCategories = Array.from(
@@ -183,12 +203,8 @@ export default function BlogPage() {
     // Fetch posts immediately when the component mounts
     fetchPosts();
 
-    // Set up an interval to refresh the data every 30 seconds
-    // This ensures the blog page stays in sync with any changes made in the admin interface
-    const refreshInterval = setInterval(fetchPosts, 30000);
-
-    // Clean up the interval when the component unmounts
-    return () => clearInterval(refreshInterval);
+    // Note: Removed excessive 30-second auto-refresh to improve performance
+    // Blog will only refresh when component mounts or filters change
   }, [selectedCategory, searchQuery, activeTag]);
 
   const handleCategoryClick = (category: string) => {
@@ -210,6 +226,41 @@ export default function BlogPage() {
     setError(null);
     setInitializing(false);
     setInitializationComplete(false);
+  };
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!newsletterEmail || !newsletterEmail.includes('@')) {
+      setNewsletterStatus('error');
+      return;
+    }
+
+    setNewsletterStatus('submitting');
+
+    try {
+      await addDoc(collection(db, 'leads'), {
+        email: newsletterEmail,
+        source: 'blog_newsletter',
+        status: 'new',
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+
+      setNewsletterStatus('success');
+      setNewsletterEmail('');
+      
+      setTimeout(() => {
+        setNewsletterStatus('idle');
+      }, 5000);
+    } catch (error) {
+      console.error('Newsletter subscription error:', error);
+      setNewsletterStatus('error');
+      
+      setTimeout(() => {
+        setNewsletterStatus('idle');
+      }, 3000);
+    }
   };
 
   // Filter posts based on search, category, and tag
@@ -234,13 +285,26 @@ export default function BlogPage() {
     return matchesSearch && matchesCategory && matchesTag;
   });
 
+  // Pagination: Show only the first N posts
+  const displayedPosts = filteredPosts.slice(0, displayedPostsCount);
+  const hasMorePosts = filteredPosts.length > displayedPostsCount;
+
+  const loadMorePosts = () => {
+    setDisplayedPostsCount(prev => prev + postsPerPage);
+  };
+
+  // Reset displayed count when filters change
+  useEffect(() => {
+    setDisplayedPostsCount(postsPerPage);
+  }, [selectedCategory, searchQuery, activeTag, postsPerPage]);
+
   return (
     <>
       <SEO 
         title="Wedding Photography Blog | Tips & Insights | Hariel Xavier Photography"
         description="Explore our wedding photography blog for expert tips, venue guides, and inspiration for your NJ wedding day. Learn from a professional Sparta, NJ wedding photographer."
         keywords="wedding photography blog, NJ wedding tips, wedding photography inspiration, Sparta NJ photographer, wedding planning advice, Hariel Xavier Photography"
-        ogImage="https://harielxavierphotography.com/images/stock/blog/blog-art-of-wedding-storytelling.jpg"
+        ogImage="https://harielxavier.com/images/stock/blog/blog-art-of-wedding-storytelling.jpg"
         type="website"
       />
       <Navigation />
@@ -273,7 +337,7 @@ export default function BlogPage() {
             <div className="bg-white rounded-xl overflow-hidden shadow-xl transform transition-transform hover:scale-[1.01]">
               <div className="relative h-96 w-full">
                 <LazyLoadImage
-                  src={sanitizeImageUrl(featuredPost.featuredImage)}
+                  src={sanitizeImageUrl(featuredPost.featuredImage || featuredPost.featured_image || '')}
                   alt={featuredPost.title}
                   effect="blur"
                   className="w-full h-full object-cover"
@@ -328,13 +392,15 @@ export default function BlogPage() {
                 <input
                   type="text"
                   placeholder="Search blog posts..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
                   className="flex-grow px-4 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-black"
                 />
                 <button
                   type="submit"
                   className="bg-black text-white px-4 py-3 rounded-r-lg hover:bg-gray-800 transition-colors"
+                  aria-label="Search blog posts"
+                  title="Search"
                 >
                   <Search size={20} />
                 </button>
@@ -403,6 +469,7 @@ export default function BlogPage() {
                 <button
                   onClick={() => {
                     setSearchQuery('');
+                    setSearchInput('');
                     setSelectedCategory('');
                     setActiveTag(null);
                   }}
@@ -412,19 +479,20 @@ export default function BlogPage() {
                 </button>
               </div>
             ) : (
+              <>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {filteredPosts.map((post) => (
+                {displayedPosts.map((post) => (
                   <div key={post.id} className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
                     <Link to={`/blog/${post.slug}`} className="block">
                       <div className="relative h-56">
                         <LazyLoadImage
-                          src={post.featuredImage}
+                          src={post.featuredImage || post.featured_image || ''}
                           alt={post.title}
                           effect="blur"
                           className="w-full h-full object-cover"
-                          placeholderSrc={post.featuredImage.startsWith('/') 
-                            ? post.featuredImage 
-                            : post.featuredImage}
+                          placeholderSrc={(post.featuredImage || post.featured_image || '').startsWith('/') 
+                            ? (post.featuredImage || post.featured_image) 
+                            : (post.featuredImage || post.featured_image)}
                           wrapperClassName="w-full h-full"
                         />
                         <div className="absolute top-4 left-4">
@@ -468,6 +536,23 @@ export default function BlogPage() {
                   </div>
                 ))}
               </div>
+              
+              {/* Load More Button */}
+              {hasMorePosts && (
+                <div className="flex justify-center mt-12">
+                  <button
+                    onClick={loadMorePosts}
+                    className="px-8 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors flex items-center space-x-2"
+                  >
+                    <span>Load More Posts</span>
+                    <ArrowRight size={16} />
+                  </button>
+                  <p className="ml-4 text-gray-600 self-center text-sm">
+                    Showing {displayedPostsCount} of {filteredPosts.length}
+                  </p>
+                </div>
+              )}
+              </>
             )}
           </div>
 
@@ -499,7 +584,7 @@ export default function BlogPage() {
                   <Link key={post.id} to={`/blog/${post.slug}`} className="flex items-start space-x-3 group">
                     <div className="w-20 h-20 flex-shrink-0">
                       <LazyLoadImage
-                        src={post.featuredImage}
+                        src={post.featuredImage || post.featured_image || ''}
                         alt={post.title}
                         effect="blur"
                         className="w-full h-full object-cover rounded-lg"
@@ -544,18 +629,29 @@ export default function BlogPage() {
               <p className="text-gray-300 mb-4">
                 Get the latest photography tips and exclusive content delivered to your inbox.
               </p>
-              <form className="space-y-3">
+              <form onSubmit={handleNewsletterSubmit} className="space-y-3">
                 <input
                   type="email"
                   placeholder="Your email address"
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 text-white placeholder-gray-400 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/50"
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
+                  disabled={newsletterStatus === 'submitting'}
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 text-white placeholder-gray-400 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 disabled:opacity-50"
+                  required
                 />
                 <button
                   type="submit"
-                  className="w-full bg-white text-black font-medium py-3 rounded-lg hover:bg-gray-200 transition-colors"
+                  disabled={newsletterStatus === 'submitting'}
+                  className="w-full bg-white text-black font-medium py-3 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Subscribe
+                  {newsletterStatus === 'submitting' ? 'Subscribing...' : 'Subscribe'}
                 </button>
+                {newsletterStatus === 'success' && (
+                  <p className="text-green-400 text-sm">✓ Successfully subscribed!</p>
+                )}
+                {newsletterStatus === 'error' && (
+                  <p className="text-red-400 text-sm">✗ Please enter a valid email</p>
+                )}
               </form>
             </div>
 

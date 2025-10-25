@@ -134,9 +134,9 @@ const DynamicSEO: React.FC<DynamicSEOProps> = ({
           "@context": "https://schema.org",
           "@type": "ProfessionalService",
           "name": "Hariel Xavier Photography",
-          "image": "https://harielxavierphotography.com/images/logo.jpg",
+          "image": "https://harielxavier.com/images/logo.jpg",
           "description": seoContent.description,
-          "url": "https://harielxavierphotography.com",
+          "url": "https://harielxavier.com",
           "telephone": "+1-XXX-XXX-XXXX",
           "priceRange": "$2,395-$5,395",
           "serviceType": "Wedding Photography",
@@ -211,13 +211,13 @@ const DynamicSEO: React.FC<DynamicSEOProps> = ({
               "@type": "ListItem",
               "position": 1,
               "name": "Home",
-              "item": "https://harielxavierphotography.com"
+              "item": "https://harielxavier.com"
             },
             {
               "@type": "ListItem", 
               "position": 2,
               "name": page.charAt(0).toUpperCase() + page.slice(1),
-              "item": `https://harielxavierphotography.com/${page}`
+              "item": `https://harielxavier.com/${page}`
             }
           ]
         })}

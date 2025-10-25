@@ -42,19 +42,19 @@ function JudyMikeGalleryPage() {
         <title>Nanina's In the Park Wedding Photography | Judy & Mike | Hariel Xavier Photography</title>
         <meta name="description" content="View this breathtaking wedding at Nanina's In the Park in Belleville, NJ. Professional wedding photography showcasing the elegant venue and beautiful grounds of this premier New Jersey wedding destination." />
         <meta name="keywords" content="Nanina's In the Park, Belleville NJ wedding venue, luxury wedding venue New Jersey, elegant wedding venue, Hariel Xavier Photography, Judy and Mike wedding" />
-        <link rel="canonical" href="https://harielxavierphotography.com/judy-mike" />
+        <link rel="canonical" href="https://harielxavier.com/judy-mike" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Nanina's In the Park Wedding Photography | Judy & Mike" />
         <meta property="og:description" content="View this breathtaking wedding at Nanina's In the Park in Belleville, NJ. Professional wedding photography showcasing the elegant venue and beautiful grounds of this premier New Jersey wedding destination." />
-        <meta property="og:image" content="https://harielxavierphotography.com/MoStuff/Featured Wedding/Judy & Mike's Wedding/jm5.jpg" />
+        <meta property="og:image" content="https://harielxavier.com/MoStuff/Featured Wedding/Judy & Mike's Wedding/jm5.jpg" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Nanina's In the Park Wedding Photography | Judy & Mike" />
         <meta name="twitter:description" content="View this breathtaking wedding at Nanina's In the Park in Belleville, NJ. Professional wedding photography showcasing the elegant venue and beautiful grounds of this premier New Jersey wedding destination." />
-        <meta name="twitter:image" content="https://harielxavierphotography.com/MoStuff/Featured Wedding/Judy & Mike's Wedding/jm5.jpg" />
+        <meta name="twitter:image" content="https://harielxavier.com/MoStuff/Featured Wedding/Judy & Mike's Wedding/jm5.jpg" />
         
         {/* Schema.org structured data */}
         <script type="application/ld+json">
@@ -63,11 +63,11 @@ function JudyMikeGalleryPage() {
             "@type": "ImageGallery",
             "name": "Nanina's In the Park Wedding Photography | Judy & Mike",
             "description": "Professional wedding photography at Nanina's In the Park in Belleville, New Jersey. Featuring the beautiful wedding of Judy and Mike.",
-            "image": "https://harielxavierphotography.com/MoStuff/Featured Wedding/Judy & Mike's Wedding/jm5.jpg",
+            "image": "https://harielxavier.com/MoStuff/Featured Wedding/Judy & Mike's Wedding/jm5.jpg",
             "author": {
               "@type": "Person",
               "name": "Hariel Xavier",
-              "url": "https://harielxavierphotography.com"
+              "url": "https://harielxavier.com"
             },
             "contentLocation": {
               "@type": "Place",
