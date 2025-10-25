@@ -15,17 +15,26 @@ export default defineConfig({
         'nodemailer',
       ],
       output: {
-        manualChunks: {
+        manualChunks: (id) => {
           // Vendor splitting for better caching
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'firebase-vendor': ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/storage'],
-          'supabase-vendor': ['@supabase/supabase-js'],
-          'ui-vendor': ['lucide-react', 'framer-motion'],
-          'admin': [
-            './src/pages/admin/AdminDashboard',
-            './src/pages/admin/NewAdminDashboard',
-            './src/pages/admin/AdminLogin',
-          ],
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+              return 'react-vendor';
+            }
+            if (id.includes('firebase')) {
+              return 'firebase-vendor';
+            }
+            if (id.includes('supabase')) {
+              return 'supabase-vendor';
+            }
+            if (id.includes('lucide-react') || id.includes('framer-motion')) {
+              return 'ui-vendor';
+            }
+          }
+          // Admin pages chunking
+          if (id.includes('src/pages/admin')) {
+            return 'admin';
+          }
         }
       }
     },
