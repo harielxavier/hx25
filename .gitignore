@@ -17,6 +17,7 @@ archive/
 
 # Migration scripts (cleanup)
 *.mjs
+!generate-dynamic-sitemap.mjs
 migrate-*.js
 setup-*.mjs
 test-*.mjs
