@@ -18,6 +18,10 @@ export default defineConfig({
         manualChunks: (id) => {
           // Vendor splitting for better caching
           if (id.includes('node_modules')) {
+            // Keep MUI and emotion together to avoid export issues
+            if (id.includes('@mui') || id.includes('@emotion')) {
+              return 'mui-vendor';
+            }
             if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
               return 'react-vendor';
             }
@@ -27,7 +31,7 @@ export default defineConfig({
             if (id.includes('supabase')) {
               return 'supabase-vendor';
             }
-            if (id.includes('lucide-react') || id.includes('framer-motion')) {
+            if (id.includes('lucide-react') || id.includes('framer-motion') || id.includes('@radix-ui')) {
               return 'ui-vendor';
             }
           }
@@ -50,6 +54,7 @@ export default defineConfig({
     sourcemap: false, // Disable sourcemaps for smaller build
   },
   optimizeDeps: {
+    include: ['@mui/material', '@emotion/react', '@emotion/styled'],
     exclude: ['lucide-react'],
   },
   resolve: {
