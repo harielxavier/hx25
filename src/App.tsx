@@ -109,6 +109,7 @@ const UniversalMediaManager = lazy(() => import('./pages/admin/UniversalMediaMan
 const ViewGalleryPage = lazy(() => import('./pages/admin/ViewGalleryPage'));
 const LeadAnalyticsPage = lazy(() => import('./pages/admin/LeadAnalyticsPage'));
 const MissionControlPage = lazy(() => import('./pages/admin/MissionControlPage'));
+const AITools = lazy(() => import('./pages/admin/AITools'));
 
 // Utilities
 const ImagesPage = lazy(() => import('./pages/ImagesPage'));
@@ -714,6 +715,15 @@ const App: React.FC = () => {
                 <PrivateRoute>
                   <AdminLayout>
                     <BusinessSettings />
+                  </AdminLayout>
+                </PrivateRoute>
+              } />
+
+              {/* AI Tools - Claude Integration */}
+              <Route path="/admin/ai-tools" element={
+                <PrivateRoute>
+                  <AdminLayout>
+                    <AITools />
                   </AdminLayout>
                 </PrivateRoute>
               } />
