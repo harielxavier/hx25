@@ -74,7 +74,7 @@ class ComprehensiveAnalytics {
     await this.startSession();
     
     // Track initial page view
-    this.track PageView();
+    this.trackPageView();
     
     // Setup event listeners
     this.setupScrollTracking();
