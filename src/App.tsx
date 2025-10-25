@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import { useSupabaseAuth as useAuth } from './contexts/SupabaseAuthContext';
 import AnalyticsProvider from './components/AnalyticsProvider';
 import GoogleAnalytics from './components/GoogleAnalytics';
+import AnalyticsTracker from './components/AnalyticsTracker';
 import { initializeAnalytics } from './utils/analytics';
 import ScrollToTop from './components/ScrollToTop';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -69,6 +70,7 @@ const SuperDealLandingPage = lazy(() => import('./pages/SuperDealLandingPage'));
 // Admin - all lazy loaded (huge bundle savings)
 const AdminLayout = lazy(() => import('./components/admin/AdminLayout'));
 const NewAdminDashboard = lazy(() => import('./pages/admin/NewAdminDashboard'));
+const ComprehensiveAnalyticsDashboard = lazy(() => import('./pages/admin/ComprehensiveAnalyticsDashboard'));
 const TrafficAnalytics = lazy(() => import('./pages/admin/TrafficAnalytics'));
 const GalleryManagementHub = lazy(() => import('./pages/admin/GalleryManagementHub'));
 const BlogManager = lazy(() => import('./pages/admin/BlogManager'));
@@ -166,6 +168,7 @@ const App: React.FC = () => {
     >
       <Router>
         <ScrollToTop />
+        <AnalyticsTracker />
         <Suspense fallback={<PageLoader />}>
           <VisitorTracker />
         </Suspense>
@@ -228,8 +231,8 @@ const App: React.FC = () => {
               {/* Dashboard - NEW BEAUTIFUL VERSION */}
               <Route path="/admin/dashboard" element={
                 <PrivateRoute>
-                  <AdminLayout>
-                    <NewAdminDashboard />
+                  <AdminLayout title="Analytics Dashboard">
+                    <ComprehensiveAnalyticsDashboard />
                   </AdminLayout>
                 </PrivateRoute>
               } />
