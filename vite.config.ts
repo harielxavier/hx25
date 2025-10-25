@@ -39,6 +39,10 @@ export default defineConfig({
               return 'charts-vendor';
             }
           }
+          // Keep utils and services together to avoid export issues
+          if (id.includes('src/utils') || id.includes('src/services')) {
+            return 'app-core';
+          }
           // Let Vite handle lazy-loaded pages automatically
           return undefined;
         }
