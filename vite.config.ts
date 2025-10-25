@@ -16,7 +16,7 @@ export default defineConfig({
       ],
       output: {
         manualChunks: (id) => {
-          // Vendor splitting for better caching
+          // Only handle vendor splitting, let lazy loading handle page chunking
           if (id.includes('node_modules')) {
             // Keep MUI and emotion together to avoid export issues
             if (id.includes('@mui') || id.includes('@emotion')) {
@@ -34,11 +34,13 @@ export default defineConfig({
             if (id.includes('lucide-react') || id.includes('framer-motion') || id.includes('@radix-ui')) {
               return 'ui-vendor';
             }
+            // Chart.js and recharts
+            if (id.includes('chart.js') || id.includes('recharts')) {
+              return 'charts-vendor';
+            }
           }
-          // Admin pages chunking
-          if (id.includes('src/pages/admin')) {
-            return 'admin';
-          }
+          // Let Vite handle lazy-loaded pages automatically
+          return undefined;
         }
       }
     },
@@ -54,7 +56,13 @@ export default defineConfig({
     sourcemap: false, // Disable sourcemaps for smaller build
   },
   optimizeDeps: {
-    include: ['@mui/material', '@emotion/react', '@emotion/styled'],
+    include: [
+      '@mui/material',
+      '@emotion/react',
+      '@emotion/styled',
+      'recharts',
+      'chart.js'
+    ],
     exclude: ['lucide-react'],
   },
   resolve: {
