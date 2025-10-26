@@ -161,3 +161,6 @@ fix-website-ftp.sh
 *.p12
 *.pfx
 
+
+# Local Netlify folder
+.netlify
