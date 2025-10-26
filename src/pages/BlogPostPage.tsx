@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Calendar, Clock, ArrowRight, Share2, Facebook, Twitter, Linkedin, Mail, Bookmark, Heart, ChevronLeft } from 'lucide-react';
-// Firebase imports removed - using Supabase
+import { Calendar, Clock, ArrowRight, Bookmark, Heart, ChevronLeft } from 'lucide-react';
+// Using Supabase
 import Navigation from '../components/landing/Navigation';
 import Footer from '../components/landing/Footer';
 import SEO from '../components/SEO';
@@ -9,9 +9,11 @@ import LeadMagnet from '../components/LeadMagnet';
 import Breadcrumbs from '../components/Breadcrumbs';
 import BlogStructuredData from '../components/BlogStructuredData';
 import BlogComments from '../components/BlogComments';
+import ShareButtons from '../components/blog/ShareButtons';
+import RelatedPosts from '../components/blog/RelatedPosts';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import '../styles/blog-content.css';
-import { BlogPost, getPostBySlug, incrementPostViews, getPostsByCategory } from '../services/supabaseBlogService';
+import { BlogPost, getPostBySlug, incrementPostViews } from '../services/supabaseBlogService';
 import { getStockImage } from '../utils/images';
 import { ImageWithFallback } from '../components/ImageWithFallback';
 import imageOptimizationUtils from '../utils/imageOptimizationUtils';
