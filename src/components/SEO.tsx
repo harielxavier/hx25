@@ -7,15 +7,17 @@ export interface SEOProps {
   ogImage?: string;
   keywords?: string;
   type?: 'website' | 'business' | 'article';
+  includeRSS?: boolean;
 }
 
-export default function SEO({ 
-  title, 
-  description, 
+export default function SEO({
+  title,
+  description,
   image = '/MoStuff/black.png',
   ogImage,
   keywords,
-  type = 'website'
+  type = 'website',
+  includeRSS = false
 }: SEOProps) {
   useEffect(() => {
     document.title = title;
@@ -182,6 +184,19 @@ export default function SEO({
     }
     canonical.setAttribute('href', window.location.href);
 
+    // Add RSS feed link if requested
+    if (includeRSS) {
+      let rssLink = document.querySelector('link[type="application/rss+xml"]');
+      if (!rssLink) {
+        rssLink = document.createElement('link');
+        rssLink.setAttribute('rel', 'alternate');
+        rssLink.setAttribute('type', 'application/rss+xml');
+        rssLink.setAttribute('title', 'Hariel Xavier Photography Blog RSS Feed');
+        document.head.appendChild(rssLink);
+      }
+      rssLink.setAttribute('href', `${window.location.origin}/feed.xml`);
+    }
+
     // Cleanup function to remove script when component unmounts
     const cleanup = () => {
       if (script) {
@@ -190,7 +205,7 @@ export default function SEO({
     };
     
     return cleanup;
-  }, [title, description, image, ogImage, keywords, type]);
+  }, [title, description, image, ogImage, keywords, type, includeRSS]);
 
   return null;
 }

@@ -300,12 +300,13 @@ export default function BlogPage() {
 
   return (
     <>
-      <SEO 
+      <SEO
         title="Wedding Photography Blog | Tips & Insights | Hariel Xavier Photography"
         description="Explore our wedding photography blog for expert tips, venue guides, and inspiration for your NJ wedding day. Learn from a professional Sparta, NJ wedding photographer."
         keywords="wedding photography blog, NJ wedding tips, wedding photography inspiration, Sparta NJ photographer, wedding planning advice, Hariel Xavier Photography"
         ogImage="https://harielxavier.com/images/stock/blog/blog-art-of-wedding-storytelling.jpg"
         type="website"
+        includeRSS={true}
       />
       <Navigation />
       

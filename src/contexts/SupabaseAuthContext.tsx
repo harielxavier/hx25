@@ -196,10 +196,13 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
       console.log('✅ Sign out successful');
       setUser(null);
       setSession(null);
-      
-      // Clear any cached data
-      localStorage.clear();
-      
+
+      // Clear auth-specific data only
+      localStorage.removeItem('sb-egoyqdbolmjfngjzllwl-auth-token');
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('isAdmin');
+
       // Redirect to home
       window.location.replace('/');
       

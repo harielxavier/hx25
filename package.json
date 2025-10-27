@@ -12,8 +12,9 @@
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
-    "generate:sitemap": "node generate-dynamic-sitemap.mjs",
-    "prebuild": "npm run generate:sitemap"
+    "generate:sitemap": "node generate-dynamic-sitemap-supabase.mjs",
+    "generate:rss": "node generate-rss-feed.mjs",
+    "prebuild": "npm run generate:sitemap && npm run generate:rss"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.65.0",

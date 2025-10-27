@@ -28,7 +28,7 @@ interface CloudinaryConfig {
 // Default configuration - replace with your Cloudinary account details
 const defaultConfig: CloudinaryConfig = {
   cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dos0qac90',
-  apiKey: import.meta.env.VITE_CLOUDINARY_API_KEY || '732256417531588',
+  apiKey: import.meta.env.VITE_CLOUDINARY_API_KEY,
   uploadPreset: 'hariel-xavier-photography',
   folder: 'hariel-xavier-photography'
 };
