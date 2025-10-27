@@ -19,8 +19,8 @@ export default defineConfig({
           // Simplified chunking strategy for React 19 compatibility
           // Avoid aggressive splitting to prevent circular dependency issues
           if (id.includes('node_modules')) {
-            // Group React ecosystem together to avoid circular deps
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router') || id.includes('scheduler')) {
+            // Group React ecosystem + recharts together (recharts needs React context)
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router') || id.includes('scheduler') || id.includes('recharts')) {
               return 'react-vendor';
             }
             // Group UI libraries with their dependencies
@@ -35,7 +35,7 @@ export default defineConfig({
             if (id.includes('firebase')) {
               return 'firebase-vendor';
             }
-            if (id.includes('chart.js') || id.includes('recharts')) {
+            if (id.includes('chart.js')) {
               return 'charts-vendor';
             }
           }
