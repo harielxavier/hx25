@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, MessageCircle } from 'lucide-react';
+import harielXavierBranding from '../../config/brandingKit';
 
 export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -54,8 +55,8 @@ export default function Navigation() {
             className="transition-colors"
           >
             <img
-              src="/black.png"
-              alt="Hariel Xavier Photography Logo"
+              src={harielXavierBranding.logo.default}
+              alt={`${harielXavierBranding.companyName} Logo`}
               className="h-20 w-auto"
             />
           </Link>

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, MapPin } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import { PLACEHOLDERS } from '../../utils/imageUtils';
+import { getCloudinaryUrl } from '../../utils/cloudinaryUrl';
 import { Timestamp } from 'firebase/firestore';
 
 // Define the FeaturedGallery interface since we're not importing it anymore
@@ -50,7 +51,7 @@ const FeaturedGalleries: React.FC = () => {
             galleryId: 'wedding-gallery-1',
             title: 'Bianca & Jeffrey\'s Wedding',
             description: 'A beautiful wedding celebration at Park Chateau Estate & Gardens',
-            imageUrl: '/MoStuff/Featured Wedding/Bianca & Jeffrey\'s Wedding/The Ceremony/Bianca & Jeff_s Wedding-826.jpg',
+            imageUrl: getCloudinaryUrl('/MoStuff/Featured Wedding/Bianca & Jeffrey\'s Wedding/The Ceremony/Bianca & Jeff_s Wedding-826.jpg'),
             position: 'left',
             linkUrl: '/bianca-jeffrey',
             displayOrder: 1,
@@ -80,7 +81,7 @@ const FeaturedGalleries: React.FC = () => {
             galleryId: 'wedding-gallery-3',
             title: 'Ainsimon & Mina\'s Wedding',
             description: 'A breathtaking celebration at Legacy Castle',
-            imageUrl: '/view/2.jpg',
+            imageUrl: getCloudinaryUrl('/MoStuff/Featured Wedding/Ansimon & Mina\'s Wedding/Annie & Steve Ansimon & Mina Wedding additional-1304_websize.jpg'),
             position: 'right',
             linkUrl: '/ansimon-mina',
             displayOrder: 3,

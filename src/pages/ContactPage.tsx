@@ -34,7 +34,7 @@ const ContactPage: React.FC = () => {
             "mainEntity": {
               "@type": "LocalBusiness",
               "name": "Hariel Xavier Photography",
-              "image": "https://harielxavier.com/logo.svg",
+              "image": "https://harielxavier.com/black.png",
               "telephone": "+1-862-391-4179",
               "email": "Hi@HarielXavier.com",
               "address": {
@@ -66,12 +66,12 @@ const ContactPage: React.FC = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <img 
-                src="/logo.svg" 
-                alt="Hariel Xavier Photography" 
+              <img
+                src="/black.png"
+                alt="Hariel Xavier Photography"
                 className="h-12 w-auto"
                 onError={(e) => {
-                  e.currentTarget.src = 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593382/hariel-xavier-photography/MoStuff/faviconhx.png';
+                  e.currentTarget.src = 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593379/hariel-xavier-photography/MoStuff/black.png';
                 }}
               />
               <div>

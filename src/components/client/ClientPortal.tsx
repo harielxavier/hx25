@@ -204,12 +204,12 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ clientId, job }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
-              <img 
-                src="/logo.svg" 
-                alt="Hariel Xavier Photography" 
+              <img
+                src="/black.png"
+                alt="Hariel Xavier Photography"
                 className="h-8 w-auto"
                 onError={(e) => {
-                  e.currentTarget.src = 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593382/hariel-xavier-photography/MoStuff/faviconhx.png';
+                  e.currentTarget.src = 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593379/hariel-xavier-photography/MoStuff/black.png';
                 }}
               />
               <div>

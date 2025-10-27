@@ -64,10 +64,11 @@ export const harielXavierBranding: BrandingConfig = {
     secondary: '"Lato", sans-serif',     // Example: A clean, readable sans-serif for body text
   },
   logo: {
-    // Replace with actual paths to your logo files in the /public directory
-    default: '/images/logo/hariel-xavier-logo-dark.svg', // Example path
-    light: '/images/logo/hariel-xavier-logo-light.svg', // Example path for dark backgrounds
-    dark: '/images/logo/hariel-xavier-logo-dark.svg',   // Example path for light backgrounds
+    // Using actual logo files in the /public directory
+    default: '/black.png', // Main logo PNG
+    light: '/black.png',   // Using same logo for dark backgrounds
+    dark: '/black.png',    // Using same logo for light backgrounds
+    svg: '/logo.svg',      // SVG version of the logo
     favicon: '/favicon.ico', // Standard favicon path
   },
   companyName: 'Hariel Xavier Photography',

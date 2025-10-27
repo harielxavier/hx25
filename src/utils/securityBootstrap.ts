@@ -58,13 +58,13 @@ function initializeContentSecurityPolicy() {
       // Allow images from self and Cloudinary
       "img-src 'self' https: data: blob:",
       // Define script sources
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://res.cloudinary.com https://*.supabase.co https://js.stripe.com https://cdn.curator.io https://*.curator.io",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://res.cloudinary.com https://*.supabase.co https://js.stripe.com https://cdn.curator.io https://*.curator.io https://maps.googleapis.com",
       // Define style sources
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://res.cloudinary.com",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://res.cloudinary.com https://cdn.curator.io",
       // Define font sources
       "font-src 'self' https://fonts.gstatic.com",
       // Define connect sources for API, Firestore, Supabase, etc.
-      "connect-src 'self' https://www.google-analytics.com https://*.supabase.co https://api.stripe.com https://res.cloudinary.com https://ipapi.co https://*.ingest.us.sentry.io",
+      "connect-src 'self' https://www.google-analytics.com https://*.supabase.co https://api.stripe.com https://res.cloudinary.com https://ipapi.co https://*.ingest.us.sentry.io https://firebase.googleapis.com https://*.firebase.googleapis.com https://firebaseinstallations.googleapis.com https://maps.googleapis.com",
       // Frame sources for embedded content
       "frame-src 'self' https://js.stripe.com https://*.firebaseapp.com https://app.studioninja.co",
       // Object sources
