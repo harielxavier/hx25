@@ -82,9 +82,9 @@ vercel --prod
 
 Once deployed, check:
 
-1. **Main Site:** https://harielxavier.co
-2. **Blog Page:** https://harielxavier.co/blog
-3. **Individual Post:** https://harielxavier.co/blog/top-10-wedding-venues-sparta-nj
+1. **Main Site:** https://harielxavier.com
+2. **Blog Page:** https://harielxavier.com/blog
+3. **Individual Post:** https://harielxavier.com/blog/top-10-wedding-venues-sparta-nj
 
 **What to Test:**
 - [ ] Site loads without errors
@@ -128,7 +128,7 @@ Once deployed, check:
 
 ### This Week
 1. **Submit to Google Search Console**
-   - Add sitemap: https://harielxavier.co/sitemap.xml
+   - Add sitemap: https://harielxavier.com/sitemap.xml
    - Request indexing of new blog posts
 
 2. **Share on Social Media**
@@ -176,7 +176,7 @@ Once deployed, check:
 ## 🎊 Success Indicators
 
 You'll know everything is working when:
-- ✅ Site loads at harielxavier.co
+- ✅ Site loads at harielxavier.com
 - ✅ Blog page shows all 8 posts
 - ✅ Can click and read full blog posts
 - ✅ Social share buttons appear and work

@@ -185,10 +185,10 @@ vercel env ls | grep SUPABASE
 After deployment:
 
 1. **Visit your production site:**
-   https://harielxavier.co
+   https://harielxavier.com
 
 2. **Check the blog:**
-   https://harielxavier.co/blog
+   https://harielxavier.com/blog
 
 3. **Verify all 8 blog posts load:**
    They should all be visible and clickable
@@ -207,7 +207,7 @@ After deployment:
 - [ ] Project linked (`vercel link`)
 - [ ] Required Supabase variables added
 - [ ] Deployed to production (`vercel --prod`)
-- [ ] Site loads at harielxavier.co
+- [ ] Site loads at harielxavier.com
 - [ ] Blog page works (/blog)
 - [ ] Individual blog posts load
 - [ ] Social sharing buttons work
@@ -252,4 +252,4 @@ If you encounter issues:
 
 **Your website is ready to go live! 🚀**
 
-Once you set up these variables and deploy, your professional wedding photography website with blog will be live at https://harielxavier.co
+Once you set up these variables and deploy, your professional wedding photography website with blog will be live at https://harielxavier.com
