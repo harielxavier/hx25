@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FALLBACK_IMAGES } from '../utils/images';
+import { FALLBACK_IMAGES } from '../utils/imageConstants';
 
 type ImageCategory = 'wedding' | 'engagement' | 'portrait' | 'landscape' | 'equipment' | 'avatar' | 'blog';
 

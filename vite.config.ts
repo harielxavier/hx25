@@ -39,6 +39,10 @@ export default defineConfig({
               return 'charts-vendor';
             }
           }
+          // Keep constants in main bundle to avoid export issues
+          if (id.includes('src/utils/imageConstants')) {
+            return undefined; // Let it stay in main bundle
+          }
           // Keep utils and services together to avoid export issues
           if (id.includes('src/utils') || id.includes('src/services')) {
             return 'app-core';
