@@ -81,8 +81,9 @@ export const getStockImage = (category: StockImageCategory, width = 800, height 
   return getUnsplashStockImage(category, width, height);
 };
 
+// Static fallback images - using direct strings to avoid circular dependencies
 export const FALLBACK_IMAGES = {
-  AVATAR: getStockImage('avatar', 150, 150),
-  BLOG_POST: getStockImage('blog', 1200, 800),
-  GALLERY: getStockImage('wedding', 1920, 1080)
+  AVATAR: 'https://source.unsplash.com/random/150x150/?person-silhouette&utm_source=hariel-xavier&utm_medium=referral',
+  BLOG_POST: 'https://source.unsplash.com/random/1200x800/?photography-blog&utm_source=hariel-xavier&utm_medium=referral',
+  GALLERY: '/images/stock/wedding/wedding-1.jpg'
 };
