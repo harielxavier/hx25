@@ -44,7 +44,7 @@ function useFetch<T = any>(
     } finally {
       setLoading(false);
     }
-  }, [url, options]);
+  }, [url, JSON.stringify(options)]);
 
   const refetch = useCallback(async (): Promise<void> => {
     await fetchData();

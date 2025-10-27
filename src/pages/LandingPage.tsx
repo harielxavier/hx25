@@ -82,7 +82,7 @@ export function LandingPage() {
         element.scrollIntoView({ behavior: 'smooth' });
       }
     }
-  }, [location]);
+  }, [location.hash]);
 
   useEffect(() => {
     const fetchLatestBlogs = async () => {
