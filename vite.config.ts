@@ -15,40 +15,7 @@ export default defineConfig({
         'nodemailer',
       ],
       output: {
-        manualChunks: (id) => {
-          // React 19 requires all React-dependent libraries in same bundle
-          // to avoid "Cannot access before initialization" errors
-          if (id.includes('node_modules')) {
-            // Group React ecosystem + all React-dependent UI libraries together
-            if (
-              id.includes('react') ||
-              id.includes('react-dom') ||
-              id.includes('react-router') ||
-              id.includes('scheduler') ||
-              id.includes('recharts') ||
-              id.includes('@mui') ||
-              id.includes('@emotion') ||
-              id.includes('lucide-react') ||
-              id.includes('framer-motion') ||
-              id.includes('@radix-ui')
-            ) {
-              return 'react-vendor';
-            }
-            // Keep Supabase and its dependencies together
-            if (id.includes('supabase') || id.includes('@supabase') || id.includes('postgrest-js') || id.includes('gotrue-js')) {
-              return 'supabase-vendor';
-            }
-            // Other large vendors
-            if (id.includes('firebase')) {
-              return 'firebase-vendor';
-            }
-            if (id.includes('chart.js')) {
-              return 'charts-vendor';
-            }
-          }
-          // Let Vite handle the rest automatically
-          return undefined;
-        }
+        manualChunks: undefined, // Let Vite handle chunking automatically for React 19
       }
     },
     target: 'esnext',
