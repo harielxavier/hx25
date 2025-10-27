@@ -56,21 +56,21 @@ function initializeContentSecurityPolicy() {
       // Define default sources
       "default-src 'self'",
       // Allow images from self and Cloudinary
-      "img-src 'self' https://*.cloudinary.com data: blob:",
+      "img-src 'self' https: data: blob:",
       // Define script sources
-      "script-src 'self' https://www.googletagmanager.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://res.cloudinary.com https://*.supabase.co https://js.stripe.com https://cdn.curator.io https://*.curator.io",
       // Define style sources
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://res.cloudinary.com",
       // Define font sources
       "font-src 'self' https://fonts.gstatic.com",
-      // Define connect sources for API, Firestore, etc.
-      "connect-src 'self' https://*.firebaseio.com https://*.googleapis.com",
+      // Define connect sources for API, Firestore, Supabase, etc.
+      "connect-src 'self' https://www.google-analytics.com https://*.supabase.co https://api.stripe.com https://res.cloudinary.com https://ipapi.co https://*.ingest.us.sentry.io",
       // Frame sources for embedded content
-      "frame-src 'self' https://*.firebaseapp.com",
+      "frame-src 'self' https://js.stripe.com https://*.firebaseapp.com https://app.studioninja.co",
       // Object sources
       "object-src 'none'",
       // Media sources
-      "media-src 'self' https://*.cloudinary.com",
+      "media-src 'self' https://*.cloudinary.com https:",
       // Form action destinations
       "form-action 'self'"
     ].join('; ');
