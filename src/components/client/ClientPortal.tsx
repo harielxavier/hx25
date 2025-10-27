@@ -205,12 +205,9 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ clientId, job }) => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <img
-                src="/black.png"
+                src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593379/hariel-xavier-photography/MoStuff/black.png"
                 alt="Hariel Xavier Photography"
                 className="h-8 w-auto"
-                onError={(e) => {
-                  e.currentTarget.src = 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593379/hariel-xavier-photography/MoStuff/black.png';
-                }}
               />
               <div>
                 <h1 className="text-lg font-semibold text-gray-900">Client Portal</h1>

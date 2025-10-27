@@ -62,7 +62,7 @@ export default function LeadMagnet({ delay = 30000, exitIntent = true }: LeadMag
         id: 'style-guide',
         title: 'What to Wear for Your Engagement Session',
         description: 'Complete style guide for your engagement photoshoot',
-        file_url: '/MoStuff/What+to+wear+on+an+engagement+session+by+Hariel+Xavier+Photography.pdf',
+        file_url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593384/hariel-xavier-photography/MoStuff/whattowear.pdf',
         thumbnail_url: '/images/engagement-style-guide-cover.jpg',
         is_active: true
       });
@@ -73,7 +73,7 @@ export default function LeadMagnet({ delay = 30000, exitIntent = true }: LeadMag
         id: 'style-guide',
         title: 'What to Wear for Your Engagement Session',
         description: 'Complete style guide for your engagement photoshoot',
-        file_url: '/MoStuff/What+to+wear+on+an+engagement+session+by+Hariel+Xavier+Photography.pdf',
+        file_url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593384/hariel-xavier-photography/MoStuff/whattowear.pdf',
         thumbnail_url: '/images/engagement-style-guide-cover.jpg',
         is_active: true
       });

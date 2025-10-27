@@ -567,10 +567,13 @@ export default function BlogPage() {
                 wedding inspiration, and behind-the-scenes insights from our photo sessions.
               </p>
               <div className="flex flex-col items-center">
-                <img 
-                  src="/images/author/hariel.jpg" 
-                  alt="Hariel Xavier" 
+                <img
+                  src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593379/hariel-xavier-photography/MoStuff/portrait.jpg"
+                  alt="Hariel Xavier"
                   className="w-24 h-24 rounded-full object-cover border-2 border-black mb-2"
+                  onError={(e) => {
+                    e.currentTarget.src = 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593379/hariel-xavier-photography/MoStuff/black.png';
+                  }}
                 />
                 <h4 className="font-medium text-sm mt-2">Hariel Xavier</h4>
                 <p className="text-xs text-gray-500">Professional Photographer</p>

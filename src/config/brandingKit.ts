@@ -64,10 +64,10 @@ export const harielXavierBranding: BrandingConfig = {
     secondary: '"Lato", sans-serif',     // Example: A clean, readable sans-serif for body text
   },
   logo: {
-    // Using actual logo files in the /public directory
-    default: '/black.png', // Main logo PNG
-    light: '/black.png',   // Using same logo for dark backgrounds
-    dark: '/black.png',    // Using same logo for light backgrounds
+    // Using Cloudinary-hosted logo files for better performance
+    default: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593379/hariel-xavier-photography/MoStuff/black.png', // Main logo PNG
+    light: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593379/hariel-xavier-photography/MoStuff/black.png',   // Using same logo for dark backgrounds
+    dark: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593379/hariel-xavier-photography/MoStuff/black.png',    // Using same logo for light backgrounds
     svg: '/logo.svg',      // SVG version of the logo
     favicon: '/favicon.ico', // Standard favicon path
   },
