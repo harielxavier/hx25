@@ -16,16 +16,23 @@ export default defineConfig({
       ],
       output: {
         manualChunks: (id) => {
-          // Simplified chunking strategy for React 19 compatibility
-          // Avoid aggressive splitting to prevent circular dependency issues
+          // React 19 requires all React-dependent libraries in same bundle
+          // to avoid "Cannot access before initialization" errors
           if (id.includes('node_modules')) {
-            // Group React ecosystem + recharts together (recharts needs React context)
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router') || id.includes('scheduler') || id.includes('recharts')) {
+            // Group React ecosystem + all React-dependent UI libraries together
+            if (
+              id.includes('react') ||
+              id.includes('react-dom') ||
+              id.includes('react-router') ||
+              id.includes('scheduler') ||
+              id.includes('recharts') ||
+              id.includes('@mui') ||
+              id.includes('@emotion') ||
+              id.includes('lucide-react') ||
+              id.includes('framer-motion') ||
+              id.includes('@radix-ui')
+            ) {
               return 'react-vendor';
-            }
-            // Group UI libraries with their dependencies
-            if (id.includes('@mui') || id.includes('@emotion') || id.includes('lucide-react') || id.includes('framer-motion') || id.includes('@radix-ui')) {
-              return 'ui-vendor';
             }
             // Keep Supabase and its dependencies together
             if (id.includes('supabase') || id.includes('@supabase') || id.includes('postgrest-js') || id.includes('gotrue-js')) {
