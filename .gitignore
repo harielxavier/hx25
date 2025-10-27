@@ -164,3 +164,4 @@ fix-website-ftp.sh
 
 # Local Netlify folder
 .netlify
+.vercel
