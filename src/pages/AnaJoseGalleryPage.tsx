@@ -155,7 +155,7 @@ function AnaJoseGalleryPage() {
                 </div>
                 <div className="rounded-lg overflow-hidden shadow-xl">
                   <img 
-                    src="/MoStuff/Featured Wedding/Anna & Jose's Wedding/aj-238.jpg" 
+                    src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593083/hariel-xavier-photography/MoStuff/Featured_Wedding/Anna_and_Joses_Wedding/aj-238.jpg" 
                     alt="The Meadow Wood in Randolph, NJ - Elegant Wedding Venue" 
                     className="w-full h-auto"
                   />

@@ -33,9 +33,9 @@ const PhotographyStyleSlider: React.FC = () => {
 
   // Specific slider images
   const sliderImages = {
-    documentary: '/MoStuff/style-slider/LeftSlider.jpg',
-    guided: '/MoStuff/style-slider/MiddleSlider.jpg',
-    editorial: '/MoStuff/style-slider/RightSlider.jpg'
+    documentary: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593385/hariel-xavier-photography/MoStuff/style-slider/LeftSlider.jpg',
+    guided: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593385/hariel-xavier-photography/MoStuff/style-slider/MiddleSlider.jpg',
+    editorial: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593384/hariel-xavier-photography/MoStuff/style-slider/RightSlider.jpg'
   };
 
   // Photography styles with detailed descriptions

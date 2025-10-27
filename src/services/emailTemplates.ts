@@ -98,13 +98,13 @@ export const createThankYouEmailTemplate = (
                         <table border="0" cellpadding="0" cellspacing="0" width="100%">
                           <tr>
                             <td width="33.33%" style="padding: 0 5px;">
-                              <img src="/MoStuff/Featured Wedding/Ansimon & Mina's Wedding/Annie & Steve Ansimon & Mina Wedding additional-1028_websize.jpg" alt="Wedding Photography" width="100%" style="display: block; width: 100%; border-radius: 4px;">
+                              <img src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593097/hariel-xavier-photography/MoStuff/Featured_Wedding/Ansimon_and_Minas_Wedding/Annie_and_Steve_Ansimon_and_Mina_Wedding_additional-1028_websize.jpg" alt="Wedding Photography" width="100%" style="display: block; width: 100%; border-radius: 4px;">
                             </td>
                             <td width="33.33%" style="padding: 0 5px;">
-                              <img src="/MoStuff/Featured Wedding/Ansimon & Mina's Wedding/Annie & Steve Ansimon & Mina Wedding additional-1069_websize.jpg" alt="Wedding Photography" width="100%" style="display: block; width: 100%; border-radius: 4px;">
+                              <img src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593099/hariel-xavier-photography/MoStuff/Featured_Wedding/Ansimon_and_Minas_Wedding/Annie_and_Steve_Ansimon_and_Mina_Wedding_additional-1069_websize.jpg" alt="Wedding Photography" width="100%" style="display: block; width: 100%; border-radius: 4px;">
                             </td>
                             <td width="33.33%" style="padding: 0 5px;">
-                              <img src="/MoStuff/Featured Wedding/Ansimon & Mina's Wedding/Annie & Steve Ansimon & Mina Wedding additional-1156_websize.jpg" alt="Wedding Photography" width="100%" style="display: block; width: 100%; border-radius: 4px;">
+                              <img src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593099/hariel-xavier-photography/MoStuff/Featured_Wedding/Ansimon_and_Minas_Wedding/Annie_and_Steve_Ansimon_and_Mina_Wedding_additional-1156_websize.jpg" alt="Wedding Photography" width="100%" style="display: block; width: 100%; border-radius: 4px;">
                             </td>
                           </tr>
                         </table>
@@ -155,7 +155,7 @@ export const createThankYouEmailTemplate = (
                   <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 20px;">
                     <tr>
                       <td width="80" style="vertical-align: top;">
-                        <img src="/MoStuff/portrait.jpg" alt="Hariel Xavier" width="70" style="display: block; border-radius: 50%;">
+                        <img src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593385/hariel-xavier-photography/MoStuff/portrait.jpg" alt="Hariel Xavier" width="70" style="display: block; border-radius: 50%;">
                       </td>
                       <td style="vertical-align: middle;">
                         <p style="margin: 0 0 5px; font-size: 18px; font-weight: 600; color: #333; font-family: Georgia, serif;">

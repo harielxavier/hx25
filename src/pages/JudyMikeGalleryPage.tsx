@@ -156,7 +156,7 @@ function JudyMikeGalleryPage() {
                 </div>
                 <div className="rounded-lg overflow-hidden shadow-xl">
                   <img 
-                    src="/MoStuff/Featured Wedding/Judy & Mike's Wedding/jm20.jpg" 
+                    src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593168/hariel-xavier-photography/MoStuff/Featured_Wedding/Judy_and_Mikes_Wedding/jm20.jpg" 
                     alt="Nanina's In the Park in Belleville, NJ - Luxury Wedding Venue" 
                     className="w-full h-auto"
                   />

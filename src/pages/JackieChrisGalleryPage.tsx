@@ -15,7 +15,7 @@ const jackieChrisGallery = {
   description: 'A breathtaking celebration of love at The Inn at Millrace Pond in Hope, NJ',
   venue: 'The Inn at Millrace Pond',
   location: 'Hope, New Jersey',
-  coverImage: '/MoStuff/Featured Wedding/Jackie & Chriss Wedding /jmt (44 of 61).jpg'
+  coverImage: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593156/hariel-xavier-photography/MoStuff/Featured_Wedding/Jackie_and_Chriss_Wedding_/jmt__44_of_61_.jpg'
 };
 
 // Gallery images
@@ -91,7 +91,7 @@ function JackieChrisGalleryPage() {
         {/* Hero Image */}
         <div className="absolute inset-0">
           <img 
-            src="/MoStuff/Featured Wedding/Jackie & Chriss Wedding /jmt (44 of 61).jpg"
+            src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593156/hariel-xavier-photography/MoStuff/Featured_Wedding/Jackie_and_Chriss_Wedding_/jmt__44_of_61_.jpg"
             alt="Jackie & Chris Wedding at The Inn at Millrace Pond" 
             className="w-full h-full object-cover"
           />
@@ -194,7 +194,7 @@ function JackieChrisGalleryPage() {
               <div className="space-y-4">
                 <div className="rounded-lg overflow-hidden shadow-xl">
                   <img 
-                    src="/MoStuff/Featured Wedding/Jackie & Chriss Wedding /jmt (51 of 61).jpg" 
+                    src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593160/hariel-xavier-photography/MoStuff/Featured_Wedding/Jackie_and_Chriss_Wedding_/jmt__51_of_61_.jpg" 
                     alt="The Inn at Millrace Pond Wedding Venue - Historic Stone Building" 
                     className="w-full h-auto"
                   />

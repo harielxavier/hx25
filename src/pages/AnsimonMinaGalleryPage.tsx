@@ -240,7 +240,7 @@ function AnsimonMinaGalleryPage() {
               <div className="space-y-4">
                 <div className="rounded-lg overflow-hidden shadow-xl">
                   <img 
-                    src="/MoStuff/Featured Wedding/Ansimon & Mina's Wedding/Annie & Steve Ansimon & Mina Wedding additional-1060_websize.jpg" 
+                    src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593099/hariel-xavier-photography/MoStuff/Featured_Wedding/Ansimon_and_Minas_Wedding/Annie_and_Steve_Ansimon_and_Mina_Wedding_additional-1060_websize.jpg" 
                     alt="The Legacy Castle Wedding Venue - Grand Ballroom with Crystal Chandeliers" 
                     className="w-full h-auto"
                   />

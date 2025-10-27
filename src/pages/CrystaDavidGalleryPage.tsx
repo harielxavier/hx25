@@ -16,7 +16,7 @@ const crystaDavidGallery = {
   description: 'A fairytale wedding at the historic Skylands Manor in Ringwood, New Jersey',
   venue: 'Skylands Manor',
   location: 'Ringwood, New Jersey',
-  coverImage: '/MoStuff/Portfolio/crystadavid/cd14.jpg'
+  coverImage: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593371/hariel-xavier-photography/MoStuff/Portfolio/crystadavid/cd14.jpg'
 };
 
 // Gallery images - filter out the featured thumbnail
@@ -193,7 +193,7 @@ function CrystaDavidGalleryPage() {
             </div>
             <div className="rounded-lg overflow-hidden shadow-xl">
               <img 
-                src="/MoStuff/Portfolio/crystadavid/cd49.jpg" 
+                src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593378/hariel-xavier-photography/MoStuff/Portfolio/crystadavid/cd49.jpg" 
                 alt="Skylands Manor in Ringwood, NJ - Historic Castle Wedding Venue with Botanical Gardens" 
                 className="w-full h-auto"
               />

@@ -313,7 +313,7 @@ export default function PicatinnyClubPage() {
         <section className="relative bg-black text-white py-20">
           <div className="absolute inset-0 opacity-40">
             <img 
-              src="/MoStuff/club/pic5.jpg" 
+              src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593383/hariel-xavier-photography/MoStuff/club/pic5.jpg" 
               alt="Picatinny Club Wedding" 
               className="w-full h-full object-cover"
             />
@@ -361,7 +361,7 @@ export default function PicatinnyClubPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className={`transition-all duration-1000 ${isHistorySectionVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
                 <img 
-                  src="/MoStuff/club/pic5.jpg" 
+                  src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593383/hariel-xavier-photography/MoStuff/club/pic5.jpg" 
                   alt="Wedding Ceremony at Picatinny Club" 
                   className="w-full h-auto rounded-lg shadow-xl"
                 />
@@ -407,7 +407,7 @@ export default function PicatinnyClubPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition-all duration-300">
                 <img 
-                  src="/MoStuff/club/pic8.jpg" 
+                  src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593382/hariel-xavier-photography/MoStuff/club/pic8.jpg" 
                   alt="Picatinny Club Grounds" 
                   className="w-full h-64 object-cover mb-4 rounded"
                 />
@@ -424,7 +424,7 @@ export default function PicatinnyClubPage() {
               
               <div className="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition-all duration-300">
                 <img 
-                  src="/MoStuff/club/pic11.jpg" 
+                  src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593382/hariel-xavier-photography/MoStuff/club/pic11.jpg" 
                   alt="Picatinny Club Ballroom" 
                   className="w-full h-64 object-cover mb-4 rounded"
                 />
@@ -441,7 +441,7 @@ export default function PicatinnyClubPage() {
               
               <div className="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition-all duration-300">
                 <img 
-                  src="/MoStuff/club/pic10.jpg" 
+                  src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593383/hariel-xavier-photography/MoStuff/club/pic10.jpg" 
                   alt="Picatinny Club Lighting" 
                   className="w-full h-64 object-cover mb-4 rounded"
                 />

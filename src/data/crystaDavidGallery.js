@@ -329,7 +329,7 @@ export const crystaDavidImages = [
   },
   {
     id: 'cd53',
-    src: '/MoStuff/Portfolio/crystadavid/cd53.jpg',
+    src: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593378/hariel-xavier-photography/MoStuff/Portfolio/crystadavid/cd53.jpg',
     alt: 'Crysta & David - Skyline Manor Wedding',
     width: 1200,
     height: 800,
@@ -356,7 +356,7 @@ export const crystaDavidImages = [
   },
   {
     id: 'cd58',
-    src: '/MoStuff/Portfolio/crystadavid/cd58.jpg',
+    src: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593377/hariel-xavier-photography/MoStuff/Portfolio/crystadavid/cd58.jpg',
     alt: 'Crysta & David - Skyline Manor Wedding',
     width: 1200,
     height: 800,

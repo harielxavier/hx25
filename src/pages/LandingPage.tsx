@@ -17,8 +17,8 @@ import '../styles/lens-flare.css';
 import '../styles/animated-dots.css';
 import { getAllPosts } from '../services/supabaseBlogService';
 
-const HeroPageUrl = '/MoStuff/LandingPage/HeroPage.jpg';
-const PortraitUrl = '/MoStuff/portrait.jpg';
+const HeroPageUrl = 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593258/hariel-xavier-photography/MoStuff/LandingPage/HeroPage.jpg';
+const PortraitUrl = 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593385/hariel-xavier-photography/MoStuff/portrait.jpg';
 
 export function LandingPage() {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -197,7 +197,7 @@ export function LandingPage() {
         'thumbnailUrl': 'https://harielxavier.com/MoStuff/images/morganvideocover.jpg',
         'uploadDate': '2024-06-15',
         'duration': 'PT5M30S',
-        'contentUrl': 'https://harielxavier.com/MoStuff/images/Morgan & Michael\'s Wedding.mp4',
+        'contentUrl': 'https://storage.googleapis.com/harielxavier-videos/Morgan%20%26%20Michael%27s%20Wedding.mp4',
         'embedUrl': 'https://harielxavier.com',
         'publisher': {
           '@type': 'Organization',
@@ -259,7 +259,7 @@ export function LandingPage() {
         {/* Static background image */}
         <div
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${HeroPageUrl})` }} // HeroPageUrl is '/MoStuff/LandingPage/HeroPage.jpg'
+          style={{ backgroundImage: `url(${HeroPageUrl})` }} // HeroPageUrl is 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593258/hariel-xavier-photography/MoStuff/LandingPage/HeroPage.jpg'
         />
         
         <div className="absolute inset-0 bg-black bg-opacity-20" data-component-name="LandingPage" aria-hidden="true" />
@@ -393,7 +393,7 @@ export function LandingPage() {
               <div className="md:w-2/5 bg-black text-white flex flex-col relative group">
                 <div className="relative overflow-hidden h-full">
                   <img 
-                    src="/MoStuff/club/pic8.jpg" 
+                    src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593382/hariel-xavier-photography/MoStuff/club/pic8.jpg" 
                     alt="Elegant outdoor wedding ceremony at Picatinny Club, Sparta NJ - Preferred wedding photographer Hariel Xavier" 
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                     loading="lazy"
@@ -494,8 +494,8 @@ export function LandingPage() {
               <div className="relative">
                 <div className="relative aspect-video rounded-lg overflow-hidden group bg-black">
                   <video 
-                    src="/MoStuff/images/Morgan & Michael's Wedding.mp4"
-                    poster="/MoStuff/images/morganvideocover.jpg"
+                    src="https://storage.googleapis.com/harielxavier-videos/Morgan%20%26%20Michael%27s%20Wedding.mp4"
+                    poster="https://res.cloudinary.com/dos0qac90/image/upload/v1761593388/hariel-xavier-photography/MoStuff/images/morganvideocover.jpg"
                     className="w-full h-full object-cover"
                     controls
                     preload="auto"
@@ -567,7 +567,7 @@ export function LandingPage() {
             <div className="order-1 md:order-2 mb-8 md:mb-0">
               <div className="relative">
                 <img
-                  src="/MoStuff/WeddingGuide.png"
+                  src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593377/hariel-xavier-photography/MoStuff/WeddingGuide.png"
                   alt="Wedding Photography Guide"
                   className="w-full aspect-[4/5] object-cover shadow-xl"
                   data-component-name="LandingPage"
@@ -853,7 +853,7 @@ export function LandingPage() {
             <div className="w-full md:w-1/2 relative">
               <div className="aspect-[3/4] bg-white rounded-lg shadow-xl overflow-hidden relative">
                 <img 
-                  src="/MoStuff/whattowear.png" 
+                  src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593384/hariel-xavier-photography/MoStuff/whattowear.png" 
                   alt="Free engagement photo style guide - What to wear for engagement photos in NJ by Hariel Xavier Photography"
                   className="w-full h-full object-cover"
                   data-component-name="LandingPage"

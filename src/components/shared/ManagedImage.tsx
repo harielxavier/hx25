@@ -88,7 +88,7 @@ const ManagedImage: React.FC<ManagedImageProps> = ({
   if (error) {
     console.error(error);
     // Render placeholder on error, with a specific fallback for logo
-    const fallbackSrc = identifier === 'common.header.logo' ? '/MoStuff/faviconhx.png' : getPlaceholderImage(placeholderCategory);
+    const fallbackSrc = identifier === 'common.header.logo' ? 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593382/hariel-xavier-photography/MoStuff/faviconhx.png' : getPlaceholderImage(placeholderCategory);
     return (
       <img
         src={fallbackSrc}

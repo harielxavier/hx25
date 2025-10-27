@@ -132,7 +132,7 @@ const BehindTheScenesVideos: React.FC<BehindTheScenesVideosProps> = ({ className
               data-component-name="AboutPage"
               onError={() => handleVideoError(index)}
               onLoadedData={handleVideoLoaded}
-              poster="/MoStuff/LandingPage/HeroPage.jpg" // Add a poster image to show before video loads
+              poster="https://res.cloudinary.com/dos0qac90/image/upload/v1761593258/hariel-xavier-photography/MoStuff/LandingPage/HeroPage.jpg" // Add a poster image to show before video loads
             />
             
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-70"></div>

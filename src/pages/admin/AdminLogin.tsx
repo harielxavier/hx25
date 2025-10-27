@@ -157,14 +157,9 @@ export default function AdminLogin() {
       <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-2xl w-full max-w-md border border-gray-200 dark:border-gray-700">
         <div className="flex flex-col items-center justify-center mb-8">
           <img 
-            src="/MoStuff/black.png" 
+            src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593379/hariel-xavier-photography/MoStuff/black.png" 
             alt="Hariel Xavier Photography" 
-            className="h-20 w-auto mb-2 dark:hidden"
-          />
-          <img 
-            src="/MoStuff/white.png" 
-            alt="Hariel Xavier Photography" 
-            className="h-20 w-auto mb-2 hidden dark:block"
+            className="h-20 w-auto mb-2"
           />
           <div className="h-0.5 w-16 bg-gradient-to-r from-purple-500 to-pink-500 mt-2"></div>
         </div>

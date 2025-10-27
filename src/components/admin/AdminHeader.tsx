@@ -182,7 +182,7 @@ export default function AdminHeader({ title }: AdminHeaderProps) {
           <div className="flex items-center gap-3 pl-3 border-l border-gray-200">
             <div className="w-8 h-8 bg-gray-200 rounded-full overflow-hidden">
               <img 
-                src={user?.user_metadata?.avatar_url || "/MoStuff/black.png"} 
+                src={user?.user_metadata?.avatar_url || "https://res.cloudinary.com/dos0qac90/image/upload/v1761593379/hariel-xavier-photography/MoStuff/black.png"} 
                 alt={user?.email || "Admin"} 
                 className="w-full h-full object-cover" 
               />

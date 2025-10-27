@@ -55,7 +55,15 @@ async function uploadToCloudinary(localPath) {
     const relativePath = relative(SOURCE_DIR, localPath);
 
     // Create Cloudinary public_id (path without extension)
-    const publicId = `${CLOUDINARY_FOLDER}/${relativePath.replace(/\.[^/.]+$/, '')}`;
+    // Replace special characters that Cloudinary doesn't allow
+    const cleanPath = relativePath
+      .replace(/&/g, 'and')           // Replace & with 'and'
+      .replace(/'/g, '')              // Remove apostrophes
+      .replace(/[^\w\s\-./]/g, '_')  // Replace other special chars with underscore
+      .replace(/\s+/g, '_')          // Replace spaces with underscore
+      .replace(/\.[^/.]+$/, '');     // Remove extension
+
+    const publicId = `${CLOUDINARY_FOLDER}/${cleanPath}`;
 
     console.log(`Uploading: ${relativePath}...`);
 
@@ -91,7 +99,7 @@ async function uploadAllImages() {
   let failed = 0;
 
   // Upload in batches to respect API rate limits
-  const BATCH_SIZE = 10;
+  const BATCH_SIZE = 50; // Increased for faster upload
 
   for (let i = 0; i < imageFiles.length; i += BATCH_SIZE) {
     const batch = imageFiles.slice(i, i + BATCH_SIZE);
@@ -108,9 +116,9 @@ async function uploadAllImages() {
     // Progress update
     console.log(`\n📊 Progress: ${uploaded} uploaded, ${failed} failed, ${imageFiles.length - (uploaded + failed)} remaining`);
 
-    // Rate limiting delay (Cloudinary free tier: ~1000 requests/hour)
+    // Small delay to avoid overwhelming the API
     if (i + BATCH_SIZE < imageFiles.length) {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay between batches
+      await new Promise(resolve => setTimeout(resolve, 500)); // 0.5 second delay
     }
   }
 

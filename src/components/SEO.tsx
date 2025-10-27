@@ -13,7 +13,7 @@ export interface SEOProps {
 export default function SEO({
   title,
   description,
-  image = '/MoStuff/black.png',
+  image = 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593379/hariel-xavier-photography/MoStuff/black.png',
   ogImage,
   keywords,
   type = 'website',
@@ -148,7 +148,7 @@ export default function SEO({
           "name": "Hariel Xavier Photography",
           "logo": {
             "@type": "ImageObject",
-            "url": "/MoStuff/black.png"
+            "url": "https://res.cloudinary.com/dos0qac90/image/upload/v1761593379/hariel-xavier-photography/MoStuff/black.png"
           }
         },
         "mainEntityOfPage": {

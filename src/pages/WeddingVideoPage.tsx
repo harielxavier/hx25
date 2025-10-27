@@ -18,7 +18,8 @@ const WeddingVideoPage: React.FC = () => {
   const [currentVideoSource, setCurrentVideoSource] = useState(videoSources[0]);
   const [videoError, setVideoError] = useState(false);
   
-  const posterImage = '/MoStuff/morgan_michael_poster.jpg';
+  // Use the actual existing morganvideocover.jpg from images folder
+  const posterImage = 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593388/hariel-xavier-photography/MoStuff/images/morganvideocover.jpg';
 
   // Fallback poster in case the main one doesn't exist
   const fallbackPoster = 'https://images.unsplash.com/photo-1583939411023-14606be1c8b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80';

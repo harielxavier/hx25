@@ -2,7 +2,7 @@
 export const karniZilvinasImages = [
   {
     id: 'karni-zilvinas-1',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (1).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593170/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__1_.jpg',
     width: 1200,
     height: 800,
     alt: 'Karni & Zilvinas\'s Wedding at The Venetian',
@@ -10,7 +10,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-2',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (2).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593170/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__2_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom portrait at The Venetian',
@@ -18,7 +18,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-3',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (3).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593175/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__3_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding details at The Venetian',
@@ -26,7 +26,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-4',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (4).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593177/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__4_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom at The Venetian',
@@ -34,7 +34,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-5',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (5).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593180/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__5_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding ceremony at The Venetian',
@@ -42,7 +42,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-6',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (6).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593180/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__6_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom first dance',
@@ -50,7 +50,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-7',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (7).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593180/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__7_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding reception moment',
@@ -58,7 +58,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-8',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (8).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593180/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__8_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding reception at The Venetian',
@@ -66,7 +66,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-9',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (9).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593180/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__9_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding party portrait',
@@ -74,7 +74,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-10',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (10).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593170/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__10_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom outdoor portrait',
@@ -82,7 +82,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-11',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (11).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593171/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__11_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding reception details',
@@ -90,7 +90,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-12',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (12).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593170/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__12_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom sunset portrait',
@@ -98,7 +98,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-13',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (13).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593170/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__13_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding cake cutting',
@@ -114,7 +114,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-15',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (15).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593170/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__15_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom evening portrait',
@@ -122,7 +122,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-16',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (16).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593170/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__16_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom romantic portrait',
@@ -130,7 +130,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-17',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (17).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593170/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__17_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding venue exterior',
@@ -154,7 +154,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-20',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (20).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593173/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__20_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding reception entertainment',
@@ -162,7 +162,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-21',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (21).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593173/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__21_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom exit',
@@ -170,7 +170,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-22',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (22).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593173/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__22_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding venue ballroom',
@@ -178,7 +178,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-23',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (23).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593173/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__23_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom garden portrait',
@@ -186,7 +186,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-24',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (24).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593173/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__24_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding reception decor',
@@ -194,7 +194,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-25',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (25).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593173/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__25_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom romantic dance',
@@ -202,7 +202,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-26',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (26).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593173/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__26_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding reception celebration',
@@ -210,7 +210,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-27',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (27).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593173/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__27_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom final portrait',
@@ -218,7 +218,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-28',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (28).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593173/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__28_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding ceremony details',
@@ -226,7 +226,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-29',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (29).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593173/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__29_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom portrait',
@@ -234,7 +234,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-30',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (30).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593176/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__30_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding party group photo',
@@ -242,7 +242,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-31',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (31).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593175/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__31_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom outdoor portrait',
@@ -250,7 +250,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-32',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (32).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593175/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__32_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding reception moment',
@@ -258,7 +258,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-33',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (33).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593175/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__33_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom portrait',
@@ -266,7 +266,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-34',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (34).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593175/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__34_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding ceremony moment',
@@ -274,7 +274,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-35',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (35).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593175/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__35_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom portrait',
@@ -282,7 +282,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-36',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (36).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593176/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__36_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding reception details',
@@ -290,7 +290,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-37',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (37).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593175/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__37_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom portrait',
@@ -298,7 +298,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-38',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (38).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593175/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__38_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding venue exterior',
@@ -306,7 +306,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-39',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (39).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593177/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__39_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom portrait',
@@ -314,7 +314,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-40',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (40).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593177/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__40_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding ceremony moment',
@@ -322,7 +322,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-41',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (41).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593178/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__41_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom portrait',
@@ -330,7 +330,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-42',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (42).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593177/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__42_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding reception details',
@@ -338,7 +338,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-43',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (43).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593177/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__43_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom portrait',
@@ -346,7 +346,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-44',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (44).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593177/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__44_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding venue details',
@@ -354,7 +354,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-45',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (45).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593178/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__45_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom portrait',
@@ -362,7 +362,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-46',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (46).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593178/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__46_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding ceremony moment',
@@ -370,7 +370,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-47',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (47).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593177/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__47_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom portrait',
@@ -378,7 +378,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-48',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (48).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593180/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__48_.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding reception details',
@@ -386,7 +386,7 @@ export const karniZilvinasImages = [
   },
   {
     id: 'karni-zilvinas-49',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (49).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593179/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__49_.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom portrait',
@@ -395,7 +395,7 @@ export const karniZilvinasImages = [
   // Featured image (used as cover)
   {
     id: 'karni-zilvinas-featured',
-    url: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (1).jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593170/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__1_.jpg',
     width: 1200,
     height: 800,
     alt: 'Karni & Zilvinas\'s Wedding at The Venetian in Garfield, NJ',

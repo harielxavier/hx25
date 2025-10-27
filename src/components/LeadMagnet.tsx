@@ -123,7 +123,7 @@ export default function LeadMagnet({ delay = 30000, exitIntent = true }: LeadMag
           {/* Image Section - PDF Cover */}
           <div className="w-full md:w-1/2 h-64 md:h-auto relative">
             <img
-              src="/MoStuff/whattowear.png" 
+              src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593384/hariel-xavier-photography/MoStuff/whattowear.png" 
               alt="What to Wear for Your Engagement Session - Style Guide Cover"
               className="w-full h-full object-cover"
               onError={(e) => {

@@ -99,7 +99,7 @@ const DownloadCenter: React.FC<DownloadCenterProps> = ({ clientId, job }) => {
         type: 'video',
         category: 'engagement',
         url: '/downloads/engagement-video.mp4',
-        thumbnailUrl: '/MoStuff/amanda/hero.jpg',
+        thumbnailUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/hero.jpg',
         size: 157286400, // 150MB
         uploadedAt: new Date('2024-03-05'),
         downloadCount: 2,

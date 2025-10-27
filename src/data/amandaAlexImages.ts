@@ -10,7 +10,7 @@ export const amandaAlexImages = [
   },
   {
     id: 'amanda-alex-2',
-    url: '/MoStuff/amanda/ch15.jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch15.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom portrait at The Mansion on Main Street',
@@ -34,7 +34,7 @@ export const amandaAlexImages = [
   },
   {
     id: 'amanda-alex-5',
-    url: '/MoStuff/amanda/ch3.jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch3.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding ceremony at The Mansion on Main Street',
@@ -58,7 +58,7 @@ export const amandaAlexImages = [
   },
   {
     id: 'amanda-alex-8',
-    url: '/MoStuff/amanda/ch10.jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch10.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding reception at The Mansion on Main Street',
@@ -82,7 +82,7 @@ export const amandaAlexImages = [
   },
   {
     id: 'amanda-alex-11',
-    url: '/MoStuff/amanda/ch7.jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch7.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding reception details',
@@ -106,7 +106,7 @@ export const amandaAlexImages = [
   },
   {
     id: 'amanda-alex-14',
-    url: '/MoStuff/amanda/ch1.jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch1.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding reception dancing',
@@ -130,7 +130,7 @@ export const amandaAlexImages = [
   },
   {
     id: 'amanda-alex-17',
-    url: '/MoStuff/amanda/ch16.jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch16.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom candid moment',
@@ -154,7 +154,7 @@ export const amandaAlexImages = [
   },
   {
     id: 'amanda-alex-20',
-    url: '/MoStuff/amanda/ch5.jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch5.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding venue decor',
@@ -178,7 +178,7 @@ export const amandaAlexImages = [
   },
   {
     id: 'amanda-alex-23',
-    url: '/MoStuff/amanda/ch2.jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch2.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom portrait',
@@ -202,7 +202,7 @@ export const amandaAlexImages = [
   },
   {
     id: 'amanda-alex-26',
-    url: '/MoStuff/amanda/ch14.jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch14.jpg',
     width: 1200,
     height: 800,
     alt: 'Bride and groom romantic shot',
@@ -226,7 +226,7 @@ export const amandaAlexImages = [
   },
   {
     id: 'amanda-alex-29',
-    url: '/MoStuff/amanda/ch9.jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch9.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding detail close-up',
@@ -250,7 +250,7 @@ export const amandaAlexImages = [
   },
   {
     id: 'amanda-alex-32',
-    url: '/MoStuff/amanda/ch11.jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593381/hariel-xavier-photography/MoStuff/amanda/ch11.jpg',
     width: 1200,
     height: 800,
     alt: 'Wedding reception atmosphere',
@@ -315,7 +315,7 @@ export const amandaAlexImages = [
   // Featured image (used as cover)
   {
     id: 'amanda-alex-featured',
-    url: '/MoStuff/amanda/thumb.jpg',
+    url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/thumb.jpg',
     width: 1200,
     height: 800,
     alt: 'Amanda & Alex\'s Wedding at The Mansion on Main Street, Voorhees Township, NJ',

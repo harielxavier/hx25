@@ -71,7 +71,7 @@ const ContactPage: React.FC = () => {
                 alt="Hariel Xavier Photography" 
                 className="h-12 w-auto"
                 onError={(e) => {
-                  e.currentTarget.src = '/MoStuff/faviconhx.png';
+                  e.currentTarget.src = 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593382/hariel-xavier-photography/MoStuff/faviconhx.png';
                 }}
               />
               <div>

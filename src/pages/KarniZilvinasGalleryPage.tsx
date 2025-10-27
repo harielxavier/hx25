@@ -15,7 +15,7 @@ const karniZilvinasGallery = {
   description: 'A luxurious wedding celebration at The Venetian in Garfield, New Jersey',
   venue: 'The Venetian',
   location: 'Garfield, New Jersey',
-  coverImage: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (1).jpg'
+  coverImage: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593170/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__1_.jpg'
 };
 
 // Gallery images - filter out the featured thumbnail
@@ -41,7 +41,7 @@ function KarniZilvinasGalleryPage() {
         title="The Venetian Wedding Photography | Karni & Zilvinas | Hariel Xavier Photography"
         description="View this luxurious wedding at The Venetian in Garfield, NJ. Professional wedding photography showcasing the elegant ballrooms and beautiful grounds of this premier New Jersey wedding venue."
         keywords="The Venetian, Garfield wedding venue, NJ wedding photographer, luxury wedding venue New Jersey, Hariel Xavier Photography, Karni and Zilvinas wedding"
-        ogImage="/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (1).jpg"
+        ogImage="https://res.cloudinary.com/dos0qac90/image/upload/v1761593170/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__1_.jpg"
         type="website"
       />
       
@@ -85,7 +85,7 @@ function KarniZilvinasGalleryPage() {
             </div>
             <div className="rounded-lg overflow-hidden shadow-xl">
               <img 
-                src="/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (22).jpg" 
+                src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593173/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__22_.jpg" 
                 alt="The Venetian in Garfield, NJ - Luxury Wedding Venue" 
                 className="w-full h-auto"
               />

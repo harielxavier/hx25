@@ -14,7 +14,7 @@ const amandaAlexGallery = {
   description: 'A stunning wedding celebration at The Mansion on Main Street in Voorhees Township, NJ',
   venue: 'The Mansion on Main Street',
   location: 'Voorhees Township, New Jersey',
-  coverImage: '/MoStuff/amanda/thumb.jpg'
+  coverImage: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/thumb.jpg'
 };
 
 // Gallery images
@@ -155,7 +155,7 @@ function AmandaAlexGalleryPage() {
                 </div>
                 <div className="rounded-lg overflow-hidden shadow-xl">
                   <img 
-                    src="/MoStuff/amanda/venue.jpg" 
+                    src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/venue.jpg" 
                     alt="The Mansion on Main Street in Voorhees Township, NJ - Elegant Wedding Venue" 
                     className="w-full h-auto"
                   />

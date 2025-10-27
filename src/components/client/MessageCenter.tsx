@@ -93,7 +93,7 @@ const MessageCenter: React.FC<MessageCenterProps> = ({ clientId, job }) => {
           {
             id: 'att_1',
             name: 'location_ideas.jpg',
-            url: '/MoStuff/amanda/hero.jpg',
+            url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/hero.jpg',
             type: 'image',
             size: 2048000
           }

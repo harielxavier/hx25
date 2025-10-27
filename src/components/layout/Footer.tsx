@@ -34,7 +34,7 @@ export default function Footer() {
             <div>
               <div className="mb-4">
                 <img 
-                  src="/MoStuff/Asset 1.png" 
+                  src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593071/hariel-xavier-photography/MoStuff/Asset_1.png" 
                   alt="Hariel Xavier Photography" 
                   className="h-16 w-auto" 
                 />

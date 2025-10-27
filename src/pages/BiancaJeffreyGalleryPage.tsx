@@ -142,7 +142,7 @@ function BiancaJeffreyGalleryPage() {
             </div>
             <div className="rounded-lg overflow-hidden shadow-xl">
               <img 
-                src="/MoStuff/Featured Wedding/Bianca & Jeffrey's Wedding/The Ceremony/Bianca & Jeff_s Wedding-826.jpg" 
+                src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593133/hariel-xavier-photography/MoStuff/Featured_Wedding/Bianca_and_Jeffreys_Wedding/The_Ceremony/Bianca_and_Jeff_s_Wedding-826.jpg" 
                 alt="Park Chateau Estate in East Brunswick, NJ - Luxury Wedding Venue" 
                 className="w-full h-auto"
               />

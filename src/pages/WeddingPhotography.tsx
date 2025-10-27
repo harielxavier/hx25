@@ -16,7 +16,7 @@ const WeddingPhotography: React.FC = () => {
         {/* Hero Background with ManagedImage */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/MoStuff/Portfolio/crystadavid/cd14.jpg"
+            src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593371/hariel-xavier-photography/MoStuff/Portfolio/crystadavid/cd14.jpg"
             alt="Wedding Photography Hero Background"
             className="w-full h-full object-cover"
           />
@@ -130,7 +130,7 @@ const WeddingPhotography: React.FC = () => {
             <div className="testimonial-card">
               <div className="couple-image">
                 <img 
-                  src="/MoStuff/Portfolio/crystadavid/cd2.jpg" 
+                  src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593370/hariel-xavier-photography/MoStuff/Portfolio/crystadavid/cd2.jpg" 
                   alt="Sarah & Michael - Happy wedding couple" 
                   className="w-full h-full object-cover rounded-full"
                 />
@@ -143,7 +143,7 @@ const WeddingPhotography: React.FC = () => {
             <div className="testimonial-card">
               <div className="couple-image">
                 <img 
-                  src="/MoStuff/Portfolio/crystadavid/cd5.jpg" 
+                  src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593377/hariel-xavier-photography/MoStuff/Portfolio/crystadavid/cd5.jpg" 
                   alt="Emma & James - Happy wedding couple" 
                   className="w-full h-full object-cover rounded-full"
                 />
@@ -156,7 +156,7 @@ const WeddingPhotography: React.FC = () => {
             <div className="testimonial-card">
               <div className="couple-image">
                 <img 
-                  src="/MoStuff/Portfolio/crystadavid/cd7.jpg" 
+                  src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593377/hariel-xavier-photography/MoStuff/Portfolio/crystadavid/cd7.jpg" 
                   alt="Jessica & David - Happy wedding couple" 
                   className="w-full h-full object-cover rounded-full"
                 />
@@ -215,7 +215,7 @@ const WeddingPhotography: React.FC = () => {
             <div className="group relative overflow-hidden transition-all duration-500 rounded-lg shadow-lg">
               <div className="relative h-80 w-full overflow-hidden">
                 <img 
-                  src="/MoStuff/Portfolio/crystadavid/cd14.jpg" 
+                  src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593371/hariel-xavier-photography/MoStuff/Portfolio/crystadavid/cd14.jpg" 
                   alt="Crysta & David's Wedding at Skylands Manor"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
@@ -244,7 +244,7 @@ const WeddingPhotography: React.FC = () => {
             <div className="group relative overflow-hidden transition-all duration-500 rounded-lg shadow-lg">
               <div className="relative h-80 w-full overflow-hidden">
                 <img 
-                  src="/MoStuff/Featured Wedding/Bianca & Jeffrey's Wedding/The Ceremony/Bianca & Jeff_s Wedding-826.jpg" 
+                  src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593133/hariel-xavier-photography/MoStuff/Featured_Wedding/Bianca_and_Jeffreys_Wedding/The_Ceremony/Bianca_and_Jeff_s_Wedding-826.jpg" 
                   alt="Bianca & Jeffrey's Wedding at Park Chateau"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
@@ -273,7 +273,7 @@ const WeddingPhotography: React.FC = () => {
             <div className="group relative overflow-hidden transition-all duration-500 rounded-lg shadow-lg">
               <div className="relative h-80 w-full overflow-hidden">
                 <img 
-                  src="/MoStuff/Featured Wedding/Jackie & Chriss Wedding /jmt (44 of 61).jpg" 
+                  src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593156/hariel-xavier-photography/MoStuff/Featured_Wedding/Jackie_and_Chriss_Wedding_/jmt__44_of_61_.jpg" 
                   alt="Jackie & Chris's Wedding at The Inn at Millrace Pond"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />

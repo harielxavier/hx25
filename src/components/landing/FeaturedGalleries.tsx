@@ -65,7 +65,7 @@ const FeaturedGalleries: React.FC = () => {
             galleryId: 'wedding-gallery-2',
             title: 'Jackie & Chris\'s Wedding',
             description: 'An intimate wedding at The Inn at Millrace Pond',
-            imageUrl: '/MoStuff/Featured Wedding/Jackie & Chriss Wedding /jmt (44 of 61).jpg',
+            imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593156/hariel-xavier-photography/MoStuff/Featured_Wedding/Jackie_and_Chriss_Wedding_/jmt__44_of_61_.jpg',
             position: 'middle',
             linkUrl: '/jackie-chris',
             displayOrder: 2,

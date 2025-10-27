@@ -363,13 +363,13 @@ export default function AboutPage() {
                 {
                   name: "Jonathan",
                   role: "Principal Photographer",
-                  image: "/MoStuff/meettheteam/Jonathan.JPG",
+                  image: "https://res.cloudinary.com/dos0qac90/image/upload/v1761593384/hariel-xavier-photography/MoStuff/meettheteam/Jonathan.jpg",
                   bio: "Jonathan brings over 14 years of experience capturing emotional moments with his unique eye for composition and lighting."
                 },
                 {
                   name: "Doris",
                   role: "Photographer & Client Experience Manager",
-                  image: "/MoStuff/meettheteam/doris.jpg",
+                  image: "https://res.cloudinary.com/dos0qac90/image/upload/v1761593385/hariel-xavier-photography/MoStuff/meettheteam/doris.jpg",
                   bio: "As Mauricio's wife and a devoted mother, Doris brings warmth and intuition to every client interaction. Her artistic eye and attention to detail ensure a seamless experience from first consultation to final delivery, while her photography captures authentic moments with a uniquely personal touch."
                 },
                 {

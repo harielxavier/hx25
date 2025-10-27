@@ -5,21 +5,21 @@
 export const heroImages = [
   {
     id: 'hero1',
-    src: '/MoStuff/Portfolio/hero3/1.jpg',
+    src: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593377/hariel-xavier-photography/MoStuff/Portfolio/hero3/1.jpg',
     alt: 'Elegant wedding photograph - hero image 1',
     width: 1920,
     height: 1080
   },
   {
     id: 'hero2',
-    src: '/MoStuff/Portfolio/hero3/2.jpg',
+    src: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593377/hariel-xavier-photography/MoStuff/Portfolio/hero3/2.jpg',
     alt: 'Romantic couple portrait - hero image 2',
     width: 1920,
     height: 1080
   },
   {
     id: 'hero4',
-    src: '/MoStuff/Portfolio/hero3/4.jpg',
+    src: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593377/hariel-xavier-photography/MoStuff/Portfolio/hero3/4.jpg',
     alt: 'Stunning wedding portrait - hero image 4',
     width: 1920,
     height: 1080
@@ -35,7 +35,7 @@ export const weddingGalleries = [
     date: 'September 18, 2024',
     venueName: 'Skyline Manor',
     location: 'Omaha, NE',
-    coverImage: '/MoStuff/Portfolio/crystadavid/cd14.jpg',
+    coverImage: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593371/hariel-xavier-photography/MoStuff/Portfolio/crystadavid/cd14.jpg',
     slug: 'crysta-david-skyline-manor',
     featured: true,
     description: 'A stunning wedding celebration at the beautiful Skyline Manor with breathtaking views.'

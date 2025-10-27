@@ -42,7 +42,7 @@ const PortfolioPage: React.FC = () => {
       coupleName: 'Jackie & Chris',
       venue: 'The Inn at Millrace Pond',
       location: 'Hope, NJ',
-      imageUrl: '/MoStuff/Featured Wedding/Jackie & Chriss Wedding /jmt (44 of 61).jpg',
+      imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593156/hariel-xavier-photography/MoStuff/Featured_Wedding/Jackie_and_Chriss_Wedding_/jmt__44_of_61_.jpg',
       linkUrl: '/jackie-chris'
     },
     {
@@ -60,7 +60,7 @@ const PortfolioPage: React.FC = () => {
       coupleName: 'Karni & Zilvinas',
       venue: 'The Venetian',
       location: 'Garfield, NJ',
-      imageUrl: '/MoStuff/Featured Wedding/Karni & Zilnivas/kz & Zilvinas Wedding (1).jpg',
+      imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593170/hariel-xavier-photography/MoStuff/Featured_Wedding/Karni_and_Zilnivas/kz_and_Zilvinas_Wedding__1_.jpg',
       linkUrl: '/karni-zilvinas'
     },
     {
@@ -69,7 +69,7 @@ const PortfolioPage: React.FC = () => {
       coupleName: 'Crysta & David',
       venue: 'Skylands Manor',
       location: 'Ringwood, NJ',
-      imageUrl: '/MoStuff/Portfolio/crystadavid/cd14.jpg',
+      imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593371/hariel-xavier-photography/MoStuff/Portfolio/crystadavid/cd14.jpg',
       linkUrl: '/crysta-david'
     },
     {
@@ -87,7 +87,7 @@ const PortfolioPage: React.FC = () => {
       coupleName: 'Carolina & Carlos',
       venue: 'The Club at Picatinny',
       location: 'Dover, NJ',
-      imageUrl: '/MoStuff/club/pic5.jpg',
+      imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593383/hariel-xavier-photography/MoStuff/club/pic5.jpg',
       linkUrl: '/picatinny-club',
       featured: true
     },
@@ -106,7 +106,7 @@ const PortfolioPage: React.FC = () => {
       coupleName: 'Amanda & Alex',
       venue: 'The Mansion on Main Street',
       location: 'Voorhees Township, NJ',
-      imageUrl: '/MoStuff/amanda/thumb.jpg',
+      imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/thumb.jpg',
       linkUrl: '/amanda-alex'
     },
     {
@@ -115,7 +115,7 @@ const PortfolioPage: React.FC = () => {
       coupleName: 'Emily & Ryan',
       venue: 'Bonnet Island Estate',
       location: 'Manahawkin, NJ',
-      imageUrl: '/MoStuff/Featured Wedding/Jackie & Chriss Wedding /jmt (44 of 61).jpg',
+      imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593156/hariel-xavier-photography/MoStuff/Featured_Wedding/Jackie_and_Chriss_Wedding_/jmt__44_of_61_.jpg',
       linkUrl: '/emily-ryan'
     },
     {
@@ -142,7 +142,7 @@ const PortfolioPage: React.FC = () => {
       coupleName: 'Sophie & Ethan',
       venue: 'The Palace at Somerset Park',
       location: 'Somerset, NJ',
-      imageUrl: '/MoStuff/Portfolio/crystadavid/cd14.jpg',
+      imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593371/hariel-xavier-photography/MoStuff/Portfolio/crystadavid/cd14.jpg',
       linkUrl: '/sophie-ethan'
     },
     {
@@ -151,7 +151,7 @@ const PortfolioPage: React.FC = () => {
       coupleName: 'Olivia & Noah',
       venue: 'The Brownstone',
       location: 'Paterson, NJ',
-      imageUrl: '/MoStuff/club/pic5.jpg',
+      imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593383/hariel-xavier-photography/MoStuff/club/pic5.jpg',
       linkUrl: '/olivia-noah'
     },
     {
@@ -169,7 +169,7 @@ const PortfolioPage: React.FC = () => {
       coupleName: 'Megan & Tyler',
       venue: 'Mallard Island Yacht Club',
       location: 'Manahawkin, NJ',
-      imageUrl: '/MoStuff/Portfolio/crystadavid/cd14.jpg',
+      imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593371/hariel-xavier-photography/MoStuff/Portfolio/crystadavid/cd14.jpg',
       linkUrl: '/megan-tyler'
     },
     {
@@ -178,7 +178,7 @@ const PortfolioPage: React.FC = () => {
       coupleName: 'Jessica & Matthew',
       venue: 'The English Manor',
       location: 'Ocean Township, NJ',
-      imageUrl: '/MoStuff/amanda/thumb.jpg',
+      imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/thumb.jpg',
       linkUrl: '/jessica-matthew'
     }
   ];
@@ -206,7 +206,7 @@ const PortfolioPage: React.FC = () => {
       <section className="relative min-h-[60vh] flex items-center justify-center pt-20">
         <div className="absolute inset-0 bg-black">
           <img 
-            src="/MoStuff/LandingPage/HeroPage.jpg" 
+            src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593258/hariel-xavier-photography/MoStuff/LandingPage/HeroPage.jpg" 
             alt="Wedding Photography Showcase" 
             className="w-full h-full object-cover opacity-70"
           />

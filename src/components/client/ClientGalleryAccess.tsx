@@ -48,12 +48,12 @@ const ClientGalleryAccess: React.FC<ClientGalleryAccessProps> = ({ clientId, job
     const mockImages: GalleryImage[] = [
       {
         id: '1',
-        url: '/MoStuff/amanda/hero.jpg',
-        thumbnail: '/MoStuff/amanda/thumb.jpg',
+        url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/hero.jpg',
+        thumbnail: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/thumb.jpg',
         title: 'First Look',
         category: 'wedding',
         isFavorite: true,
-        downloadUrl: '/MoStuff/amanda/hero.jpg',
+        downloadUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/hero.jpg',
         metadata: {
           camera: 'Canon EOS R5',
           lens: '85mm f/1.4',
@@ -63,12 +63,12 @@ const ClientGalleryAccess: React.FC<ClientGalleryAccessProps> = ({ clientId, job
       },
       {
         id: '2',
-        url: '/MoStuff/amanda/ch1.jpg',
-        thumbnail: '/MoStuff/amanda/ch1.jpg',
+        url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch1.jpg',
+        thumbnail: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch1.jpg',
         title: 'Ceremony Kiss',
         category: 'wedding',
         isFavorite: false,
-        downloadUrl: '/MoStuff/amanda/ch1.jpg',
+        downloadUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch1.jpg',
         metadata: {
           camera: 'Canon EOS R5',
           lens: '70-200mm f/2.8',
@@ -78,12 +78,12 @@ const ClientGalleryAccess: React.FC<ClientGalleryAccessProps> = ({ clientId, job
       },
       {
         id: '3',
-        url: '/MoStuff/amanda/ch2.jpg',
-        thumbnail: '/MoStuff/amanda/ch2.jpg',
+        url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch2.jpg',
+        thumbnail: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch2.jpg',
         title: 'Ring Exchange',
         category: 'wedding',
         isFavorite: true,
-        downloadUrl: '/MoStuff/amanda/ch2.jpg',
+        downloadUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch2.jpg',
         metadata: {
           camera: 'Canon EOS R5',
           lens: '85mm f/1.4',
@@ -93,12 +93,12 @@ const ClientGalleryAccess: React.FC<ClientGalleryAccessProps> = ({ clientId, job
       },
       {
         id: '4',
-        url: '/MoStuff/amanda/ch3.jpg',
-        thumbnail: '/MoStuff/amanda/ch3.jpg',
+        url: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch3.jpg',
+        thumbnail: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch3.jpg',
         title: 'Reception Dance',
         category: 'wedding',
         isFavorite: false,
-        downloadUrl: '/MoStuff/amanda/ch3.jpg',
+        downloadUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593380/hariel-xavier-photography/MoStuff/amanda/ch3.jpg',
         metadata: {
           camera: 'Canon EOS R5',
           lens: '24-70mm f/2.8',
