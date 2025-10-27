@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://harielxavierphotography.com/sitemap.xml
+Sitemap: https://harielxavier.com/sitemap.xml

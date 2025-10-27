@@ -266,7 +266,7 @@ class SEOService {
         image: `${this.domain}/images/logo.jpg`,
         description: 'Professional wedding photography services in Sparta, NJ and surrounding areas',
         url: this.domain,
-        telephone: '+1-973-XXX-XXXX',
+        telephone: '+1-862-391-4179',
         email: 'info@harielxavier.com',
         address: {
           '@type': 'PostalAddress',
