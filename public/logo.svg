@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="240" height="80" viewBox="0 0 240 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Camera Icon -->
+  <path d="M50 20h-10L35 26H29a4 4 0 00-4 4v20a4 4 0 004 4h32a4 4 0 004-4V30a4 4 0 00-4-4h-6l-5-6z" stroke="black" stroke-width="2" fill="none"/>
+  <circle cx="45" cy="40" r="8" stroke="black" stroke-width="2" fill="none"/>
+  
+  <!-- Text: HARIEL XAVIER -->
+  <text x="80" y="40" font-family="Montserrat, sans-serif" font-size="22" font-weight="300" fill="black">HARIEL</text>
+  <text x="160" y="40" font-family="Montserrat, sans-serif" font-size="22" font-weight="600" fill="black">XAVIER</text>
+  
+  <!-- Text: PHOTOGRAPHY -->
+  <text x="80" y="60" font-family="Montserrat, sans-serif" font-size="12" font-weight="400" fill="#666">PHOTOGRAPHY</text>
+</svg>

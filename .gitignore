@@ -121,6 +121,7 @@ temp_images/
 *.ico
 !public/favicon.ico
 !public/logo.png
+!public/logo.svg
 !src/assets/*.svg
 !src/assets/*.png
 
