@@ -40,12 +40,18 @@ CREATE TABLE IF NOT EXISTS public.bookings (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Create users table (CRITICAL for admin) or add missing columns
+-- Handle users table - remove foreign key constraint if it exists, then fix structure
 DO $$
 BEGIN
-    -- Create table if it doesn't exist
+    -- Drop foreign key constraint if it exists (this is causing the error)
+    BEGIN
+        ALTER TABLE public.users DROP CONSTRAINT IF EXISTS users_id_fkey;
+    EXCEPTION WHEN undefined_object THEN NULL;
+    END;
+
+    -- Create table if it doesn't exist (standalone, not linked to auth.users)
     CREATE TABLE IF NOT EXISTS public.users (
-        id UUID PRIMARY KEY,
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
         email TEXT UNIQUE NOT NULL,
         created_at TIMESTAMPTZ DEFAULT NOW(),
         updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -67,6 +73,12 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'users' AND column_name = 'avatar_url') THEN
         ALTER TABLE public.users ADD COLUMN avatar_url TEXT;
     END IF;
+
+    -- Fix the ID column to be auto-generated if it's not
+    BEGIN
+        ALTER TABLE public.users ALTER COLUMN id SET DEFAULT uuid_generate_v4();
+    EXCEPTION WHEN others THEN NULL;
+    END;
 END $$;
 
 -- Create payments table
@@ -191,9 +203,9 @@ CREATE INDEX IF NOT EXISTS idx_bookings_client_id ON public.bookings(client_id);
 CREATE INDEX IF NOT EXISTS idx_bookings_event_date ON public.bookings(event_date);
 CREATE INDEX IF NOT EXISTS idx_leads_status ON public.leads(status);
 
--- Insert default admin user (you can change this)
-INSERT INTO public.users (id, email, full_name, role)
-VALUES (uuid_generate_v4(), 'admin@harielxavierphotography.com', 'Admin User', 'admin')
+-- Insert default admin user (you can change this) - let ID auto-generate
+INSERT INTO public.users (email, full_name, role)
+VALUES ('admin@harielxavierphotography.com', 'Admin User', 'admin')
 ON CONFLICT (email) DO NOTHING;
 
 -- ========================================
