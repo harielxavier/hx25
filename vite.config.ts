@@ -27,14 +27,11 @@ export default defineConfig({
         manualChunks(id) {
           // Aggressive chunking for maximum performance
           if (id.includes('node_modules')) {
-            // Essential React - keep minimal
-            if (id.includes('react/') || id.includes('react-dom/') || id.includes('scheduler')) {
-              return 'vendor-react-core';
-            }
-            // React ecosystem - separate chunk
-            if (id.includes('react-router') || id.includes('react-hot-toast') ||
+            // All React packages together to ensure proper loading order
+            if (id.includes('react/') || id.includes('react-dom/') || id.includes('scheduler') ||
+                id.includes('react-router') || id.includes('react-hot-toast') ||
                 id.includes('react-hook-form') || id.includes('react-helmet')) {
-              return 'vendor-react-utils';
+              return 'vendor-react';
             }
             // UI Heavy - separate chunk
             if (id.includes('@mui') || id.includes('@emotion') || id.includes('framer-motion')) {
