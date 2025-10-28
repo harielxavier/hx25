@@ -25,26 +25,48 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     console.log('🔄 Setting up Supabase auth state listener');
-    
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-      console.log('✅ Initial session loaded:', session?.user?.email || 'No user');
-    });
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      console.log('🔄 Auth state changed:', session?.user?.email || 'No user');
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    // Add error handling for Supabase initialization
+    const initializeAuth = async () => {
+      try {
+        // Get initial session
+        const { data: { session }, error } = await supabase.auth.getSession();
+
+        if (error) {
+          console.error('❌ Error getting initial session:', error);
+          setError(`Authentication error: ${error.message}`);
+          setLoading(false);
+          return;
+        }
+
+        setSession(session);
+        setUser(session?.user ?? null);
+        setLoading(false);
+        console.log('✅ Initial session loaded:', session?.user?.email || 'No user');
+
+        // Listen for auth changes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+          console.log('🔄 Auth state changed:', session?.user?.email || 'No user');
+          setSession(session);
+          setUser(session?.user ?? null);
+          setLoading(false);
+        });
+
+        return () => {
+          console.log('🧹 Cleaning up Supabase auth listener');
+          subscription.unsubscribe();
+        };
+      } catch (err) {
+        console.error('❌ Fatal error initializing Supabase auth:', err);
+        setError(`Failed to initialize authentication: ${err instanceof Error ? err.message : 'Unknown error'}`);
+        setLoading(false);
+      }
+    };
+
+    const cleanup = initializeAuth();
 
     return () => {
-      console.log('🧹 Cleaning up Supabase auth listener');
-      subscription.unsubscribe();
+      cleanup.then(cleanupFn => cleanupFn?.());
     };
   }, []);
 

@@ -121,13 +121,37 @@ const FirebaseAuthDebugger = lazy(() => import('./components/admin/FirebaseAuthD
 
 // Auth routing component
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuth();
+  const { user, loading, error } = useAuth();
   const location = useLocation();
+
+  // Show error if authentication failed
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-red-50">
+        <div className="max-w-md p-6 bg-white rounded-lg shadow-lg border border-red-200">
+          <div className="text-center">
+            <div className="text-red-600 text-xl mb-4">⚠️</div>
+            <h2 className="text-lg font-semibold text-red-800 mb-2">Authentication Error</h2>
+            <p className="text-red-600 mb-4">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading authentication...</p>
+        </div>
       </div>
     );
   }
