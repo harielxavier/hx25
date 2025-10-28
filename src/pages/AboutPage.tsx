@@ -293,7 +293,7 @@ export default function AboutPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                   <div className="col-span-1 aspect-w-3 aspect-h-4 rounded-lg overflow-hidden shadow-lg transform transition-all duration-500 hover:shadow-xl">
                     <ReversibleVideo 
-                      src="/MoStuff/meettheteam/slowmo.MOV"
+                      src="/MoStuff/meettheteam/slowmo.mov"
                       className="w-full h-full object-cover"
                       playbackRate={0.5}
                       autoPlay

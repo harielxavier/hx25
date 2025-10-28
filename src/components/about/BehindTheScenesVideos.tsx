@@ -11,9 +11,9 @@ interface BehindTheScenesVideosProps {
 
 const BehindTheScenesVideos: React.FC<BehindTheScenesVideosProps> = ({ className = '' }) => {
   const videos: VideoSource[] = [
-    { src: '/images/bts.MOV', title: 'Behind the Scenes 1' },
-    { src: '/MoStuff/meettheteam/bts2.MOV', title: 'Behind the Scenes 2' },
-    { src: '/MoStuff/meettheteam/bts3.MOV', title: 'Behind the Scenes 3' },
+    { src: '/images/bts.mov', title: 'Behind the Scenes 1' },
+    { src: '/MoStuff/meettheteam/bts2.mov', title: 'Behind the Scenes 2' },
+    { src: '/MoStuff/meettheteam/bts3.mov', title: 'Behind the Scenes 3' },
   ];
 
   const [activeIndex, setActiveIndex] = useState(0);

@@ -252,7 +252,7 @@ export function LandingPage() {
           className="absolute inset-0 w-full h-full object-cover"
           poster={HeroPageUrl}
         >
-          <source src="/images/bts.MOV" type="video/mp4" />
+          <source src="/images/bts.mov" type="video/mp4" />
         </video>
         */}
         
