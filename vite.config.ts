@@ -25,60 +25,123 @@ export default defineConfig({
       ],
       output: {
         manualChunks(id) {
-          // Core vendor chunks
+          // Aggressive chunking for maximum performance
           if (id.includes('node_modules')) {
-            // React core, MUI, Charts, and ALL React-related packages - must be together
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router') ||
-                id.includes('react-') || id.includes('@react-') || id.includes('use-') ||
-                id.includes('react/') || id.includes('scheduler') || id.includes('prop-types') ||
-                id.includes('react-icons') || id.includes('lucide-react') || id.includes('@hello-pangea') ||
-                id.includes('framer-motion') || id.includes('react-hot-toast') || id.includes('react-hook-form') ||
-                id.includes('context') || id.includes('jsx') || id.includes('hooks') ||
-                id.includes('react-') || id.includes('-react') ||
-                id.includes('@mui') || id.includes('@emotion') ||
-                id.includes('recharts') || id.includes('chart.js') || id.includes('d3-')) {
-              return 'vendor-react';
+            // Essential React - keep minimal
+            if (id.includes('react/') || id.includes('react-dom/') || id.includes('scheduler')) {
+              return 'vendor-react-core';
             }
+            // React ecosystem - separate chunk
+            if (id.includes('react-router') || id.includes('react-hot-toast') ||
+                id.includes('react-hook-form') || id.includes('react-helmet')) {
+              return 'vendor-react-utils';
+            }
+            // UI Heavy - separate chunk
+            if (id.includes('@mui') || id.includes('@emotion') || id.includes('framer-motion')) {
+              return 'vendor-ui';
+            }
+            // Charts - only load when needed
+            if (id.includes('recharts') || id.includes('chart.js') || id.includes('d3-')) {
+              return 'vendor-charts';
+            }
+            // Icons - separate chunk
+            if (id.includes('react-icons') || id.includes('lucide-react')) {
+              return 'vendor-icons';
+            }
+            // Firebase - separate chunk
             if (id.includes('firebase')) {
               return 'vendor-firebase';
             }
+            // Supabase - separate chunk
             if (id.includes('@supabase')) {
               return 'vendor-supabase';
             }
+            // Editor - only for admin
             if (id.includes('react-quill') || id.includes('quill')) {
               return 'vendor-editor';
             }
+            // Payment - only for booking
             if (id.includes('@stripe')) {
               return 'vendor-stripe';
             }
-            if (id.includes('photoswipe')) {
+            // Gallery - only for gallery pages
+            if (id.includes('photoswipe') || id.includes('react-photoswipe')) {
               return 'vendor-gallery';
             }
+            // 3D - only for specific pages
             if (id.includes('three') || id.includes('@react-three')) {
               return 'vendor-3d';
             }
-            // All other vendor libraries
+            // DND - only for admin
+            if (id.includes('@dnd-kit') || id.includes('react-dnd')) {
+              return 'vendor-dnd';
+            }
+            // Calendar - only for booking
+            if (id.includes('fullcalendar') || id.includes('react-calendar')) {
+              return 'vendor-calendar';
+            }
+            // Heavy individual libraries - separate chunks
+            if (id.includes('swiper')) {
+              return 'vendor-swiper';
+            }
+            if (id.includes('sharp') || id.includes('canvas') || id.includes('jspdf')) {
+              return 'vendor-image-processing';
+            }
+            if (id.includes('react-photoswipe') || id.includes('photoswipe')) {
+              return 'vendor-gallery';
+            }
+            if (id.includes('react-share') || id.includes('react-ga4')) {
+              return 'vendor-social';
+            }
+            if (id.includes('react-use') || id.includes('react-intersection-observer') ||
+                id.includes('react-lazy-load') || id.includes('react-loading-skeleton')) {
+              return 'vendor-react-extras';
+            }
+            if (id.includes('emailjs') || id.includes('qrcode')) {
+              return 'vendor-communication';
+            }
+            // Utils and small libs
+            if (id.includes('date-fns') || id.includes('axios') || id.includes('clsx') ||
+                id.includes('zod') || id.includes('mime-types') || id.includes('tailwind-merge')) {
+              return 'vendor-utils';
+            }
+            // All other vendor libraries - should be much smaller now
             return 'vendor-misc';
           }
         },
-        // Use content hash for better caching
-        chunkFileNames: 'assets/[name]-[hash].js',
-        entryFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash].[ext]',
-        // Ensure proper chunk loading order
+        // Aggressive caching strategy
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name?.endsWith('.css')) {
+            return 'assets/css/[name]-[hash][extname]';
+          }
+          return 'assets/[name]-[hash][extname]';
+        },
+        // Optimize chunk loading
         inlineDynamicImports: false,
       }
     },
-    target: 'esnext',
+    target: 'es2020', // Modern browsers only for smaller output
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true, // Remove console logs in production
+        drop_console: true,
         drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug'],
+        passes: 2, // Multiple compression passes
+      },
+      mangle: {
+        safari10: true, // Fix Safari 10+ issues
+      },
+      format: {
+        comments: false, // Remove all comments
       }
     },
-    chunkSizeWarningLimit: 1000,
-    sourcemap: false, // Disable sourcemaps for smaller build
+    chunkSizeWarningLimit: 500, // Stricter size limits
+    sourcemap: false, // NEVER in production
+    reportCompressedSize: false, // Faster builds
+    cssCodeSplit: true, // Split CSS per route
   },
   optimizeDeps: {
     include: [
