@@ -3,10 +3,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Save, X, Eye, Image as ImageIcon, Video, Trash2, ArrowLeft } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import toast from 'react-hot-toast';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import '../../styles/quill-custom.css';
 import ImageUploadButton from '../../components/ImageUploadButton';
+
+// Dynamically import ReactQuill to avoid SSR and findDOMNode issues
+let ReactQuill: any = null;
+if (typeof window !== 'undefined') {
+  ReactQuill = require('react-quill');
+  require('react-quill/dist/quill.snow.css');
+}
 
 interface BlogPost {
   id?: string;
@@ -49,6 +54,7 @@ export default function EnhancedBlogEditor() {
   const [saving, setSaving] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [newTag, setNewTag] = useState('');
+  const [isMounted, setIsMounted] = useState(false);
   
   const [post, setPost] = useState<BlogPost>({
     title: '',
@@ -103,6 +109,11 @@ export default function EnhancedBlogEditor() {
       fetchPost();
     }
   }, [id]);
+
+  // Set mounted state to true on client side to enable ReactQuill
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const fetchPost = async () => {
     setLoading(true);
@@ -336,16 +347,25 @@ export default function EnhancedBlogEditor() {
                 Content * (Use the toolbar to format your text - no HTML knowledge needed!)
               </label>
               <div className="prose-editor">
-                <ReactQuill
-                  theme="snow"
-                  value={post.content}
-                  onChange={(content) => setPost(prev => ({ ...prev, content }))}
-                  modules={modules}
-                  formats={formats}
-                  placeholder="Start writing your amazing blog post..."
-                  className="bg-white"
-                  style={{ minHeight: '400px' }}
-                />
+                {isMounted && ReactQuill ? (
+                  <ReactQuill
+                    theme="snow"
+                    value={post.content}
+                    onChange={(content) => setPost(prev => ({ ...prev, content }))}
+                    modules={modules}
+                    formats={formats}
+                    placeholder="Start writing your amazing blog post..."
+                    className="bg-white"
+                    style={{ minHeight: '400px' }}
+                  />
+                ) : (
+                  <div className="min-h-[400px] border border-gray-300 rounded-lg flex items-center justify-center bg-gray-50">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                      <p className="text-gray-600">Loading editor...</p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
