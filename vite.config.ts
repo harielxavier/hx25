@@ -27,7 +27,10 @@ export default defineConfig({
         manualChunks(id) {
           // Core vendor chunks
           if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+            // React core and all React-related packages must be in the same chunk
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router') ||
+                id.includes('react-') || id.includes('@react-') || id.includes('use-') ||
+                id.includes('react/') || id.includes('scheduler')) {
               return 'vendor-react';
             }
             if (id.includes('@mui') || id.includes('@emotion')) {
@@ -62,6 +65,8 @@ export default defineConfig({
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]',
+        // Ensure proper chunk loading order
+        inlineDynamicImports: false,
       }
     },
     target: 'esnext',
@@ -77,6 +82,9 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: [
+      'react',
+      'react-dom',
+      'react-dom/client',
       '@mui/material',
       '@emotion/react',
       '@emotion/styled',
