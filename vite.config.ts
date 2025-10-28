@@ -27,18 +27,16 @@ export default defineConfig({
         manualChunks(id) {
           // Core vendor chunks
           if (id.includes('node_modules')) {
-            // React core and ALL React-related packages - be very aggressive
+            // React core, MUI, and ALL React-related packages - must be together
             if (id.includes('react') || id.includes('react-dom') || id.includes('react-router') ||
                 id.includes('react-') || id.includes('@react-') || id.includes('use-') ||
                 id.includes('react/') || id.includes('scheduler') || id.includes('prop-types') ||
                 id.includes('react-icons') || id.includes('lucide-react') || id.includes('@hello-pangea') ||
                 id.includes('framer-motion') || id.includes('react-hot-toast') || id.includes('react-hook-form') ||
                 id.includes('context') || id.includes('jsx') || id.includes('hooks') ||
-                id.includes('react-') || id.includes('-react')) {
+                id.includes('react-') || id.includes('-react') ||
+                id.includes('@mui') || id.includes('@emotion')) {
               return 'vendor-react';
-            }
-            if (id.includes('@mui') || id.includes('@emotion')) {
-              return 'vendor-mui';
             }
             if (id.includes('firebase')) {
               return 'vendor-firebase';
