@@ -27,7 +27,7 @@ export default defineConfig({
         manualChunks(id) {
           // Core vendor chunks
           if (id.includes('node_modules')) {
-            // React core, MUI, and ALL React-related packages - must be together
+            // React core, MUI, Charts, and ALL React-related packages - must be together
             if (id.includes('react') || id.includes('react-dom') || id.includes('react-router') ||
                 id.includes('react-') || id.includes('@react-') || id.includes('use-') ||
                 id.includes('react/') || id.includes('scheduler') || id.includes('prop-types') ||
@@ -35,7 +35,8 @@ export default defineConfig({
                 id.includes('framer-motion') || id.includes('react-hot-toast') || id.includes('react-hook-form') ||
                 id.includes('context') || id.includes('jsx') || id.includes('hooks') ||
                 id.includes('react-') || id.includes('-react') ||
-                id.includes('@mui') || id.includes('@emotion')) {
+                id.includes('@mui') || id.includes('@emotion') ||
+                id.includes('recharts') || id.includes('chart.js') || id.includes('d3-')) {
               return 'vendor-react';
             }
             if (id.includes('firebase')) {
@@ -46,9 +47,6 @@ export default defineConfig({
             }
             if (id.includes('react-quill') || id.includes('quill')) {
               return 'vendor-editor';
-            }
-            if (id.includes('recharts') || id.includes('chart.js')) {
-              return 'vendor-charts';
             }
             if (id.includes('@stripe')) {
               return 'vendor-stripe';
