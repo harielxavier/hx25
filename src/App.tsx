@@ -58,10 +58,10 @@ const AmandaAlexGalleryPage = lazy(() => import('./pages/AmandaAlexGalleryPage')
 const ClientGalleryViewPage = lazy(() => import('./pages/ClientGalleryViewPage'));
 
 // Tools - lazy loaded
-const VenueLightingTool = lazy(() => import('./pages/VenueLightingTool'));
-const WeddingTimelineToolPage = lazy(() => import('./pages/WeddingTimelineToolPage'));
-const WeddingToolsPage = lazy(() => import('./pages/WeddingToolsPage'));
-const MultiPhotographerCoordinationToolPage = lazy(() => import('./pages/MultiPhotographerCoordinationToolPage'));
+const VenueLightingTool = lazy(() => import(/* webpackChunkName: "tools" */ './pages/VenueLightingTool'));
+const WeddingTimelineToolPage = lazy(() => import(/* webpackChunkName: "tools" */ './pages/WeddingTimelineToolPage'));
+const WeddingToolsPage = lazy(() => import(/* webpackChunkName: "tools" */ './pages/WeddingToolsPage'));
+const MultiPhotographerCoordinationToolPage = lazy(() => import(/* webpackChunkName: "tools" */ './pages/MultiPhotographerCoordinationToolPage'));
 const PicatinnyClubPage = lazy(() => import('./pages/PicatinnyClubPage'));
 
 // New features

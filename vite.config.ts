@@ -1,10 +1,19 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    visualizer({
+      open: false, // Don't auto-open, let user open manually
+      filename: 'dist/bundle-analysis.html',
+      gzipSize: true,
+      brotliSize: true,
+    })
+  ],
   base: '/',
   build: {
     rollupOptions: {
@@ -15,7 +24,44 @@ export default defineConfig({
         'nodemailer',
       ],
       output: {
-        manualChunks: undefined, // Let Vite handle chunking automatically for React 19
+        manualChunks(id) {
+          // Core vendor chunks
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+              return 'vendor-react';
+            }
+            if (id.includes('@mui') || id.includes('@emotion')) {
+              return 'vendor-mui';
+            }
+            if (id.includes('firebase')) {
+              return 'vendor-firebase';
+            }
+            if (id.includes('@supabase')) {
+              return 'vendor-supabase';
+            }
+            if (id.includes('react-quill') || id.includes('quill')) {
+              return 'vendor-editor';
+            }
+            if (id.includes('recharts') || id.includes('chart.js')) {
+              return 'vendor-charts';
+            }
+            if (id.includes('@stripe')) {
+              return 'vendor-stripe';
+            }
+            if (id.includes('photoswipe')) {
+              return 'vendor-gallery';
+            }
+            if (id.includes('three') || id.includes('@react-three')) {
+              return 'vendor-3d';
+            }
+            // All other vendor libraries
+            return 'vendor-misc';
+          }
+        },
+        // Use content hash for better caching
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]',
       }
     },
     target: 'esnext',

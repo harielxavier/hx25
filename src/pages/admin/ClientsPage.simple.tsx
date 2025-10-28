@@ -8,7 +8,7 @@ import { Timestamp, collection, writeBatch, doc, updateDoc } from "firebase/fire
 import { db } from "../../firebase/config";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
-import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 
 // Extended client interface with additional properties for the admin page
 interface ExtendedClient extends Client {

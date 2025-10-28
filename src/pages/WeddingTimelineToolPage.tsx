@@ -87,7 +87,7 @@ import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import TimelineIcon from '@mui/icons-material/Timeline';
 
 // For drag and drop functionality
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 
 // For styling
 import { styled } from '@mui/system';
