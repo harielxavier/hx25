@@ -1,3 +1,30 @@
+# Robots.txt for Hariel Xavier Photography
+# https://harielxavier.com
+
+# All search engines
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+Disallow: /.git/
+Disallow: /node_modules/
+Disallow: /src/
+Disallow: *.json$
+Disallow: *.map$
+Disallow: /auth/
+Crawl-delay: 0
+
+# Google Image Bot
+User-agent: Googlebot-Image
+Allow: /
+
+# Google AdSense
+User-agent: Mediapartners-Google
+Allow: /
+
+# Sitemap location
 Sitemap: https://harielxavier.com/sitemap.xml
+
+# Host preference
+Host: harielxavier.com

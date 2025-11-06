@@ -14,6 +14,15 @@ export default defineConfig({
       brotliSize: true,
     })
   ],
+  server: {
+    headers: {
+      // Security and SEO headers for development
+      'X-Frame-Options': 'SAMEORIGIN',
+      'X-Content-Type-Options': 'nosniff',
+      'Referrer-Policy': 'strict-origin-when-cross-origin',
+      'Permissions-Policy': 'camera=(self), microphone=(self), geolocation=(self)',
+    }
+  },
   base: '/',
   build: {
     rollupOptions: {
@@ -28,18 +37,16 @@ export default defineConfig({
           // Aggressive chunking for maximum performance
           if (id.includes('node_modules')) {
             // All React packages together to ensure proper loading order
+            // CRITICAL: Include charting libraries with React to ensure React.forwardRef is available
             if (id.includes('react/') || id.includes('react-dom/') || id.includes('scheduler') ||
                 id.includes('react-router') || id.includes('react-hot-toast') ||
-                id.includes('react-hook-form') || id.includes('react-helmet')) {
+                id.includes('react-hook-form') || id.includes('react-helmet') ||
+                id.includes('react-chartjs-2') || id.includes('recharts') || id.includes('chart.js')) {
               return 'vendor-react';
             }
             // UI Heavy - separate chunk
             if (id.includes('@mui') || id.includes('@emotion') || id.includes('framer-motion')) {
               return 'vendor-ui';
-            }
-            // Charts - only load when needed
-            if (id.includes('recharts') || id.includes('chart.js') || id.includes('d3-')) {
-              return 'vendor-charts';
             }
             // Icons - separate chunk
             if (id.includes('react-icons') || id.includes('lucide-react')) {
@@ -121,6 +128,7 @@ export default defineConfig({
     },
     target: 'es2020', // Modern browsers only for smaller output
     minify: 'terser',
+    cssMinify: 'lightningcss', // Better CSS minification
     terserOptions: {
       compress: {
         drop_console: true,
@@ -139,6 +147,14 @@ export default defineConfig({
     sourcemap: false, // NEVER in production
     reportCompressedSize: false, // Faster builds
     cssCodeSplit: true, // Split CSS per route
+    // Performance optimizations for Core Web Vitals
+    assetsInlineLimit: 4096, // Inline assets smaller than 4kb
+  },
+  css: {
+    devSourcemap: false,
+    modules: {
+      localsConvention: 'camelCase'
+    }
   },
   optimizeDeps: {
     include: [
@@ -149,9 +165,16 @@ export default defineConfig({
       '@emotion/react',
       '@emotion/styled',
       'recharts',
-      'chart.js'
+      'chart.js',
+      'react-chartjs-2'
     ],
     exclude: ['lucide-react'],
+    // Ensure React is available to all dependencies
+    esbuildOptions: {
+      define: {
+        global: 'globalThis'
+      }
+    }
   },
   resolve: {
     alias: {

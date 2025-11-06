@@ -1,77 +1,65 @@
-# Security Headers for SEO and Security Best Practices
-# https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
-
 /*
-  # Prevent clickjacking attacks
-  X-Frame-Options: DENY
-  
-  # Prevent MIME type sniffing
+  # Security Headers
+  X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
-  
-  # Enable XSS protection
   X-XSS-Protection: 1; mode=block
-  
-  # Control referrer information
   Referrer-Policy: strict-origin-when-cross-origin
-  
-  # Permissions Policy (formerly Feature-Policy)
-  Permissions-Policy: camera=(), microphone=(), geolocation=(self), payment=()
-  
-  # Strict Transport Security (force HTTPS)
-  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
-  
-  # Content Security Policy (adjust as needed)
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://res.cloudinary.com https://*.supabase.co https://js.stripe.com https://cdn.curator.io https://*.curator.io https://maps.googleapis.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://res.cloudinary.com https://cdn.curator.io; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://www.google-analytics.com https://egoyqdbolmjfngjzllwl.supabase.co https://*.supabase.co https://api.stripe.com https://res.cloudinary.com https://ipapi.co https://o4509517571620864.ingest.us.sentry.io https://*.ingest.us.sentry.io https://firebase.googleapis.com https://*.firebase.googleapis.com https://firebaseinstallations.googleapis.com https://maps.googleapis.com; frame-src 'self' https://js.stripe.com https://*.firebaseapp.com https://app.studioninja.co; object-src 'none'; base-uri 'self'; form-action 'self';
+  Permissions-Policy: camera=(self), microphone=(self), geolocation=(self), interest-cohort=()
 
-# Cache static assets
-/*.js
-  Cache-Control: public, max-age=31536000, immutable
-  
-/*.css
-  Cache-Control: public, max-age=31536000, immutable
-  
-/*.woff2
-  Cache-Control: public, max-age=31536000, immutable
-  Access-Control-Allow-Origin: *
-  
-/*.woff
-  Cache-Control: public, max-age=31536000, immutable
-  Access-Control-Allow-Origin: *
-  
-# Cache images
-/*.jpg
-  Cache-Control: public, max-age=31536000, immutable
-  
-/*.jpeg
-  Cache-Control: public, max-age=31536000, immutable
-  
-/*.png
-  Cache-Control: public, max-age=31536000, immutable
-  
-/*.webp
-  Cache-Control: public, max-age=31536000, immutable
-  
-/*.avif
-  Cache-Control: public, max-age=31536000, immutable
-  
-/*.svg
-  Cache-Control: public, max-age=31536000, immutable
-  
-/*.gif
+  # Cache Control for static assets
   Cache-Control: public, max-age=31536000, immutable
 
-# Don't cache HTML files
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
 
-# Sitemap and robots.txt
+/*.json
+  Cache-Control: public, max-age=0, must-revalidate
+
 /sitemap.xml
-  Cache-Control: public, max-age=86400
-  Content-Type: application/xml
-  
+  Cache-Control: public, max-age=3600, must-revalidate
+
 /robots.txt
-  Cache-Control: public, max-age=86400
-  Content-Type: text/plain
+  Cache-Control: public, max-age=3600, must-revalidate
 
+# Images
+/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
 
+/*.jpeg
+  Cache-Control: public, max-age=31536000, immutable
 
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.gif
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+# Fonts
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.ttf
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.eot
+  Cache-Control: public, max-age=31536000, immutable
+
+# CSS and JS
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+# Service Worker
+/sw.js
+  Cache-Control: public, max-age=0, must-revalidate
