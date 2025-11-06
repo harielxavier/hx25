@@ -54,9 +54,9 @@ export default defineConfig({
             return 'vendor';
           }
         },
-        // Aggressive caching strategy
-        chunkFileNames: 'assets/js/[name]-[hash].js',
-        entryFileNames: 'assets/js/[name]-[hash].js',
+        // Aggressive caching strategy - v3 to bust cache
+        chunkFileNames: 'assets/js/[name]-v3-[hash].js',
+        entryFileNames: 'assets/js/[name]-v3-[hash].js',
         assetFileNames: (assetInfo) => {
           if (assetInfo.name?.endsWith('.css')) {
             return 'assets/css/[name]-[hash][extname]';
