@@ -34,9 +34,10 @@ export default defineConfig({
       ],
       output: {
         manualChunks(id) {
-          // Simplified chunking to prevent loading order issues
+          // Simplified chunking to prevent loading order issues - v2
           if (id.includes('node_modules')) {
             // Bundle ALL React-related packages together to ensure proper loading order
+            // This includes react-use, react-intersection-observer, etc.
             if (id.includes('react') || id.includes('lucide') || id.includes('@emotion') ||
                 id.includes('@mui') || id.includes('framer-motion')) {
               return 'vendor-react';
