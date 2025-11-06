@@ -116,6 +116,10 @@ export default defineConfig({
       }
     }
   },
+  define: {
+    // Ensure React is available globally for libraries that expect it
+    global: 'globalThis',
+  },
   resolve: {
     alias: {
       // Shadcn/ui path alias

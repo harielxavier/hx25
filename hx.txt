@@ -1,0 +1,97 @@
+# hx.txt — Vercel env import (KEY=VALUE)
+# How to use: Vercel → Project → Settings → Environment Variables → Import from .env file
+# Note: VITE_* are exposed to the browser. Secrets (no VITE_) are server-only.
+
+############################
+# Core (required)
+############################
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
+
+# Cloudinary (public client config)
+VITE_CLOUDINARY_CLOUD_NAME=
+VITE_CLOUDINARY_UPLOAD_PRESET=
+VITE_CLOUDINARY_FOLDER=
+VITE_CLOUDINARY_API_KEY=
+
+# Stripe (server-only)
+STRIPE_SECRET_KEY=
+
+# Sentry (optional client DSN)
+VITE_SENTRY_DSN_FRONTEND=
+
+############################
+# Firebase (client config)
+############################
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+VITE_FIREBASE_MEASUREMENT_ID=
+
+############################
+# Google / Maps / Calendar (client)
+############################
+VITE_GOOGLE_API_KEY=
+VITE_GOOGLE_CLIENT_ID=
+VITE_GOOGLE_MAPS_API_KEY=
+VITE_GOOGLE_CALENDAR_ID=
+
+############################
+# Weather (client)
+############################
+VITE_OPENWEATHERMAP_API_KEY=
+
+############################
+# EmailJS (client)
+############################
+VITE_EMAILJS_SERVICE_ID=
+VITE_EMAILJS_TEMPLATE_ID=
+VITE_EMAILJS_PUBLIC_KEY=
+
+############################
+# Misc frontend
+############################
+VITE_API_URL=
+VITE_ANTHROPIC_API_KEY=
+VITE_JWT_ACCESS_SECRET=
+VITE_JWT_REFRESH_SECRET=
+
+############################
+# Server-only secrets
+############################
+SUPABASE_SERVICE_ROLE_KEY=
+VITE_SUPABASE_SERVICE_ROLE_KEY=
+CLOUDINARY_API_SECRET=
+DOCUSIGN_ACCESS_TOKEN=
+DOCUSIGN_ACCOUNT_ID=
+DOCUSIGN_BASE_PATH=
+ADOBE_CLIENT_ID=
+ADOBE_CLIENT_SECRET=
+ADOBE_REDIRECT_URI=
+EMAIL_PASSWORD=
+
+############################
+# Legacy/compat variables (present in repo; prefer VITE_* where applicable)
+############################
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_EMAILJS_SERVICE_ID=
+NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=
+NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=
+REACT_APP_STRIPE_SECRET_KEY=
+REACT_APP_STRIPE_WEBHOOK_SECRET=
+REACT_APP_OPENAI_API_KEY=
+REACT_APP_GOOGLE_MAPS_API_KEY=
+REACT_APP_WEATHER_API_KEY=
+
+############################
+# Optional test/admin helpers (used in scripts/tests)
+############################
+ADMIN_EMAIL=
+ADMIN_PASSWORD=
+TEST_EMAIL=
+TEST_PASSWORD=
+SEND_ACTUAL_EMAILS=
+
