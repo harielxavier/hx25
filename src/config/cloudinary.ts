@@ -6,11 +6,9 @@
  */
 
 export const cloudinaryConfig = {
-  cloudName: 'dos0qac90',
-  apiKey: '732256417531588',
-  apiSecret: 'yslulpTj48WkkNlTmjwNDg70Aw',
-  uploadPreset: 'hariel_xavier_gallery',
-  folder: 'gallery_images'
+  cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dos0qac90',
+  uploadPreset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'hariel_xavier_gallery',
+  folder: import.meta.env.VITE_CLOUDINARY_FOLDER || 'gallery_images'
 };
 
 /**

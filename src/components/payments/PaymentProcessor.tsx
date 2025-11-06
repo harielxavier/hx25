@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PaymentProcessor } from '../../lib/integrations/stripe';
+
 import { CreditCard, DollarSign } from 'lucide-react';
 
 interface PaymentFormProps {
@@ -15,13 +15,19 @@ export default function PaymentForm({ amount, description, onSuccess, onError }:
   const handlePayment = async () => {
     setLoading(true);
     try {
-      const processor = new PaymentProcessor(process.env.STRIPE_SECRET_KEY!);
-      
-      // Create payment intent
-      const intent = await processor.createPaymentIntent(amount);
-      
-      // Handle successful payment
-      onSuccess(intent.id);
+      const res = await fetch('/api/payments/create-intent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount, description })
+      });
+
+      if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(`Payment failed: ${msg}`);
+      }
+
+      const data = await res.json();
+      onSuccess(data.paymentIntentId || data.id);
     } catch (error) {
       onError(error as Error);
     } finally {

@@ -19,6 +19,7 @@ import { db } from '../lib/firebase';
 import { getStockImage } from '../utils/images';
 import { ImageWithFallback } from '../components/ImageWithFallback';
 import imageOptimizationUtils from '../utils/imageOptimizationUtils';
+import { sanitizeHtml } from '../utils/sanitize';
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -47,21 +48,21 @@ export default function BlogPostPage() {
     if (!url || url === '') {
       return '/images/stock/blog/blog-art-of-wedding-storytelling.jpg';
     }
-    
+
     // If it's a relative path starting with /, it's a valid local image
     if (url.startsWith('/')) {
       return url;
     }
-    
+
     try {
       // Check if URL is valid
       new URL(url);
-      
+
       // Additional validation for common issues
       if (url.includes('undefined') || url === 'null') {
         return '/images/stock/blog/blog-art-of-wedding-storytelling.jpg';
       }
-      
+
       // Use our image optimization utility to transform the URL
       return imageOptimizationUtils.transformImageUrl(url);
     } catch (error) {
@@ -77,7 +78,7 @@ export default function BlogPostPage() {
       const documentHeight = document.documentElement.scrollHeight - windowHeight;
       const scrolled = window.scrollY;
       const progress = (scrolled / documentHeight) * 100;
-      
+
       const progressBar = document.getElementById('reading-progress');
       if (progressBar) {
         progressBar.style.width = `${Math.min(progress, 100)}%`;
@@ -94,20 +95,20 @@ export default function BlogPostPage() {
 
       setLoading(true);
       setError(null);
-      
+
       try {
         // Use the blog service to fetch post by slug
         const postData = await getPostBySlug(slug);
-        
+
         if (!postData) {
           setError('Blog post not found');
           setLoading(false);
           return;
         }
-        
+
         // Update view count
         await incrementPostViews(postData.id);
-        
+
         // Ensure the post has a valid image (check both field names)
         if (!postData.featuredImage && !postData.featured_image) {
           postData.featuredImage = getStockImage('wedding');
@@ -119,20 +120,20 @@ export default function BlogPostPage() {
           // If only featuredImage exists, copy it to featured_image
           postData.featured_image = postData.featuredImage;
         }
-        
+
         console.log('🖼️ Post image:', postData.featuredImage || postData.featured_image);
-        
+
         setPost(postData);
-        
+
         // Fetch related posts (same category, excluding current post)
         if (postData.category) {
           const relatedData = await getPostsByCategory(postData.category);
-          
+
           // Filter out the current post and limit to 3
           const filteredRelatedPosts = relatedData
             .filter(relatedPost => relatedPost.id !== postData.id)
             .slice(0, 3);
-            
+
           // Ensure all related posts have valid images
           const relatedWithImages = filteredRelatedPosts.map(post => {
             const imageUrl = post.featuredImage || post.featured_image || '';
@@ -143,7 +144,7 @@ export default function BlogPostPage() {
               featured_image: sanitized
             };
           });
-          
+
           setRelatedPosts(relatedWithImages);
         }
       } catch (error) {
@@ -153,25 +154,25 @@ export default function BlogPostPage() {
         setLoading(false);
       }
     };
-    
+
     // Reset state when slug changes
     setPost(null);
     setRelatedPosts([]);
-    
+
     fetchPost();
-    
+
     // Scroll to top when navigating to a new post
     window.scrollTo(0, 0);
   }, [slug]);
 
   const handleShare = (platform: string) => {
     if (!post) return;
-    
+
     const url = window.location.href;
     const title = post.title;
-    
+
     let shareUrl = '';
-    
+
     switch (platform) {
       case 'facebook':
         shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
@@ -188,7 +189,7 @@ export default function BlogPostPage() {
       default:
         return;
     }
-    
+
     window.open(shareUrl, '_blank');
   };
 
@@ -208,7 +209,7 @@ export default function BlogPostPage() {
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!newsletterEmail || !newsletterEmail.includes('@')) {
       setNewsletterStatus('error');
       return;
@@ -227,14 +228,14 @@ export default function BlogPostPage() {
 
       setNewsletterStatus('success');
       setNewsletterEmail('');
-      
+
       setTimeout(() => {
         setNewsletterStatus('idle');
       }, 5000);
     } catch (error) {
       console.error('Newsletter subscription error:', error);
       setNewsletterStatus('error');
-      
+
       setTimeout(() => {
         setNewsletterStatus('idle');
       }, 3000);
@@ -259,7 +260,7 @@ export default function BlogPostPage() {
         <div className="container mx-auto px-4 py-32 text-center">
           <h1 className="text-2xl font-serif mb-4">{error || 'Blog post not found'}</h1>
           <p className="mb-8">The blog post you're looking for might have been removed or is temporarily unavailable.</p>
-          <button 
+          <button
             onClick={handleNavigateBack}
             className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
           >
@@ -275,8 +276,8 @@ export default function BlogPostPage() {
     <>
       {/* Reading Progress Bar */}
       <div className="blog-reading-progress" style={{ width: '0%' }} id="reading-progress"></div>
-      
-      <SEO 
+
+      <SEO
         title={post.seoTitle || `${post.title} | Hariel Xavier Photography`}
         description={post.seoDescription || post.excerpt}
         type="article"
@@ -285,7 +286,7 @@ export default function BlogPostPage() {
       <BlogStructuredData post={post} />
       <Navigation />
       <LeadMagnet delay={60000} exitIntent={true} />
-      
+
       <main className="pt-24 pb-16">
         {/* Hero Section */}
         <div className="relative h-[50vh] md:h-[60vh] flex items-center justify-center mb-12">
@@ -322,14 +323,14 @@ export default function BlogPostPage() {
         {/* Main Content */}
         <div className="container mx-auto px-4">
           {/* Breadcrumbs */}
-          <Breadcrumbs 
+          <Breadcrumbs
             items={[
               { label: 'Blog', path: '/blog' },
               { label: post.title }
             ]}
             className="mb-6"
           />
-          
+
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Article Content */}
             <article className="lg:w-2/3 bg-white rounded-xl shadow-sm p-6 md:p-10">
@@ -338,20 +339,20 @@ export default function BlogPostPage() {
                 <ChevronLeft className="h-4 w-4 mr-1" />
                 <span>Back to Blog</span>
               </Link>
-              
+
               {/* Article Body */}
-              <div 
-                className="blog-content prose prose-lg max-w-none" 
-                dangerouslySetInnerHTML={{ __html: post.content }}
+              <div
+                className="blog-content prose prose-lg max-w-none"
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
               />
-              
+
               {/* Tags */}
               {post.tags && post.tags.length > 0 && (
                 <div className="mt-10 pt-6 border-t border-gray-200">
                   <h3 className="text-lg font-medium mb-3">Tags</h3>
                   <div className="flex flex-wrap gap-2">
                     {post.tags.map(tag => (
-                      <Link 
+                      <Link
                         key={tag}
                         to={`/blog?tag=${tag}`}
                         className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 transition-colors"
@@ -362,26 +363,26 @@ export default function BlogPostPage() {
                   </div>
                 </div>
               )}
-              
+
               {/* Social Sharing */}
               <div className="mt-10 pt-6 border-t border-gray-200">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
-                    <button 
+                    <button
                       onClick={() => setShowShareOptions(!showShareOptions)}
                       className="flex items-center space-x-2 text-gray-600 hover:text-black"
                     >
                       <Share2 className="h-5 w-5" />
                       <span>Share</span>
                     </button>
-                    <button 
+                    <button
                       onClick={handleSave}
                       className={`flex items-center space-x-2 ${isSaved ? 'text-blue-600' : 'text-gray-600 hover:text-black'}`}
                     >
                       <Bookmark className={`h-5 w-5 ${isSaved ? 'fill-current' : ''}`} />
                       <span>{isSaved ? 'Saved' : 'Save'}</span>
                     </button>
-                    <button 
+                    <button
                       onClick={handleLike}
                       className={`flex items-center space-x-2 ${isLiked ? 'text-red-600' : 'text-gray-600 hover:text-black'}`}
                     >
@@ -390,11 +391,11 @@ export default function BlogPostPage() {
                     </button>
                   </div>
                 </div>
-                
+
                 {/* Share Options Dropdown */}
                 {showShareOptions && (
                   <div className="mt-4 flex space-x-4">
-                    <button 
+                    <button
                       onClick={() => handleShare('facebook')}
                       className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700"
                       aria-label="Share on Facebook"
@@ -402,7 +403,7 @@ export default function BlogPostPage() {
                     >
                       <Facebook className="h-5 w-5" />
                     </button>
-                    <button 
+                    <button
                       onClick={() => handleShare('twitter')}
                       className="p-2 bg-sky-500 text-white rounded-full hover:bg-sky-600"
                       aria-label="Share on Twitter"
@@ -410,7 +411,7 @@ export default function BlogPostPage() {
                     >
                       <Twitter className="h-5 w-5" />
                     </button>
-                    <button 
+                    <button
                       onClick={() => handleShare('linkedin')}
                       className="p-2 bg-blue-700 text-white rounded-full hover:bg-blue-800"
                       aria-label="Share on LinkedIn"
@@ -418,7 +419,7 @@ export default function BlogPostPage() {
                     >
                       <Linkedin className="h-5 w-5" />
                     </button>
-                    <button 
+                    <button
                       onClick={() => handleShare('email')}
                       className="p-2 bg-gray-600 text-white rounded-full hover:bg-gray-700"
                       aria-label="Share via Email"
@@ -429,7 +430,7 @@ export default function BlogPostPage() {
                   </div>
                 )}
               </div>
-              
+
               {/* Author Bio */}
               {post.author && (
                 <div className="mt-10 pt-6 border-t border-gray-200">
@@ -455,7 +456,7 @@ export default function BlogPostPage() {
                 <BlogComments postId={post.id} postSlug={post.slug} />
               )}
             </article>
-            
+
             {/* Sidebar */}
             <aside className="lg:w-1/3 space-y-8">
               {/* Related Posts */}
@@ -464,8 +465,8 @@ export default function BlogPostPage() {
                   <h3 className="text-xl font-medium mb-6">Related Articles</h3>
                   <div className="space-y-6">
                     {relatedPosts.map(relatedPost => (
-                      <Link 
-                        key={relatedPost.id} 
+                      <Link
+                        key={relatedPost.id}
                         to={`/blog/${relatedPost.slug}`}
                         className="flex space-x-4 group"
                       >
@@ -490,8 +491,8 @@ export default function BlogPostPage() {
                       </Link>
                     ))}
                   </div>
-                  <Link 
-                    to="/blog" 
+                  <Link
+                    to="/blog"
                     className="inline-flex items-center space-x-2 text-black hover:text-gray-700 mt-6"
                   >
                     <span>View all articles</span>
@@ -499,14 +500,14 @@ export default function BlogPostPage() {
                   </Link>
                 </div>
               )}
-              
+
               {/* Newsletter Signup */}
               <div className="bg-black text-white rounded-xl shadow-sm p-6">
                 <h3 className="text-xl font-medium mb-4">Subscribe to Our Newsletter</h3>
                 <p className="text-gray-300 mb-4">Get the latest photography tips, tutorials, and inspiration delivered to your inbox.</p>
                 <form onSubmit={handleNewsletterSubmit} className="space-y-3">
-                  <input 
-                    type="email" 
+                  <input
+                    type="email"
                     placeholder="Your email address"
                     value={newsletterEmail}
                     onChange={(e) => setNewsletterEmail(e.target.value)}
@@ -514,7 +515,7 @@ export default function BlogPostPage() {
                     className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/30 disabled:opacity-50"
                     required
                   />
-                  <button 
+                  <button
                     type="submit"
                     disabled={newsletterStatus === 'submitting'}
                     className="w-full px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -533,7 +534,7 @@ export default function BlogPostPage() {
           </div>
         </div>
       </main>
-      
+
       <Footer />
     </>
   );
