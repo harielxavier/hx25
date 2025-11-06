@@ -128,7 +128,6 @@ export default defineConfig({
     },
     target: 'es2020', // Modern browsers only for smaller output
     minify: 'terser',
-    cssMinify: 'lightningcss', // Better CSS minification
     terserOptions: {
       compress: {
         drop_console: true,
