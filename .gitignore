@@ -166,3 +166,7 @@ fix-website-ftp.sh
 # Local Netlify folder
 .netlify
 .vercel
+
+
+# macOS resource fork files (AppleDouble)
+._*
