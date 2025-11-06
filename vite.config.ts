@@ -37,21 +37,19 @@ export default defineConfig({
           // Aggressive chunking for maximum performance
           if (id.includes('node_modules')) {
             // All React packages together to ensure proper loading order
-            // CRITICAL: Include charting libraries with React to ensure React.forwardRef is available
+            // CRITICAL: Include icons and charting libraries with React to prevent undefined errors
             if (id.includes('react/') || id.includes('react-dom/') || id.includes('scheduler') ||
                 id.includes('react-router') || id.includes('react-hot-toast') ||
                 id.includes('react-hook-form') || id.includes('react-helmet') ||
-                id.includes('react-chartjs-2') || id.includes('recharts') || id.includes('chart.js')) {
+                id.includes('react-chartjs-2') || id.includes('recharts') || id.includes('chart.js') ||
+                id.includes('lucide-react') || id.includes('react-icons')) {
               return 'vendor-react';
             }
             // UI Heavy - separate chunk
             if (id.includes('@mui') || id.includes('@emotion') || id.includes('framer-motion')) {
               return 'vendor-ui';
             }
-            // Icons - separate chunk
-            if (id.includes('react-icons') || id.includes('lucide-react')) {
-              return 'vendor-icons';
-            }
+            // Note: Icons moved to vendor-react to prevent loading order issues
             // Firebase - separate chunk
             if (id.includes('firebase')) {
               return 'vendor-firebase';
@@ -165,9 +163,9 @@ export default defineConfig({
       '@emotion/styled',
       'recharts',
       'chart.js',
-      'react-chartjs-2'
+      'react-chartjs-2',
+      'lucide-react'
     ],
-    exclude: ['lucide-react'],
     // Ensure React is available to all dependencies
     esbuildOptions: {
       define: {
