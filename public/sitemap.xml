@@ -1,115 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-  <!-- Primary Pages -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://harielxavier.com/</loc>
     <lastmod>2025-11-06</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
-    <image:image>
-      <image:loc>https://res.cloudinary.com/dos0qac90/image/upload/v1761593133/hariel-xavier-photography/MoStuff/LandingPage/HeroPage.jpg</image:loc>
-      <image:title>Hariel Xavier Photography - Award Winning Wedding Photographer</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://harielxavier.com/about</loc>
     <lastmod>2025-11-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://harielxavier.com/portfolio</loc>
     <lastmod>2025-11-06</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://harielxavier.com/pricing</loc>
-    <lastmod>2025-11-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://harielxavier.com/contact</loc>
+    <loc>https://harielxavier.com/services</loc>
     <lastmod>2025-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://harielxavier.com/book-now</loc>
+    <loc>https://harielxavier.com/contact</loc>
+    <lastmod>2025-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://harielxavier.com/blog</loc>
+    <lastmod>2025-11-06</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://harielxavier.com/faq</loc>
+    <lastmod>2025-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://harielxavier.com/testimonials</loc>
     <lastmod>2025-11-06</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Service Pages -->
-  <url>
-    <loc>https://harielxavier.com/wedding</loc>
-    <lastmod>2025-11-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://harielxavier.com/wedding-video</loc>
+    <loc>https://harielxavier.com/booking</loc>
     <lastmod>2025-11-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <!-- Featured Gallery Pages -->
-  <url>
-    <loc>https://harielxavier.com/bianca-jeffrey</loc>
-    <lastmod>2025-11-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://res.cloudinary.com/dos0qac90/image/upload/v1761593133/hariel-xavier-photography/MoStuff/Featured_Wedding/Bianca_and_Jeffreys_Wedding/THE_FIRST_LOOK/Bianca_and_Jeff_s_Wedding-475.jpg</image:loc>
-      <image:title>Park Chateau Estate Wedding Photography</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://harielxavier.com/jackie-chris</loc>
-    <lastmod>2025-11-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://harielxavier.com/ansimon-mina</loc>
-    <lastmod>2025-11-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://harielxavier.com/ana-jose</loc>
-    <lastmod>2025-11-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://harielxavier.com/crysta-david</loc>
-    <lastmod>2025-11-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://harielxavier.com/karni-zilvinas</loc>
-    <lastmod>2025-11-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://harielxavier.com/judy-mike</loc>
-    <lastmod>2025-11-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://harielxavier.com/amanda-alex</loc>
-    <lastmod>2025-11-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://harielxavier.com/galleries</loc>
@@ -117,87 +60,35 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
-  <!-- Venue Pages -->
-  <url>
-    <loc>https://harielxavier.com/picatinny-club</loc>
-    <lastmod>2025-11-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Tool Pages -->
-  <url>
-    <loc>https://harielxavier.com/wedding-tools</loc>
-    <lastmod>2025-11-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://harielxavier.com/wedding-timeline-tool</loc>
-    <lastmod>2025-11-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://harielxavier.com/venue-lighting-tool</loc>
-    <lastmod>2025-11-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://harielxavier.com/multi-photographer-tool</loc>
-    <lastmod>2025-11-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- Info Pages -->
-  <url>
-    <loc>https://harielxavier.com/faq</loc>
-    <lastmod>2025-11-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- Blog Main Page -->
-  <url>
-    <loc>https://harielxavier.com/blog</loc>
-    <lastmod>2025-11-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Blog Posts -->
   <url>
     <loc>https://harielxavier.com/blog/wedding-photography-pricing-guide</loc>
     <lastmod>2025-10-29</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://harielxavier.com/blog/what-to-wear-engagement-photos</loc>
     <lastmod>2025-10-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://harielxavier.com/blog/nj-wedding-photography-timeline</loc>
     <lastmod>2025-10-25</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://harielxavier.com/blog/choosing-perfect-engagement-location-nj</loc>
     <lastmod>2025-11-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://harielxavier.com/blog/top-10-wedding-venues-sparta-nj</loc>
     <lastmod>2025-10-27</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://harielxavier.com/blog/behind-the-scenes-wedding-photographer</loc>
@@ -209,7 +100,7 @@
     <loc>https://harielxavier.com/blog/complete-wedding-day-preparation-guide</loc>
     <lastmod>2025-10-25</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://harielxavier.com/blog/rainy-day-wedding-photography-tips</loc>
@@ -221,44 +112,42 @@
     <loc>https://harielxavier.com/blog/wedding-photography-pricing-guide-nj</loc>
     <lastmod>2025-10-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://harielxavier.com/blog/welcome-to-our-blog</loc>
     <lastmod>2025-10-28</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
-
-  <!-- Blog Categories -->
   <url>
     <loc>https://harielxavier.com/blog?category=Wedding%20Planning</loc>
     <lastmod>2025-11-06</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.65</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://harielxavier.com/blog?category=Wedding%20Tips</loc>
     <lastmod>2025-11-06</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.65</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://harielxavier.com/blog?category=Engagement%20Photography</loc>
     <lastmod>2025-11-06</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.65</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://harielxavier.com/blog?category=Photography%20Tips</loc>
     <lastmod>2025-11-06</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.65</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://harielxavier.com/blog?category=Wedding%20Venues</loc>
     <lastmod>2025-11-06</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.65</priority>
+    <priority>0.6</priority>
   </url>
 </urlset>

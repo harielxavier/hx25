@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { Eye, ArrowUpRight, Users, Clock } from 'lucide-react';
 import { Line } from 'react-chartjs-2';
 

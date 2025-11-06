@@ -163,13 +163,24 @@ export const getPostsByCategory = async (category: string): Promise<BlogPost[]> 
 // Increment post views
 export const incrementPostViews = async (id: string): Promise<boolean> => {
   try {
-    const { error } = await supabase.rpc('increment_post_views', { post_id: id });
-    
-    if (error) {
-      console.error(`Error incrementing views for post ${id}:`, error);
-      return false;
+    // Try using the RPC function first
+    const { error: rpcError } = await supabase.rpc('increment_post_views', { post_id: id });
+
+    if (rpcError) {
+      console.warn(`RPC increment_post_views failed for post ${id}, trying direct update:`, rpcError);
+
+      // Fallback to direct update if RPC fails
+      const { error: updateError } = await supabase
+        .from('posts')
+        .update({ views: supabase.sql`views + 1` })
+        .eq('id', id);
+
+      if (updateError) {
+        console.error(`Error incrementing views for post ${id} via direct update:`, updateError);
+        return false;
+      }
     }
-    
+
     return true;
   } catch (error) {
     console.error(`Error incrementing views for post ${id}:`, error);

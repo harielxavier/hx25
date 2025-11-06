@@ -124,37 +124,62 @@ export default function AboutPage() {
                 }`}
               >
                 <div className="space-y-12">
+                  <div className="mb-8">
+                    <h2 className="text-4xl font-serif mb-6 text-gray-900">Why I Cry at Weddings (and Why That's a Good Thing)</h2>
+                    <div className="prose prose-lg text-gray-700 space-y-6">
+                      <p className="text-xl leading-relaxed">
+                        I'm Mauricio, and I've shot 300+ weddings over the past 14 years. My dirty little secret? I still get emotional during the first dance. Every. Single. Time.
+                      </p>
+                      <p className="text-lg leading-relaxed">
+                        There's something about watching two people who chose each other, surrounded by everyone they love, that gets me. I just do my job from behind the camera so you don't see the tears.
+                      </p>
+                      <p className="text-lg leading-relaxed">
+                        I started photographing people 14+ years ago—portraits, models, whatever paid the bills. Then a friend asked me to shoot his wedding. That day changed everything. I found what I was meant to do.
+                      </p>
+                    </div>
+                  </div>
+
                   <div className="relative">
                     <div className="absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-gray-800 to-gray-400"></div>
                     <div className="pl-6">
                       <h3 className="text-2xl font-serif mb-6 text-gray-800 inline-flex items-center">
                         <span className="relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-gray-800">
-                          What Makes Me Different
+                          What Makes Us Different
                         </span>
                       </h3>
-                      <ul className="space-y-4">
-                        <li className="flex items-start group">
-                          <span className="w-2 h-2 rounded-full bg-gray-800 mt-2 mr-4 flex-shrink-0 group-hover:scale-150 transition-transform duration-300"></span>
+                      <div className="space-y-6 text-lg">
+                        <div>
+                          <p className="font-semibold text-gray-900 mb-2">❌ We're not the "stand here, smile, look at me" photographers</p>
                           <p className="text-gray-700 font-light leading-relaxed">
-                            Curating a luxury experience with personalized attention to every detail, ensuring your wedding day is captured with the elegance it deserves
+                            ✅ We're the "do your thing, we'll capture it beautifully" photographers
                           </p>
-                        </li>
-                        <li className="flex items-start group">
-                          <span className="w-2 h-2 rounded-full bg-gray-800 mt-2 mr-4 flex-shrink-0 group-hover:scale-150 transition-transform duration-300"></span>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-gray-900 mb-2">❌ We don't make you feel awkward with forced poses</p>
                           <p className="text-gray-700 font-light leading-relaxed">
-                            Trained in fine art photography with over a decade of experience photographing high-end weddings across New York, New Jersey, and international destinations
+                            ✅ We guide you into moments that feel natural
                           </p>
-                        </li>
-                        <li className="flex items-start group">
-                          <span className="w-2 h-2 rounded-full bg-gray-800 mt-2 mr-4 flex-shrink-0 group-hover:scale-150 transition-transform duration-300"></span>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-gray-900 mb-2">❌ We're not just vendors showing up to do a job</p>
                           <p className="text-gray-700 font-light leading-relaxed">
-                            Recognized for creating a calm, confident atmosphere that allows you to be present in your moments while I artfully document them
+                            ✅ We become part of your day (just ask our past couples)
                           </p>
-                        </li>
-                      </ul>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   
+                  <div className="relative bg-gray-50 p-8 rounded-lg">
+                    <h3 className="text-2xl font-serif mb-6 text-gray-800">My Promise</h3>
+                    <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                      I'll capture the big moments everyone expects AND the small moments no one sees coming. The way your dad's voice cracks during his speech. Your grandma crying happy tears. The look you give each other when you think no one's watching.
+                    </p>
+                    <p className="text-lg text-gray-700 leading-relaxed font-semibold">
+                      Those moments? They're why I do this.
+                    </p>
+                  </div>
+
                   <div className="relative">
                     <div className="absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-gray-800 to-gray-400"></div>
                     <div className="pl-6">
@@ -163,26 +188,18 @@ export default function AboutPage() {
                           When I'm Not Behind the Camera
                         </span>
                       </h3>
-                      <ul className="space-y-4">
-                        <li className="flex items-start group">
-                          <span className="w-2 h-2 rounded-full bg-gray-800 mt-2 mr-4 flex-shrink-0 group-hover:scale-150 transition-transform duration-300"></span>
-                          <p className="text-gray-700 font-light leading-relaxed">
-                            Exploring the art world at galleries and museums, drawing inspiration for my photography from classical and contemporary masterpieces
-                          </p>
-                        </li>
-                        <li className="flex items-start group">
-                          <span className="w-2 h-2 rounded-full bg-gray-800 mt-2 mr-4 flex-shrink-0 group-hover:scale-150 transition-transform duration-300"></span>
-                          <p className="text-gray-700 font-light leading-relaxed">
-                            Traveling to new destinations to experience diverse cultures and architectural styles that influence my compositional approach
-                          </p>
-                        </li>
-                        <li className="flex items-start group">
-                          <span className="w-2 h-2 rounded-full bg-gray-800 mt-2 mr-4 flex-shrink-0 group-hover:scale-150 transition-transform duration-300"></span>
-                          <p className="text-gray-700 font-light leading-relaxed">
-                            Mentoring aspiring photographers and giving back to the community through photography workshops for underprivileged youth
-                          </p>
-                        </li>
-                      </ul>
+                      <p className="text-lg text-gray-700 leading-relaxed mb-4">
+                        When I'm not shooting weddings, I'm living in Sparta with my family, probably editing photos at 2am because I get too excited about your gallery to sleep.
+                      </p>
+                      <div className="bg-white p-6 rounded-lg border-l-4 border-gray-800 mt-6">
+                        <h4 className="font-semibold text-lg mb-4">Fun Facts:</h4>
+                        <ul className="space-y-3 text-gray-700">
+                          <li>• Coffee consumed per wedding: Too many</li>
+                          <li>• Favorite part of the day: First look reactions</li>
+                          <li>• My backup camera has a backup camera (yes, really)</li>
+                          <li>• I've photographed weddings at 50+ different venues across NJ, NY, and PA</li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -381,21 +398,21 @@ export default function AboutPage() {
               ].map((member, index) => (
                 <div 
                   key={member.name}
-                  className="text-center group"
-                  style={{
-                    transform: visibleTeamMembers.includes(index) ? 'translateY(0px)' : 'translateY(40px)',
-                    opacity: visibleTeamMembers.includes(index) ? 1 : 0,
-                    transition: 'all 0.7s ease'
-                  }}
+                  className={`text-center group transition-all duration-700 ease-out ${
+                    visibleTeamMembers.includes(index) 
+                      ? 'translate-y-0 opacity-100' 
+                      : 'translate-y-10 opacity-0'
+                  }`}
                 >
                   <div className="relative mb-6 overflow-hidden rounded-lg aspect-square">
                     <img 
                       src={member.image} 
                       alt={member.name} 
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      style={{
-                        objectPosition: member.name === "Jonathan" ? "center" : member.name === "Doris" ? "center top" : "center 30%"
-                      }}
+                      className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${
+                        member.name === "Jonathan" ? "object-center" : 
+                        member.name === "Doris" ? "object-top" : 
+                        "object-[center_30%]"
+                      }`}
                     />
                     <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
                   </div>

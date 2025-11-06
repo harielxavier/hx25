@@ -5,6 +5,9 @@ import { SupabaseAuthProvider } from './contexts/SupabaseAuthContext';
 import App from './App';
 import './index.css';
 
+// Bootstrap React globally for charting libraries (fixes forwardRef error)
+import './utils/reactBootstrap';
+
 // Import security bootstrap and logger
 import { initializeSecurity } from './utils/securityBootstrap';
 import logger from './utils/logger';

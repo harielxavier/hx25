@@ -295,26 +295,50 @@ export function LandingPage() {
           heroInView ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>
           <p className="text-sm uppercase tracking-[0.3em] mb-6">Wedding Photography</p>
+          <div className="mb-6">
+            <div className="inline-block bg-white/90 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg">
+              <div className="flex items-center gap-2 text-black">
+                <div className="flex">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <svg key={star} className="w-5 h-5 text-yellow-500 fill-current" viewBox="0 0 24 24">
+                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                    </svg>
+                  ))}
+                </div>
+                <span className="font-semibold">5.0</span>
+                <span className="text-gray-600">• Trusted by 300+ Couples Since 2010</span>
+              </div>
+            </div>
+          </div>
           <h1 className="text-6xl md:text-7xl lg:text-8xl font-light mb-8">
             <BlurText
-              text="Capturing Timeless"
+              text="NJ Wedding Photography"
               delay={500}
               animateBy="words"
               direction="top"
               className="font-light"
             />
             <br />
-            <span className="font-serif">Love Stories</span>
+            <span className="font-serif">That Feels Like Family</span>
           </h1>
-          <p className="text-xl text-white/90 mb-12 max-w-2xl mx-auto">
-            Professional wedding photography services in Sparta, NJ and surrounding areas. Capturing timeless moments with a modern approach.
+          <p className="text-xl text-white/90 mb-4 max-w-2xl mx-auto">
+            We make wedding photography feel less like a photoshoot and more like hanging out with a friend who happens to have a really nice camera.
+          </p>
+          <p className="text-lg text-white/80 mb-12 max-w-2xl mx-auto">
+            <span className="font-semibold">Sparta, NJ</span> • 14+ Years • 300+ Weddings • Rated 5★ on Every Platform
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
             <Link 
               to="/showcase"
+              className="w-full md:w-auto bg-white text-black px-12 py-4 hover:bg-black hover:text-white border-2 border-white transition-all duration-300 font-semibold"
+            >
+              View Our Work
+            </Link>
+            <Link 
+              to="/pricing"
               className="w-full md:w-auto border-2 border-white text-white px-12 py-4 hover:bg-white hover:text-black transition-all duration-300"
             >
-              View Portfolio
+              See Packages & Pricing
             </Link>
           </div>
         </div>
@@ -363,11 +387,18 @@ export function LandingPage() {
               />
             </div>
             <div>
-              <h2 className="font-serif text-4xl mb-6" data-component-name="LandingPage">Meet Your <span className="text-rose-dark">Photographer</span></h2>
-              <p className="text-lg mb-4">Capturing Love Stories Since 2010</p>
-              <p className="text-lg mb-8">Hello! I'm Mauricio Fernandez, a passionate wedding photographer based in the heart of New York. With over a decade of experience, I've had the privilege of documenting hundreds of beautiful love stories. My approach combines photojournalistic storytelling with fine art portraiture, ensuring every precious moment of your special day is captured with authenticity and elegance.</p>
-              <p className="text-lg mb-8">I believe that every wedding is unique, and I work closely with each couple to understand their vision and create timeless photographs that will be cherished for generations to come. My style is characterized by natural light, genuine emotions, and thoughtful composition.</p>
-
+              <h2 className="font-serif text-4xl mb-6" data-component-name="LandingPage">Hi, I'm <span className="text-rose-dark">Mauricio</span></h2>
+              <p className="text-2xl font-serif mb-6 italic text-gray-700">Why I Still Cry at Weddings (And Why That's a Good Thing)</p>
+              <p className="text-lg mb-6">I've shot 300+ weddings over the past 14 years. My dirty little secret? I still get emotional during the first dance. Every. Single. Time.</p>
+              <p className="text-lg mb-6">There's something about watching two people who chose each other, surrounded by everyone they love, that gets me. I just do my job from behind the camera so you don't see the tears.</p>
+              <p className="text-lg mb-6">I accidentally discovered my calling at a friend's wedding back in 2010. That one day changed everything. Since then, I've photographed hundreds of weddings across New Jersey, New York, and Pennsylvania. What I love most? The quiet moments between the big ones—the groom's nervous laugh, the bride's mom crying during the first look, the way couples look at each other when they think no one's watching.</p>
+              <p className="text-lg mb-8"><span className="font-semibold">My Promise:</span> I'll capture the big moments everyone expects AND the small moments no one sees coming. Those moments? They're why I do this.</p>
+              <Link 
+                to="/about"
+                className="inline-block bg-black text-white px-8 py-3 hover:bg-gray-800 transition-all duration-300"
+              >
+                Read My Full Story
+              </Link>
             </div>
           </div>
         </div>
@@ -535,8 +566,8 @@ export function LandingPage() {
 
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div className="order-2 md:order-1">
+          <div className="max-w-3xl mx-auto text-center">
+            <div>
               <h2 className="font-serif text-4xl mb-6">Wedding <span className="text-rose-dark">Photography</span></h2>
               <p className="text-lg mb-4">Capturing Your Love Story with Elegance</p>
               <p className="text-lg mb-8">
@@ -544,7 +575,7 @@ export function LandingPage() {
                 photography services ensure that every precious moment is captured with artistry and authenticity.
                 From the intimate first look to the joyful celebration, I'll be there to document your unique love story.
               </p>
-              <div className="space-y-4 mb-8">
+              <div className="space-y-4 mb-8 text-left max-w-2xl mx-auto">
                 <div className="flex items-start">
                   <Check className="text-black mr-3 mt-1 flex-shrink-0" size={18} />
                   <p>Interactive before/after editing showcase</p>
@@ -564,29 +595,11 @@ export function LandingPage() {
               </div>
               {/* Removed link to /wedding as per user request */}
             </div>
-            <div className="order-1 md:order-2 mb-8 md:mb-0">
-              <div className="relative">
-                <img
-                  src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593377/hariel-xavier-photography/MoStuff/WeddingGuide.png"
-                  alt="Wedding Photography Guide"
-                  className="w-full aspect-[4/5] object-cover shadow-xl"
-                  data-component-name="LandingPage"
-                />
-                <div className="absolute top-4 right-4 bg-black text-white text-xs px-3 py-1 rounded-full">FREE GUIDE</div>
-                <a 
-                  href="/MoStuff/WeddingGuide.pdf" 
-                  download
-                  className="absolute bottom-4 left-0 right-0 mx-auto w-4/5 bg-black text-white text-center py-3 font-medium hover:bg-gray-800 transition-colors"
-                >
-                  DOWNLOAD YOUR COPY
-                </a>
-              </div>
-            </div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials Section - Elegant Dark Theme */}
+      {/* Original Testimonials Section - Keep as additional social proof */}
       <section 
         className="py-24 bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white relative overflow-hidden"
         data-component-name="LandingPage"
@@ -847,81 +860,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center gap-12">
-            <div className="w-full md:w-1/2 relative">
-              <div className="aspect-[3/4] bg-white rounded-lg shadow-xl overflow-hidden relative">
-                <img 
-                  src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593384/hariel-xavier-photography/MoStuff/whattowear.png" 
-                  alt="Free engagement photo style guide - What to wear for engagement photos in NJ by Hariel Xavier Photography"
-                  className="w-full h-full object-cover"
-                  data-component-name="LandingPage"
-                  loading="lazy"
-                />
-                <div className="absolute top-4 right-4 bg-black text-white text-xs px-3 py-1 rounded-full">FREE GUIDE</div>
-                <a 
-                  href="/MoStuff/whattowear.pdf" 
-                  download
-                  className="absolute bottom-4 left-0 right-0 mx-auto w-4/5 bg-black text-white text-center py-3 font-medium hover:bg-gray-800 transition-colors"
-                >
-                  DOWNLOAD YOUR COPY
-                </a>
-              </div>
-            </div>
-            
-            <div className="w-full md:w-1/2 md:pr-8">
-              <h2 className="text-4xl mb-4 font-serif">What to Wear for Your Engagement Session</h2>
-              <p className="text-gray-600 mb-6">Looking your best for your engagement photos starts with the perfect wardrobe choices. Our comprehensive style guide helps you select outfits that complement each other, your location, and the season.</p>
-              
-              <div className="mb-8">
-                <h3 className="text-xl mb-4">Inside the guide:</h3>
-                <ul className="space-y-3">
-                  <li className="flex items-start">
-                    <span className="text-black mr-2 mt-1">•</span>
-                    <span>Seasonal style tips for any weather condition</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-black mr-2 mt-1">•</span>
-                    <span>Color coordination advice for stunning photos</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-black mr-2 mt-1">•</span>
-                    <span>Location-specific outfit recommendations</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-black mr-2 mt-1">•</span>
-                    <span>Shopping suggestions for every budget</span>
-                  </li>
-                </ul>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-4">
-                <a 
-                  href="/MoStuff/whattowear.pdf" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 bg-black text-white px-8 py-3 hover:bg-gray-800 transition-all duration-300 group"
-                  data-component-name="LandingPage"
-                >
-                  Download Free Guide
-                  <ArrowRight className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
-                </a>
-                <Link 
-                  to="/pricing"
-                  className="inline-flex items-center justify-center gap-2 border border-black px-8 py-3 hover:bg-black hover:text-white transition-all duration-300 group"
-                >
-                  View Pricing
-                  <ArrowRight className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <PhotographyStyleSlider />
-
 
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">

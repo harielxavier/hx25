@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Calendar, Clock, ArrowRight, Search, Eye, AlertCircle } from 'lucide-react';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 // Firebase imports removed - using Supabase
 import LeadMagnet from '../components/LeadMagnet';
 import Navigation from '../components/landing/Navigation';

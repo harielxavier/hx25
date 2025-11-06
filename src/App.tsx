@@ -191,7 +191,12 @@ const App: React.FC = () => {
         // You could send this to an error reporting service
       }}
     >
-      <Router>
+      <Router
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true
+        }}
+      >
         <ScrollToTop />
         <AnalyticsTracker />
         <Suspense fallback={<PageLoader />}>
