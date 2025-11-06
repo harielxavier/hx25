@@ -34,22 +34,13 @@ export default defineConfig({
       ],
       output: {
         manualChunks(id) {
-          // Aggressive chunking for maximum performance
+          // Simplified chunking to prevent loading order issues
           if (id.includes('node_modules')) {
-            // All React packages together to ensure proper loading order
-            // CRITICAL: Include icons and charting libraries with React to prevent undefined errors
-            if (id.includes('react/') || id.includes('react-dom/') || id.includes('scheduler') ||
-                id.includes('react-router') || id.includes('react-hot-toast') ||
-                id.includes('react-hook-form') || id.includes('react-helmet') ||
-                id.includes('react-chartjs-2') || id.includes('recharts') || id.includes('chart.js') ||
-                id.includes('lucide-react') || id.includes('react-icons')) {
+            // Bundle ALL React-related packages together to ensure proper loading order
+            if (id.includes('react') || id.includes('lucide') || id.includes('@emotion') ||
+                id.includes('@mui') || id.includes('framer-motion')) {
               return 'vendor-react';
             }
-            // UI Heavy - separate chunk
-            if (id.includes('@mui') || id.includes('@emotion') || id.includes('framer-motion')) {
-              return 'vendor-ui';
-            }
-            // Note: Icons moved to vendor-react to prevent loading order issues
             // Firebase - separate chunk
             if (id.includes('firebase')) {
               return 'vendor-firebase';
@@ -58,57 +49,8 @@ export default defineConfig({
             if (id.includes('@supabase')) {
               return 'vendor-supabase';
             }
-            // Editor - only for admin
-            if (id.includes('react-quill') || id.includes('quill')) {
-              return 'vendor-editor';
-            }
-            // Payment - only for booking
-            if (id.includes('@stripe')) {
-              return 'vendor-stripe';
-            }
-            // Gallery - only for gallery pages
-            if (id.includes('photoswipe') || id.includes('react-photoswipe')) {
-              return 'vendor-gallery';
-            }
-            // 3D - only for specific pages
-            if (id.includes('three') || id.includes('@react-three')) {
-              return 'vendor-3d';
-            }
-            // DND - only for admin
-            if (id.includes('@dnd-kit') || id.includes('react-dnd')) {
-              return 'vendor-dnd';
-            }
-            // Calendar - only for booking
-            if (id.includes('fullcalendar') || id.includes('react-calendar')) {
-              return 'vendor-calendar';
-            }
-            // Heavy individual libraries - separate chunks
-            if (id.includes('swiper')) {
-              return 'vendor-swiper';
-            }
-            if (id.includes('sharp') || id.includes('canvas') || id.includes('jspdf')) {
-              return 'vendor-image-processing';
-            }
-            if (id.includes('react-photoswipe') || id.includes('photoswipe')) {
-              return 'vendor-gallery';
-            }
-            if (id.includes('react-share') || id.includes('react-ga4')) {
-              return 'vendor-social';
-            }
-            if (id.includes('react-use') || id.includes('react-intersection-observer') ||
-                id.includes('react-lazy-load') || id.includes('react-loading-skeleton')) {
-              return 'vendor-react-extras';
-            }
-            if (id.includes('emailjs') || id.includes('qrcode')) {
-              return 'vendor-communication';
-            }
-            // Utils and small libs
-            if (id.includes('date-fns') || id.includes('axios') || id.includes('clsx') ||
-                id.includes('zod') || id.includes('mime-types') || id.includes('tailwind-merge')) {
-              return 'vendor-utils';
-            }
-            // All other vendor libraries - should be much smaller now
-            return 'vendor-misc';
+            // All other vendor libraries
+            return 'vendor';
           }
         },
         // Aggressive caching strategy
