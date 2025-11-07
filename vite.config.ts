@@ -34,13 +34,17 @@ export default defineConfig({
       ],
       output: {
         manualChunks(id) {
-          // Simplified chunking to prevent loading order issues - v2
+          // Fixed chunking to prevent React forwardRef errors - v4
           if (id.includes('node_modules')) {
-            // Bundle ALL React-related packages together to ensure proper loading order
-            // This includes react-use, react-intersection-observer, etc.
-            if (id.includes('react') || id.includes('lucide') || id.includes('@emotion') ||
-                id.includes('@mui') || id.includes('framer-motion')) {
-              return 'vendor-react';
+            // Keep React core separate and loaded first
+            if (id.includes('react/') && !id.includes('react-')) {
+              return 'vendor-react-core';
+            }
+            // Bundle ALL React-related packages together AFTER core React
+            if (id.includes('react-') || id.includes('lucide') || id.includes('@emotion') ||
+                id.includes('@mui') || id.includes('framer-motion') || id.includes('recharts') ||
+                id.includes('react/jsx-runtime')) {
+              return 'vendor-react-extras';
             }
             // Firebase - separate chunk
             if (id.includes('firebase')) {
@@ -54,9 +58,9 @@ export default defineConfig({
             return 'vendor';
           }
         },
-        // Aggressive caching strategy - v3 to bust cache
-        chunkFileNames: 'assets/js/[name]-v3-[hash].js',
-        entryFileNames: 'assets/js/[name]-v3-[hash].js',
+        // Aggressive caching strategy - v4 to bust cache
+        chunkFileNames: 'assets/js/[name]-v4-[hash].js',
+        entryFileNames: 'assets/js/[name]-v4-[hash].js',
         assetFileNames: (assetInfo) => {
           if (assetInfo.name?.endsWith('.css')) {
             return 'assets/css/[name]-[hash][extname]';

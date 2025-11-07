@@ -1,31 +1,48 @@
 /**
- * React Bootstrap Module
+ * React Bootstrap Module - CRITICAL LOADING ORDER FIX
  *
- * This module ensures React is available globally for charting libraries
- * that may be bundled separately and need access to React.forwardRef
- *
- * This fixes the error:
- * "Cannot read properties of undefined (reading 'forwardRef')"
+ * This module MUST load before any vendor bundles that use React.forwardRef
+ * Fixes: "Cannot read properties of undefined (reading 'forwardRef')"
  */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-// Ensure React and ReactDOM are available globally for all libraries
+// Aggressively ensure React is globally available IMMEDIATELY
+const globalScope = (globalThis as any) || (window as any) || {};
+
+// Set React on ALL possible global objects
+globalScope.React = React;
+globalScope.ReactDOM = ReactDOM;
+
 if (typeof window !== 'undefined') {
   (window as any).React = React;
   (window as any).ReactDOM = ReactDOM;
 
-  // Ensure forwardRef is explicitly available
-  if (React.forwardRef) {
-    (window as any).forwardRef = React.forwardRef;
-  }
+  // Explicitly expose ALL React methods that vendor bundles might need
+  (window as any).forwardRef = React.forwardRef;
+  (window as any).createElement = React.createElement;
+  (window as any).Component = React.Component;
+  (window as any).PureComponent = React.PureComponent;
+  (window as any).memo = React.memo;
+  (window as any).useEffect = React.useEffect;
+  (window as any).useState = React.useState;
+  (window as any).useRef = React.useRef;
 
-  // Debug logging (will be removed by terser in production)
-  console.debug('React bootstrap loaded:', {
-    React: !!window.React,
-    ReactDOM: !!window.ReactDOM,
-    forwardRef: !!React.forwardRef
+  // Ensure React object has all methods accessible
+  Object.defineProperty(window, 'React', {
+    value: React,
+    writable: false,
+    configurable: false
+  });
+}
+
+// Console verification (removed in production)
+if (process.env.NODE_ENV !== 'production') {
+  console.log('✅ React Bootstrap: React globally available', {
+    React: !!globalScope.React,
+    forwardRef: !!React.forwardRef,
+    window: typeof window !== 'undefined'
   });
 }
 
