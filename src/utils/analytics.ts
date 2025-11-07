@@ -27,7 +27,7 @@ const isUserAuthenticated = (): boolean => {
 // Track event in both Google Analytics and Firestore
 export async function trackEvent(event: AnalyticsEvent): Promise<void> {
   try {
-    // Track in Google Analytics if available
+    // Track in Google Analytics only - Firestore analytics temporarily disabled
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', event.action, {
         event_category: event.category,
@@ -36,61 +36,32 @@ export async function trackEvent(event: AnalyticsEvent): Promise<void> {
         non_interaction: event.nonInteraction
       });
     }
-    
-    // Only track in Firestore if user is authenticated
-    if (isUserAuthenticated()) {
-      await trackInFirestore(event);
-      
-      // Update conversion metrics if this is a lead-related event
-      if (event.category === 'Leads' || event.category === 'Conversions') {
-        await updateLeadMetrics(event);
-      }
-    }
+
+    // Firestore analytics disabled to prevent authentication errors
+    // console.log('Event tracked (Google Analytics only):', event);
+
   } catch (error) {
-    console.error('Analytics error:', error);
-    // Continue execution even if analytics fails
+    // Silently handle errors to prevent UI disruption
+    console.debug('Analytics tracking disabled for event:', event.action);
   }
 }
 
 // Track page views
 export async function trackPageView(path: string): Promise<void> {
   try {
-    // Track in Google Analytics
+    // Track in Google Analytics only - Firestore analytics temporarily disabled
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('config', (window as any).GA_MEASUREMENT_ID, {
         page_path: path
       });
     }
-    
-    // Only track in Firestore if user is authenticated
-    if (!isUserAuthenticated()) {
-      return;
-    }
-    
-    try {
-      // Track in Firestore
-      const pageViewsRef = doc(collection(db, 'analytics'), 'pageViews');
-      await setDoc(pageViewsRef, {
-        [`${path.replace(/\//g, '_')}`]: increment(1),
-        total: increment(1),
-        lastUpdated: serverTimestamp()
-      }, { merge: true });
-      
-      // Also track in daily stats
-      const today = new Date().toISOString().split('T')[0];
-      const dailyStatsRef = doc(collection(db, 'analytics'), `daily_${today}`);
-      await setDoc(dailyStatsRef, {
-        [`pageViews_${path.replace(/\//g, '_')}`]: increment(1),
-        totalPageViews: increment(1),
-        lastUpdated: serverTimestamp()
-      }, { merge: true });
-    } catch (firestoreError) {
-      // Silently fail for Firestore errors to prevent UI disruption
-      console.error('Error tracking page view in Firestore:', firestoreError);
-    }
+
+    // Firestore analytics disabled to prevent authentication errors
+    // console.log('Page view tracked (Google Analytics only):', path);
+
   } catch (error) {
-    console.error('Error tracking page view:', error);
-    // Continue execution even if analytics fails
+    // Silently handle errors to prevent UI disruption
+    console.debug('Analytics tracking disabled:', path);
   }
 }
 
@@ -148,42 +119,20 @@ async function trackInFirestore(event: AnalyticsEvent): Promise<void> {
 
 // Track a new lead with detailed metrics
 export async function trackLead(leadMetrics: LeadMetrics): Promise<void> {
-  if (!isUserAuthenticated()) {
-    return;
-  }
-  
   try {
-    // Track the lead event
+    // Track the lead event in Google Analytics only
     await trackEvent({
       category: 'Leads',
       action: 'New Lead',
       label: leadMetrics.source || 'Website',
       value: leadMetrics.qualityScore || 5
     });
-    
-    // Store detailed lead information
-    const today = new Date().toISOString().split('T')[0];
-    const leadId = `lead_${Date.now()}`;
-    const leadsRef = doc(collection(db, 'analytics'), 'leads');
-    
-    await setDoc(leadsRef, {
-      [leadId]: {
-        timestamp: serverTimestamp(),
-        source: leadMetrics.source || 'Website',
-        campaign: leadMetrics.campaign || 'Organic',
-        conversionPage: leadMetrics.conversionPage || window.location.pathname,
-        qualityScore: leadMetrics.qualityScore || 5,
-        initialInterest: leadMetrics.initialInterest || 'Photography',
-        timeToConvert: leadMetrics.timeToConvert || 0
-      },
-      lastUpdated: serverTimestamp()
-    }, { merge: true });
-    
-    // Update lead metrics
-    await updateLeadMetrics();
-    
+
+    // Firestore lead tracking disabled to prevent authentication errors
+    console.debug('Lead tracked (Google Analytics only):', leadMetrics.source);
+
   } catch (error) {
-    console.error('Error tracking lead:', error);
+    console.debug('Lead tracking disabled:', leadMetrics.source);
   }
 }
 
@@ -290,61 +239,7 @@ export async function updateCustomerValueMetrics(bookingValue: number): Promise<
 
 // Initialize analytics collection if it doesn't exist
 export async function initializeAnalytics(): Promise<void> {
-  // Only initialize if user is authenticated
-  if (!isUserAuthenticated()) {
-    console.log('Skipping analytics initialization - user not authenticated');
-    return;
-  }
-  
-  try {
-    // Create base analytics documents if they don't exist
-    const analyticsRef = doc(collection(db, 'analytics'), 'dashboard');
-    await setDoc(analyticsRef, {
-      initialized: true,
-      lastUpdated: serverTimestamp()
-    }, { merge: true });
-    
-    // Create pageViews document
-    const pageViewsRef = doc(collection(db, 'analytics'), 'pageViews');
-    await setDoc(pageViewsRef, {
-      initialized: true,
-      lastUpdated: serverTimestamp()
-    }, { merge: true });
-    
-    // Create events document
-    const eventsRef = doc(collection(db, 'analytics'), 'events');
-    await setDoc(eventsRef, {
-      initialized: true,
-      lastUpdated: serverTimestamp()
-    }, { merge: true });
-    
-    // Create lead metrics document
-    const leadMetricsRef = doc(collection(db, 'analytics'), 'leadMetrics');
-    await setDoc(leadMetricsRef, {
-      initialized: true,
-      totalLeads: 0,
-      conversionRate: 0,
-      costPerLead: 0,
-      averageQualityScore: 0,
-      mqlToSqlRate: 0,
-      leadVelocityRate: 0,
-      landingPageConversion: 0,
-      lastUpdated: serverTimestamp()
-    }, { merge: true });
-    
-    // Create customer value metrics document
-    const customerMetricsRef = doc(collection(db, 'analytics'), 'customerMetrics');
-    await setDoc(customerMetricsRef, {
-      initialized: true,
-      customerLifetimeValue: 0,
-      customerAcquisitionCost: 0,
-      returnOnMarketingInvestment: 0,
-      lastUpdated: serverTimestamp()
-    }, { merge: true });
-    
-    console.log('Analytics collection initialized');
-  } catch (error) {
-    console.error('Error initializing analytics:', error);
-    // Continue execution even if analytics initialization fails
-  }
+  // Firestore analytics disabled - return early to prevent errors
+  console.debug('Firestore analytics initialization skipped - analytics disabled');
+  return;
 }
