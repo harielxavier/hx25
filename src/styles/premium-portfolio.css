@@ -46,7 +46,7 @@
 
 /* Custom Cursor for Gallery */
 .premium-portfolio .portfolio-grid {
-  cursor: url('/images/cursors/gallery-cursor.png'), auto;
+  cursor: url('https://res.cloudinary.com/dos0qac90/image/upload/v1/cursors/gallery-cursor.png'), auto;
 }
 
 /* Premium UI Elements */

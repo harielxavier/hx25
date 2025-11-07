@@ -32,22 +32,22 @@ const WeddingStyleQuiz: React.FC = () => {
       options: [
         {
           text: "A grand, elegant ballroom with chandeliers",
-          image: "/images/quiz/venue-ballroom.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/venue-ballroom.jpg",
           style: "classic"
         },
         {
           text: "A rustic barn with string lights and wooden details",
-          image: "/images/quiz/venue-barn.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/venue-barn.jpg",
           style: "rustic"
         },
         {
           text: "A modern art gallery or industrial space",
-          image: "/images/quiz/venue-modern.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/venue-modern.jpg",
           style: "editorial"
         },
         {
           text: "An outdoor garden or beach ceremony",
-          image: "/images/quiz/venue-outdoor.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/venue-outdoor.jpg",
           style: "natural"
         }
       ]
@@ -58,22 +58,22 @@ const WeddingStyleQuiz: React.FC = () => {
       options: [
         {
           text: "Timeless and elegant, with traditional poses",
-          image: "/images/quiz/look-classic.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/look-classic.jpg",
           style: "classic"
         },
         {
           text: "Relaxed and authentic, capturing genuine moments",
-          image: "/images/quiz/look-natural.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/look-natural.jpg",
           style: "natural"
         },
         {
           text: "Bold and dramatic, like a magazine editorial",
-          image: "/images/quiz/look-editorial.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/look-editorial.jpg",
           style: "editorial"
         },
         {
           text: "Warm and intimate, with a vintage feel",
-          image: "/images/quiz/look-rustic.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/look-rustic.jpg",
           style: "rustic"
         }
       ]
@@ -84,22 +84,22 @@ const WeddingStyleQuiz: React.FC = () => {
       options: [
         {
           text: "Neutral and earthy tones (greens, browns, creams)",
-          image: "/images/quiz/colors-earthy.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/colors-earthy.jpg",
           style: "rustic"
         },
         {
           text: "Bold, contrasting colors with dramatic lighting",
-          image: "/images/quiz/colors-bold.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/colors-bold.jpg",
           style: "editorial"
         },
         {
           text: "Classic whites, ivories, and metallics",
-          image: "/images/quiz/colors-classic.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/colors-classic.jpg",
           style: "classic"
         },
         {
           text: "Soft, pastel colors with natural light",
-          image: "/images/quiz/colors-soft.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/colors-soft.jpg",
           style: "natural"
         }
       ]
@@ -110,22 +110,22 @@ const WeddingStyleQuiz: React.FC = () => {
       options: [
         {
           text: "Capturing authentic emotions and candid moments",
-          image: "/images/quiz/priority-candid.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/priority-candid.jpg",
           style: "natural"
         },
         {
           text: "Beautiful, perfectly composed portraits",
-          image: "/images/quiz/priority-portraits.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/priority-portraits.jpg",
           style: "classic"
         },
         {
           text: "Creative, unique shots that stand out",
-          image: "/images/quiz/priority-creative.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/priority-creative.jpg",
           style: "editorial"
         },
         {
           text: "Telling a story with warmth and character",
-          image: "/images/quiz/priority-story.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/priority-story.jpg",
           style: "rustic"
         }
       ]
@@ -136,22 +136,22 @@ const WeddingStyleQuiz: React.FC = () => {
       options: [
         {
           text: "Handcrafted elements and personal touches",
-          image: "/images/quiz/details-handcrafted.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/details-handcrafted.jpg",
           style: "rustic"
         },
         {
           text: "Luxurious florals and elegant table settings",
-          image: "/images/quiz/details-luxury.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/details-luxury.jpg",
           style: "classic"
         },
         {
           text: "Minimalist, architectural details",
-          image: "/images/quiz/details-minimalist.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/details-minimalist.jpg",
           style: "editorial"
         },
         {
           text: "Organic, garden-inspired elements",
-          image: "/images/quiz/details-organic.jpg",
+          image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_400/v1/quiz/details-organic.jpg",
           style: "natural"
         }
       ]
@@ -164,9 +164,9 @@ const WeddingStyleQuiz: React.FC = () => {
       title: "Your Style: Classic Elegance",
       description: "You're drawn to timeless, sophisticated photography that will never go out of style. You appreciate traditional compositions with a modern touch, elegant portraits, and a refined approach that captures the formality and beauty of your wedding day.",
       sampleImages: [
-        "/images/results/classic-1.jpg",
-        "/images/results/classic-2.jpg",
-        "/images/results/classic-3.jpg"
+        "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_600/v1/results/classic-1.jpg",
+        "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_600/v1/results/classic-2.jpg",
+        "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_600/v1/results/classic-3.jpg"
       ],
       recommendations: [
         "Consider a full-day package to capture all the traditional moments",
@@ -180,9 +180,9 @@ const WeddingStyleQuiz: React.FC = () => {
       title: "Your Style: Natural & Candid",
       description: "You value authentic, unposed moments that tell the real story of your day. You're drawn to a photojournalistic approach with natural light, genuine emotions, and a relaxed feel that captures the true essence of your relationships and celebration.",
       sampleImages: [
-        "/images/results/natural-1.jpg",
-        "/images/results/natural-2.jpg",
-        "/images/results/natural-3.jpg"
+        "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_600/v1/results/natural-1.jpg",
+        "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_600/v1/results/natural-2.jpg",
+        "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_600/v1/results/natural-3.jpg"
       ],
       recommendations: [
         "Choose a photographer who excels at candid photography",
@@ -196,9 +196,9 @@ const WeddingStyleQuiz: React.FC = () => {
       title: "Your Style: Editorial & Dramatic",
       description: "You're inspired by bold, magazine-worthy images with a wow factor. You appreciate creative compositions, dramatic lighting, and artistic approaches that transform your wedding photos into striking works of art that stand out from the ordinary.",
       sampleImages: [
-        "/images/results/editorial-1.jpg",
-        "/images/results/editorial-2.jpg",
-        "/images/results/editorial-3.jpg"
+        "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_600/v1/results/editorial-1.jpg",
+        "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_600/v1/results/editorial-2.jpg",
+        "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_600/v1/results/editorial-3.jpg"
       ],
       recommendations: [
         "Schedule additional time for creative portrait sessions",
@@ -212,9 +212,9 @@ const WeddingStyleQuiz: React.FC = () => {
       title: "Your Style: Rustic & Romantic",
       description: "You're drawn to warm, intimate photography with a touch of nostalgia. You value images that capture the cozy, heartfelt moments of your day with rich tones, organic settings, and an emphasis on the emotional connections between you and your loved ones.",
       sampleImages: [
-        "/images/results/rustic-1.jpg",
-        "/images/results/rustic-2.jpg",
-        "/images/results/rustic-3.jpg"
+        "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_600/v1/results/rustic-1.jpg",
+        "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_600/v1/results/rustic-2.jpg",
+        "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_600/v1/results/rustic-3.jpg"
       ],
       recommendations: [
         "Choose outdoor or naturally-lit venues when possible",

@@ -73,7 +73,7 @@ const SarahAIWidget: React.FC<SarahAIWidgetProps> = ({ allPackages }) => {
       <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-6">
         <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-white/20 shrink-0 shadow-xl">
           <img
-            src="/images/sarahai.jpg"
+            src="https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_200,h_200,c_fill,g_face/v1/sarahai.jpg"
             alt="Sarah AI Consultant - Hariel Xavier Photography"
             className="w-full h-full object-cover"
           />

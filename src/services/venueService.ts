@@ -259,7 +259,7 @@ export const createSampleVenueData = async (): Promise<void> => {
       name: 'The Legacy Castle',
       location: 'Pompton Plains, NJ',
       categoryId: luxuryCategory,
-      thumbnailImage: '/images/venues/legacy-castle.jpg',
+      thumbnailImage: 'https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_600,h_400,c_fill/v1/venues/legacy-castle.jpg',
       gallerySlug: 'smith-wedding',
       featured: true
     });
@@ -268,7 +268,7 @@ export const createSampleVenueData = async (): Promise<void> => {
       name: 'The Palace',
       location: 'Somerset, NJ',
       categoryId: luxuryCategory,
-      thumbnailImage: '/images/venues/the-palace.jpg',
+      thumbnailImage: 'https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_600,h_400,c_fill/v1/venues/the-palace.jpg',
       gallerySlug: 'johnson-wedding',
       featured: true
     });
@@ -277,7 +277,7 @@ export const createSampleVenueData = async (): Promise<void> => {
       name: 'Park Chateau',
       location: 'East Brunswick, NJ',
       categoryId: gardenCategory,
-      thumbnailImage: '/images/venues/park-chateau.jpg',
+      thumbnailImage: 'https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_600,h_400,c_fill/v1/venues/park-chateau.jpg',
       gallerySlug: 'williams-wedding',
       featured: true
     });
@@ -286,7 +286,7 @@ export const createSampleVenueData = async (): Promise<void> => {
       name: 'Ocean Place Resort',
       location: 'Long Branch, NJ',
       categoryId: beachCategory,
-      thumbnailImage: '/images/venues/ocean-place.jpg',
+      thumbnailImage: 'https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_600,h_400,c_fill/v1/venues/ocean-place.jpg',
       gallerySlug: 'beach-wedding',
       featured: false
     });
@@ -295,7 +295,7 @@ export const createSampleVenueData = async (): Promise<void> => {
       name: 'The Ashford Estate',
       location: 'Allentown, NJ',
       categoryId: historicCategory,
-      thumbnailImage: '/images/venues/ashford-estate.jpg',
+      thumbnailImage: 'https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_600,h_400,c_fill/v1/venues/ashford-estate.jpg',
       gallerySlug: 'historic-wedding',
       featured: true
     });

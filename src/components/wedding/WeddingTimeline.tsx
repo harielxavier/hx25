@@ -22,7 +22,7 @@ const WeddingTimeline: React.FC = () => {
       testimonial: {
         quote: "From our first meeting, we knew we were in good hands. They asked questions about our relationship that other photographers never thought to ask.",
         client: "Emma & James",
-        image: "/images/testimonials/emma-james.jpg"
+        image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_300,h_300,c_fill,g_face/v1/testimonials/emma-james.jpg"
       }
     },
     {
@@ -32,7 +32,7 @@ const WeddingTimeline: React.FC = () => {
       testimonial: {
         quote: "Our engagement photos were so natural and captured our personalities perfectly. It really helped us feel at ease for the wedding day.",
         client: "Michael & Sarah",
-        image: "/images/testimonials/michael-sarah.jpg"
+        image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_300,h_300,c_fill,g_face/v1/testimonials/michael-sarah.jpg"
       }
     },
     {
@@ -47,7 +47,7 @@ const WeddingTimeline: React.FC = () => {
       testimonial: {
         quote: "We barely noticed our photographer was there, yet somehow they captured EVERY moment. Even our guests commented on how professional and unobtrusive they were.",
         client: "David & Jennifer",
-        image: "/images/testimonials/david-jennifer.jpg"
+        image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_300,h_300,c_fill,g_face/v1/testimonials/david-jennifer.jpg"
       }
     },
     {
@@ -62,7 +62,7 @@ const WeddingTimeline: React.FC = () => {
       testimonial: {
         quote: "Our wedding album is absolutely stunning. The quality is incredible, and it perfectly tells the story of our day from start to finish.",
         client: "Rebecca & Thomas",
-        image: "/images/testimonials/rebecca-thomas.jpg"
+        image: "https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_300,h_300,c_fill,g_face/v1/testimonials/rebecca-thomas.jpg"
       }
     }
   ];

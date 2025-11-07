@@ -23,7 +23,7 @@ export default function Testimonials() {
   ];
 
   return (
-    <section className="py-20 bg-white bg-[url('/images/backgroundclient.jpg')] bg-cover bg-center bg-no-repeat">
+    <section className="py-20 bg-white bg-[url('https://res.cloudinary.com/dos0qac90/image/upload/q_auto,f_auto,w_1920/v1/backgroundclient.jpg')] bg-cover bg-center bg-no-repeat">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="font-serif text-4xl mb-4">Love Notes</h2>
