@@ -32,6 +32,10 @@ export default defineConfig({
         'child_process',
         'nodemailer',
       ],
+      treeshake: {
+        preset: 'recommended',
+        moduleSideEffects: true
+      },
       output: {
         // Aggressive caching strategy - v5 to bust cache
         chunkFileNames: 'assets/js/[name]-v5-[hash].js',
@@ -44,71 +48,138 @@ export default defineConfig({
         },
         // Optimize chunk loading
         inlineDynamicImports: false,
-        // Manual chunking for better performance
+        // Strategic manual chunking for optimal performance
         manualChunks: (id) => {
           // Node modules chunking
           if (id.includes('node_modules')) {
-            // Core React libraries
+            // Core React ecosystem
             if (id.includes('react') || id.includes('react-dom')) {
               return 'react-vendor';
             }
 
-            // Router libraries
-            if (id.includes('react-router') || id.includes('react-helmet-async')) {
+            // Router and navigation
+            if (id.includes('react-router') || id.includes('react-helmet')) {
               return 'router-vendor';
             }
 
-            // MUI and emotion (large UI framework)
+            // MUI and styling (large UI framework)
             if (id.includes('@mui') || id.includes('@emotion')) {
               return 'mui-vendor';
             }
 
-            // Chart libraries (large)
-            if (id.includes('chart.js') || id.includes('recharts') || id.includes('react-chartjs-2')) {
+            // Heavy graphics and 3D libraries
+            if (id.includes('three') || id.includes('@react-three') ||
+                id.includes('canvas') || id.includes('framer-motion') ||
+                id.includes('motion')) {
+              return 'graphics-vendor';
+            }
+
+            // Data visualization
+            if (id.includes('chart.js') || id.includes('recharts') ||
+                id.includes('react-chartjs-2')) {
               return 'chart-vendor';
             }
 
-            // Database
-            if (id.includes('@supabase')) {
-              return 'supabase-vendor';
+            // Payment and business
+            if (id.includes('@stripe') || id.includes('@fullcalendar')) {
+              return 'business-vendor';
             }
 
-            // Rich text editor
-            if (id.includes('react-quill') || id.includes('quill')) {
-              return 'editor-vendor';
-            }
-
-            // Media libraries
-            if (id.includes('photoswipe') || id.includes('react-intersection-observer')) {
+            // Media and file processing
+            if (id.includes('photoswipe') || id.includes('html2canvas') ||
+                id.includes('jspdf') || id.includes('jszip') ||
+                id.includes('swiper') || id.includes('react-image')) {
               return 'media-vendor';
             }
 
-            // Form libraries
-            if (id.includes('react-hook-form') || id.includes('zod')) {
+            // Database and APIs
+            if (id.includes('@supabase') || id.includes('firebase') ||
+                id.includes('axios')) {
+              return 'api-vendor';
+            }
+
+            // Form and validation
+            if (id.includes('react-hook-form') || id.includes('zod') ||
+                id.includes('@hookform') || id.includes('react-quill') ||
+                id.includes('quill')) {
               return 'form-vendor';
             }
 
-            // Utility libraries
-            if (id.includes('date-fns') || id.includes('lucide-react') ||
-                id.includes('react-hot-toast') || id.includes('react-use')) {
-              return 'util-vendor';
+            // Icons and UI components
+            if (id.includes('lucide-react') || id.includes('react-icons') ||
+                id.includes('@radix-ui') || id.includes('@dnd-kit') ||
+                id.includes('react-dnd')) {
+              return 'ui-vendor';
             }
 
-            // Firebase (separate from main bundle)
-            if (id.includes('firebase')) {
-              return 'firebase-vendor';
+            // Utilities and small libraries
+            if (id.includes('date-fns') || id.includes('react-hot-toast') ||
+                id.includes('react-use') || id.includes('clsx') ||
+                id.includes('@emailjs') || id.includes('bcryptjs')) {
+              return 'utils-vendor';
             }
 
-            // All other node_modules go to vendor chunk
+            // Security and monitoring (can be heavy)
+            if (id.includes('@sentry') || id.includes('analytics') ||
+                id.includes('react-ga4')) {
+              return 'monitoring-vendor';
+            }
+
+            // PDF and document processing (heavy)
+            if (id.includes('jspdf') || id.includes('html2canvas') ||
+                id.includes('canvas') || id.includes('sharp')) {
+              return 'document-vendor';
+            }
+
+            // Animation and motion (can be heavy)
+            if (id.includes('framer-motion') || id.includes('motion') ||
+                id.includes('react-confetti')) {
+              return 'animation-vendor';
+            }
+
+            // Development and build tools
+            if (id.includes('esm') || id.includes('chalk') ||
+                id.includes('dotenv') || id.includes('mime-types')) {
+              return 'dev-vendor';
+            }
+
+            // All other node_modules
             return 'vendor';
           }
 
-          // Admin pages in separate chunk (they're heavy)
+          // Application code chunking - split admin by functionality
           if (id.includes('src/pages/admin/') || id.includes('src/components/admin/')) {
+            // Analytics and dashboard admin pages
+            if (id.includes('Analytics') || id.includes('Dashboard') ||
+                id.includes('Traffic') || id.includes('Lead') ||
+                id.includes('MissionControl')) {
+              return 'admin-analytics';
+            }
+
+            // Content management admin pages
+            if (id.includes('Blog') || id.includes('Page') ||
+                id.includes('Image') || id.includes('Gallery') ||
+                id.includes('Universal')) {
+              return 'admin-content';
+            }
+
+            // Business admin pages
+            if (id.includes('Client') || id.includes('Job') ||
+                id.includes('Booking') || id.includes('Payment') ||
+                id.includes('Invoice') || id.includes('Contract')) {
+              return 'admin-business';
+            }
+
+            // Settings and configuration
+            if (id.includes('Settings') || id.includes('Branding') ||
+                id.includes('Integration') || id.includes('SEO')) {
+              return 'admin-settings';
+            }
+
+            // Default admin chunk
             return 'admin';
           }
 
-          // Gallery pages in separate chunk
           if (id.includes('Gallery') && id.includes('src/pages/')) {
             return 'gallery-pages';
           }
@@ -131,7 +202,7 @@ export default defineConfig({
         comments: false, // Remove all comments
       }
     },
-    chunkSizeWarningLimit: 800, // Reasonable limit for modern web apps
+    chunkSizeWarningLimit: 600, // Professional standard for optimal performance
     sourcemap: false, // NEVER in production
     reportCompressedSize: false, // Faster builds
     cssCodeSplit: true, // Split CSS per route
