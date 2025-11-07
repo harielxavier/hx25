@@ -40,10 +40,17 @@ export default defineConfig({
             if (id.includes('react/') && !id.includes('react-')) {
               return 'vendor-react-core';
             }
-            // Bundle ALL React-related packages together AFTER core React
-            if (id.includes('react-') || id.includes('lucide') || id.includes('@emotion') ||
-                id.includes('@mui') || id.includes('framer-motion') || id.includes('recharts') ||
-                id.includes('react/jsx-runtime')) {
+            // Bundle React DOM and JSX runtime with extras
+            if (id.includes('react-dom') || id.includes('react/jsx-runtime')) {
+              return 'vendor-react-extras';
+            }
+            // Keep lucide-react in main vendor for immediate availability
+            if (id.includes('lucide')) {
+              return 'vendor';
+            }
+            // Bundle heavy UI libraries separately
+            if (id.includes('@emotion') || id.includes('@mui') ||
+                id.includes('framer-motion') || id.includes('recharts')) {
               return 'vendor-react-extras';
             }
             // Firebase - separate chunk
