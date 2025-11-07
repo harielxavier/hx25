@@ -1,10 +1,12 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, X, Eye, Image as ImageIcon, Video, Trash2, ArrowLeft } from 'lucide-react';
+import { Save, X, Eye, Image as ImageIcon, Video, Trash2, ArrowLeft, CheckCircle, Clock, Link as LinkIcon, Grid } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import toast from 'react-hot-toast';
 import '../../styles/quill-custom.css';
 import ImageUploadButton from '../../components/ImageUploadButton';
+import SocialEmbedWidget from '../../components/blog/SocialEmbedWidget';
+import ImageGalleryWidget from '../../components/blog/ImageGalleryWidget';
 
 // Dynamically import ReactQuill to avoid SSR and findDOMNode issues
 let ReactQuill: any = null;
@@ -52,9 +54,16 @@ export default function EnhancedBlogEditor() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [autoSaving, setAutoSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [newTag, setNewTag] = useState('');
   const [isMounted, setIsMounted] = useState(false);
+  const [showSocialEmbed, setShowSocialEmbed] = useState(false);
+  const [showImageGallery, setShowImageGallery] = useState(false);
+  const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastAutoSaveRef = useRef<string>('');
+  const quillRef = useRef<any>(null);
   
   const [post, setPost] = useState<BlogPost>({
     title: '',
@@ -113,6 +122,82 @@ export default function EnhancedBlogEditor() {
   // Set mounted state to true on client side to enable ReactQuill
   useEffect(() => {
     setIsMounted(true);
+  }, []);
+
+  // Auto-save functionality
+  const autoSave = useCallback(async () => {
+    if (!post.title && !post.content) return;
+    if (autoSaving) return;
+
+    const currentContent = JSON.stringify(post);
+    if (currentContent === lastAutoSaveRef.current) return;
+
+    setAutoSaving(true);
+    try {
+      const postData = {
+        ...post,
+        status: 'draft', // Always save as draft for auto-save
+        updated_at: new Date().toISOString()
+      };
+
+      if (id && id !== 'new') {
+        // Update existing post
+        const { error } = await supabase
+          .from('posts')
+          .update(postData)
+          .eq('id', id);
+
+        if (error) throw error;
+      } else if (post.title) {
+        // Create new post only if there's a title
+        const { data, error } = await supabase
+          .from('posts')
+          .insert([{ ...postData, created_at: new Date().toISOString() }])
+          .select()
+          .single();
+
+        if (error) throw error;
+        if (data) {
+          // Update URL to reflect the new post ID
+          window.history.replaceState({}, '', `/admin/blog/edit/${data.id}`);
+        }
+      }
+
+      lastAutoSaveRef.current = currentContent;
+      setLastSaved(new Date());
+    } catch (error) {
+      console.error('Auto-save failed:', error);
+      // Don't show error toast for auto-save failures to avoid interrupting user
+    } finally {
+      setAutoSaving(false);
+    }
+  }, [post, id, autoSaving]);
+
+  // Debounced auto-save effect
+  useEffect(() => {
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
+    }
+
+    // Only auto-save if there's content and it's been 3 seconds since last change
+    if (post.title || post.content) {
+      autoSaveTimeoutRef.current = setTimeout(autoSave, 3000);
+    }
+
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+    };
+  }, [post.title, post.content, post.excerpt, autoSave]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+    };
   }, []);
 
   const fetchPost = async () => {
@@ -238,6 +323,56 @@ export default function EnhancedBlogEditor() {
     toast.success('Featured image set!');
   };
 
+  const handleEmbedInsert = (embedCode: string) => {
+    if (quillRef.current) {
+      const quill = quillRef.current.getEditor();
+      const range = quill.getSelection(true);
+      const index = range ? range.index : quill.getLength();
+
+      // Insert line breaks and the embed code
+      quill.insertText(index, '\n\n', 'user');
+      quill.clipboard.dangerouslyPasteHTML(index + 2, embedCode);
+      quill.insertText(index + embedCode.length + 2, '\n\n', 'user');
+
+      // Focus back to editor
+      quill.setSelection(index + embedCode.length + 4);
+
+      toast.success('Social media embed inserted!');
+    } else {
+      // Fallback: append to content
+      setPost(prev => ({
+        ...prev,
+        content: prev.content + '\n\n' + embedCode + '\n\n'
+      }));
+      toast.success('Social media embed inserted!');
+    }
+  };
+
+  const handleGalleryInsert = (galleryHtml: string) => {
+    if (quillRef.current) {
+      const quill = quillRef.current.getEditor();
+      const range = quill.getSelection(true);
+      const index = range ? range.index : quill.getLength();
+
+      // Insert line breaks and the gallery HTML
+      quill.insertText(index, '\n\n', 'user');
+      quill.clipboard.dangerouslyPasteHTML(index + 2, galleryHtml);
+      quill.insertText(index + galleryHtml.length + 2, '\n\n', 'user');
+
+      // Focus back to editor
+      quill.setSelection(index + galleryHtml.length + 4);
+
+      toast.success('Image gallery inserted!');
+    } else {
+      // Fallback: append to content
+      setPost(prev => ({
+        ...prev,
+        content: prev.content + '\n\n' + galleryHtml + '\n\n'
+      }));
+      toast.success('Image gallery inserted!');
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -275,6 +410,27 @@ export default function EnhancedBlogEditor() {
                 <Eye className="w-5 h-5" />
                 {showPreview ? 'Edit' : 'Preview'}
               </button>
+
+              {/* Auto-save status */}
+              <div className="flex items-center gap-2 px-3 py-2 text-sm">
+                {autoSaving ? (
+                  <>
+                    <Clock className="w-4 h-4 text-blue-500 animate-spin" />
+                    <span className="text-blue-600">Saving...</span>
+                  </>
+                ) : lastSaved ? (
+                  <>
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    <span className="text-green-600">
+                      Saved {new Date().getTime() - lastSaved.getTime() < 60000
+                        ? 'just now'
+                        : `${Math.floor((new Date().getTime() - lastSaved.getTime()) / 60000)}m ago`}
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-gray-500">Draft</span>
+                )}
+              </div>
 
               <button
                 onClick={() => handleSave('draft')}
@@ -349,6 +505,7 @@ export default function EnhancedBlogEditor() {
               <div className="prose-editor">
                 {isMounted && ReactQuill ? (
                   <ReactQuill
+                    ref={quillRef}
                     theme="snow"
                     value={post.content}
                     onChange={(content) => setPost(prev => ({ ...prev, content }))}
@@ -366,6 +523,27 @@ export default function EnhancedBlogEditor() {
                     </div>
                   </div>
                 )}
+              </div>
+
+              {/* Quick Actions */}
+              <div className="mt-4 flex flex-wrap gap-2">
+                <button
+                  onClick={() => setShowSocialEmbed(true)}
+                  className="flex items-center gap-2 px-3 py-2 text-sm bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors"
+                >
+                  <LinkIcon className="w-4 h-4" />
+                  Add Social Embed
+                </button>
+                <button
+                  onClick={() => setShowImageGallery(true)}
+                  className="flex items-center gap-2 px-3 py-2 text-sm bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition-colors"
+                >
+                  <Grid className="w-4 h-4" />
+                  Add Image Gallery
+                </button>
+                <span className="text-xs text-gray-500 self-center">
+                  Create galleries, add social embeds, and more
+                </span>
               </div>
             </div>
           </div>
@@ -513,6 +691,22 @@ export default function EnhancedBlogEditor() {
           </div>
         </div>
       </div>
+
+      {/* Social Embed Widget */}
+      {showSocialEmbed && (
+        <SocialEmbedWidget
+          onEmbedInsert={handleEmbedInsert}
+          onClose={() => setShowSocialEmbed(false)}
+        />
+      )}
+
+      {/* Image Gallery Widget */}
+      {showImageGallery && (
+        <ImageGalleryWidget
+          onGalleryInsert={handleGalleryInsert}
+          onClose={() => setShowImageGallery(false)}
+        />
+      )}
     </div>
   );
 }
