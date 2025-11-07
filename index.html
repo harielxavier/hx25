@@ -276,9 +276,17 @@
       }
     }
     </script>
-    <!-- Ensure React is globally available and then load the app in strict order -->
+    <!-- Load React bootstrap synchronously BEFORE any modules -->
     <script type="module">
-      import '/src/utils/reactBootstrap.ts';
+      // Import and execute React bootstrap first
+      import reactBootstrap from '/src/utils/reactBootstrap.ts';
+
+      // Wait for React to be globally available
+      if (typeof window !== 'undefined') {
+        window.React = reactBootstrap;
+      }
+
+      // Then load the main app
       import '/src/main.tsx';
     </script>
   </head>
