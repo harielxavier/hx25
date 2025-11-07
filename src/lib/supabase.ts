@@ -64,26 +64,48 @@ function createSupabaseFallback(): any {
   } as any;
 }
 
-export const supabase = isConfigured
-  ? createClient(supabaseUrl!, supabaseAnonKey!, {
-      auth: {
-        autoRefreshToken: true,
-        persistSession: true,
-        detectSessionInUrl: true,
-        storage: window.localStorage
-      }
-    })
-  : createSupabaseFallback();
+// Lazy initialization to prevent bundling issues
+let _supabase: any = null;
 
-// Log initial session on load (safe in both real and fallback clients)
-supabase.auth.getSession().then(({ data: { session } }: any) => {
-  if (session) {
-    console.log('✅ Active Supabase session:', session.user?.email);
-  } else {
-    console.log('👤 No active session');
+function getSupabaseClient() {
+  if (_supabase) return _supabase;
+
+  // Check configuration at runtime, not module load time
+  const url = import.meta.env.VITE_SUPABASE_URL;
+  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const configured = Boolean(url && key);
+
+  _supabase = configured
+    ? createClient(url!, key!, {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: true,
+          storage: window.localStorage
+        }
+      })
+    : createSupabaseFallback();
+
+  // Log initial session on first access only
+  if (configured) {
+    _supabase.auth.getSession().then(({ data: { session } }: any) => {
+      if (session) {
+        console.log('✅ Active Supabase session:', session.user?.email);
+      } else {
+        console.log('👤 No active session');
+      }
+    }).catch(() => {
+      // ignore
+    });
   }
-}).catch(() => {
-  // ignore
+
+  return _supabase;
+}
+
+export const supabase = new Proxy({} as any, {
+  get(target, prop) {
+    return getSupabaseClient()[prop];
+  }
 });
 
 export default supabase;

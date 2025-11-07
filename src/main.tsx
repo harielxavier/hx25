@@ -13,8 +13,7 @@ import { initializeSecurity } from './utils/securityBootstrap';
 import logger from './utils/logger';
 import ErrorBoundary from './utils/ErrorBoundary';
 
-// Import Supabase client first (PRIMARY authentication)
-import './lib/supabase';
+// Supabase client now uses lazy initialization
 
 // Import Firebase (needed for storage and legacy services only)
 import './firebase/config';
