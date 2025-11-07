@@ -15,9 +15,20 @@ const globalScope = (globalThis as any) || (window as any) || {};
 globalScope.React = React;
 globalScope.ReactDOM = ReactDOM;
 
+// Create a safe global object for lucide-react exports
+globalScope.LucideReact = globalScope.LucideReact || {};
+
 if (typeof window !== 'undefined') {
   (window as any).React = React;
   (window as any).ReactDOM = ReactDOM;
+
+  // Create a safe global object for lucide-react to attach to
+  (window as any).LucideReact = (window as any).LucideReact || {};
+
+  // Also create an Activity placeholder to prevent undefined errors
+  if (!(window as any).Activity) {
+    (window as any).Activity = {};
+  }
 
   // Explicitly expose ALL React methods that vendor bundles might need
   (window as any).forwardRef = React.forwardRef;

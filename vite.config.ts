@@ -40,16 +40,16 @@ export default defineConfig({
             if (id.includes('react/') && !id.includes('react-')) {
               return 'vendor-react-core';
             }
-            // Bundle React DOM and JSX runtime with extras
+            // Bundle React DOM and JSX runtime with core
             if (id.includes('react-dom') || id.includes('react/jsx-runtime')) {
-              return 'vendor-react-extras';
+              return 'vendor-react-core';
             }
-            // Bundle heavy UI libraries separately
+            // Bundle ALL UI libraries together in extras (including lucide)
             if (id.includes('@emotion') || id.includes('@mui') ||
-                id.includes('framer-motion') || id.includes('recharts')) {
+                id.includes('framer-motion') || id.includes('recharts') ||
+                id.includes('lucide-react')) {
               return 'vendor-react-extras';
             }
-            // Don't manually chunk lucide-react - let it bundle with components that use it
             // Firebase - separate chunk
             if (id.includes('firebase')) {
               return 'vendor-firebase';
