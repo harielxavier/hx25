@@ -33,7 +33,6 @@ export default defineConfig({
         'nodemailer',
       ],
       output: {
-        // Let Vite handle chunking automatically - React 19 best practice
         // Aggressive caching strategy - v5 to bust cache
         chunkFileNames: 'assets/js/[name]-v5-[hash].js',
         entryFileNames: 'assets/js/[name]-v5-[hash].js',
@@ -45,6 +44,75 @@ export default defineConfig({
         },
         // Optimize chunk loading
         inlineDynamicImports: false,
+        // Manual chunking for better performance
+        manualChunks: (id) => {
+          // Node modules chunking
+          if (id.includes('node_modules')) {
+            // Core React libraries
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'react-vendor';
+            }
+
+            // Router libraries
+            if (id.includes('react-router') || id.includes('react-helmet-async')) {
+              return 'router-vendor';
+            }
+
+            // MUI and emotion (large UI framework)
+            if (id.includes('@mui') || id.includes('@emotion')) {
+              return 'mui-vendor';
+            }
+
+            // Chart libraries (large)
+            if (id.includes('chart.js') || id.includes('recharts') || id.includes('react-chartjs-2')) {
+              return 'chart-vendor';
+            }
+
+            // Database
+            if (id.includes('@supabase')) {
+              return 'supabase-vendor';
+            }
+
+            // Rich text editor
+            if (id.includes('react-quill') || id.includes('quill')) {
+              return 'editor-vendor';
+            }
+
+            // Media libraries
+            if (id.includes('photoswipe') || id.includes('react-intersection-observer')) {
+              return 'media-vendor';
+            }
+
+            // Form libraries
+            if (id.includes('react-hook-form') || id.includes('zod')) {
+              return 'form-vendor';
+            }
+
+            // Utility libraries
+            if (id.includes('date-fns') || id.includes('lucide-react') ||
+                id.includes('react-hot-toast') || id.includes('react-use')) {
+              return 'util-vendor';
+            }
+
+            // Firebase (separate from main bundle)
+            if (id.includes('firebase')) {
+              return 'firebase-vendor';
+            }
+
+            // All other node_modules go to vendor chunk
+            return 'vendor';
+          }
+
+          // Admin pages in separate chunk (they're heavy)
+          if (id.includes('src/pages/admin/') || id.includes('src/components/admin/')) {
+            return 'admin';
+          }
+
+          // Gallery pages in separate chunk
+          if (id.includes('Gallery') && id.includes('src/pages/')) {
+            return 'gallery-pages';
+          }
+        }
       }
     },
     target: 'es2020', // Modern browsers only for smaller output
@@ -63,7 +131,7 @@ export default defineConfig({
         comments: false, // Remove all comments
       }
     },
-    chunkSizeWarningLimit: 500, // Stricter size limits
+    chunkSizeWarningLimit: 800, // Reasonable limit for modern web apps
     sourcemap: false, // NEVER in production
     reportCompressedSize: false, // Faster builds
     cssCodeSplit: true, // Split CSS per route

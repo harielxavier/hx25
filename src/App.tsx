@@ -18,10 +18,10 @@ const PageLoader = () => (
   </div>
 );
 
-// Eager load critical pages (landing, about, galleries)
+// Critical pages - keep only LandingPage eager, lazy load rest
 import { LandingPage } from './pages/LandingPage';
-import AboutPage from './pages/AboutPage';
-import NotFoundPage from './pages/NotFoundPage';
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 // Lazy load everything else
 const GalleriesPage = lazy(() => import('./pages/GalleriesPage'));
