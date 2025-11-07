@@ -16,8 +16,9 @@ export default {
         cream: '#F8F5E6',
       },
       fontFamily: {
-        sans: ['Montserrat', 'sans-serif'],
-        serif: ['Cormorant Garamond', 'serif']
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        serif: ['Playfair Display', 'Georgia', 'serif'],
+        display: ['Space Grotesk', 'Inter', 'sans-serif']
       },
       backgroundImage: {
         'rose-gradient': 'linear-gradient(to right, #FDF2F4, #DB7F8E)',

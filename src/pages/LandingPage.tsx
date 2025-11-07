@@ -294,9 +294,9 @@ export function LandingPage() {
         <div className={`relative text-center text-white px-4 transform transition-all duration-1000 ${
           heroInView ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>
-          <p className="text-sm uppercase tracking-[0.3em] mb-6">Wedding Photography</p>
-          <div className="mb-6">
-            <div className="inline-block bg-white/90 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg">
+          <p className="text-sm font-display uppercase tracking-[0.4em] mb-8 text-white/90">Award-Winning Photography</p>
+          <div className="mb-8">
+            <div className="inline-block bg-white/95 backdrop-blur-sm px-6 py-3 rounded-full shadow-xl">
               <div className="flex items-center gap-2 text-black">
                 <div className="flex">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -306,47 +306,47 @@ export function LandingPage() {
                   ))}
                 </div>
                 <span className="font-semibold">5.0</span>
-                <span className="text-gray-600">• Trusted by 300+ Couples Since 2010</span>
+                <span className="text-gray-700">• Trusted by 300+ Couples</span>
               </div>
             </div>
           </div>
-          <h1 className="text-6xl md:text-7xl lg:text-8xl font-light mb-8">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-medium leading-[1.1] mb-6">
             <BlurText
-              text="NJ Wedding Photography"
+              text="Luxury Wedding Photography"
               delay={500}
               animateBy="words"
               direction="top"
-              className="font-light"
+              className="font-display font-medium"
             />
             <br />
-            <span className="font-serif">That Feels Like Family</span>
+            <span className="font-serif text-white/95 font-normal text-4xl md:text-5xl lg:text-6xl">for New Jersey Couples</span>
           </h1>
-          <p className="text-xl text-white/90 mb-4 max-w-2xl mx-auto">
-            We make wedding photography feel less like a photoshoot and more like hanging out with a friend who happens to have a really nice camera.
+          <p className="text-xl text-white/95 mb-4 max-w-2xl mx-auto font-light leading-relaxed">
+            Artfully capturing authentic moments and timeless elegance for discerning couples across New Jersey's most prestigious venues.
           </p>
-          <p className="text-lg text-white/80 mb-12 max-w-2xl mx-auto">
-            <span className="font-semibold">Sparta, NJ</span> • 14+ Years • 300+ Weddings • Rated 5★ on Every Platform
+          <p className="text-lg text-white/85 mb-12 max-w-2xl mx-auto font-display font-light">
+            <span className="font-medium">Sparta, NJ</span> • 14 Years Experience • 300+ Weddings • Featured in Top Publications
           </p>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <Link 
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
               to="/showcase"
-              className="w-full md:w-auto bg-white text-black px-12 py-4 hover:bg-black hover:text-white border-2 border-white transition-all duration-300 font-semibold"
+              className="w-full sm:w-auto bg-white text-black px-8 py-4 hover:bg-black hover:text-white border-2 border-white transition-all duration-300 font-display font-medium tracking-wide"
             >
-              View Our Work
+              View Portfolio
             </Link>
-            <Link 
+            <Link
               to="/pricing"
-              className="w-full md:w-auto border-2 border-white text-white px-12 py-4 hover:bg-white hover:text-black transition-all duration-300"
+              className="w-full sm:w-auto border-2 border-white/80 text-white px-8 py-4 hover:bg-white hover:text-black transition-all duration-300 font-display font-medium tracking-wide backdrop-blur-sm"
             >
-              See Packages & Pricing
+              Investment & Packages
             </Link>
           </div>
         </div>
 
         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white">
           <div className="animate-bounce">
-            <div className="w-[1px] h-16 bg-white mx-auto mb-4" />
-            <p className="uppercase tracking-[0.2em] text-xs">Scroll Down</p>
+            <div className="w-[1px] h-16 bg-white/70 mx-auto mb-4" />
+            <p className="font-display uppercase tracking-[0.3em] text-xs text-white/80">Scroll Down</p>
           </div>
         </div>
       </section>
@@ -388,7 +388,7 @@ export function LandingPage() {
             </div>
             <div>
               <h2 className="font-serif text-4xl mb-6" data-component-name="LandingPage">Hi, I'm <span className="text-rose-dark">Mauricio</span></h2>
-              <p className="text-2xl font-serif mb-6 italic text-gray-700">Why I Still Cry at Weddings (And Why That's a Good Thing)</p>
+              <p className="text-2xl font-serif mb-6 font-normal text-gray-700">Why I Still Cry at Weddings (And Why That's a Good Thing)</p>
               <p className="text-lg mb-6">I've shot 300+ weddings over the past 14 years. My dirty little secret? I still get emotional during the first dance. Every. Single. Time.</p>
               <p className="text-lg mb-6">There's something about watching two people who chose each other, surrounded by everyone they love, that gets me. I just do my job from behind the camera so you don't see the tears.</p>
               <p className="text-lg mb-6">I accidentally discovered my calling at a friend's wedding back in 2010. That one day changed everything. Since then, I've photographed hundreds of weddings across New Jersey, New York, and Pennsylvania. What I love most? The quiet moments between the big ones—the groom's nervous laugh, the bride's mom crying during the first look, the way couples look at each other when they think no one's watching.</p>
