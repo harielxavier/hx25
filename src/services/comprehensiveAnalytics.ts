@@ -134,6 +134,10 @@ class ComprehensiveAnalytics {
   }
 
   private async startSession() {
+    // TEMPORARILY DISABLED: Supabase analytics tables don't exist yet
+    return;
+
+    /* Uncomment when analytics tables are created in Supabase:
     if (this.sessionSaved) return;
 
     const { browser, version } = this.getBrowser();
@@ -171,6 +175,10 @@ class ComprehensiveAnalytics {
   }
 
   private async trackPageView() {
+    // TEMPORARILY DISABLED: Supabase analytics tables don't exist yet
+    return;
+
+    /* Uncomment when analytics tables are created in Supabase:
     const pageViewData: any = {
       session_id: this.sessionId,
       page_path: window.location.pathname,
@@ -182,7 +190,7 @@ class ComprehensiveAnalytics {
 
     try {
       await supabase.from('analytics_page_views').insert([pageViewData]);
-      
+
       // Update session page_views count
       await supabase.rpc('increment', {
         table_name: 'analytics_sessions',
@@ -194,6 +202,7 @@ class ComprehensiveAnalytics {
     } catch (error) {
       console.error('Page view tracking error:', error);
     }
+    */
   }
 
   private setupScrollTracking() {
@@ -226,6 +235,10 @@ class ComprehensiveAnalytics {
   }
 
   private async savePageExit() {
+    // TEMPORARILY DISABLED: Supabase analytics tables don't exist yet
+    return;
+
+    /* Uncomment when analytics tables are created in Supabase:
     const timeOnPage = Math.round((Date.now() - this.currentPageStart) / 1000);
 
     try {
@@ -264,6 +277,7 @@ class ComprehensiveAnalytics {
     } catch (error) {
       console.error('Page exit tracking error:', error);
     }
+    */
   }
 
   private setupPageUnloadTracking() {
@@ -292,6 +306,10 @@ class ComprehensiveAnalytics {
 
   // Public method to track custom events
   public async trackEvent(eventType: string, eventData: any = {}) {
+    // TEMPORARILY DISABLED: Supabase analytics tables don't exist yet
+    return;
+
+    /* Uncomment when analytics tables are created in Supabase:
     try {
       await supabase.from('analytics_events').insert([{
         session_id: this.sessionId,
@@ -308,6 +326,7 @@ class ComprehensiveAnalytics {
     } catch (error) {
       console.error('Event tracking error:', error);
     }
+    */
   }
 
   // Public method to track page change (for SPAs)
