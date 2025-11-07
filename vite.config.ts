@@ -33,38 +33,10 @@ export default defineConfig({
         'nodemailer',
       ],
       output: {
-        manualChunks(id) {
-          // Fixed chunking to prevent React forwardRef errors - v4
-          if (id.includes('node_modules')) {
-            // Keep React core separate and loaded first
-            if (id.includes('react/') && !id.includes('react-')) {
-              return 'vendor-react-core';
-            }
-            // Bundle React DOM and JSX runtime with core
-            if (id.includes('react-dom') || id.includes('react/jsx-runtime')) {
-              return 'vendor-react-core';
-            }
-            // Bundle ALL UI libraries together in extras (including lucide)
-            if (id.includes('@emotion') || id.includes('@mui') ||
-                id.includes('framer-motion') || id.includes('recharts') ||
-                id.includes('lucide-react')) {
-              return 'vendor-react-extras';
-            }
-            // Firebase - separate chunk
-            if (id.includes('firebase')) {
-              return 'vendor-firebase';
-            }
-            // Supabase - separate chunk
-            if (id.includes('@supabase')) {
-              return 'vendor-supabase';
-            }
-            // All other vendor libraries
-            return 'vendor';
-          }
-        },
-        // Aggressive caching strategy - v4 to bust cache
-        chunkFileNames: 'assets/js/[name]-v4-[hash].js',
-        entryFileNames: 'assets/js/[name]-v4-[hash].js',
+        // Let Vite handle chunking automatically - React 19 best practice
+        // Aggressive caching strategy - v5 to bust cache
+        chunkFileNames: 'assets/js/[name]-v5-[hash].js',
+        entryFileNames: 'assets/js/[name]-v5-[hash].js',
         assetFileNames: (assetInfo) => {
           if (assetInfo.name?.endsWith('.css')) {
             return 'assets/css/[name]-[hash][extname]';
