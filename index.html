@@ -291,5 +291,23 @@
     <div class="loading-container">
       <div class="loading-spinner"></div>
     </div>
+
+    <!-- Fallback: hide spinner and show message if app fails to mount -->
+    <script>
+      window.addEventListener('load', function () {
+        setTimeout(function () {
+          var root = document.getElementById('root');
+          var spinner = document.querySelector('.loading-container');
+          if (root && root.children.length === 0) {
+            root.innerHTML = '<div style="padding:20px;font-family:sans-serif">' +
+              '<h1>App failed to start</h1>' +
+              '<p>Please refresh the page. If the issue persists, the deployment may be misconfigured.</p>' +
+              '<p style="color:#666">Site owner tip: ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set in Vercel.</p>' +
+            '</div>';
+          }
+          if (spinner) spinner.remove();
+        }, 8000);
+      });
+    </script>
   </body>
 </html>
