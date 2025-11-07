@@ -44,15 +44,12 @@ export default defineConfig({
             if (id.includes('react-dom') || id.includes('react/jsx-runtime')) {
               return 'vendor-react-extras';
             }
-            // Keep lucide-react in main vendor for immediate availability
-            if (id.includes('lucide')) {
-              return 'vendor';
-            }
             // Bundle heavy UI libraries separately
             if (id.includes('@emotion') || id.includes('@mui') ||
                 id.includes('framer-motion') || id.includes('recharts')) {
               return 'vendor-react-extras';
             }
+            // Don't manually chunk lucide-react - let it bundle with components that use it
             // Firebase - separate chunk
             if (id.includes('firebase')) {
               return 'vendor-firebase';
