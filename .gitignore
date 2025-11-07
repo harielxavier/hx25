@@ -115,7 +115,7 @@ temp/
 temp_images/
 .vite/
 
-# Exclude all image files except critical ones
+# Exclude large image files but allow essential public assets
 *.jpg
 *.jpeg
 *.png
@@ -123,11 +123,32 @@ temp_images/
 *.webp
 *.svg
 *.ico
-!public/favicon.ico
-!public/logo.png
-!public/logo.svg
-!src/assets/*.svg
-!src/assets/*.png
+
+# But allow essential public directory images (needed for deployment)
+!public/**/*.jpg
+!public/**/*.jpeg
+!public/**/*.png
+!public/**/*.gif
+!public/**/*.webp
+!public/**/*.svg
+!public/**/*.ico
+
+# Allow source assets
+!src/assets/**/*.svg
+!src/assets/**/*.png
+!src/assets/**/*.jpg
+!src/assets/**/*.jpeg
+
+# Exclude very large files and private content
+public/MoStuff/**/*.jpg
+public/MoStuff/**/*.jpeg
+public/MoStuff/**/*.png
+**/private/**/*.jpg
+**/private/**/*.jpeg
+**/private/**/*.png
+**/*_large.jpg
+**/*_original.jpg
+**/*_raw.*
 
 # Additional exclusions for Windsurf deployment
 google-cloud-sdk/
