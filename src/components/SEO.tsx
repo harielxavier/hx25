@@ -84,7 +84,7 @@ export default function SEO({
         "longitude": "-74.6974"
       },
       "url": window.location.origin,
-      "telephone": "+1-973-729-5555",
+      "telephone": "+1-862-355-3502",
       "priceRange": "$$$",
       "areaServed": [
         {
