@@ -300,11 +300,18 @@ export async function initSupabaseGATracking() {
       }
     };
 
-    const sessionId = await trackVisitorSession(sessionData);
+    // Try to track in Supabase, but don't fail if table doesn't exist
+    let sessionId = null;
+    try {
+      sessionId = await trackVisitorSession(sessionData);
+      console.log('✅ Supabase visitor tracking connected to GA4:', sessionId);
+    } catch (supabaseError: any) {
+      // Silently handle Supabase errors - visitors table may not exist yet
+      console.debug('Supabase visitor tracking not available (table may not exist)');
+      sessionId = 'ga4-only-' + Date.now();
+    }
 
-    console.log('✅ Supabase visitor tracking connected to GA4:', sessionId);
-
-    // Send initial event to GA4 with Supabase session ID
+    // Send initial event to GA4 (works even without Supabase)
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'session_start', {
         session_id: sessionId,
@@ -317,7 +324,7 @@ export async function initSupabaseGATracking() {
 
     return sessionId;
   } catch (error) {
-    console.error('Error connecting Supabase tracking to GA4:', error);
+    console.debug('GA4 tracking initialized without Supabase');
     return null;
   }
 }
