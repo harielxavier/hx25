@@ -7,11 +7,12 @@
 import { GA_MEASUREMENT_ID } from '../config/analytics';
 import { trackVisitorSession, updateSession } from '../services/analyticsService';
 
-// Declare gtag globally
+// Declare gtag and fbq globally
 declare global {
   interface Window {
     gtag: (...args: any[]) => void;
     dataLayer: any[];
+    fbq: (...args: any[]) => void;
   }
 }
 
@@ -24,6 +25,14 @@ export function trackFormSubmission(formName: string, formData?: Record<string, 
         form_name: formName,
         form_data: JSON.stringify(formData || {}),
         timestamp: new Date().toISOString()
+      });
+    }
+
+    // Send to Meta Pixel
+    if (typeof window !== 'undefined' && window.fbq) {
+      window.fbq('track', 'SubmitApplication', {
+        content_name: formName,
+        content_category: 'form_submission'
       });
     }
 
@@ -152,6 +161,16 @@ export function trackContactConversion(conversionData: {
         value: conversionData.value || 1,
         currency: 'USD',
         timestamp: new Date().toISOString()
+      });
+    }
+
+    // Send to Meta Pixel as Lead event
+    if (typeof window !== 'undefined' && window.fbq) {
+      window.fbq('track', 'Lead', {
+        content_name: conversionData.formType || 'contact_form',
+        content_category: 'wedding_inquiry',
+        value: conversionData.value || 1000,
+        currency: 'USD'
       });
     }
 
