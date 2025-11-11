@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:validate": "node scripts/validate-build.mjs",
+    "build:safe": "npm run build && npm run build:validate",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "playwright test",
@@ -16,7 +18,8 @@
     "generate:rss": "node generate-rss-feed.mjs",
     "migrate:cloudinary": "node migrate-to-cloudinary.mjs",
     "update:image-paths": "node update-image-paths.mjs",
-    "prebuild": "npm run generate:sitemap && npm run generate:rss"
+    "prebuild": "npm run generate:sitemap && npm run generate:rss",
+    "precommit": "npm run build:safe"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.68.0",

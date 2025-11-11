@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Quick validation before push (faster than full build)
+echo "🚀 Running pre-push checks..."
+
+# 1. Check if vite.config.ts has dev-vendor
+if grep -q "return 'dev-vendor'" vite.config.ts 2>/dev/null; then
+  echo "❌ CRITICAL: dev-vendor chunk detected in vite.config.ts!"
+  echo "This will cause production build failures."
+  echo "Remove the dev-vendor chunk before pushing."
+  exit 1
+fi
+
+# 2. Check if drop_console is set to true
+if grep -q "drop_console: true" vite.config.ts 2>/dev/null; then
+  echo "⚠️  WARNING: drop_console is set to true"
+  echo "This may cause initialization issues with analytics."
+  echo "Consider setting to false."
+fi
+
+# 3. Check GA4 ID is present in index.html
+if ! grep -q "G-SB0Q9ER7KW" index.html 2>/dev/null; then
+  echo "❌ CRITICAL: GA4 tracking ID not found in index.html!"
+  exit 1
+fi
+
+echo "✅ Pre-push checks passed!"
