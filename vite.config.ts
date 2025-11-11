@@ -148,11 +148,8 @@ export default defineConfig({
               return 'animation-vendor';
             }
 
-            // Development and build tools
-            if (id.includes('esm') || id.includes('chalk') ||
-                id.includes('dotenv') || id.includes('mime-types')) {
-              return 'dev-vendor';
-            }
+            // Skip dev-vendor chunk - causes initialization issues
+            // These packages should be tree-shaken out in production anyway
 
             // All other node_modules
             return 'vendor';
@@ -201,13 +198,13 @@ export default defineConfig({
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true,
+        drop_console: false, // Keep console for analytics debugging
         drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug'],
         passes: 2, // Multiple compression passes
       },
       mangle: {
         safari10: true, // Fix Safari 10+ issues
+        keep_fnames: false,
       },
       format: {
         comments: false, // Remove all comments
