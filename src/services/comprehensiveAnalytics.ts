@@ -57,11 +57,6 @@ class ComprehensiveAnalytics {
     this.clicksCount = 0;
     this.sessionSaved = false;
 
-    // Bind methods to preserve 'this' context
-    this.onPageChange = this.onPageChange.bind(this);
-    this.trackPageView = this.trackPageView.bind(this);
-    this.savePageExit = this.savePageExit.bind(this);
-
     this.initialize();
   }
 
@@ -179,7 +174,7 @@ class ComprehensiveAnalytics {
     }
   }
 
-  private async trackPageView() {
+  private trackPageView = async () => {
     // TEMPORARILY DISABLED: Supabase analytics tables don't exist yet
     return;
 
@@ -239,7 +234,7 @@ class ComprehensiveAnalytics {
     });
   }
 
-  private async savePageExit() {
+  private savePageExit = async () => {
     // TEMPORARILY DISABLED: Supabase analytics tables don't exist yet
     return;
 
@@ -335,16 +330,16 @@ class ComprehensiveAnalytics {
   }
 
   // Public method to track page change (for SPAs)
-  public async onPageChange(newPath: string) {
+  public onPageChange = async (newPath: string) => {
     // Save data for previous page
     await this.savePageExit();
-    
+
     // Reset for new page
     this.currentPagePath = newPath;
     this.currentPageStart = Date.now();
     this.maxScrollDepth = 0;
     this.clicksCount = 0;
-    
+
     // Track new page view
     await this.trackPageView();
   }
