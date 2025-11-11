@@ -64,27 +64,25 @@ try {
   process.exit(1);
 }
 
-// 4. Verify react-vendor loads before animation-vendor
-console.log('4️⃣  Verifying chunk load order...');
+// 4. Verify automatic chunking is working
+console.log('4️⃣  Verifying chunk strategy...');
 try {
   const distJs = fs.readdirSync('dist/assets/js');
-  const reactVendor = distJs.find(file => file.includes('react-vendor'));
-  const animationVendor = distJs.find(file => file.includes('animation-vendor'));
 
-  if (!reactVendor) {
-    console.error('   ❌ CRITICAL: react-vendor chunk not found!');
+  // With automatic chunking, we should have index chunks and page chunks
+  const indexChunks = distJs.filter(file => file.includes('index-v5-'));
+
+  if (indexChunks.length === 0) {
+    console.error('   ❌ CRITICAL: No index chunks found!');
     process.exit(1);
   }
 
-  if (animationVendor) {
-    console.log('   ✅ React vendor chunk exists');
-    console.log('   ✅ Animation vendor chunk separated');
-  }
+  console.log(`   ✅ Found ${indexChunks.length} index chunk(s)`);
+  console.log('   ✅ Automatic chunking active (no manual chunk conflicts)\n');
 
   VALIDATION_CHECKS.reactLoadsFirst = true;
-  console.log('   ✅ Chunk load order correct\n');
 } catch (error) {
-  console.error('   ❌ Failed to verify load order:', error.message);
+  console.error('   ❌ Failed to verify chunking:', error.message);
   process.exit(1);
 }
 

@@ -40,16 +40,18 @@ Regular production build (validation happens separately).
 
 ### ❌ NEVER Do This in vite.config.ts:
 ```javascript
-// BAD - causes initialization errors
-if (id.includes('esm') || id.includes('chalk')) {
-  return 'dev-vendor';
+// BAD - manual chunking causes React initialization errors
+manualChunks: (id) => {
+  if (id.includes('react')) return 'react-vendor';
+  if (id.includes('mui')) return 'mui-vendor';
+  // ... more manual chunks
 }
 ```
 
 ### ✅ ALWAYS Keep This:
 ```javascript
-// GOOD - dev packages tree-shaken automatically
-// Skip dev-vendor chunk - causes initialization issues
+// GOOD - automatic chunking prevents all initialization issues
+manualChunks: undefined
 ```
 
 ### ❌ NEVER Do This in terser options:

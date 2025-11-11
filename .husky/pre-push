@@ -4,7 +4,15 @@
 # Quick validation before push (faster than full build)
 echo "🚀 Running pre-push checks..."
 
-# 1. Check if vite.config.ts has dev-vendor
+# 1. Check if manual chunking is enabled (should be undefined)
+if grep -q "manualChunks: (id)" vite.config.ts 2>/dev/null; then
+  echo "❌ CRITICAL: Manual chunking detected in vite.config.ts!"
+  echo "Manual chunking causes React initialization errors."
+  echo "manualChunks should be set to undefined."
+  exit 1
+fi
+
+# 2. Check if vite.config.ts has dev-vendor
 if grep -q "return 'dev-vendor'" vite.config.ts 2>/dev/null; then
   echo "❌ CRITICAL: dev-vendor chunk detected in vite.config.ts!"
   echo "This will cause production build failures."
@@ -12,14 +20,20 @@ if grep -q "return 'dev-vendor'" vite.config.ts 2>/dev/null; then
   exit 1
 fi
 
-# 2. Check if drop_console is set to true
+# 3. Verify automatic chunking is set
+if ! grep -q "manualChunks: undefined" vite.config.ts 2>/dev/null; then
+  echo "⚠️  WARNING: manualChunks may not be set to undefined"
+  echo "Automatic chunking is the safest strategy."
+fi
+
+# 4. Check if drop_console is set to true
 if grep -q "drop_console: true" vite.config.ts 2>/dev/null; then
   echo "⚠️  WARNING: drop_console is set to true"
   echo "This may cause initialization issues with analytics."
   echo "Consider setting to false."
 fi
 
-# 3. Check GA4 ID is present in index.html
+# 5. Check GA4 ID is present in index.html
 if ! grep -q "G-SB0Q9ER7KW" index.html 2>/dev/null; then
   echo "❌ CRITICAL: GA4 tracking ID not found in index.html!"
   exit 1

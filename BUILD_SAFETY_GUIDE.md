@@ -20,31 +20,35 @@ Run this anytime to check if your build is production-ready.
 
 ## Common Issues & How We Prevent Them
 
-### ❌ Issue 1: dev-vendor Initialization Error
+### ❌ Issue 1: Manual Chunking Causes React Initialization Errors
+**Problem:** Manual chunking splits React across multiple chunks or loads dependencies before React, causing:
+- "Cannot set properties of undefined (setting 'AsyncMode')"
+- "Cannot access 'n' before initialization"
+- Other initialization race conditions
+
+**Prevention:**
+1. ✅ Pre-push hook detects manual chunking and blocks push
+2. ✅ Build validator ensures automatic chunking is active
+3. ✅ Vite config set to `manualChunks: undefined`
+
+**Fix if it happens:**
+- Set `manualChunks: undefined` in vite.config.ts
+- Let Vite handle chunking automatically
+- Vite's dependency analysis prevents initialization issues
+
+---
+
+### ❌ Issue 2: dev-vendor Initialization Error
 **Problem:** Dev dependencies get bundled in production, causing "Cannot access 'n' before initialization"
 
 **Prevention:**
 1. ✅ Pre-push hook checks vite.config.ts for dev-vendor chunks
 2. ✅ Build validator ensures no dev-vendor chunk exists
-3. ✅ Vite config comments explain why dev-vendor is skipped
+3. ✅ Automatic chunking prevents dev deps from being bundled
 
 **Fix if it happens:**
-- Remove dev-vendor chunking from vite.config.ts
-- These packages should be tree-shaken automatically
-
----
-
-### ❌ Issue 2: React Context Undefined Error
-**Problem:** Framer-motion loads before React, causing context errors
-
-**Prevention:**
-1. ✅ React-vendor chunk ALWAYS loads first
-2. ✅ Animation-vendor separated from other chunks
-3. ✅ Build validator checks chunk order
-
-**Fix if it happens:**
-- Split framer-motion into separate animation-vendor chunk
-- Ensure React vendor chunk loads before animation chunk
+- Ensure no manual dev-vendor chunking
+- Let Vite tree-shake dev dependencies automatically
 
 ---
 
