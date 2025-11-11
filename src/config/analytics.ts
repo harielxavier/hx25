@@ -7,7 +7,8 @@
 
 // Google Analytics Measurement ID
 // Format should be G-XXXXXXXXXX for GA4
-export const GA_MEASUREMENT_ID = 'G-V9HYY5GS0D'; // Google Analytics ID
+// HarielXavierPhotographyv2 Stream
+export const GA_MEASUREMENT_ID = 'G-SB0Q9ER7KW'; // Google Analytics ID
 
 // Analytics feature flags
 export const ANALYTICS_CONFIG = {

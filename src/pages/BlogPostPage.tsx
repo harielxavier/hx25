@@ -14,6 +14,7 @@ import RelatedPosts from '../components/blog/RelatedPosts';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import '../styles/blog-content.css';
 import { BlogPost, getPostBySlug, incrementPostViews, getPostsByCategory } from '../services/supabaseBlogService';
+import { trackBlogEngagement } from '../utils/enhancedAnalytics';
 // REMOVED FIREBASE: import { addDoc, collection, serverTimestamp // REMOVED FIREBASE
 // REMOVED FIREBASE: import { db } from '../lib/firebase';
 import { getStockImage } from '../utils/images';
@@ -124,6 +125,15 @@ export default function BlogPostPage() {
         console.log('🖼️ Post image:', postData.featuredImage || postData.featured_image);
 
         setPost(postData);
+
+        // Track blog post read
+        const readTime = parseInt(calculateReadTime(postData.content));
+        trackBlogEngagement('read', {
+          postId: postData.id,
+          postTitle: postData.title,
+          postCategory: postData.category,
+          readTime: readTime
+        });
 
         // Fetch related posts (same category, excluding current post)
         if (postData.category) {

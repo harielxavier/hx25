@@ -5,6 +5,7 @@ import AnalyticsProvider from './components/AnalyticsProvider';
 import GoogleAnalytics from './components/GoogleAnalytics';
 import AnalyticsTracker from './components/AnalyticsTracker';
 import { initializeAnalytics } from './utils/analytics';
+import { initEnhancedAnalytics, cleanupEnhancedAnalytics, initSupabaseGATracking } from './utils/enhancedAnalytics';
 import ScrollToTop from './components/ScrollToTop';
 import ErrorBoundary from './components/ErrorBoundary';
 import { GA_MEASUREMENT_ID } from './config/analytics';
@@ -174,13 +175,27 @@ const App: React.FC = () => {
   useEffect(() => {
     const init = async () => {
       try {
+        // Initialize base analytics
         await initializeAnalytics();
+
+        // Initialize enhanced analytics with GA4 + Supabase tracking
+        initEnhancedAnalytics();
+
+        // Connect Supabase visitor tracking to GA4
+        await initSupabaseGATracking();
+
+        console.log('✅ All analytics initialized successfully');
       } catch (error) {
         console.error('Failed to initialize analytics:', error);
       }
     };
-    
+
     init();
+
+    // Cleanup on unmount
+    return () => {
+      cleanupEnhancedAnalytics();
+    };
   }, []);
 
   return (

@@ -9,6 +9,7 @@ import SEO from '../components/SEO';
 import { biancaJeffreyImages } from '../data/biancaJeffreyImages';
 import PhotoswipeResponsiveGallery from '../components/gallery/PhotoswipeResponsiveGallery';
 import { useInView } from 'react-intersection-observer';
+import { trackGalleryView } from '../utils/enhancedAnalytics';
 
 // Gallery data
 const galleryData = {
@@ -137,6 +138,15 @@ function BiancaJeffreyGalleryPage() {
       setLoading(false);
     }, 1200);
     return () => clearTimeout(timer);
+  }, []);
+
+  // Track gallery view
+  useEffect(() => {
+    trackGalleryView(galleryData.title, {
+      venue: galleryData.venue,
+      location: galleryData.location,
+      imageCount: biancaJeffreyImages.length
+    });
   }, []);
 
   const scrollToTop = () => {

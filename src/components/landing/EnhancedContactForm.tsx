@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Camera, Calendar, MapPin, Phone, Mail, Send, Sparkles, Star } from 'lucide-react';
+import { trackFormSubmission, trackContactConversion } from '../../utils/enhancedAnalytics';
 
 interface FormData {
   firstName: string;
@@ -130,12 +131,28 @@ const EnhancedContactForm: React.FC = () => {
 
     setIsLoading(true);
     try {
+      // Track form submission start
+      trackFormSubmission('Enhanced Contact Form', {
+        jobType: formData.jobType,
+        budget: formData.budget,
+        hearAboutUs: formData.hearAboutUs,
+        eventLocation: formData.eventLocation
+      });
+
       // Use EmailJS service (no backend needed!)
       const { sendContactEmail } = await import('../../services/emailjsService');
-      
+
       const success = await sendContactEmail(formData);
-      
+
       if (success) {
+        // Track successful contact conversion
+        trackContactConversion({
+          source: formData.hearAboutUs || 'website',
+          formType: 'enhanced_contact_form',
+          phoneOrEmail: 'email',
+          value: 1000 // Estimated lead value
+        });
+
         setSubmitted(true);
         setFormData({
           firstName: '',
@@ -152,11 +169,11 @@ const EnhancedContactForm: React.FC = () => {
           weddingStyle: ''
         });
       } else {
-        alert('There was an error sending your message. Please try again or call us at (862) 290-4349.');
+        alert('There was an error sending your message. Please try again or call us at (862) 355-3502.');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      alert('There was an error sending your message. Please try again or call us at (862) 290-4349.');
+      alert('There was an error sending your message. Please try again or call us at (862) 355-3502.');
     } finally {
       setIsLoading(false);
     }
