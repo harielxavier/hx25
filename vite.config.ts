@@ -92,9 +92,16 @@ export default defineConfig({
               return 'media-vendor';
             }
 
-            // Database and APIs
-            if (id.includes('@supabase') || id.includes('firebase') ||
-                id.includes('axios')) {
+            // Database and APIs - SPLIT INTO SEPARATE CHUNKS
+            if (id.includes('@supabase')) {
+              return 'supabase-vendor';
+            }
+
+            if (id.includes('firebase')) {
+              return 'firebase-vendor';
+            }
+
+            if (id.includes('axios')) {
               return 'api-vendor';
             }
 
