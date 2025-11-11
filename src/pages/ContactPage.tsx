@@ -8,7 +8,7 @@ const ContactPage: React.FC = () => {
     <>
       <Helmet>
         <title>Contact Hariel Xavier Photography | Wedding Photographer Sussex County NJ</title>
-        <meta name="description" content="Contact Hariel Xavier Photography for your wedding photography needs in Sussex County, NJ. Professional wedding photographer serving New Jersey and surrounding areas. Call (862) 290-4349 or email Hi@HarielXavier.com." />
+        <meta name="description" content="Contact Hariel Xavier Photography for your wedding photography needs in Sussex County, NJ. Professional wedding photographer serving New Jersey and surrounding areas. Call (862) 355-3502 or email Hi@HarielXavier.com." />
         <meta name="keywords" content="contact wedding photographer, Sussex County NJ photographer, Hariel Xavier Photography contact, wedding photography inquiry, New Jersey wedding photographer" />
         <link rel="canonical" href="https://harielxavier.com/contact" />
         
@@ -35,7 +35,7 @@ const ContactPage: React.FC = () => {
               "@type": "LocalBusiness",
               "name": "Hariel Xavier Photography",
               "image": "https://harielxavier.com/black.png",
-              "telephone": "+1-862-391-4179",
+              "telephone": "+1-862-355-3502",
               "email": "Hi@HarielXavier.com",
               "address": {
                 "@type": "PostalAddress",
@@ -133,8 +133,8 @@ const ContactPage: React.FC = () => {
                     </svg>
                   </div>
                   <h3 className="text-xl font-semibold text-gray-800 mb-2">Phone</h3>
-                  <a href="tel:+18623914179" className="text-green-600 hover:text-green-800 transition-colors font-medium">
-                    (862) 391-4179
+                  <a href="tel:+18623553502" className="text-green-600 hover:text-green-800 transition-colors font-medium">
+                    (862) 355-3502
                   </a>
                   <p className="text-sm text-gray-500 mt-2">Call or text anytime</p>
                 </div>

@@ -197,7 +197,7 @@ class DynamicSEOService {
       "name": "Hariel Xavier Photography",
       "description": `Professional wedding photography serving ${location.city}, ${location.county}, New Jersey`,
       "url": "https://harielxavier.com",
-      "telephone": "+1-862-391-4179",
+      "telephone": "+1-862-355-3502",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": location.city,

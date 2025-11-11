@@ -127,7 +127,7 @@
       "image": "https://res.cloudinary.com/dos0qac90/image/upload/v1761593133/hariel-xavier-photography/MoStuff/LandingPage/HeroPage.jpg",
       "logo": "https://harielxavier.com/logo.svg",
       "url": "https://harielxavier.com",
-      "telephone": "+1-973-534-5555",
+      "telephone": "+1-862-355-3502",
       "email": "info@harielxavier.com",
       "address": {
         "@type": "PostalAddress",
@@ -276,19 +276,8 @@
       }
     }
     </script>
-    <!-- Load React bootstrap synchronously BEFORE any modules -->
-    <script type="module">
-      // Import and execute React bootstrap first
-      import reactBootstrap from '/src/utils/reactBootstrap.ts';
-
-      // Wait for React to be globally available
-      if (typeof window !== 'undefined') {
-        window.React = reactBootstrap;
-      }
-
-      // Then load the main app
-      import '/src/main.tsx';
-    </script>
+    <!-- Load main app module -->
+    <script type="module" src="/src/main.tsx"></script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

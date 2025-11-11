@@ -54,7 +54,7 @@ export const createPlainThankYouEmailTemplate = (name, email, eventType = 'weddi
         <p style="margin-bottom: 5px;">Warmly,</p>
         <p style="margin-bottom: 5px;">Mauricio Fernandez</p>
         <p style="margin-bottom: 5px;">Hariel Xavier Photography</p>
-        <p style="margin-bottom: 5px;">Phone: 862-290-4349</p>
+        <p style="margin-bottom: 5px;">Phone: (862) 355-3502</p>
         <p style="margin-bottom: 5px;">Email: Hi@HarielXavier.com</p>
         <p style="margin-bottom: 25px;">Instagram: @harielxaviermedia</p>
         

@@ -73,7 +73,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
   const siteName = 'Hariel Xavier Photography';
   const domain = getEnv('VITE_DOMAIN', 'https://harielxavier.com');
   const contactEmail = getEnv('VITE_CONTACT_EMAIL', 'info@harielxavier.com');
-  const contactPhone = getEnv('VITE_CONTACT_PHONE', '+1-973-534-5555');
+  const contactPhone = getEnv('VITE_CONTACT_PHONE', '+1-862-355-3502');
 
   // Enhanced structured data for photography website
   const baseStructuredData = {

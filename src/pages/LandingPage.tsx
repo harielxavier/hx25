@@ -6,7 +6,6 @@ import Navigation from '../components/landing/Navigation';
 import Footer from '../components/landing/Footer';
 import SEOHead from '../components/common/SEOHead';
 import FeaturedGalleries from '../components/landing/FeaturedGalleries';
-import CuratorSocialFeed from '../components/social/CuratorSocialFeed';
 import PhotographyStyleSlider from '../components/portfolio/PhotographyStyleSlider';
 import BlurText from '../components/BlurText';
 // Removed FOMO element
@@ -138,7 +137,7 @@ export function LandingPage() {
           'postalCode': '',
           'addressCountry': 'US'
         },
-        'telephone': '+1-862-391-4179',
+        'telephone': '+1-862-355-3502',
         'url': 'https://harielxavier.com',
         'priceRange': '$$$',
         'sameAs': [
@@ -168,7 +167,7 @@ export function LandingPage() {
           '@type': 'LocalBusiness',
           'name': 'Hariel Xavier Photography',
           'image': 'https://harielxavier.com/MoStuff/LandingPage/HeroPage.jpg',
-          'telephone': '+1-862-391-4179',
+          'telephone': '+1-862-355-3502',
           'address': {
             '@type': 'PostalAddress',
             'addressLocality': 'Sparta',
@@ -862,17 +861,6 @@ export function LandingPage() {
 
       <PhotographyStyleSlider />
 
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-light mb-4">Follow Our Journey</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Stay updated with our latest work and behind-the-scenes moments on Instagram
-            </p>
-          </div>
-          <CuratorSocialFeed feedId="f9d2afdf-f60e-4050-97d7-5b52c7ffaeb3" className="w-full" />
-        </div>
-      </section>
 
       {/* Latest Blog Posts Section */}
       <section className="py-16 md:py-24 bg-gradient-to-br from-gray-50 to-white">

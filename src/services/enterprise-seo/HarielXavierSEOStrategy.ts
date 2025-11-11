@@ -90,7 +90,7 @@ export const harielXavierSEOConfig: SEOConfiguration = {
       latitude: 41.0348,
       longitude: -74.6396
     },
-    phone: '+1-862-391-4179',
+    phone: '+1-862-355-3502',
     email: 'info@harielxavier.com',
     businessType: 'Professional Photography Services',
     serviceAreas: [

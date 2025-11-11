@@ -137,7 +137,7 @@ const DynamicSEO: React.FC<DynamicSEOProps> = ({
           "image": "https://harielxavier.com/images/logo.jpg",
           "description": seoContent.description,
           "url": "https://harielxavier.com",
-          "telephone": "+1-862-391-4179",
+          "telephone": "+1-862-355-3502",
           "priceRange": "$2,395-$5,395",
           "serviceType": "Wedding Photography",
           "areaServed": [

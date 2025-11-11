@@ -332,7 +332,7 @@ const createThankYouEmailTemplate = (name, email, eventType = 'wedding', eventDa
                         </p>
                         <p style="margin: 0; font-size: 14px; color: #666;">
                           Hariel Xavier Photography<br>
-                          Phone: 862-290-4349<br>
+                          Phone: (862) 355-3502<br>
                           Email: Hi@HarielXavier.com
                         </p>
                       </td>
