@@ -32,7 +32,7 @@ const PortfolioPage: React.FC = () => {
       coupleName: 'Bianca & Jeffrey',
       venue: 'Park Chateau Estate & Gardens',
       location: 'East Brunswick, NJ',
-      imageUrl: '/MoStuff/Featured Wedding/Bianca & Jeffrey\'s Wedding/The Ceremony/Bianca & Jeff_s Wedding-826.jpg',
+      imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593133/hariel-xavier-photography/MoStuff/Featured_Wedding/Bianca_and_Jeffreys_Wedding/The_Ceremony/Bianca_and_Jeff_s_Wedding-826.jpg',
       linkUrl: '/bianca-jeffrey',
       featured: true
     },
@@ -51,7 +51,7 @@ const PortfolioPage: React.FC = () => {
       coupleName: 'Ansimon & Mina',
       venue: 'The Legacy Castle',
       location: 'Pompton Plains, NJ',
-      imageUrl: '/MoStuff/Featured Wedding/Ansimon & Mina\'s Wedding/Annie & Steve Ansimon & Mina Wedding additional-1060_websize.jpg',
+      imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593168/hariel-xavier-photography/MoStuff/Featured_Wedding/Ansimon_and_Mina/Annie_Steve_Ansimon_Mina_Wedding_additional-1060_websize.jpg',
       linkUrl: '/ansimon-mina'
     },
     {
@@ -78,7 +78,7 @@ const PortfolioPage: React.FC = () => {
       coupleName: 'Anna & Jose',
       venue: 'The Meadow Wood',
       location: 'Randolph, NJ',
-      imageUrl: '/MoStuff/Featured Wedding/Anna & Jose\'s Wedding/aj-189.jpg',
+      imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593176/hariel-xavier-photography/MoStuff/Featured_Wedding/Anna_and_Joses_Wedding/aj-189.jpg',
       linkUrl: '/ana-jose'
     },
     {
@@ -97,7 +97,7 @@ const PortfolioPage: React.FC = () => {
       coupleName: 'Judy & Mike',
       venue: 'Nanina\'s In the Park',
       location: 'Belleville, NJ',
-      imageUrl: '/MoStuff/Featured Wedding/Judy & Mike\'s Wedding/jm1.jpg',
+      imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593174/hariel-xavier-photography/MoStuff/Featured_Wedding/Judy_and_Mikes_Wedding/jm1.jpg',
       linkUrl: '/judy-mike'
     },
     {
@@ -124,7 +124,7 @@ const PortfolioPage: React.FC = () => {
       coupleName: 'Lauren & David',
       venue: 'Crystal Plaza',
       location: 'Livingston, NJ',
-      imageUrl: '/MoStuff/Featured Wedding/Judy & Mike\'s Wedding/jm1.jpg',
+      imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593174/hariel-xavier-photography/MoStuff/Featured_Wedding/Judy_and_Mikes_Wedding/jm1.jpg',
       linkUrl: '/lauren-david'
     },
     {
@@ -133,7 +133,7 @@ const PortfolioPage: React.FC = () => {
       coupleName: 'Emma & James',
       venue: 'The Ryland Inn',
       location: 'Whitehouse Station, NJ',
-      imageUrl: '/MoStuff/Featured Wedding/Ansimon & Mina\'s Wedding/Annie & Steve Ansimon & Mina Wedding additional-1060_websize.jpg',
+      imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593168/hariel-xavier-photography/MoStuff/Featured_Wedding/Ansimon_and_Mina/Annie_Steve_Ansimon_Mina_Wedding_additional-1060_websize.jpg',
       linkUrl: '/emma-james'
     },
     {
@@ -160,7 +160,7 @@ const PortfolioPage: React.FC = () => {
       coupleName: 'Rachel & Ben',
       venue: 'The Ashford Estate',
       location: 'Allentown, NJ',
-      imageUrl: '/MoStuff/Featured Wedding/Bianca & Jeffrey\'s Wedding/The Ceremony/Bianca & Jeff_s Wedding-826.jpg',
+      imageUrl: 'https://res.cloudinary.com/dos0qac90/image/upload/v1761593133/hariel-xavier-photography/MoStuff/Featured_Wedding/Bianca_and_Jeffreys_Wedding/The_Ceremony/Bianca_and_Jeff_s_Wedding-826.jpg',
       linkUrl: '/rachel-ben'
     },
     {

@@ -57,6 +57,11 @@ class ComprehensiveAnalytics {
     this.clicksCount = 0;
     this.sessionSaved = false;
 
+    // Bind methods to preserve 'this' context
+    this.onPageChange = this.onPageChange.bind(this);
+    this.trackPageView = this.trackPageView.bind(this);
+    this.savePageExit = this.savePageExit.bind(this);
+
     this.initialize();
   }
 
