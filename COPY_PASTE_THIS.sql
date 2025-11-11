@@ -205,7 +205,7 @@ CREATE INDEX IF NOT EXISTS idx_leads_status ON public.leads(status);
 
 -- Insert default admin user (you can change this) - let ID auto-generate
 INSERT INTO public.users (email, full_name, role)
-VALUES ('admin@harielxavierphotography.com', 'Admin User', 'admin')
+VALUES ('admin@harielxavier.com', 'Admin User', 'admin')
 ON CONFLICT (email) DO NOTHING;
 
 -- ========================================

@@ -146,7 +146,7 @@ async function sendAdminNotificationEmail(lead) {
     <p><strong>Source:</strong> ${lead.source}</p>
     ${lead.message ? `<p><strong>Message:</strong><br>${lead.message.replace(/\n/g, '<br>')}</p>` : ''}
     <p><strong>Received:</strong> ${new Date(lead.createdAt).toLocaleString()}</p>
-    <p><a href="https://www.harielxavierphotography.com/admin/leads/${lead.id}">View Lead in Admin</a></p>
+    <p><a href="https://www.harielxavier.com/admin/leads/${lead.id}">View Lead in Admin</a></p>
   `;
   
   const mailOptions = {
@@ -182,15 +182,15 @@ async function sendLeadAutoresponseEmail(lead) {
         <li>We'll schedule a consultation to discuss your vision in detail</li>
       </ol>
       
-      <p>In the meantime, feel free to browse our <a href="https://www.harielxavierphotography.com/portfolio">portfolio</a> for inspiration.</p>
-      
+      <p>In the meantime, feel free to browse our <a href="https://www.harielxavier.com/portfolio">portfolio</a> for inspiration.</p>
+
       <p>Looking forward to connecting with you soon!</p>
-      
+
       <p>Warm regards,<br>
       Hariel Xavier<br>
       Hariel Xavier Photography<br>
-      <a href="mailto:info@harielxavierphotography.com">info@harielxavierphotography.com</a><br>
-      <a href="tel:+1234567890">(123) 456-7890</a></p>
+      <a href="mailto:info@harielxavier.com">info@harielxavier.com</a><br>
+      <a href="tel:+18623553502">(862) 355-3502</a></p>
       
       <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #666;">
         <p>This is an automatic response to your inquiry. Please do not reply to this email.</p>
