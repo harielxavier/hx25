@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom'; // Import useLocation
-import { ArrowRight, Check, MapPin, Calendar, Clock } from 'lucide-react';
+import { ArrowRight, Check, MapPin, Calendar, Clock, Download, FileText } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import Navigation from '../components/landing/Navigation';
 import Footer from '../components/landing/Footer';
@@ -8,7 +8,6 @@ import SEOHead from '../components/common/SEOHead';
 import FeaturedGalleries from '../components/landing/FeaturedGalleries';
 import PhotographyStyleSlider from '../components/portfolio/PhotographyStyleSlider';
 import BlurText from '../components/BlurText';
-import LeadMagnetBanner from '../components/landing/LeadMagnetBanner';
 // Removed FOMO element
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
@@ -862,8 +861,125 @@ export function LandingPage() {
 
       <PhotographyStyleSlider />
 
-      {/* Free Resources - PDF Downloads */}
-      <LeadMagnetBanner />
+      {/* Wedding Timeline Guide Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className="order-2 md:order-1">
+                <div className="inline-flex items-center gap-2 bg-rose-100 text-rose-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                  <FileText className="w-4 h-4" />
+                  FREE DOWNLOAD
+                </div>
+                <h2 className="text-4xl md:text-5xl font-serif mb-6 text-gray-900">
+                  Wedding Photography Timeline Guide
+                </h2>
+                <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+                  The complete guide to planning your wedding day photography timeline. Learn when to schedule each moment for perfect lighting and stress-free photos.
+                </p>
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-start gap-3">
+                    <Check className="w-6 h-6 text-rose-600 flex-shrink-0 mt-1" />
+                    <span className="text-gray-700">Optimal timing for getting ready photos</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-6 h-6 text-rose-600 flex-shrink-0 mt-1" />
+                    <span className="text-gray-700">Golden hour ceremony recommendations</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-6 h-6 text-rose-600 flex-shrink-0 mt-1" />
+                    <span className="text-gray-700">Family photo organization tips</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-6 h-6 text-rose-600 flex-shrink-0 mt-1" />
+                    <span className="text-gray-700">Reception timeline strategies</span>
+                  </li>
+                </ul>
+                <a
+                  href="/MoStuff/WeddingGuide.pdf"
+                  download
+                  className="inline-flex items-center gap-3 bg-gradient-to-r from-gray-900 to-black text-white px-8 py-4 rounded-lg font-semibold hover:shadow-xl transition-all duration-300 text-lg"
+                >
+                  <Download className="w-6 h-6" />
+                  Download Free Guide
+                </a>
+              </div>
+              <div className="order-1 md:order-2">
+                <div className="relative">
+                  <img
+                    src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593377/hariel-xavier-photography/MoStuff/WeddingGuide.png"
+                    alt="Wedding Photography Timeline Guide"
+                    className="w-full rounded-2xl shadow-2xl"
+                  />
+                  <div className="absolute -top-4 -right-4 bg-rose-600 text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg">
+                    FREE
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* What to Wear Guide Section */}
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <div className="relative">
+                  <img
+                    src="https://res.cloudinary.com/dos0qac90/image/upload/v1761593384/hariel-xavier-photography/MoStuff/whattowear.png"
+                    alt="What to Wear Guide for Engagement Photos"
+                    className="w-full rounded-2xl shadow-2xl"
+                  />
+                  <div className="absolute -top-4 -right-4 bg-rose-600 text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg">
+                    FREE
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div className="inline-flex items-center gap-2 bg-rose-100 text-rose-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                  <FileText className="w-4 h-4" />
+                  FREE DOWNLOAD
+                </div>
+                <h2 className="text-4xl md:text-5xl font-serif mb-6 text-gray-900">
+                  What to Wear for Your Engagement Session
+                </h2>
+                <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+                  Expert styling tips for your engagement session. Color coordination, seasonal suggestions, and outfit ideas that photograph beautifully.
+                </p>
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-start gap-3">
+                    <Check className="w-6 h-6 text-rose-600 flex-shrink-0 mt-1" />
+                    <span className="text-gray-700">Color palette recommendations</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-6 h-6 text-rose-600 flex-shrink-0 mt-1" />
+                    <span className="text-gray-700">Seasonal outfit ideas</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-6 h-6 text-rose-600 flex-shrink-0 mt-1" />
+                    <span className="text-gray-700">Accessory and styling tips</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-6 h-6 text-rose-600 flex-shrink-0 mt-1" />
+                    <span className="text-gray-700">What to avoid wearing</span>
+                  </li>
+                </ul>
+                <a
+                  href="/MoStuff/whattowear.pdf"
+                  download
+                  className="inline-flex items-center gap-3 bg-gradient-to-r from-gray-900 to-black text-white px-8 py-4 rounded-lg font-semibold hover:shadow-xl transition-all duration-300 text-lg"
+                >
+                  <Download className="w-6 h-6" />
+                  Download Style Guide
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Latest Blog Posts Section */}
       <section className="py-16 md:py-24 bg-gradient-to-br from-gray-50 to-white">
