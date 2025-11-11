@@ -76,15 +76,25 @@ const initAnalytics = async () => {
     // Continue without analytics
   }
 };
-initAnalytics();
 
-// Remove any emulator warning banners that might be present
-setTimeout(() => {
-  const warning = document.querySelector('.firebase-emulator-warning');
-  if (warning) {
-    warning.remove();
+// Only initialize analytics after DOM is ready
+if (typeof window !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => initAnalytics());
+  } else {
+    initAnalytics();
   }
-}, 1000);
+}
+
+// Remove any emulator warning banners that might be present (only in browser)
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+  setTimeout(() => {
+    const warning = document.querySelector('.firebase-emulator-warning');
+    if (warning) {
+      warning.remove();
+    }
+  }, 1000);
+}
 
 // Export with non-null assertions for services that depend on Firebase
 // If Firebase isn't configured, services won't work but won't crash at import
