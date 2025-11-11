@@ -89,8 +89,8 @@ export default function SiteFooter() {
               </div>
               <div className="flex items-center">
                 <Phone className="mr-2 h-5 w-5 text-gray-400" />
-                <a href="tel:+18623914179" className="text-gray-400 hover:text-white transition-colors">
-                  (862) 391-4179
+                <a href="tel:+18623553502" className="text-gray-400 hover:text-white transition-colors">
+                  (862) 355-3502
                 </a>
               </div>
               <div className="flex items-center">

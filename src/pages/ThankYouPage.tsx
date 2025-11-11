@@ -270,8 +270,8 @@ export default function ThankYouPage() {
           >
             <p className="text-gray-600 text-sm">
               <strong>Need immediate assistance?</strong> Call us at{' '}
-              <a href="tel:+1234567890" className="text-rose-dark hover:underline font-medium">
-                (123) 456-7890
+              <a href="tel:+18623553502" className="text-rose-dark hover:underline font-medium">
+                (862) 355-3502
               </a>{' '}
               or email{' '}
               <a href="mailto:hello@harielxavier.com" className="text-rose-dark hover:underline font-medium">

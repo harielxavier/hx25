@@ -136,7 +136,7 @@ const ContactPage: React.FC = () => {
                   <a href="tel:+18623553502" className="text-green-600 hover:text-green-800 transition-colors font-medium">
                     (862) 355-3502
                   </a>
-                  <p className="text-sm text-gray-500 mt-2">Call or text anytime</p>
+                  <p className="text-sm text-gray-500 mt-2">Voice calls only (no text)</p>
                 </div>
               </div>
 

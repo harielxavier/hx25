@@ -261,12 +261,12 @@ export default function Contact() {
               </div>
             </a>
 
-            <a href="tel:+1234567890" className="group">
+            <a href="tel:+18623553502" className="group">
               <div className="p-8 border border-primary/20 hover:border-primary transition-all duration-300">
                 <Phone className="w-8 h-8 text-primary mb-6" />
                 <h3 className="font-serif text-2xl mb-2">Phone</h3>
                 <p className="text-gray-400 font-light group-hover:text-primary transition-colors">
-                  (862) 290-4349
+                  (862) 355-3502
                 </p>
               </div>
             </a>

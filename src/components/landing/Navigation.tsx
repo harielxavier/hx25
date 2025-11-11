@@ -28,13 +28,13 @@ export default function Navigation() {
               <MessageCircle className="w-4 h-4" />
             </div>
             <span className="font-light">📢 New Number Alert!</span>
-            <span className="font-light hidden sm:inline">Call or text us at our new number:</span>
+            <span className="font-light hidden sm:inline">Call us at our new number:</span>
             <span className="font-light sm:hidden">Our new number:</span>
-            <a 
-              href="tel:+18623914179" 
+            <a
+              href="tel:+18623553502"
               className="font-semibold hover:text-gray-300 transition-colors underline decoration-dotted underline-offset-4"
             >
-              (862) 391-4179
+              (862) 355-3502
             </a>
           </div>
         </div>

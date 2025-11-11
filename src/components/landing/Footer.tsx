@@ -609,13 +609,14 @@ export default function Footer() {
                 We're pleased to introduce our new primary contact number for all wedding photography consultations and inquiries.
               </p>
               <div className="mt-4">
-                <a 
-                  href="tel:+18623914179" 
+                <a
+                  href="tel:+18623553502"
                   className="inline-flex items-center bg-gradient-to-r from-accent to-rose-dark text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                 >
                   <span className="mr-2">📞</span>
-                  Call (862) 391-4179
+                  Call (862) 355-3502
                 </a>
+                <p className="text-xs text-gray-400 mt-2">Voice calls only - no text messages</p>
               </div>
             </div>
           </div>

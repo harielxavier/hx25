@@ -94,7 +94,7 @@ export default function WeddingToolsPage() {
     secondaryColor: '#f43f5e',
     accentColor: '#d4af37',
     contactEmail: 'Hi@HarielXavier.com',
-    contactPhone: '(862) 290-4349',
+    contactPhone: '(862) 355-3502',
     website: 'harielxavier.com'
   });
   
