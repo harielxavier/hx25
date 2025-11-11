@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PlusCircle, Search, Filter, Trash2, Edit, Eye, AlertCircle } from 'lucide-react';
-import { db } from '../../lib/firebase';
-import { collection, getDocs, doc, deleteDoc, Timestamp, setDoc } from 'firebase/firestore';
+// REMOVED FIREBASE: import { db } from '../../lib/firebase';
+// REMOVED FIREBASE: import { collection, getDocs, doc, deleteDoc, Timestamp, setDoc // REMOVED FIREBASE
 
 interface Author {
   name: string;

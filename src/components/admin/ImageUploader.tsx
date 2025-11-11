@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { getFirestore, collection, doc, setDoc, updateDoc, increment, serverTimestamp } from 'firebase/firestore';
+// REMOVED FIREBASE: import { getStorage, ref, uploadBytesResumable, getDownloadURL // REMOVED FIREBASE
+// REMOVED FIREBASE: import { getFirestore, collection, doc, setDoc, updateDoc, increment, serverTimestamp // REMOVED FIREBASE
 import { v4 as uuidv4 } from 'uuid';
 import { X, Upload, Check, AlertCircle } from 'lucide-react';
 import { compressImage } from '../../utils/imageUtils';

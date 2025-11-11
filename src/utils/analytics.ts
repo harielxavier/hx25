@@ -1,5 +1,5 @@
-import { collection, doc, setDoc, increment, serverTimestamp, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase/config';
+// REMOVED FIREBASE: import { collection, doc, setDoc, increment, serverTimestamp, getDoc, updateDoc // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../firebase/config';
 
 interface AnalyticsEvent {
   category: string;

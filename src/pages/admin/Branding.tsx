@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Save, Upload, Palette, Type, Image, CheckCircle, AlertCircle } from 'lucide-react';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+// REMOVED FIREBASE: import { getStorage, ref, uploadBytes, getDownloadURL // REMOVED FIREBASE
+// REMOVED FIREBASE: import { getFirestore, doc, getDoc, setDoc // REMOVED FIREBASE
 
 interface BrandingSettings {
   logo: {

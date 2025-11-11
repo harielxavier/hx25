@@ -4,7 +4,7 @@ import { Gallery, GalleryMedia } from '../../services/galleryService';
 import { Client, GalleryAccess } from '../../services/clientGalleryService';
 import { getGallery, getGalleryMedia } from '../../services/galleryService';
 import { getClient, getGalleryAccess, toggleClientSelection, getClientSelections } from '../../services/clientGalleryService';
-import { getOptimizedImageUrls } from '../../services/firebaseCloudinaryService';
+// REMOVED FIREBASE: import { getOptimizedImageUrls } from '../../services/firebaseCloudinaryService';
 import { Box, Typography, Grid, Button, CircularProgress, Chip, Badge, IconButton, Dialog, DialogContent } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import FavoriteIcon from '@mui/icons-material/Favorite';

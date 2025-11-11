@@ -4,7 +4,7 @@ import { ArrowRight, MapPin } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import { PLACEHOLDERS } from '../../utils/imageUtils';
 import { getCloudinaryUrl } from '../../utils/cloudinaryUrl';
-import { Timestamp } from 'firebase/firestore';
+// REMOVED FIREBASE: import { Timestamp // REMOVED FIREBASE
 
 // Define the FeaturedGallery interface since we're not importing it anymore
 interface FeaturedGallery {

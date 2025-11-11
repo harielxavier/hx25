@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+// REMOVED FIREBASE: import { collection, getDocs, query, where // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/Tabs';
 import { 

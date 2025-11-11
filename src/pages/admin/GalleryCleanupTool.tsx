@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { collection, getDocs, doc, writeBatch } from 'firebase/firestore';
-import { ref, listAll, deleteObject } from 'firebase/storage';
-import { db, storage } from '../../firebase/config';
+// REMOVED FIREBASE: import { collection, getDocs, doc, writeBatch // REMOVED FIREBASE
+// REMOVED FIREBASE: import { ref, listAll, deleteObject // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db, storage } from '../../firebase/config';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { AlertTriangle, Trash2, CheckCircle } from 'lucide-react';
 

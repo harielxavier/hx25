@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Camera, Calendar, Users, MessageSquare, ArrowRight, ArrowLeft, Check, X, Briefcase, Palette, Target } from 'lucide-react';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db, functions } from '../firebase/config';
+// REMOVED FIREBASE: import { addDoc, collection, serverTimestamp // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db, functions } from '../firebase/config';
 import { format } from 'date-fns';
-import { httpsCallable } from 'firebase/functions';
+// REMOVED FIREBASE: import { httpsCallable // REMOVED FIREBASE
 import { sendEmailToClient, sendEmailToAdmin } from '../services/emailService';
 
 // Type for form data

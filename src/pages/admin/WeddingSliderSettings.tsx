@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Save, Upload, Info, Trash2, CheckCircle, AlertCircle } from 'lucide-react';
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject, listAll } from 'firebase/storage';
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+// REMOVED FIREBASE: import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject, listAll // REMOVED FIREBASE
+// REMOVED FIREBASE: import { getFirestore, doc, getDoc, setDoc // REMOVED FIREBASE
 
 const WeddingSliderSettings: React.FC = () => {
   const [leftImage, setLeftImage] = useState<string>('');

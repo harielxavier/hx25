@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getFirestore, doc, updateDoc } from 'firebase/firestore';
-import { getStorage, ref, getDownloadURL } from 'firebase/storage';
+// REMOVED FIREBASE: import { getFirestore, doc, updateDoc // REMOVED FIREBASE
+// REMOVED FIREBASE: import { getStorage, ref, getDownloadURL // REMOVED FIREBASE
 import { Gallery, Item } from 'react-photoswipe-gallery';
 import 'photoswipe/dist/photoswipe.css';
 import { Loader, Download, Heart, Share2, Lock, Check } from 'lucide-react';

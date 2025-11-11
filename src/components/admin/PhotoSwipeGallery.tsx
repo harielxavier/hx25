@@ -1,8 +1,8 @@
 import 'photoswipe/dist/photoswipe.css'
 import { Gallery, Item } from 'react-photoswipe-gallery'
 import { useEffect, useState } from 'react'
-import { ref, listAll, getDownloadURL } from 'firebase/storage'
-import { storage } from '../../firebase/config'; 
+// REMOVED FIREBASE: import { ref, listAll, getDownloadURL // REMOVED FIREBASE
+// REMOVED FIREBASE: import { storage } from '../../firebase/config'; 
 import LoadingSpinner from '../ui/LoadingSpinner';
 
 interface PhotoSwipeGalleryProps {

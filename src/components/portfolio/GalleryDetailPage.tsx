@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { doc, getDoc, collection, getDocs, query, orderBy, where } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+// REMOVED FIREBASE: import { doc, getDoc, collection, getDocs, query, orderBy, where // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
 import { transformImageUrl } from '../../utils/imageOptimizationUtils';
 import { HeroSkeleton, PortfolioGridSkeleton } from './SkeletonLoaders';
 import Lightbox from 'photoswipe/lightbox';

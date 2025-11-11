@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+// REMOVED FIREBASE: import { collection, getDocs, query, orderBy, limit // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
 import { transformImageUrl } from '../../utils/imageOptimizationUtils';
 import { HeroSkeleton } from './SkeletonLoaders';
 import { heroImages as mockHeroImages } from '../../data/mockPortfolioData';

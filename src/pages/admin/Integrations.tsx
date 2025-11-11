@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Save, Link, MessageSquare, CreditCard, Mail, BarChart, CheckCircle, AlertCircle } from 'lucide-react';
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+// REMOVED FIREBASE: import { getFirestore, doc, getDoc, setDoc // REMOVED FIREBASE
 
 interface IntegrationConfig {
   enabled: boolean;

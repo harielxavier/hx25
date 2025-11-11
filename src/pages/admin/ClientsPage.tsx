@@ -4,8 +4,8 @@ import { Edit, Trash2, Mail, Upload, Plus, Search, GripVertical, Settings, X, Ch
 import { Link } from "react-router-dom";
 import { Client, deleteClient, getAllClients } from "../../services/clientGalleryService";
 import { sendEmail } from "../../services/emailService";
-import { Timestamp, collection, writeBatch, doc, updateDoc } from "firebase/firestore";
-import { db } from "../../firebase/config";
+// REMOVED FIREBASE: import { Timestamp, collection, writeBatch, doc, updateDoc } from "firebase/firestore";
+// REMOVED FIREBASE: import { db } from "../../firebase/config";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
 

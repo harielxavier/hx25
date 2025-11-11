@@ -1,7 +1,7 @@
 // src/services/SmartSchedulerService.ts
 
-import { Timestamp, getFirestore, collection, query, where, getDocs, addDoc, doc, updateDoc } from 'firebase/firestore';
-import { app } from '../firebase/config'; // Firebase app instance
+// REMOVED FIREBASE: import { Timestamp, getFirestore, collection, query, where, getDocs, addDoc, doc, updateDoc // REMOVED FIREBASE
+// REMOVED FIREBASE: import { app } from '../firebase/config'; // Firebase app instance
 
 // Interfaces for our booking system
 export interface BookingSlot {

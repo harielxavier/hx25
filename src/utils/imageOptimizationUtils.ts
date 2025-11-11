@@ -7,7 +7,7 @@
  */
 
 import cloudinaryService from '../services/cloudinaryService';
-import { getOptimizedImageUrls } from '../services/firebaseCloudinaryService';
+// REMOVED FIREBASE: import { getOptimizedImageUrls } from '../services/firebaseCloudinaryService';
 
 /**
  * Transform any image URL to use Cloudinary for optimization

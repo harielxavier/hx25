@@ -1,5 +1,5 @@
-import { collection, addDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+// REMOVED FIREBASE: import { collection, addDoc, serverTimestamp, Timestamp // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../lib/firebase';
 
 interface SampleLead {
   firstName: string;

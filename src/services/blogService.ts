@@ -1,21 +1,4 @@
-import { db } from '../firebase/config';
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  where,
-  orderBy,
-  limit,
-  Timestamp,
-  increment,
-  DocumentData,
-  QueryDocumentSnapshot
-} from 'firebase/firestore';
+import { supabase } from '../lib/supabase';
 
 export interface BlogPost {
   id: string;
@@ -23,13 +6,13 @@ export interface BlogPost {
   slug: string;
   excerpt: string;
   content: string;
-  featuredImage: string;
+  featured_image: string;
   category: string;
   tags: string[];
   status: 'draft' | 'published';
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
-  publishedAt: Timestamp | null;
+  created_at: string;
+  updated_at: string;
+  published_at: string | null;
   featured: boolean;
   author: {
     name: string;
@@ -37,38 +20,41 @@ export interface BlogPost {
     bio?: string;
   };
   views: number;
-  readTime?: string;
-  videoEmbed?: string;
-  shareEnabled?: boolean;
-  commentsEnabled?: boolean;
+  read_time?: string;
+  video_embed?: string;
+  share_enabled?: boolean;
+  comments_enabled?: boolean;
 }
 
-// Helper function to convert Firestore document to BlogPost
-const convertDocToBlogPost = (doc: QueryDocumentSnapshot<DocumentData>): BlogPost => {
-  const data = doc.data();
+// Convert database row to BlogPost
+const convertRowToBlogPost = (row: Record<string, unknown>): BlogPost => {
+  const authorData = row.author as Record<string, unknown> | undefined;
+  const author = {
+    name: (authorData?.name as string) || 'Admin',
+    avatar: (authorData?.avatar as string) || '/images/default-avatar.png',
+    bio: (authorData?.bio as string) || undefined
+  };
+
   return {
-    id: doc.id,
-    title: data.title || '',
-    slug: data.slug || '',
-    excerpt: data.excerpt || '',
-    content: data.content || '',
-    featuredImage: data.featuredImage || '',
-    category: data.category || 'Uncategorized',
-    tags: data.tags || [],
-    status: data.status || 'draft',
-    createdAt: data.createdAt || Timestamp.now(),
-    updatedAt: data.updatedAt || Timestamp.now(),
-    publishedAt: data.publishedAt || null,
-    featured: data.featured || false,
-    author: data.author || {
-      name: 'Admin',
-      avatar: '/images/default-avatar.png'
-    },
-    views: data.views || 0,
-    readTime: data.readTime || '',
-    videoEmbed: data.videoEmbed || '',
-    shareEnabled: data.shareEnabled !== undefined ? data.shareEnabled : true,
-    commentsEnabled: data.commentsEnabled !== undefined ? data.commentsEnabled : true
+    id: (row.id as string) || '',
+    title: (row.title as string) || '',
+    slug: (row.slug as string) || '',
+    excerpt: (row.excerpt as string) || '',
+    content: (row.content as string) || '',
+    featured_image: (row.featured_image as string) || '',
+    category: (row.category as string) || 'Uncategorized',
+    tags: (row.tags as string[]) || [],
+    status: (row.status as 'draft' | 'published') || 'draft',
+    created_at: (row.created_at as string) || new Date().toISOString(),
+    updated_at: (row.updated_at as string) || new Date().toISOString(),
+    published_at: (row.published_at as string | null) || null,
+    featured: (row.featured as boolean) || false,
+    author,
+    views: (row.views as number) || 0,
+    read_time: (row.read_time as string) || '',
+    video_embed: (row.video_embed as string) || '',
+    share_enabled: (row.share_enabled as boolean) !== false,
+    comments_enabled: (row.comments_enabled as boolean) !== false
   };
 };
 
@@ -76,37 +62,22 @@ const convertDocToBlogPost = (doc: QueryDocumentSnapshot<DocumentData>): BlogPos
 export const getAllPosts = async (includeUnpublished = false): Promise<BlogPost[]> => {
   try {
     console.log('Fetching all blog posts...');
-    
-    // Check if Firebase is initialized
-    if (!db) {
-      console.log('Firebase not initialized - returning empty blog posts');
-      return [];
+
+    let query = supabase.from('blogs').select('*');
+
+    if (!includeUnpublished) {
+      query = query.eq('status', 'published');
     }
-    
-    // Use a simpler query that doesn't require composite indexes
-    const postsRef = collection(db, 'posts');
-    const postsSnapshot = await getDocs(postsRef);
-    
-    if (postsSnapshot.empty) {
+
+    const { data, error } = await query.order('published_at', { ascending: false });
+
+    if (error) throw error;
+    if (!data) {
       console.log('No blog posts found');
       return [];
     }
-    
-    // Convert documents to BlogPost objects
-    let posts = postsSnapshot.docs.map(convertDocToBlogPost);
-    
-    // Filter and sort client-side instead of using complex Firestore queries
-    if (!includeUnpublished) {
-      posts = posts.filter(post => post.status === 'published');
-    }
-    
-    // Sort by publishedAt date (newest first)
-    posts.sort((a, b) => {
-      const aTime = a.publishedAt ? a.publishedAt.seconds : 0;
-      const bTime = b.publishedAt ? b.publishedAt.seconds : 0;
-      return bTime - aTime;
-    });
-    
+
+    const posts = data.map(convertRowToBlogPost);
     console.log(`Found ${posts.length} blog posts`);
     return posts;
   } catch (error) {
@@ -118,25 +89,18 @@ export const getAllPosts = async (includeUnpublished = false): Promise<BlogPost[
 // Get a single blog post by slug
 export const getPostBySlug = async (slug: string): Promise<BlogPost | null> => {
   try {
-    // Check if Firebase is initialized
-    if (!db) {
-      console.log('Firebase not initialized - cannot fetch blog post');
-      return null;
-    }
-    
-    // Query for the post with the matching slug
-    const postsRef = collection(db, 'posts');
-    const q = query(postsRef, where('slug', '==', slug));
-    const querySnapshot = await getDocs(q);
-    
-    if (querySnapshot.empty) {
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('*')
+      .eq('slug', slug)
+      .single();
+
+    if (error) {
       console.log(`No post found with slug: ${slug}`);
       return null;
     }
-    
-    // Convert the first matching document to a BlogPost
-    const post = convertDocToBlogPost(querySnapshot.docs[0]);
-    return post;
+
+    return convertRowToBlogPost(data);
   } catch (error) {
     console.error(`Error fetching post with slug ${slug}:`, error);
     throw new Error(`Failed to fetch post with slug ${slug}`);
@@ -146,47 +110,18 @@ export const getPostBySlug = async (slug: string): Promise<BlogPost | null> => {
 // Get a single blog post by ID
 export const getPostById = async (id: string): Promise<BlogPost | null> => {
   try {
-    if (!db) {
-      console.log('Firebase not initialized - cannot fetch blog post');
-      return null;
-    }
-    
-    const postRef = doc(db, 'posts', id);
-    const postSnap = await getDoc(postRef);
-    
-    if (!postSnap.exists()) {
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
       console.log(`No post found with ID: ${id}`);
       return null;
     }
-    
-    // Convert the document to a BlogPost
-    const data = postSnap.data();
-    const post: BlogPost = {
-      id: postSnap.id,
-      title: data.title || '',
-      slug: data.slug || '',
-      excerpt: data.excerpt || '',
-      content: data.content || '',
-      featuredImage: data.featuredImage || '',
-      category: data.category || 'Uncategorized',
-      tags: data.tags || [],
-      status: data.status || 'draft',
-      createdAt: data.createdAt || Timestamp.now(),
-      updatedAt: data.updatedAt || Timestamp.now(),
-      publishedAt: data.publishedAt || null,
-      featured: data.featured || false,
-      author: data.author || {
-        name: 'Admin',
-        avatar: '/images/default-avatar.png'
-      },
-      views: data.views || 0,
-      readTime: data.readTime || '',
-      videoEmbed: data.videoEmbed || '',
-      shareEnabled: data.shareEnabled !== undefined ? data.shareEnabled : true,
-      commentsEnabled: data.commentsEnabled !== undefined ? data.commentsEnabled : true
-    };
-    
-    return post;
+
+    return convertRowToBlogPost(data);
   } catch (error) {
     console.error(`Error fetching post with ID ${id}:`, error);
     throw new Error(`Failed to fetch post with ID ${id}`);
@@ -196,15 +131,18 @@ export const getPostById = async (id: string): Promise<BlogPost | null> => {
 // Get featured blog posts
 export const getFeaturedPosts = async (limit = 3): Promise<BlogPost[]> => {
   try {
-    // Get all posts and filter client-side
-    const allPosts = await getAllPosts(false);
-    
-    // Filter for featured posts and limit the number
-    const featuredPosts = allPosts
-      .filter(post => post.featured)
-      .slice(0, limit);
-    
-    return featuredPosts;
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('*')
+      .eq('featured', true)
+      .eq('status', 'published')
+      .order('published_at', { ascending: false })
+      .limit(limit);
+
+    if (error) throw error;
+    if (!data) return [];
+
+    return data.map(convertRowToBlogPost);
   } catch (error) {
     console.error('Error fetching featured posts:', error);
     throw new Error('Failed to fetch featured posts');
@@ -214,15 +152,17 @@ export const getFeaturedPosts = async (limit = 3): Promise<BlogPost[]> => {
 // Get blog posts by category
 export const getPostsByCategory = async (category: string): Promise<BlogPost[]> => {
   try {
-    // Get all posts and filter client-side
-    const allPosts = await getAllPosts(false);
-    
-    // Filter for posts in the specified category
-    const categoryPosts = allPosts.filter(
-      post => post.category.toLowerCase() === category.toLowerCase()
-    );
-    
-    return categoryPosts;
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('*')
+      .eq('category', category)
+      .eq('status', 'published')
+      .order('published_at', { ascending: false });
+
+    if (error) throw error;
+    if (!data) return [];
+
+    return data.map(convertRowToBlogPost);
   } catch (error) {
     console.error(`Error fetching posts for category ${category}:`, error);
     throw new Error(`Failed to fetch posts for category ${category}`);
@@ -232,15 +172,17 @@ export const getPostsByCategory = async (category: string): Promise<BlogPost[]> 
 // Get blog posts by tag
 export const getPostsByTag = async (tag: string): Promise<BlogPost[]> => {
   try {
-    // Get all posts and filter client-side
-    const allPosts = await getAllPosts(false);
-    
-    // Filter for posts with the specified tag
-    const tagPosts = allPosts.filter(
-      post => post.tags.some(t => t.toLowerCase() === tag.toLowerCase())
-    );
-    
-    return tagPosts;
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('*')
+      .contains('tags', [tag])
+      .eq('status', 'published')
+      .order('published_at', { ascending: false });
+
+    if (error) throw error;
+    if (!data) return [];
+
+    return data.map(convertRowToBlogPost);
   } catch (error) {
     console.error(`Error fetching posts for tag ${tag}:`, error);
     throw new Error(`Failed to fetch posts for tag ${tag}`);
@@ -248,37 +190,46 @@ export const getPostsByTag = async (tag: string): Promise<BlogPost[]> => {
 };
 
 // Search blog posts
-export const searchPosts = async (query: string): Promise<BlogPost[]> => {
+export const searchPosts = async (queryStr: string): Promise<BlogPost[]> => {
   try {
-    // Get all published posts
-    const allPosts = await getAllPosts(false);
-    
-    // Filter posts that match the search query
-    const searchResults = allPosts.filter(post => {
-      const searchableText = `${post.title} ${post.excerpt} ${post.content} ${post.category} ${post.tags.join(' ')}`.toLowerCase();
-      return searchableText.includes(query.toLowerCase());
-    });
-    
-    return searchResults;
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('*')
+      .eq('status', 'published')
+      .or(`title.ilike.%${queryStr}%,excerpt.ilike.%${queryStr}%,content.ilike.%${queryStr}%`)
+      .order('published_at', { ascending: false });
+
+    if (error) throw error;
+    if (!data) return [];
+
+    return data.map(convertRowToBlogPost);
   } catch (error) {
-    console.error(`Error searching posts for "${query}":`, error);
-    throw new Error(`Failed to search posts for "${query}"`);
+    console.error(`Error searching posts for "${queryStr}":`, error);
+    throw new Error(`Failed to search posts for "${queryStr}"`);
   }
 };
 
 // Create a new blog post
-export const createPost = async (postData: Omit<BlogPost, 'id'>): Promise<string> => {
+export const createPost = async (postData: Omit<BlogPost, 'id' | 'created_at' | 'updated_at'>): Promise<string> => {
   try {
-    const postsRef = collection(db, 'posts');
-    const docRef = await addDoc(postsRef, {
-      ...postData,
-      createdAt: Timestamp.now(),
-      updatedAt: Timestamp.now(),
-      views: 0
-    });
-    
-    console.log(`Created new post with ID: ${docRef.id}`);
-    return docRef.id;
+    const { data, error } = await supabase
+      .from('blogs')
+      .insert([
+        {
+          ...postData,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          views: 0
+        }
+      ])
+      .select('id')
+      .single();
+
+    if (error) throw error;
+    if (!data) throw new Error('No data returned');
+
+    console.log(`Created new post with ID: ${data.id}`);
+    return data.id;
   } catch (error) {
     console.error('Error creating post:', error);
     throw new Error('Failed to create post');
@@ -288,15 +239,15 @@ export const createPost = async (postData: Omit<BlogPost, 'id'>): Promise<string
 // Update an existing blog post
 export const updatePost = async (id: string, postData: Partial<BlogPost>): Promise<boolean> => {
   try {
-    const postRef = doc(db, 'posts', id);
-    
-    // Add updatedAt timestamp
-    const updateData = {
-      ...postData,
-      updatedAt: Timestamp.now()
-    };
-    
-    await updateDoc(postRef, updateData);
+    const { error } = await supabase
+      .from('blogs')
+      .update({
+        ...postData,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id);
+
+    if (error) throw error;
     console.log(`Updated post with ID: ${id}`);
     return true;
   } catch (error) {
@@ -308,8 +259,12 @@ export const updatePost = async (id: string, postData: Partial<BlogPost>): Promi
 // Delete a blog post
 export const deletePost = async (id: string): Promise<boolean> => {
   try {
-    const postRef = doc(db, 'posts', id);
-    await deleteDoc(postRef);
+    const { error } = await supabase
+      .from('blogs')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
     console.log(`Deleted post with ID: ${id}`);
     return true;
   } catch (error) {
@@ -321,15 +276,22 @@ export const deletePost = async (id: string): Promise<boolean> => {
 // Increment post view count
 export const incrementPostViews = async (id: string): Promise<boolean> => {
   try {
-    if (!db) {
-      console.log('Firebase not initialized - skipping view increment');
-      return false;
-    }
-    
-    const postRef = doc(db, 'posts', id);
-    await updateDoc(postRef, {
-      views: increment(1)
-    });
+    const { data, error: getError } = await supabase
+      .from('blogs')
+      .select('views')
+      .eq('id', id)
+      .single();
+
+    if (getError) throw getError;
+
+    const newViewCount = ((data?.views as number) || 0) + 1;
+
+    const { error: updateError } = await supabase
+      .from('blogs')
+      .update({ views: newViewCount })
+      .eq('id', id);
+
+    if (updateError) throw updateError;
     console.log(`Incremented view count for post with ID: ${id}`);
     return true;
   } catch (error) {
@@ -342,35 +304,36 @@ export const incrementPostViews = async (id: string): Promise<boolean> => {
 // Get related posts based on category and tags
 export const getRelatedPosts = async (currentPost: BlogPost, limit = 3): Promise<BlogPost[]> => {
   try {
-    // Get all published posts
-    const allPosts = await getAllPosts(false);
-    
-    // Filter out the current post
-    const otherPosts = allPosts.filter(post => post.id !== currentPost.id);
-    
-    // Score each post based on relevance
-    const scoredPosts = otherPosts.map(post => {
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('*')
+      .eq('status', 'published')
+      .neq('id', currentPost.id)
+      .order('published_at', { ascending: false })
+      .limit(limit * 2);
+
+    if (error) throw error;
+    if (!data) return [];
+
+    // Score and sort by relevance
+    const scoredPosts = data.map((row: Record<string, unknown>) => {
+      const post = convertRowToBlogPost(row);
       let score = 0;
-      
-      // Same category
+
       if (post.category === currentPost.category) {
         score += 3;
       }
-      
-      // Shared tags
+
       const sharedTags = post.tags.filter(tag => currentPost.tags.includes(tag));
       score += sharedTags.length * 2;
-      
+
       return { post, score };
     });
-    
-    // Sort by score (highest first) and take the top 'limit' posts
-    const relatedPosts = scoredPosts
-      .sort((a, b) => b.score - a.score)
+
+    return scoredPosts
+      .sort((a: { post: BlogPost; score: number }, b: { post: BlogPost; score: number }) => b.score - a.score)
       .slice(0, limit)
-      .map(item => item.post);
-    
-    return relatedPosts;
+      .map((item: { post: BlogPost; score: number }) => item.post);
   } catch (error) {
     console.error('Error fetching related posts:', error);
     throw new Error('Failed to fetch related posts');

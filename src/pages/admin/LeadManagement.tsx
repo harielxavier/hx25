@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, Plus, Mail, Phone, Calendar, MessageSquare, Edit, Trash2, Star, Download, MoreHorizontal } from 'lucide-react';
-import { collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+// REMOVED FIREBASE: import { collection, getDocs, query, orderBy, Timestamp // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
 import { Lead } from '../../services/leadService';
 
 interface LeadWithId extends Lead {

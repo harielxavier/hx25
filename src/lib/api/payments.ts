@@ -1,15 +1,5 @@
-import { db } from '../../firebase/config';
-import { 
-  collection, 
-  doc, 
-  getDocs, 
-  addDoc, 
-  updateDoc, 
-  query, 
-  where, 
-  orderBy, 
-  Timestamp 
-} from 'firebase/firestore';
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
+// REMOVED FIREBASE: imports
 
 export interface Payment {
   id: string;

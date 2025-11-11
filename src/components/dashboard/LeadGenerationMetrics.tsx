@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { collection, doc, getDoc } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+// REMOVED FIREBASE: import { collection, doc, getDoc // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
 import { 
   BarChart3, 
   DollarSign, 

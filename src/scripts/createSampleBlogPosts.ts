@@ -1,6 +1,6 @@
 // This script creates sample blog posts in Firebase
-import { db } from '../lib/firebase';
-import { collection, addDoc, Timestamp, query, where, getDocs } from 'firebase/firestore';
+// REMOVED FIREBASE: import { db } from '../lib/firebase';
+// REMOVED FIREBASE: import { collection, addDoc, Timestamp, query, where, getDocs // REMOVED FIREBASE
 
 // Sample blog posts data
 const samplePosts = [

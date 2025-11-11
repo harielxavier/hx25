@@ -1,7 +1,7 @@
 import React from 'react';
 import ClientPortal from '../components/client/ClientPortal';
 import { Job } from '../services/jobsService';
-import { Timestamp } from 'firebase/firestore';
+// REMOVED FIREBASE: import { Timestamp // REMOVED FIREBASE
 
 const ClientPortalPage: React.FC = () => {
   // Mock job data for demonstration

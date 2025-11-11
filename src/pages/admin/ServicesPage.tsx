@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { Plus, Search, Filter, Edit2, Trash2, Clock, DollarSign, Camera, Check } from 'lucide-react';
-import { db } from '../../firebase/config';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, Timestamp } from 'firebase/firestore';
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
+// REMOVED FIREBASE: import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, Timestamp // REMOVED FIREBASE
 
 interface Service {
   id: string;

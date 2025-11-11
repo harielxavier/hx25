@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { Job, getJob, updateJob, uploadJobDocument, deleteJobDocument } from '../../services/jobsService';
-import { Timestamp } from 'firebase/firestore';
+// REMOVED FIREBASE: import { Timestamp // REMOVED FIREBASE
 import { format } from 'date-fns';
 
 export default function JobDetailPage() {

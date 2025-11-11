@@ -1,23 +1,6 @@
-import { 
-  ref, 
-  uploadBytesResumable, 
-  getDownloadURL,
-  deleteObject
-} from 'firebase/storage';
-import {
-  collection,
-  addDoc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-  doc,
-  query,
-  where,
-  orderBy,
-  serverTimestamp
-} from 'firebase/firestore';
-import { guaranteedStorage as storage, guaranteedDb as db } from '../firebase/config';
+// REMOVED FIREBASE: imports
+// REMOVED FIREBASE: imports
+// REMOVED FIREBASE: import { guaranteedStorage as storage, guaranteedDb as db } from '../firebase/config';
 
 // Image metadata interface
 export interface ImageMetadata {

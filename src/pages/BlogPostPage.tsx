@@ -14,8 +14,8 @@ import RelatedPosts from '../components/blog/RelatedPosts';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import '../styles/blog-content.css';
 import { BlogPost, getPostBySlug, incrementPostViews, getPostsByCategory } from '../services/supabaseBlogService';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+// REMOVED FIREBASE: import { addDoc, collection, serverTimestamp // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../lib/firebase';
 import { getStockImage } from '../utils/images';
 import { ImageWithFallback } from '../components/ImageWithFallback';
 import imageOptimizationUtils from '../utils/imageOptimizationUtils';

@@ -1,7 +1,7 @@
 // Image service to handle Firebase Storage operations with fallbacks
-import { storage } from '../firebase/config';
-import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
-import { db } from '../firebase/config';
+// REMOVED FIREBASE: import { storage } from '../firebase/config';
+// REMOVED FIREBASE: import { ref, uploadBytes, getDownloadURL, deleteObject // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../firebase/config';
 import { 
   doc, 
   updateDoc, 
@@ -12,7 +12,7 @@ import {
   limit,
   Timestamp,
   DocumentData
-} from 'firebase/firestore';
+// REMOVED FIREBASE
 
 // --- New Interface for Site-Wide Images ---
 export interface SiteImageData {

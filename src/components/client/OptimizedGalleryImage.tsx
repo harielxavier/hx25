@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Skeleton } from '@mui/material';
-import { getOptimizedImageUrls } from '../../services/firebaseCloudinaryService';
+// REMOVED FIREBASE: import { getOptimizedImageUrls } from '../../services/firebaseCloudinaryService';
 
 interface OptimizedGalleryImageProps {
   firebaseUrl: string;

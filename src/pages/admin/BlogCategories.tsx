@@ -1,19 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit, AlertCircle, Check, X } from 'lucide-react';
 import AdminLayout from '../../components/admin/AdminLayout';
-import { db } from '../../lib/firebase';
-import { 
-  collection, 
-  getDocs, 
-  addDoc, 
-  deleteDoc, 
-  updateDoc, 
-  doc, 
-  query, 
-  orderBy,
-  where,
-  writeBatch
-} from 'firebase/firestore';
+// REMOVED FIREBASE: All imports removed - using Supabase now
+// import { db } from '../../lib/firebase';
+// import { collection, getDocs, addDoc, deleteDoc, updateDoc, doc, query, orderBy, where, writeBatch } from 'firebase/firestore';
 
 interface Category {
   id: string;

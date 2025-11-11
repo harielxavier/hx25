@@ -1,17 +1,5 @@
-import { db } from '../firebase/config';
-import { 
-  collection, 
-  doc, 
-  getDocs, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where, 
-  orderBy, 
-  limit,
-  Timestamp 
-} from 'firebase/firestore';
+// REMOVED FIREBASE: import { db } from '../firebase/config';
+// REMOVED FIREBASE: imports
 
 // Types
 export interface EmailTemplate {

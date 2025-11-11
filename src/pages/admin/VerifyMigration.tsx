@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+// REMOVED FIREBASE: import { collection, getDocs // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
 import { Gallery, GalleryMedia } from '../../services/galleryService';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 

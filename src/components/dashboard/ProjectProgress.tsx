@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DollarSign, Users, Calendar, Camera, ArrowUp, ArrowDown } from 'lucide-react';
-import { db } from '../../firebase/config';
-import { collection, getDocs, query, where, orderBy, Timestamp } from 'firebase/firestore';
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
+// REMOVED FIREBASE: import { collection, getDocs, query, where, orderBy, Timestamp // REMOVED FIREBASE
 
 interface Project {
   id: string;

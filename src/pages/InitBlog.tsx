@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { initializeBlogPosts, createNewBlogPosts } from '../utils/blogInitializer';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+// REMOVED FIREBASE: import { getAuth, signInWithEmailAndPassword // REMOVED FIREBASE
 import { Link } from 'react-router-dom';
 
 const InitBlog = () => {

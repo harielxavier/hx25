@@ -1,20 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Trash2, Check, AlertCircle, ExternalLink, MessageSquare } from 'lucide-react';
 import AdminLayout from '../../components/admin/AdminLayout';
-import { db } from '../../lib/firebase';
-import { 
-  collection, 
-  getDocs, 
-  deleteDoc, 
-  updateDoc, 
-  doc, 
-  query, 
-  orderBy,
-  where,
-  getDoc,
-  Timestamp,
-  addDoc
-} from 'firebase/firestore';
+// REMOVED FIREBASE: All Firebase imports removed
+// Using commentService.ts which now uses Supabase
 
 interface Comment {
   id: string;

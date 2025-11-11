@@ -1,7 +1,7 @@
 import React from 'react';
 import { Eye, ThumbsUp, MessageSquare, Share2, TrendingUp } from 'lucide-react';
-import { db } from '../../lib/firebase';
-import { collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
+// REMOVED FIREBASE: import { db } from '../../lib/firebase';
+// REMOVED FIREBASE: import { collection, query, where, orderBy, limit, getDocs // REMOVED FIREBASE
 
 interface BlogPost {
   id: string;

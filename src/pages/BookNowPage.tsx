@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { db } from '../firebase/config';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+// REMOVED FIREBASE: import { db } from '../firebase/config';
+// REMOVED FIREBASE: import { collection, getDocs, query, orderBy // REMOVED FIREBASE
 import Navigation from '../components/landing/Navigation';
 import BookingForm from '../components/booking/BookingForm';
 import SEO from '../components/SEO';

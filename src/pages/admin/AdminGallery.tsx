@@ -25,7 +25,7 @@ import {
   createSampleGalleries,
   updateGallery
 } from '../../services/galleryService';
-import { Timestamp } from 'firebase/firestore';
+// REMOVED FIREBASE: import { Timestamp // REMOVED FIREBASE
 
 export default function AdminGallery() {
   const [galleries, setGalleries] = useState<Gallery[]>([]);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { collection, query, where, orderBy, getDocs, updateDoc, doc, deleteDoc, Timestamp } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+// REMOVED FIREBASE: import { collection, query, where, orderBy, getDocs, updateDoc, doc, deleteDoc, Timestamp // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
 import { MessageCircle, Check, X, Trash2 } from 'lucide-react';
 
 interface Comment {

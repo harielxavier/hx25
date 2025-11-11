@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
 import PhotoSwipeGallery from '../../components/admin/PhotoSwipeGallery';
 import { useEffect, useState } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+// REMOVED FIREBASE: import { doc, getDoc // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';

@@ -1,7 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { auth, db } from '../firebase/config';
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut as firebaseSignOut, User } from 'firebase/auth';
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { supabase } from '../lib/supabase';
 
 interface ClientUser {
   id: string;
@@ -28,59 +26,75 @@ export function ClientAuthProvider({ children }: { children: React.ReactNode }) 
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Listen for auth changes
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        await fetchUserProfile(firebaseUser);
+    // Listen for auth changes with Supabase
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event: unknown, session: unknown) => {
+      const typedSession = session as { user?: { id: string; email?: string } } | null;
+      if (typedSession?.user) {
+        await fetchUserProfile(typedSession.user.id, typedSession.user.email);
       } else {
         setUser(null);
       }
       setLoading(false);
     });
 
+    // Check current session on mount
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        await fetchUserProfile(session.user.id, session.user.email);
+      }
+      setLoading(false);
+    };
+
+    checkSession();
+
     return () => {
-      unsubscribe();
+      subscription?.unsubscribe();
     };
   }, []);
 
-  async function fetchUserProfile(firebaseUser: User) {
+  async function fetchUserProfile(userId: string, email: string | undefined) {
     try {
+      if (!email) throw new Error('No email provided');
+
       // Check if user is a client
-      const clientsRef = collection(db, 'client_users');
-      const q = query(clientsRef, where('email', '==', firebaseUser.email));
-      const querySnapshot = await getDocs(q);
-      
-      if (!querySnapshot.empty) {
-        const clientData = querySnapshot.docs[0].data();
+      const { data: clientData, error: clientError } = await supabase
+        .from('client_users')
+        .select('*')
+        .eq('email', email)
+        .single();
+
+      if (!clientError && clientData) {
         setUser({
-          id: firebaseUser.uid,
-          firstName: clientData.first_name || clientData.firstName || '',
-          lastName: clientData.last_name || clientData.lastName || '',
-          email: firebaseUser.email || '',
+          id: userId,
+          firstName: clientData.first_name || '',
+          lastName: clientData.last_name || '',
+          email,
           role: 'client'
         });
       } else {
         // If not found in client_users, check if they're an admin
-        const adminRef = doc(db, 'admin_users', firebaseUser.uid);
-        const adminSnap = await getDoc(adminRef);
-        
-        if (adminSnap.exists()) {
-          const adminData = adminSnap.data();
+        const { data: adminData, error: adminError } = await supabase
+          .from('admin_users')
+          .select('*')
+          .eq('id', userId)
+          .single();
+
+        if (!adminError && adminData) {
           setUser({
-            id: firebaseUser.uid,
-            firstName: adminData.first_name || adminData.firstName || '',
-            lastName: adminData.last_name || adminData.lastName || '',
-            email: firebaseUser.email || '',
+            id: userId,
+            firstName: adminData.first_name || '',
+            lastName: adminData.last_name || '',
+            email,
             role: 'admin'
           });
         } else {
-          // User exists in Firebase but not in our database
-          console.warn('User exists in Firebase but not in our database:', firebaseUser.email);
+          console.warn('User exists in Supabase Auth but not in our database:', email);
           setUser(null);
         }
       }
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
+    } catch (err) {
+      console.error('Error fetching user profile:', err);
       setError('Error fetching user profile');
       setUser(null);
     }
@@ -91,24 +105,27 @@ export function ClientAuthProvider({ children }: { children: React.ReactNode }) 
       setLoading(true);
       setError(null);
 
-      // Sign in with Firebase
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const firebaseUser = userCredential.user;
+      // Sign in with Supabase
+      const { data, error: loginError } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
 
-      // Get the JWT token for API requests
-      const token = await firebaseUser.getIdToken();
-      localStorage.setItem('token', token);
-      
-      // Store refresh token
-      const refreshToken = firebaseUser.refreshToken;
-      localStorage.setItem('refreshToken', refreshToken);
+      if (loginError) throw loginError;
+      if (!data.user) throw new Error('Login failed');
 
-      // Fetch user profile from Firestore
-      await fetchUserProfile(firebaseUser);
-    } catch (error: any) {
-      console.error('Login error:', error);
-      setError(error.message || 'Invalid email or password');
-      throw error;
+      // Store token for API requests (Supabase handles this, but we keep it for compatibility)
+      if (data.session) {
+        localStorage.setItem('token', data.session.access_token);
+      }
+
+      // Fetch user profile
+      await fetchUserProfile(data.user.id, data.user.email);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Invalid email or password';
+      console.error('Login error:', err);
+      setError(message);
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -116,16 +133,17 @@ export function ClientAuthProvider({ children }: { children: React.ReactNode }) 
 
   const refreshToken = async (): Promise<string | null> => {
     try {
-      // Get current user
-      const currentUser = auth.currentUser;
-      if (!currentUser) return null;
+      // Supabase handles token refresh automatically, but we can manually refresh if needed
+      const { data, error } = await supabase.auth.refreshSession();
 
-      // Force token refresh
-      const newToken = await currentUser.getIdToken(true);
-      localStorage.setItem('token', newToken);
-      return newToken;
-    } catch (error) {
-      console.error('Token refresh error:', error);
+      if (error || !data.session) {
+        throw error || new Error('No session');
+      }
+
+      localStorage.setItem('token', data.session.access_token);
+      return data.session.access_token;
+    } catch (err) {
+      console.error('Token refresh error:', err);
       setError('Failed to refresh authentication');
       return null;
     }
@@ -133,12 +151,13 @@ export function ClientAuthProvider({ children }: { children: React.ReactNode }) 
 
   const logout = async () => {
     try {
-      await firebaseSignOut(auth);
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+
       localStorage.removeItem('token');
-      localStorage.removeItem('refreshToken');
       setUser(null);
-    } catch (error) {
-      console.error('Logout error:', error);
+    } catch (err) {
+      console.error('Logout error:', err);
       setError('Error signing out');
     }
   };

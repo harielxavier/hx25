@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
-import { collection, query, getDocs, doc, writeBatch } from 'firebase/firestore';
-import { db } from '../../firebase';
+// REMOVED FIREBASE: import { collection, query, getDocs, doc, writeBatch // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../../firebase';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/Tabs';
 import { 
   ImageIcon, 

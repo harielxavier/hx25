@@ -1,21 +1,6 @@
-import { 
-  collection, 
-  doc, 
-  getDoc, 
-  getDocs, 
-  query, 
-  where, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc,
-  orderBy,
-  serverTimestamp,
-  limit,
-  Timestamp
-} from 'firebase/firestore';
-import { db } from '../firebase/config';
-import storageService from '../firebase/storageService';
+// REMOVED FIREBASE: All Firebase/Firestore imports
 import cloudinaryService from './cloudinaryService';
+import { supabase } from '../lib/supabase';
 
 // Portfolio Category interface
 export interface PortfolioCategory {

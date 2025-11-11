@@ -1,19 +1,5 @@
-import { 
-  collection, 
-  doc, 
-  getDocs, 
-  getDoc, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where, 
-  orderBy, 
-  serverTimestamp,
-  Timestamp,
-  DocumentData
-} from 'firebase/firestore';
-import { db } from '../firebase/config';
+// REMOVED FIREBASE: imports
+// REMOVED FIREBASE: import { db } from '../firebase/config';
 
 export interface Category {
   id: string;

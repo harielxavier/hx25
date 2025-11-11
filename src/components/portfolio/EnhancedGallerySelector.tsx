@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+// REMOVED FIREBASE: import { doc, updateDoc // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
 import { transformImageUrl } from '../../utils/imageOptimizationUtils';
 import { toast } from 'react-hot-toast';
 

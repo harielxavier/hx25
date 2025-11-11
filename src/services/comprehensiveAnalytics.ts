@@ -72,10 +72,10 @@ class ComprehensiveAnalytics {
   private async initialize() {
     // Start session tracking
     await this.startSession();
-    
+
     // Track initial page view
-    this.trackPageView();
-    
+    await this.trackPageView();
+
     // Setup event listeners
     this.setupScrollTracking();
     this.setupClickTracking();
@@ -359,8 +359,8 @@ export const trackEvent = (eventType: string, eventData: any = {}) => {
   analyticsInstance?.trackEvent(eventType, eventData);
 };
 
-export const trackPageChange = (newPath: string) => {
-  analyticsInstance?.onPageChange(newPath);
+export const trackPageChange = async (newPath: string) => {
+  await analyticsInstance?.onPageChange(newPath);
 };
 
 export default { initializeAnalytics, trackEvent, trackPageChange };

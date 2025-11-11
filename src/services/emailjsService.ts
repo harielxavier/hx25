@@ -89,34 +89,29 @@ export const sendContactEmail = async (formData: ContactFormData): Promise<boole
 };
 
 /**
- * Save contact form data to Firestore
+ * Save contact form data to Supabase (via leadService)
  */
 async function saveToFirestore(formData: ContactFormData): Promise<void> {
   try {
-    const { db } = await import('../firebase/config');
-    const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
+    // Use leadService which now uses Supabase
+    const { createLead } = await import('./leadService');
 
     const leadData = {
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
       phone: formData.phone,
+      eventType: formData.jobType || 'General Inquiry',
       eventDate: formData.eventDate || '',
       eventLocation: formData.eventLocation || '',
-      jobType: formData.jobType || 'General Inquiry',
       budget: formData.budget || '',
-      message: formData.message,
-      partnerName: formData.partnerName || '',
-      weddingStyle: formData.weddingStyle || '',
+      additionalInfo: formData.message,
       hearAboutUs: formData.hearAboutUs || '',
-      source: 'Website Contact Form',
-      status: 'new',
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      source: 'Website Contact Form'
     };
 
-    const docRef = await addDoc(collection(db!, 'leads'), leadData);
-    console.log('Lead saved to Firestore with ID:', docRef.id);
+    const leadId = await createLead(leadData);
+    console.log('Lead saved to Supabase with ID:', leadId);
   } catch (error) {
     console.error('Error saving to Firestore:', error);
     throw error;

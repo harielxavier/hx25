@@ -4,8 +4,8 @@
  * This file contains utility functions for working with images,
  * focusing on reliable local placeholders to prevent loading errors.
  */
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '../firebase/config';
+// REMOVED FIREBASE: import { ref, uploadBytes, getDownloadURL // REMOVED FIREBASE
+// REMOVED FIREBASE: import { storage } from '../firebase/config';
 
 // Default placeholders for different types of content
 export const PLACEHOLDERS = {

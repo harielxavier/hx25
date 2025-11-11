@@ -1,35 +1,12 @@
 import { Link } from 'react-router-dom';
 import { Instagram, Facebook, Twitter, ArrowRight, ArrowLeft, Check, AlertCircle, Briefcase, Palette, Target } from 'lucide-react';
 import { useState } from 'react';
-// Import Firebase dependencies
-import { getApp, initializeApp } from 'firebase/app';
-// We don't need to import getFirestore as it's not used in this component
 
 // Import lead service for proper lead registration
 import { LeadSubmission } from '../../services/leadService';
 
 // Import the email service
 import emailService from '../../lib/api/email';
-
-// Firebase configuration - only used if Firebase isn't already initialized
-const firebaseConfig = {
-  apiKey: "AIzaSyAohXEBojJPIFKXd1KTPQSi-LE2VxLG3xg",
-  authDomain: "hariel-xavier-photography.firebaseapp.com",
-  projectId: "hariel-xavier-photography",
-  storageBucket: "hariel-xavier-photography.appspot.com",
-  messagingSenderId: "397018472516",
-  appId: "1:397018472516:web:49b2915c257651262a29b5",
-  measurementId: "G-DNMEK173KQ"
-};
-
-// Initialize Firebase safely (avoid duplicate initialization)
-try {
-  // Try to get existing Firebase app
-  getApp();
-} catch (error) {
-  // Initialize Firebase if no app exists
-  initializeApp(firebaseConfig);
-}
 
 // Lead source types
 type LeadSource = 

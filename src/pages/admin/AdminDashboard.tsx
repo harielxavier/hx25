@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { doc, setDoc, collection, getDoc, getDocs, query, orderBy, limit, Timestamp } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+// REMOVED FIREBASE: import { doc, setDoc, collection, getDoc, getDocs, query, orderBy, limit, Timestamp // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 import { useLocation, Link } from 'react-router-dom';
 import { Job, getAllJobs } from '../../services/jobsService';

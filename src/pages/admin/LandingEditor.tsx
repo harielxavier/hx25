@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db, storage } from '../../firebase/config';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+// REMOVED FIREBASE: import { doc, getDoc, updateDoc // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db, storage } from '../../firebase/config';
+// REMOVED FIREBASE: import { ref, uploadBytes, getDownloadURL // REMOVED FIREBASE
 import { useToast } from '../../hooks/useToast';
 
 export default function LandingEditor() {

@@ -3,9 +3,9 @@ import { useDropzone } from 'react-dropzone';
 import { Box, Typography, Button, LinearProgress, IconButton, Chip, Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { FiUploadCloud, FiCheckCircle, FiAlertCircle, FiX } from 'react-icons/fi';
-import { uploadImageWithOptimization, UploadProgress } from '../../services/firebaseCloudinaryService';
+// REMOVED FIREBASE: import { uploadImageWithOptimization, UploadProgress } from '../../services/firebaseCloudinaryService';
 import { updateGallery } from '../../services/galleryService';
-import { increment } from 'firebase/firestore';
+// REMOVED FIREBASE: import { increment // REMOVED FIREBASE
 
 interface GalleryUploaderProps {
   galleryId: string;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Globe, Clock, Users, ArrowDown, ArrowUp, Map, Link as LinkIcon } from 'lucide-react';
-import { db } from '../../firebase/config';
-import { collection, getDocs, query, where, Timestamp } from 'firebase/firestore';
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
+// REMOVED FIREBASE: import { collection, getDocs, query, where, Timestamp // REMOVED FIREBASE
 
 interface VisitorMetrics {
   total_visitors: number;

@@ -14,7 +14,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { getAllGalleries, createGallery, updateGallery, deleteGallery, Gallery } from '../../services/galleryService';
 import { getAllClients, grantGalleryAccess, revokeGalleryAccess, Client } from '../../services/clientGalleryService';
 import GalleryUploader from './GalleryUploader';
-import { Timestamp } from 'firebase/firestore';
+// REMOVED FIREBASE: import { Timestamp // REMOVED FIREBASE
 
 const GalleryCard = styled(Card)(({ theme }) => ({
   height: '100%',

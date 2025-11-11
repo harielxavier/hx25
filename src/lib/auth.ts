@@ -1,27 +1,6 @@
-import { auth, db } from './firebase';
-import { 
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-  updatePassword as firebaseUpdatePassword,
-  signOut as firebaseSignOut,
-  onAuthStateChanged,
-  User,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult
-} from 'firebase/auth';
-import { 
-  doc, 
-  setDoc, 
-  getDoc, 
-  updateDoc, 
-  collection, 
-  query, 
-  where, 
-  getDocs 
-} from 'firebase/firestore';
+// REMOVED FIREBASE: import { auth, db } from './firebase';
+// REMOVED FIREBASE: imports
+// REMOVED FIREBASE: imports
 import QRCode from 'qrcode';
 
 export interface AuthUser {

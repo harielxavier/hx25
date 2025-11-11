@@ -1,5 +1,5 @@
-import { collection, addDoc, serverTimestamp, query, getDocs, limit, where } from 'firebase/firestore';
-import { db } from '../firebase/config';
+// REMOVED FIREBASE: import { collection, addDoc, serverTimestamp, query, getDocs, limit, where // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../firebase/config';
 
 // New blog posts with modern photography topics
 const newBlogPosts = [

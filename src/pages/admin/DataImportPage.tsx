@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+// REMOVED FIREBASE: import { collection, getDocs, query, orderBy // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
 import AdminLayout from '../../components/admin/AdminLayout';
 import importAllData from '../../scripts/importAllData';
 import importWeddingDates from '../../scripts/importWeddingDates';

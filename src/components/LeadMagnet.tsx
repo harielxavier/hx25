@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Download, Mail } from 'lucide-react';
-import { db } from '../firebase/config';
-import { collection, addDoc, Timestamp } from 'firebase/firestore';
+// REMOVED FIREBASE: import { db } from '../firebase/config';
+// REMOVED FIREBASE: import { collection, addDoc, Timestamp // REMOVED FIREBASE
 
 interface LeadMagnetProps {
   delay?: number; // Delay in milliseconds before showing

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { ArrowRight, Check, X } from 'lucide-react';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db } from '../firebase/config';
+// REMOVED FIREBASE: import { addDoc, collection, serverTimestamp // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../firebase/config';
 import { format } from 'date-fns';
 // Email service imports removed as they're no longer needed
 // import { sendEmailToClient, sendEmailToAdmin } from '../services/emailService';

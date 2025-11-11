@@ -1,6 +1,5 @@
-import { collection, addDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { supabase } from '../lib/supabase';
 import { z } from 'zod';
-import { db } from '../firebase/config';
 
 // Zod schema for Lead Submission
 const leadSubmissionSchema = z.object({
@@ -38,8 +37,8 @@ export interface Lead {
   additionalInfo?: string;
   status: 'new' | 'contacted' | 'qualified' | 'converted' | 'lost';
   source: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: string; // Changed from Timestamp to ISO string
+  updatedAt: string; // Changed from Timestamp to ISO string
 }
 
 export interface LeadSubmission {
@@ -61,7 +60,7 @@ export interface LeadSubmission {
 }
 
 /**
- * Create a new lead in Firestore
+ * Create a new lead in Supabase
  * @param leadData The lead data to save
  * @returns Promise with the created lead ID
  */
@@ -70,28 +69,49 @@ export const createLead = async (leadData: LeadSubmission): Promise<string> => {
     // Validate leadData against the schema
     const validatedData = leadSubmissionSchema.parse(leadData);
 
-    const leadsRef = collection(db, 'leads');
-    
-    const lead: Omit<Lead, 'id'> = {
-      ...validatedData, // Use validated data
-      status: 'new',
+    const now = new Date().toISOString();
+
+    // Transform to database schema
+    const dbData = {
+      name: `${validatedData.firstName} ${validatedData.lastName}`,
+      email: validatedData.email,
+      phone: validatedData.phone || null,
+      event_type: validatedData.eventType || null,
+      event_date: validatedData.eventDate || null,
+      message: validatedData.additionalInfo || null,
       source: validatedData.source || 'website_form',
-      createdAt: serverTimestamp() as Timestamp,
-      updatedAt: serverTimestamp() as Timestamp
+      status: 'new' as const,
+      created_at: now,
+      updated_at: now,
+      // Store additional fields in metadata JSONB column if exists, or add them directly
+      event_location: validatedData.eventLocation || null,
+      guest_count: validatedData.guestCount || null,
+      preferred_style: validatedData.preferredStyle || null,
+      must_have_shots: validatedData.mustHaveShots || null,
+      inspiration_links: validatedData.inspirationLinks || null,
+      budget: validatedData.budget || null,
+      hear_about_us: validatedData.hearAboutUs || null
     };
-    
-    const docRef = await addDoc(leadsRef, lead);
-    console.log('Lead created with ID:', docRef.id);
-    return docRef.id;
+
+    const { data, error } = await supabase
+      .from('leads')
+      .insert([dbData])
+      .select('id')
+      .single();
+
+    if (error) throw error;
+    if (!data) throw new Error('No data returned from insert');
+
+    console.log('Lead created with ID:', data.id);
+    return data.id;
   } catch (error) {
     if (error instanceof z.ZodError) {
       // Log Zod validation errors or rethrow as a custom error
       console.error('Lead data validation error:', error.errors);
-      // You might want to throw a more specific error or handle it
-      // For example, throw new Error(`Validation failed: ${error.errors.map(e => e.message).join(', ')}`);
+      throw new Error(`Validation failed: ${error.errors.map(e => e.message).join(', ')}`);
     }
     console.error('Error creating lead:', error);
-    throw error; // Rethrow the original error or a new one
+    throw error;
   }
 };
 
@@ -104,11 +124,75 @@ export const submitContactForm = async (formData: LeadSubmission): Promise<strin
   try {
     // You could add additional processing here if needed
     // For example, sending an email notification, etc.
-    
+
     const leadId = await createLead(formData);
     return leadId;
   } catch (error) {
     console.error('Error submitting contact form:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get all leads
+ * @returns Promise with all leads
+ */
+export const getAllLeads = async (): Promise<any[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('leads')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error fetching leads:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get leads by status
+ * @param status The lead status to filter by
+ * @returns Promise with filtered leads
+ */
+export const getLeadsByStatus = async (status: string): Promise<any[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('leads')
+      .select('*')
+      .eq('status', status)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error fetching leads by status:', error);
+    throw error;
+  }
+};
+
+/**
+ * Update lead status
+ * @param leadId The lead ID
+ * @param status The new status
+ * @returns Promise with success status
+ */
+export const updateLeadStatus = async (leadId: string, status: string): Promise<boolean> => {
+  try {
+    const { error } = await supabase
+      .from('leads')
+      .update({
+        status,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', leadId);
+
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error('Error updating lead status:', error);
     throw error;
   }
 };
@@ -172,12 +256,12 @@ export const createTestLeads = async (): Promise<boolean> => {
         source: 'test_data'
       }
     ];
-    
+
     for (const lead of testLeads) {
       await createLead(lead as LeadSubmission);
       console.log(`Created test lead for ${lead.firstName} ${lead.lastName}`);
     }
-    
+
     return true;
   } catch (error) {
     console.error('Error creating test leads:', error);

@@ -5,8 +5,8 @@
 
 import fs from 'fs';
 import path from 'path';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../firebase/config';
+// REMOVED FIREBASE: import { collection, addDoc // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../firebase/config';
 
 // Path to the import data directory
 const IMPORT_DATA_PATH = '/Users/bigmo/Desktop/HarielXavierActive/Import Data/Studio Ninja Leads Export [15 Feb 2025 0308PM]';

@@ -21,10 +21,10 @@ import {
   Gallery,
   deleteGallery
 } from '../../services/galleryService';
-import { ref, listAll, getMetadata } from 'firebase/storage';
-import { storage } from '../../firebase/config';
-import { collection, onSnapshot } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+// REMOVED FIREBASE: import { ref, listAll, getMetadata // REMOVED FIREBASE
+// REMOVED FIREBASE: import { storage } from '../../firebase/config';
+// REMOVED FIREBASE: import { collection, onSnapshot // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
 import GalleryNotificationSender from '../../components/admin/GalleryNotificationSender';
 
 export default function GalleryManagementHub() {

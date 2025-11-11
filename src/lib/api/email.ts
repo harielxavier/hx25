@@ -48,12 +48,9 @@ interface LeadData {
  */
 export const sendEmail = async (options: EmailOptions): Promise<boolean> => {
   try {
-    // Call the generic Firebase Cloud Function 'sendEmail'
-    // Dynamically import necessary Firebase modules
-    const { functions } = await import('../../firebase/config'); // Adjust path if needed
-    const { httpsCallable } = await import('firebase/functions');
-    
-    const sendEmailFn = httpsCallable(functions, 'sendEmail'); 
+    // FIREBASE REMOVED - Use EmailJS service instead
+    console.warn('sendEmail() called - Firebase Functions removed. Use emailjsService.ts instead');
+    return false; 
     
     // Prepare data payload for the backend function
     const payload = {

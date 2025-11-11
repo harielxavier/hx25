@@ -5,7 +5,7 @@ import App from './App';
 import './index.css';
 
 // Import the fixed Firebase configuration
-import './firebase/fixed-config';
+// REMOVED FIREBASE: import './firebase/fixed-config';
 
 console.log('1. main.tsx is executing');
 

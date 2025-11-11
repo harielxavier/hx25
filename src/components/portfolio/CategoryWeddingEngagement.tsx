@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+// REMOVED FIREBASE: import { collection, getDocs, query, where, orderBy, limit // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
 import { Link } from 'react-router-dom';
 import { FeaturedWeddingSkeleton, PortfolioGridSkeleton } from './SkeletonLoaders';
 import { weddingGalleries as mockWeddingGalleries, engagementGalleries as mockEngagementGalleries } from '../../data/mockPortfolioData';

@@ -1,18 +1,6 @@
 // Comprehensive Firebase Storage service
-import { getStorage } from 'firebase/storage';
-import { 
-  ref, 
-  uploadBytes, 
-  getDownloadURL, 
-  deleteObject,
-  listAll,
-  getMetadata,
-  updateMetadata,
-  UploadMetadata,
-  FullMetadata,
-  StorageReference,
-  UploadResult
-} from 'firebase/storage';
+// REMOVED FIREBASE: import { getStorage // REMOVED FIREBASE
+// REMOVED FIREBASE: imports
 
 // Default storage paths
 const STORAGE_PATHS = {

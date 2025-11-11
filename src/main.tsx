@@ -15,13 +15,8 @@ import ErrorBoundary from './utils/ErrorBoundary';
 
 // Supabase client now uses lazy initialization
 
-// Lazy-load Firebase (needed for storage and legacy services only)
-// This prevents circular dependency issues in the api-vendor bundle
-if (typeof window !== 'undefined') {
-  import('./firebase/config').catch((error) => {
-    console.warn('Firebase initialization skipped or failed:', error);
-  });
-}
+// FIREBASE REMOVED - Now using Supabase + Cloudinary only
+// All auth, database, and storage now handled by Supabase/Cloudinary
 
 // Initialize Sentry
 const sentryDsn = import.meta.env.VITE_SENTRY_DSN_FRONTEND || "https://1fb81719800e469ccfc621e5f4b02e07@o4509517571620864.ingest.us.sentry.io/4509517580664832"; // Fallback to existing DSN if env var is not set

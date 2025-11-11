@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+// REMOVED FIREBASE: import { collection, query, where, getDocs, doc, updateDoc // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../../firebase/config';
 
 const QuickGalleryUpdate: React.FC = () => {
   const [status, setStatus] = useState<string>('');

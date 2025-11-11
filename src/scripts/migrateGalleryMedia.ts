@@ -1,5 +1,5 @@
-import { db } from '../firebase/config';
-import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
+// REMOVED FIREBASE: import { db } from '../firebase/config';
+// REMOVED FIREBASE: import { collection, getDocs, doc, updateDoc // REMOVED FIREBASE
 import { GalleryMedia } from '../services/galleryService';
 
 /**

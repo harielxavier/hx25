@@ -1,4 +1,4 @@
-import { adminAuth } from './firebase-admin';
+// REMOVED FIREBASE: import { adminAuth } from './firebase-admin';
 
 /**
  * Verifies a Firebase ID token

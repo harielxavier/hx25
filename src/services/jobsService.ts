@@ -1,19 +1,5 @@
-import { db, storage } from '../firebase/config';
-import { 
-  collection, 
-  doc, 
-  getDoc, 
-  getDocs, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  orderBy, 
-  Timestamp,
-  writeBatch
-} from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
-import { v4 as uuidv4 } from 'uuid';
+import { supabase } from '../lib/supabase';
+import storageService from './storageService';
 
 // Job interface
 export interface JobDocuments {
@@ -30,16 +16,16 @@ export interface Job {
   name: string;
   type: string;
   leadSource: string;
-  mainShootDate: Timestamp | null;
-  mainShootEndDate: Timestamp | null;
+  mainShootDate: string | null; // Changed from Timestamp to ISO string
+  mainShootEndDate: string | null; // Changed from Timestamp to ISO string
   location: string;
   clientName: string;
   clientEmail: string;
   clientPhone: string;
   notes: string;
   status: 'active' | 'completed' | 'cancelled';
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: string; // Changed from Timestamp to ISO string
+  updatedAt: string; // Changed from Timestamp to ISO string
   clientId?: string; // Reference to client if available
   // Additional fields
   documents: JobDocuments;
@@ -52,7 +38,7 @@ export interface JobDocument {
   name: string;
   fileUrl: string;
   fileType: string;
-  uploadedAt: Timestamp;
+  uploadedAt: string; // Changed from Timestamp to ISO string
   size?: number;
 }
 
@@ -62,48 +48,50 @@ export interface JobDocument {
  */
 export const getAllJobs = async (): Promise<Job[]> => {
   try {
-    // Create reference to jobs collection
-    const jobsRef = collection(db, 'jobs');
-    
-    // Create query with proper ordering
-    const q = query(jobsRef, orderBy('createdAt', 'desc'));
-    
-    // Execute query with error handling
-    console.log('Fetching jobs from Firestore...');
-    const querySnapshot = await getDocs(q);
-    console.log(`Successfully retrieved ${querySnapshot.docs.length} job documents`);
+    console.log('Fetching jobs from Supabase...');
 
-    // Transform Firestore documents to Job objects with data validation
-    const jobs = querySnapshot.docs.map(doc => {
-      const data = doc.data();
-      
+    const { data, error } = await supabase
+      .from('jobs')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      console.log('No jobs found in database');
+      return [];
+    }
+
+    console.log(`Successfully retrieved ${data.length} job documents`);
+
+    // Transform database rows to Job objects with data validation
+    const jobs: Job[] = data.map((row: Record<string, any>) => {
       // Ensure all required fields exist with default values if needed
       const job: Job = {
-        id: doc.id,
-        name: data.name || `Untitled Job (${doc.id})`,
-        type: data.type || 'Other',
-        leadSource: data.leadSource || 'Unknown',
-        mainShootDate: data.mainShootDate || null,
-        mainShootEndDate: data.mainShootEndDate || null,
-        location: data.location || '',
-        clientName: data.clientName || '',
-        clientEmail: data.clientEmail || '',
-        clientPhone: data.clientPhone || '',
-        notes: data.notes || '',
-        status: data.status || 'active',
-        createdAt: data.createdAt || Timestamp.now(),
-        updatedAt: data.updatedAt || Timestamp.now(),
-        clientId: data.clientId || undefined,
-        documents: data.documents || {
+        id: row.id || '',
+        name: row.title || row.name || `Untitled Job (${row.id})`,
+        type: row.type || 'Other',
+        leadSource: row.lead_source || row.leadSource || 'Unknown',
+        mainShootDate: row.date || row.mainShootDate || null,
+        mainShootEndDate: row.mainShootEndDate || null,
+        location: row.location || '',
+        clientName: row.client_name || row.clientName || '',
+        clientEmail: row.client_email || row.clientEmail || '',
+        clientPhone: row.client_phone || row.clientPhone || '',
+        notes: row.notes || '',
+        status: row.status || 'active',
+        createdAt: row.created_at || new Date().toISOString(),
+        updatedAt: row.updated_at || new Date().toISOString(),
+        clientId: row.client_id || row.clientId || undefined,
+        documents: row.documents || {
           contracts: [],
           invoices: [],
           questionnaires: [],
           quotes: [],
           otherDocs: []
-        },
-        ...data // Include any other fields that might exist
+        }
       };
-      
+
       return job;
     });
 
@@ -111,12 +99,10 @@ export const getAllJobs = async (): Promise<Job[]> => {
     return jobs;
   } catch (error) {
     console.error('Error getting jobs:', error);
-    // Add more detailed logging for specific errors
     if (error instanceof Error) {
       console.error(`Error message: ${error.message}`);
       console.error(`Error stack: ${error.stack}`);
     }
-    
     throw error;
   }
 };
@@ -128,19 +114,49 @@ export const getAllJobs = async (): Promise<Job[]> => {
  */
 export const getJob = async (jobId: string): Promise<Job | null> => {
   try {
-    const jobRef = doc(db, 'jobs', jobId);
-    const jobSnap = await getDoc(jobRef);
+    const { data, error } = await supabase
+      .from('jobs')
+      .select('*')
+      .eq('id', jobId)
+      .single();
 
-    if (jobSnap.exists()) {
-      const data = jobSnap.data();
-      return {
-        id: jobSnap.id,
-        ...data
-      } as Job;
-    } else {
-      console.log('No such job exists');
-      return null;
+    if (error) {
+      if (error.code === 'PGRST116') {
+        console.log('No such job exists');
+        return null;
+      }
+      throw error;
     }
+
+    if (!data) return null;
+
+    // Transform to Job interface
+    const job: Job = {
+      id: data.id,
+      name: data.title || data.name || 'Untitled Job',
+      type: data.type || 'Other',
+      leadSource: data.lead_source || 'Unknown',
+      mainShootDate: data.date || null,
+      mainShootEndDate: data.mainShootEndDate || null,
+      location: data.location || '',
+      clientName: data.client_name || '',
+      clientEmail: data.client_email || '',
+      clientPhone: data.client_phone || '',
+      notes: data.notes || '',
+      status: data.status || 'active',
+      createdAt: data.created_at,
+      updatedAt: data.updated_at,
+      clientId: data.client_id,
+      documents: data.documents || {
+        contracts: [],
+        invoices: [],
+        questionnaires: [],
+        quotes: [],
+        otherDocs: []
+      }
+    };
+
+    return job;
   } catch (error) {
     console.error('Error getting job:', error);
     throw error;
@@ -154,24 +170,43 @@ export const getJob = async (jobId: string): Promise<Job | null> => {
  */
 export const createJob = async (jobData: Omit<Job, 'id'>): Promise<string> => {
   try {
-    // Set timestamps
-    const now = Timestamp.now();
-    const data = {
-      ...jobData,
-      createdAt: now,
-      updatedAt: now,
+    const now = new Date().toISOString();
+
+    // Transform to database schema
+    const dbData = {
+      title: jobData.name,
+      type: jobData.type,
+      date: jobData.mainShootDate,
+      location: jobData.location,
+      status: jobData.status || 'active',
+      client_id: jobData.clientId,
+      client_name: jobData.clientName,
+      client_email: jobData.clientEmail,
+      client_phone: jobData.clientPhone,
+      notes: jobData.notes,
       documents: jobData.documents || {
         contracts: [],
         invoices: [],
         questionnaires: [],
         quotes: [],
         otherDocs: []
-      }
+      },
+      lead_source: jobData.leadSource,
+      created_at: now,
+      updated_at: now
     };
 
-    const docRef = await addDoc(collection(db, 'jobs'), data);
-    console.log('Job created with ID:', docRef.id);
-    return docRef.id;
+    const { data, error } = await supabase
+      .from('jobs')
+      .insert([dbData])
+      .select('id')
+      .single();
+
+    if (error) throw error;
+    if (!data) throw new Error('No data returned from insert');
+
+    console.log('Job created with ID:', data.id);
+    return data.id;
   } catch (error) {
     console.error('Error creating job:', error);
     throw error;
@@ -185,15 +220,32 @@ export const createJob = async (jobData: Omit<Job, 'id'>): Promise<string> => {
  */
 export const updateJob = async (jobId: string, jobData: Partial<Job>): Promise<void> => {
   try {
-    const jobRef = doc(db, 'jobs', jobId);
-    
-    // Update the timestamp
-    const data = {
-      ...jobData,
-      updatedAt: Timestamp.now()
+    const now = new Date().toISOString();
+
+    // Transform to database schema
+    const dbData: Record<string, any> = {
+      updated_at: now
     };
 
-    await updateDoc(jobRef, data);
+    if (jobData.name !== undefined) dbData.title = jobData.name;
+    if (jobData.type !== undefined) dbData.type = jobData.type;
+    if (jobData.mainShootDate !== undefined) dbData.date = jobData.mainShootDate;
+    if (jobData.location !== undefined) dbData.location = jobData.location;
+    if (jobData.status !== undefined) dbData.status = jobData.status;
+    if (jobData.clientId !== undefined) dbData.client_id = jobData.clientId;
+    if (jobData.clientName !== undefined) dbData.client_name = jobData.clientName;
+    if (jobData.clientEmail !== undefined) dbData.client_email = jobData.clientEmail;
+    if (jobData.clientPhone !== undefined) dbData.client_phone = jobData.clientPhone;
+    if (jobData.notes !== undefined) dbData.notes = jobData.notes;
+    if (jobData.documents !== undefined) dbData.documents = jobData.documents;
+    if (jobData.leadSource !== undefined) dbData.lead_source = jobData.leadSource;
+
+    const { error } = await supabase
+      .from('jobs')
+      .update(dbData)
+      .eq('id', jobId);
+
+    if (error) throw error;
     console.log('Job updated:', jobId);
   } catch (error) {
     console.error('Error updating job:', error);
@@ -207,25 +259,26 @@ export const updateJob = async (jobId: string, jobData: Partial<Job>): Promise<v
  */
 export const deleteJob = async (jobId: string): Promise<void> => {
   try {
-    const jobRef = doc(db, 'jobs', jobId);
-    
     // Get job data to delete associated files if needed
-    const jobSnap = await getDoc(jobRef);
-    if (jobSnap.exists()) {
-      const jobData = jobSnap.data() as Job;
-      
+    const { data: jobData, error: fetchError } = await supabase
+      .from('jobs')
+      .select('*')
+      .eq('id', jobId)
+      .single();
+
+    if (fetchError) throw fetchError;
+
+    if (jobData && jobData.documents) {
       // Delete associated documents from storage
       const docTypes = ['contracts', 'invoices', 'questionnaires', 'quotes', 'otherDocs'];
       for (const docType of docTypes) {
-        const docs = jobData.documents?.[docType] || [];
+        const docs = jobData.documents[docType] || [];
         for (const document of docs) {
           if (document.fileUrl) {
             try {
-              // Extract the path from URL and delete the file
-              const fileUrl = new URL(document.fileUrl);
-              const filePath = decodeURIComponent(fileUrl.pathname.split('/o/')[1].split('?')[0]);
-              const fileRef = ref(storage, filePath);
-              await deleteObject(fileRef);
+              // Delete from Supabase Storage or Cloudinary
+              const filePath = `jobs/${jobId}/${docType}/${document.id}`;
+              await storageService.deleteFile(filePath);
             } catch (fileError) {
               console.error('Error deleting file:', fileError);
             }
@@ -233,9 +286,14 @@ export const deleteJob = async (jobId: string): Promise<void> => {
         }
       }
     }
-    
+
     // Delete the job document
-    await deleteDoc(jobRef);
+    const { error: deleteError } = await supabase
+      .from('jobs')
+      .delete()
+      .eq('id', jobId);
+
+    if (deleteError) throw deleteError;
     console.log('Job deleted:', jobId);
   } catch (error) {
     console.error('Error deleting job:', error);
@@ -251,55 +309,61 @@ export const deleteJob = async (jobId: string): Promise<void> => {
  * @returns The uploaded document data
  */
 export const uploadJobDocument = async (
-  jobId: string, 
-  file: File, 
+  jobId: string,
+  file: File,
   docType: keyof JobDocuments
 ): Promise<JobDocument> => {
   try {
-    const jobRef = doc(db, 'jobs', jobId);
-    const jobSnap = await getDoc(jobRef);
-    
-    if (!jobSnap.exists()) {
+    const { data: jobData, error: fetchError } = await supabase
+      .from('jobs')
+      .select('documents')
+      .eq('id', jobId)
+      .single();
+
+    if (fetchError || !jobData) {
       throw new Error('Job not found');
     }
-    
+
     // Generate a unique file name
     const fileExtension = file.name.split('.').pop()?.toLowerCase() || '';
-    const uniqueFileName = `${uuidv4()}.${fileExtension}`;
+    const timestamp = Date.now();
+    const uniqueFileName = `${timestamp}.${fileExtension}`;
     const filePath = `jobs/${jobId}/${docType}/${uniqueFileName}`;
-    
-    // Upload the file to Firebase Storage
-    const storageRef = ref(storage, filePath);
-    const uploadResult = await uploadBytes(storageRef, file);
-    const downloadUrl = await getDownloadURL(uploadResult.ref);
-    
+
+    // Upload the file to Storage (Supabase Storage or Cloudinary)
+    const { url: downloadUrl } = await storageService.uploadFile(filePath, file);
+
     // Create the document object
     const newDocument: JobDocument = {
-      id: uuidv4(),
+      id: `${timestamp}`,
       name: file.name,
       fileUrl: downloadUrl,
       fileType: file.type,
-      uploadedAt: Timestamp.now(),
+      uploadedAt: new Date().toISOString(),
       size: file.size
     };
-    
+
     // Update the job document with the new file reference
-    const jobData = jobSnap.data() as Job;
     const documents = jobData.documents || {
-      contracts: [], 
+      contracts: [],
       invoices: [],
       questionnaires: [],
       quotes: [],
       otherDocs: []
     };
-    
+
     documents[docType].push(newDocument);
-    
-    await updateDoc(jobRef, {
-      documents,
-      updatedAt: Timestamp.now()
-    });
-    
+
+    const { error: updateError } = await supabase
+      .from('jobs')
+      .update({
+        documents,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', jobId);
+
+    if (updateError) throw updateError;
+
     return newDocument;
   } catch (error) {
     console.error('Error uploading job document:', error);
@@ -319,14 +383,16 @@ export const deleteJobDocument = async (
   docType: keyof JobDocuments
 ): Promise<void> => {
   try {
-    const jobRef = doc(db, 'jobs', jobId);
-    const jobSnap = await getDoc(jobRef);
-    
-    if (!jobSnap.exists()) {
+    const { data: jobData, error: fetchError } = await supabase
+      .from('jobs')
+      .select('documents')
+      .eq('id', jobId)
+      .single();
+
+    if (fetchError || !jobData) {
       throw new Error('Job not found');
     }
-    
-    const jobData = jobSnap.data() as Job;
+
     const documents = jobData.documents || {
       contracts: [],
       invoices: [],
@@ -334,37 +400,39 @@ export const deleteJobDocument = async (
       quotes: [],
       otherDocs: []
     };
-    
+
     // Find the document to delete
     const docIndex = documents[docType].findIndex(doc => doc.id === docId);
     if (docIndex === -1) {
       throw new Error('Document not found');
     }
-    
+
     const documentToDelete = documents[docType][docIndex];
-    
+
     // Delete the file from storage
     if (documentToDelete.fileUrl) {
       try {
-        // Extract the path from URL and delete the file
-        const fileUrl = new URL(documentToDelete.fileUrl);
-        const filePath = decodeURIComponent(fileUrl.pathname.split('/o/')[1].split('?')[0]);
-        const fileRef = ref(storage, filePath);
-        await deleteObject(fileRef);
+        const filePath = `jobs/${jobId}/${docType}/${docId}`;
+        await storageService.deleteFile(filePath);
       } catch (fileError) {
         console.error('Error deleting file:', fileError);
       }
     }
-    
+
     // Remove the document from the array
     documents[docType].splice(docIndex, 1);
-    
+
     // Update the job with the modified documents array
-    await updateDoc(jobRef, {
-      documents,
-      updatedAt: Timestamp.now()
-    });
-    
+    const { error: updateError } = await supabase
+      .from('jobs')
+      .update({
+        documents,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', jobId);
+
+    if (updateError) throw updateError;
+
     console.log('Job document deleted:', docId);
   } catch (error) {
     console.error('Error deleting job document:', error);
@@ -379,43 +447,55 @@ export const deleteJobDocument = async (
  */
 export const batchImportJobs = async (jobsData: Omit<Job, 'id'>[]): Promise<{ added: number, updated: number, failed: number }> => {
   const stats = { added: 0, updated: 0, failed: 0 };
-  
+
   try {
-    const batch = writeBatch(db);
-    
+    const now = new Date().toISOString();
+
     for (const jobData of jobsData) {
       try {
-        // Generate a deterministic ID based on client email and job name for de-duplication
-        const idBase = `${jobData.clientEmail || ''}_${jobData.name || ''}`.toLowerCase().replace(/[^a-z0-9]/g, '_');
-        const jobId = idBase || uuidv4();
-        const jobRef = doc(db, 'jobs', jobId);
-        
-        // Add timestamps if not present
-        const now = Timestamp.now();
-        const data = {
-          ...jobData,
-          createdAt: jobData.createdAt || now,
-          updatedAt: now,
+        // Transform to database schema
+        const dbData = {
+          title: jobData.name,
+          type: jobData.type,
+          date: jobData.mainShootDate,
+          location: jobData.location,
+          status: jobData.status || 'active',
+          client_name: jobData.clientName,
+          client_email: jobData.clientEmail,
+          client_phone: jobData.clientPhone,
+          notes: jobData.notes,
+          lead_source: jobData.leadSource,
           documents: jobData.documents || {
             contracts: [],
             invoices: [],
             questionnaires: [],
             quotes: [],
             otherDocs: []
-          }
+          },
+          created_at: jobData.createdAt || now,
+          updated_at: now
         };
-        
-        // Add to batch
-        batch.set(jobRef, data, { merge: true });
-        stats.updated++;
+
+        // Upsert using client_email + name as unique key
+        const { error } = await supabase
+          .from('jobs')
+          .upsert(dbData, {
+            onConflict: 'client_email,title',
+            ignoreDuplicates: false
+          });
+
+        if (error) {
+          console.error('Error in batch import item:', error);
+          stats.failed++;
+        } else {
+          stats.updated++;
+        }
       } catch (error) {
         console.error('Error processing job for batch import:', error);
         stats.failed++;
       }
     }
-    
-    // Commit the batch
-    await batch.commit();
+
     console.log(`Batch import complete. Added/Updated: ${stats.updated}, Failed: ${stats.failed}`);
     return stats;
   } catch (error) {

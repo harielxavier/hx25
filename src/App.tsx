@@ -117,7 +117,6 @@ const InitBlog = lazy(() => import('./pages/InitBlog'));
 const AuthCallback = lazy(() => import('./pages/AuthCallback'));
 const VisitorTracker = lazy(() => import('./components/VisitorTracker'));
 const BlogPostOptimizer = lazy(() => import('./scripts/optimize-all-blog-posts'));
-const FirebaseAuthDebugger = lazy(() => import('./components/admin/FirebaseAuthDebugger'));
 
 // Auth routing component
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
@@ -786,7 +785,6 @@ const App: React.FC = () => {
               <Route path="/admin/auth-debug" element={
                 <div className="min-h-screen bg-gray-100 p-6">
                   <h1 className="text-3xl font-bold mb-6">Firebase Authentication Debugger</h1>
-                  <FirebaseAuthDebugger />
                 </div>
               } />
               

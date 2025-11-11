@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { Edit, Trash2, Upload, Plus, Search, Settings, X, ChevronUp, ChevronDown, ArrowUpDown, MoreVertical, CheckSquare, Eye, Download } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Job, getAllJobs, deleteJob, updateJob } from "../../services/jobsService";
-import { Timestamp } from "firebase/firestore";
+// REMOVED FIREBASE: import { Timestamp } from "firebase/firestore";
 import { format } from "date-fns";
 
 // Extended job interface with additional properties for the admin page

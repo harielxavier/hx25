@@ -1,7 +1,7 @@
 // src/components/booking/BookingWidget.tsx
 import React, { useState, useEffect } from 'react';
 import { smartSchedulerService, BookingSlot, BookingRequest, BookingConfirmation, WeatherData, AISessionSuggestion } from '../../services/SmartSchedulerService';
-import { Timestamp } from 'firebase/firestore';
+// REMOVED FIREBASE: import { Timestamp // REMOVED FIREBASE
 
 interface BookingWidgetProps {
   userId: string; // Assuming the user is logged in and we have their ID

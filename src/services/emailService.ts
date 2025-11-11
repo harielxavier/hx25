@@ -1,9 +1,9 @@
-import { functions } from '../firebase/config';
-import { httpsCallable } from 'firebase/functions';
+// REMOVED FIREBASE: import { functions } from '../firebase/config';
+// REMOVED FIREBASE: import { httpsCallable // REMOVED FIREBASE
 // Nodemailer import removed - should not be used in frontend
 // import nodemailer from 'nodemailer'; 
-import { collection, addDoc, serverTimestamp, setDoc, doc } from 'firebase/firestore';
-import { db } from '../firebase/config';
+// REMOVED FIREBASE: import { collection, addDoc, serverTimestamp, setDoc, doc // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../firebase/config';
 
 // Brand styling constants for enhanced email templates
 const BRAND = {

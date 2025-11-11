@@ -1,5 +1,5 @@
 // Firebase Storage service
-import { storage } from './firebase';
+// REMOVED FIREBASE: import { storage } from './firebase';
 import { 
   ref, 
   uploadBytes, 
@@ -12,7 +12,7 @@ import {
   FullMetadata,
   StorageReference,
   UploadResult
-} from 'firebase/storage';
+// REMOVED FIREBASE
 
 // Default storage paths
 const STORAGE_PATHS = {

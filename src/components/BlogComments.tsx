@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { collection, addDoc, query, where, orderBy, getDocs, serverTimestamp, Timestamp } from 'firebase/firestore';
-import { db } from '../firebase/config';
+// REMOVED FIREBASE: import { collection, addDoc, query, where, orderBy, getDocs, serverTimestamp, Timestamp // REMOVED FIREBASE
+// REMOVED FIREBASE: import { db } from '../firebase/config';
 import { MessageCircle, Send, User } from 'lucide-react';
 
 interface Comment {
