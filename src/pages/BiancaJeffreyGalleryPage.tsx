@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import Navigation from '../components/landing/Navigation';
 import Footer from '../components/landing/Footer';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import SEO from '../components/SEO';
 import { biancaJeffreyImages } from '../data/biancaJeffreyImages';
 import PhotoswipeResponsiveGallery from '../components/gallery/PhotoswipeResponsiveGallery';
 import { useInView } from 'react-intersection-observer';
@@ -144,6 +145,13 @@ function BiancaJeffreyGalleryPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEO
+        title="Park Chateau Estate Wedding Photographer | 50+ Weddings | East Brunswick NJ"
+        description="Preferred photographer at Park Chateau Estate with 50+ weddings photographed. Expert knowledge of every photo location, lighting, and venue secrets. Serving East Brunswick, Middlesex County, Bergen County, and all of New Jersey."
+        keywords="Park Chateau Estate photographer, Park Chateau wedding photographer, East Brunswick wedding photographer, Middlesex County wedding photographer, Bergen County wedding photographer, NJ luxury wedding photographer, Park Chateau preferred vendor, New Jersey wedding venues"
+        image={galleryData.coverImage}
+        type="website"
+      />
       <Helmet>
         <title>Park Chateau Estate Wedding Photography Expert | 50+ Weddings | Hariel Xavier</title>
         <meta name="description" content="Preferred photographer at Park Chateau Estate with 50+ weddings captured. Expert knowledge of every photo location, optimal lighting times, and venue secrets. East Brunswick, NJ." />
