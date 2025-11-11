@@ -8,6 +8,7 @@ import SEOHead from '../components/common/SEOHead';
 import FeaturedGalleries from '../components/landing/FeaturedGalleries';
 import PhotographyStyleSlider from '../components/portfolio/PhotographyStyleSlider';
 import BlurText from '../components/BlurText';
+import LeadMagnetBanner from '../components/landing/LeadMagnetBanner';
 // Removed FOMO element
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
@@ -861,6 +862,8 @@ export function LandingPage() {
 
       <PhotographyStyleSlider />
 
+      {/* Free Resources - PDF Downloads */}
+      <LeadMagnetBanner />
 
       {/* Latest Blog Posts Section */}
       <section className="py-16 md:py-24 bg-gradient-to-br from-gray-50 to-white">
