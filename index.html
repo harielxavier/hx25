@@ -27,9 +27,6 @@
   fbq('init', '545271408929876');
   fbq('track', 'PageView');
   </script>
-  <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=545271408929876&ev=PageView&noscript=1"
-  /></noscript>
   <!-- End Meta Pixel Code -->
 
     <meta charset="UTF-8" />
@@ -310,6 +307,11 @@
     <script type="module" src="/src/main.tsx"></script>
   </head>
   <body>
+    <!-- Meta Pixel noscript fallback -->
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=545271408929876&ev=PageView&noscript=1"
+    /></noscript>
+
     <noscript>You need to enable JavaScript to run this app.</noscript>
 
     <div id="root"></div>
