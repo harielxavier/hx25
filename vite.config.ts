@@ -52,26 +52,31 @@ export default defineConfig({
         manualChunks: (id) => {
           // Node modules chunking
           if (id.includes('node_modules')) {
-            // Core React ecosystem
-            if (id.includes('react') || id.includes('react-dom')) {
+            // Core React ecosystem - MUST BE FIRST
+            if (id.includes('react/') || id.includes('react-dom/') ||
+                id.includes('/react/') || id.includes('/react-dom/') ||
+                id.includes('scheduler') || id.includes('react-is')) {
               return 'react-vendor';
             }
 
-            // Router and navigation
+            // Router and navigation - depends on React
             if (id.includes('react-router') || id.includes('react-helmet')) {
               return 'router-vendor';
             }
 
-            // MUI and styling (large UI framework)
+            // MUI and styling (large UI framework) - depends on React
             if (id.includes('@mui') || id.includes('@emotion')) {
               return 'mui-vendor';
             }
 
-            // Heavy graphics and 3D libraries
-            if (id.includes('three') || id.includes('@react-three') ||
-                id.includes('canvas') || id.includes('framer-motion') ||
-                id.includes('motion')) {
+            // Heavy graphics and 3D libraries - depends on React, so keep separate
+            if (id.includes('three') || id.includes('@react-three')) {
               return 'graphics-vendor';
+            }
+
+            // Motion/animation libraries - these use React context, keep in separate chunk
+            if (id.includes('framer-motion') || id.includes('motion/') || id.includes('/motion')) {
+              return 'animation-vendor';
             }
 
             // Data visualization
@@ -138,9 +143,8 @@ export default defineConfig({
               return 'document-vendor';
             }
 
-            // Animation and motion (can be heavy)
-            if (id.includes('framer-motion') || id.includes('motion') ||
-                id.includes('react-confetti')) {
+            // react-confetti for animation-vendor (already defined above)
+            if (id.includes('react-confetti')) {
               return 'animation-vendor';
             }
 
